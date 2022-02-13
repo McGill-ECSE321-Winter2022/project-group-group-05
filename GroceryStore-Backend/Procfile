@@ -1,0 +1,1 @@
+web: java -jar GroceryStore-Backend/build/libs/GroceryStore-Backend-0.0.1-SNAPSHOT.jar

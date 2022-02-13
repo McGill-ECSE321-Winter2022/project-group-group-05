@@ -1,0 +1,3 @@
+task stage () {
+    dependsOn ':GroceryStore-Backend:assemble'
+}
