@@ -1,5 +1,5 @@
 package mcgill.ecse321.grocerystore.model;
 
-public class GroceryStore {
+public class SpecificItem {
 
 }
