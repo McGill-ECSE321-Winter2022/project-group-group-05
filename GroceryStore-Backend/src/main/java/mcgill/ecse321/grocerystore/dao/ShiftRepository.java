@@ -5,5 +5,6 @@ import mcgill.ecse321.grocerystore.model.Shift;
 
 public interface ShiftRepository extends CrudRepository<Shift, String> {
 
+  Shift findByName(String name);
 
 }

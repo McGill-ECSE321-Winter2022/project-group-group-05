@@ -5,5 +5,6 @@ import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 
 public interface EmployeeScheduleRepository extends CrudRepository<EmployeeSchedule, Long> {
 
+  EmployeeSchedule findById(long id);
 
 }
