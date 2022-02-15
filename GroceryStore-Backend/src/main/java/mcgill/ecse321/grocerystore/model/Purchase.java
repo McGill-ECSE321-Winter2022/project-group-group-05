@@ -22,7 +22,7 @@ public class Purchase {
   private long id;
 
   @OneToMany(cascade = {CascadeType.ALL})
-  private HashSet<SpecificItem> specificItems;
+  private Set<SpecificItem> specificItems;
 
   @Enumerated(EnumType.STRING)
   private PurchaseState state;
