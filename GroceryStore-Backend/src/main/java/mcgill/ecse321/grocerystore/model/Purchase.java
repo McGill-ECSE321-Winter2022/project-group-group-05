@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -29,10 +30,13 @@ public class Purchase {
 
   private boolean isDelivery;
 
+  private Date purchaseDate;
+
   public Purchase() {
     this.specificItems = new HashSet<SpecificItem>();
     this.state = PurchaseState.Cart;
     this.isDelivery = false;
+    this.purchaseDate = new java.sql.Date(System.currentTimeMillis());
   }
 
   public long getId() {
@@ -49,6 +53,10 @@ public class Purchase {
 
   public boolean getIsDelivery() {
     return this.isDelivery;
+  }
+
+  public Date getPurchaseDate() {
+    return this.purchaseDate;
   }
 
   public void addSpecificItem(SpecificItem anItem) {
@@ -79,6 +87,10 @@ public class Purchase {
 
   public void setIsDelivery(boolean b) {
     this.isDelivery = b;
+  }
+
+  public void setPurchaseDate() {
+    this.purchaseDate = new java.sql.Date(System.currentTimeMillis());
   }
 
 }
