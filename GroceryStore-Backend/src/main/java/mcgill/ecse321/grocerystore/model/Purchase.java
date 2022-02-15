@@ -1,6 +1,7 @@
 package mcgill.ecse321.grocerystore.model;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -14,7 +15,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Purchase {
 
-  private enum PurchaseState {
+  public enum PurchaseState {
     Cart, Paid, Prepared, Completed
   };
 
@@ -30,13 +31,13 @@ public class Purchase {
 
   private boolean isDelivery;
 
-  private Date purchaseDate;
+  private long timeOfPurchaseMillis;
 
   public Purchase() {
     this.specificItems = new HashSet<SpecificItem>();
     this.state = PurchaseState.Cart;
     this.isDelivery = false;
-    this.purchaseDate = new java.sql.Date(System.currentTimeMillis());
+    this.timeOfPurchaseMillis = System.currentTimeMillis();
   }
 
   public long getId() {
@@ -55,8 +56,16 @@ public class Purchase {
     return this.isDelivery;
   }
 
-  public Date getPurchaseDate() {
-    return this.purchaseDate;
+  public Date getDateOfPurchase() {
+    return new Date(this.timeOfPurchaseMillis);
+  }
+
+  public Time getTimeOfPurchase() {
+    return new Time(this.timeOfPurchaseMillis);
+  }
+
+  public long getTimeOfPurchaseMillis() {
+    return this.timeOfPurchaseMillis;
   }
 
   public void addSpecificItem(SpecificItem anItem) {
@@ -89,8 +98,8 @@ public class Purchase {
     this.isDelivery = b;
   }
 
-  public void setPurchaseDate() {
-    this.purchaseDate = new java.sql.Date(System.currentTimeMillis());
+  public void setTimeOfPurchaseMillis() {
+    this.timeOfPurchaseMillis = System.currentTimeMillis();
   }
 
 }
