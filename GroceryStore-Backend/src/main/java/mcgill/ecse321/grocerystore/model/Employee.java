@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.model;
 
 import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -31,7 +32,7 @@ public class Employee {
   private String password;
 
   // Employee Associations
-  @OneToMany
+  @OneToMany(fetch = FetchType.LAZY)
   private Set<EmployeeSchedule> employeeSchedules;
 
   // Getter Methods
@@ -68,6 +69,14 @@ public class Employee {
 
   public void setEmployeeSchedules(Set<EmployeeSchedule> employeeSchedules) {
     this.employeeSchedules = employeeSchedules;
+  }
+
+  public boolean addEmployeeSchedule(EmployeeSchedule employeeSchedule) {
+    return employeeSchedules.add(employeeSchedule);
+  }
+
+  public boolean removeEmployeeSchedule(EmployeeSchedule employeeSchedule) {
+    return employeeSchedules.remove(employeeSchedule);
   }
 
 }
