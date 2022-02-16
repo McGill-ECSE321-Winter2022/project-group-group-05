@@ -6,7 +6,39 @@ import javax.persistence.Id;
 @Entity
 public class Holiday {
 
+    private String name
+    private int month
+    private int day
+
   @Id
-  private String name;
+  public Holiday() {
+      this.name = null;
+      this.month = 0;
+      this.day = 0;
+  }
+
+  public String getname() {
+      return this.name;
+  }
+
+  public int getmonth() {
+      return this.month;
+  }
+
+  public int getday() {
+      return this.day;
+  }
+
+  public void setname(String name) {
+      this.name = name;
+  }
+
+  public void setmonth(int month) {
+      this.month = month;
+  }
+
+  public void setday(int day) {
+      this.day = day;
+  }
 
 }
