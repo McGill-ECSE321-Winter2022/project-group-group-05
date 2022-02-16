@@ -33,5 +33,5 @@ jobs:
         working-directory: GroceryStore-Backend
       # Build
       - name: Build Backend with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
         working-directory: GroceryStore-Backend
