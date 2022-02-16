@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -23,7 +24,8 @@ public class Purchase {
   @GeneratedValue
   private long id;
 
-  @OneToMany(cascade = {CascadeType.ALL})
+  // For simplicity use FetchType.EAGER to load associations
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private Set<SpecificItem> specificItems;
 
   @Enumerated(EnumType.STRING)
