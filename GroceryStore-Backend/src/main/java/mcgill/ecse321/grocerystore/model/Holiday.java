@@ -11,12 +11,6 @@ public class Holiday {
     private int day
 
   @Id
-  public Holiday() {
-      this.name = null;
-      this.month = 0;
-      this.day = 0;
-  }
-
   public String getname() {
       return this.name;
   }
