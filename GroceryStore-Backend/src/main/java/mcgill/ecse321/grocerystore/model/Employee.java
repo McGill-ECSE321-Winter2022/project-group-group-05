@@ -1,6 +1,8 @@
 package mcgill.ecse321.grocerystore.model;
 
+import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -32,7 +34,7 @@ public class Employee {
   private String password;
 
   // Employee Associations
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private Set<EmployeeSchedule> employeeSchedules;
 
   // Getter Methods
@@ -71,12 +73,34 @@ public class Employee {
     this.employeeSchedules = employeeSchedules;
   }
 
+  /**
+   * @param employeeSchedule - The EmployeeSchedule instance to add
+   * @return boolean - True if the EmployeeSchedule instance was added successfully.
+   */
   public boolean addEmployeeSchedule(EmployeeSchedule employeeSchedule) {
-    return employeeSchedules.add(employeeSchedule);
+    if (employeeSchedules == null) {
+      employeeSchedules = new HashSet<EmployeeSchedule>();
+    }
+    return employeeSchedules == null ? false : employeeSchedules.add(employeeSchedule);
   }
 
-  public boolean removeEmployeeSchedule(EmployeeSchedule employeeSchedule) {
-    return employeeSchedules.remove(employeeSchedule);
+  /**
+   * The .remove(Object o) method isn't helpful when classes are loaded from the database. Instead,
+   * this method will search for an instance of EmployeeSchedule with the specified ID and remove it
+   * if found.
+   * 
+   * @param scheduleId - The id of the EmployeeSchedule to be removed.
+   * @return boolean - True if the EmployeeSchedule was successfully removed.
+   */
+  public boolean removeEmployeeSchedule(long scheduleId) {
+    EmployeeSchedule tempSchedule = null;
+    for (var schedule : employeeSchedules) {
+      if (schedule.getId() == scheduleId) {
+        tempSchedule = schedule;
+        break;
+      }
+    }
+    return tempSchedule == null ? false : employeeSchedules.remove(null);
   }
 
 }

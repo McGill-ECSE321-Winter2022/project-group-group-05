@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
+import java.sql.Time;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -21,8 +22,8 @@ public class Shift {
   // Shift Attributes
   @Id
   private String name;
-  private String startTime;
-  private String endTime;
+  private Time startTime;
+  private Time endTime;
 
   // Getter Methods
   // --------------
@@ -30,11 +31,11 @@ public class Shift {
     return name;
   }
 
-  public String getStartTime() {
+  public Time getStartTime() {
     return startTime;
   }
 
-  public String getEndTime() {
+  public Time getEndTime() {
     return endTime;
   }
 
@@ -44,11 +45,27 @@ public class Shift {
     this.name = name;
   }
 
+  public void setStartTime(long startTime) {
+    this.startTime = new Time(startTime);
+  }
+
   public void setStartTime(String startTime) {
+    this.startTime = Time.valueOf(startTime);
+  }
+
+  public void setStartTime(Time startTime) {
     this.startTime = startTime;
   }
 
+  public void setEndTime(long endTime) {
+    this.endTime = new Time(endTime);
+  }
+
   public void setEndTime(String endTime) {
+    this.endTime = Time.valueOf(endTime);
+  }
+
+  public void setEndTime(Time endTime) {
     this.endTime = endTime;
   }
 

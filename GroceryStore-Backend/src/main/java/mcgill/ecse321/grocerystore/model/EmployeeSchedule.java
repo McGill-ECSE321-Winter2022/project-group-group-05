@@ -30,7 +30,7 @@ public class EmployeeSchedule {
   private Date date;
 
   // EmployeeSchedule Associations
-  @ManyToOne
+  @ManyToOne(optional = false)
   private Shift shift;
 
   // Getter Methods
@@ -49,8 +49,12 @@ public class EmployeeSchedule {
 
   // Setter Methods
   // --------------
-  public void setId(long id) {
-    this.id = id;
+  public void setDate(long date) {
+    this.date = new Date(date);
+  }
+
+  public void setDate(String date) {
+    this.date = Date.valueOf(date);
   }
 
   public void setDate(Date date) {
