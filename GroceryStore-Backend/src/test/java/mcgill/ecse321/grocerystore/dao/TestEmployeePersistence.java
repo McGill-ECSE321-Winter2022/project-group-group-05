@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,7 @@ public class TestEmployeePersistence {
   private ShiftRepository shiftRepository;
 
   @BeforeEach
+  @AfterEach
   public void clearDatabase() {
     employeeRepository.deleteAll();
     employeeScheduleRepository.deleteAll();
