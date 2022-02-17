@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,19 +10,22 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Customer {
-
+  @Id
   private String username;
   private String password;
   private String email;
   private String address;
   private boolean isLocal;
+  @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
   private Set<Purchase> purchases;
 
+  public Customer() {
+    this.purchases = new HashSet<Purchase>();
+  }
   public void setUsername(String value) {
     this.username = value;
   }
 
-  @Id
   public String getUsername() {
     return this.username;
   }
@@ -62,15 +66,24 @@ public class Customer {
     this.purchases = set;
   }
 
-  public void addPurchases(Purchase value) {
+  public void addPurchase(Purchase value) {
     this.purchases.add(value);
   }
 
-  public void removePurchases(Purchase value) {
-    this.purchases.remove(value);
+  public boolean removePurchase(Purchase value) {
+    //if(this.purchases.contains(value)) {
+    //this.purchases.remove(value);
+   // return true;
+    //}
+    for (Purchase p : this.purchases) {
+      if(p.equals(value)) {
+        this.purchases.remove(p);
+        return true;
+      }
+    }
+    return false;
   }
 
-  @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
   public Set<Purchase> getPurchases() {
     return this.purchases;
   }

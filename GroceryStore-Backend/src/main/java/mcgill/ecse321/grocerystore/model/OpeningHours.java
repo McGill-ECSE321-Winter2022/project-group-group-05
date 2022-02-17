@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
+import java.sql.Time;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,8 +8,8 @@ import javax.persistence.Id;
 public class OpeningHours {
 
   private String daysOfWeek;
-  private String startTime;
-  private String endTime;
+  private Time startTime;
+  private Time endTime;
 
   @Id
   public String getDaysOfWeek() {
@@ -19,19 +20,19 @@ public class OpeningHours {
     this.daysOfWeek = value;
   }
 
-  public String getStartTime() {
+  public Time getStartTime() {
     return this.startTime;
   }
 
-  public void setStartTime(String value) {
+  public void setStartTime(Time value) {
     this.startTime = value;
   }
 
-  public String getEndTime() {
+  public Time getEndTime() {
     return this.endTime;
   }
 
-  public void setEndTime(String value) {
+  public void setEndTime(Time value) {
     this.endTime = value;
   }
 }

@@ -3,6 +3,7 @@ package mcgill.ecse321.grocerystore.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,13 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 public class TestCustomerPersistence {
   @Autowired
   private CustomerRepository customerRepository;
-
+  @Autowired
+  private PurchaseRepository purchaseRepository;
+  @BeforeEach
   @AfterEach
   public void clearDatabase() {
     customerRepository.deleteAll();
+    purchaseRepository.deleteAll();
   }
 
   @Test
@@ -49,7 +53,7 @@ public class TestCustomerPersistence {
   }
 
   @Test
-  public void testAttribute() {
+  public void testAttributeCustomer() {
     String username = "TestCustomer";
     Customer customer = new Customer();
     customer.setUsername(username);
@@ -70,6 +74,7 @@ public class TestCustomerPersistence {
     customer.setPassword(password);
     customer.setAddress(address);
     customer.setIsLocal(isLocal);
+    customerRepository.save(customer);
     assertEquals(username, customer.getUsername());
     assertEquals(password, customer.getPassword());
     assertEquals(email, customer.getEmail());
@@ -81,23 +86,30 @@ public class TestCustomerPersistence {
   public void testPurchase() {
     String username = "TestCustomer";
     Purchase p1 = new Purchase();
+    p1.setIsDelivery(false);
     Purchase p2 = new Purchase();
+    p2.setIsDelivery(true);
+    purchaseRepository.save(p1);
+    purchaseRepository.save(p2);
     Customer customer = new Customer();
     customer.setUsername(username);
-    customer.addPurchases(p1);
-    customer.addPurchases(p2);
+    customer.addPurchase(p1);
+    customer.addPurchase(p2);
     customerRepository.save(customer);
     assertEquals(2, customer.getPurchases().size());
     
     customer = null;
     
+    Purchase p3 = new Purchase();
+    p3.setIsDelivery(true);
+    purchaseRepository.save(p3);
     customer = customerRepository.findCustomerByUsername(username);
-    customer.removePurchases(p2);
-    assertEquals(1, customer.getPurchases().size());
+    customer.addPurchase(p3);
+    assertEquals(3, customer.getPurchases().size());
     customerRepository.save(customer);
     customer = null;
     customer = customerRepository.findCustomerByUsername(username);
-    customer.addPurchases(p2);
+    customer.removePurchase(p3);
     assertEquals(2, customer.getPurchases().size());
   }
 

@@ -1,16 +1,16 @@
 package mcgill.ecse321.grocerystore.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Owner {
-  
+  @Id
   private String username;
   private String password;
   private String email;
-  
-  @Id
+
   public String getUsername() {
     return this.username;
   }
