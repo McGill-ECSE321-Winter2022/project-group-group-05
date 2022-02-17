@@ -8,14 +8,13 @@ import javax.persistence.Id;
 public class Item {
 
 	@Id
-    @GeneratedValue
 	private String name;
-	
+	//Attributes
 	private double price;
 	private int inventory;
 	private boolean canDeliver;
 	private boolean canPickUp;
-	private boolean isAvailable;
+	private boolean isDiscontinued;
 
 	// This class has no association
 	public Item() {
@@ -24,7 +23,7 @@ public class Item {
 		this.inventory = 0;
 		this.canDeliver = false;
 		this.canPickUp = false;
-		this.isAvailable = false;
+		this.isDiscontinued = false;
 
 	}
 
@@ -47,7 +46,7 @@ public class Item {
 		return this.canPickUp;
 	}
 	public boolean getisAvailable() {
-		return this.isAvailable;
+		return this.isDiscontinued;
 	}
 
 	public void setname(String name) {
@@ -66,6 +65,6 @@ public class Item {
 		this.canPickUp=canPickUp;
 	}
 	public void setisAvailable(boolean isAvailable) {
-		this.isAvailable=isAvailable;
+		this.isDiscontinued=isAvailable;
 	}
 }
