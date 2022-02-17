@@ -11,27 +11,27 @@ public class Holiday {
     private int day
 
   @Id
-  public String getname() {
+  public String getName() {
       return this.name;
   }
 
-  public int getmonth() {
+  public int getMonth() {
       return this.month;
   }
 
-  public int getday() {
+  public int getDay() {
       return this.day;
   }
 
-  public void setname(String name) {
+  public void setName(String name) {
       this.name = name;
   }
 
-  public void setmonth(int month) {
+  public void setMonth(int month) {
       this.month = month;
   }
 
-  public void setday(int day) {
+  public void setDay(int day) {
       this.day = day;
   }
 
