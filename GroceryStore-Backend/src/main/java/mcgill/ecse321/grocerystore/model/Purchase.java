@@ -148,7 +148,7 @@ public class Purchase {
     if (o == this)
       return true;
     if (o.getClass() == this.getClass()) {
-      SpecificItem obj = (SpecificItem) o;
+      Purchase obj = (Purchase) o;
       if (obj.getId() == 0)
         return false;
       return obj.getId() == this.getId();
