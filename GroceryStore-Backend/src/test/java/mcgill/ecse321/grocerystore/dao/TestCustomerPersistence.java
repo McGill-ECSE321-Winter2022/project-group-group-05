@@ -108,8 +108,12 @@ public class TestCustomerPersistence {
     customer = customerRepository.findCustomerByUsername(username);
     customer.addPurchase(p3);
     assertEquals(3, customer.getPurchases().size());
+    customerRepository.save(customer);
+
+    customer = null;
+
+    customer = customerRepository.findCustomerByUsername(username);
     customer.removePurchase(p3);
-    purchaseRepository.delete(p3);
     assertEquals(2, customer.getPurchases().size());
   }
 
