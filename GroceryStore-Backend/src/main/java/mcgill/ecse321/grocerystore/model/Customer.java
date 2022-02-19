@@ -16,12 +16,13 @@ public class Customer {
   private String email;
   private String address;
   private boolean isLocal;
-  @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private Set<Purchase> purchases;
 
   public Customer() {
     this.purchases = new HashSet<Purchase>();
   }
+
   public void setUsername(String value) {
     this.username = value;
   }
@@ -71,15 +72,9 @@ public class Customer {
   }
 
   public boolean removePurchase(Purchase value) {
-    //if(this.purchases.contains(value)) {
-    //this.purchases.remove(value);
-   // return true;
-    //}
-    for (Purchase p : this.purchases) {
-      if(p.equals(value)) {
-        this.purchases.remove(p);
-        return true;
-      }
+    if (this.purchases.contains(value)) {
+      this.purchases.remove(value);
+      return true;
     }
     return false;
   }

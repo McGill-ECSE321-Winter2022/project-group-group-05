@@ -17,13 +17,11 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 public class TestCustomerPersistence {
   @Autowired
   private CustomerRepository customerRepository;
-  @Autowired
-  private PurchaseRepository purchaseRepository;
+
   @BeforeEach
   @AfterEach
   public void clearDatabase() {
     customerRepository.deleteAll();
-    purchaseRepository.deleteAll();
   }
 
   @Test
@@ -75,6 +73,10 @@ public class TestCustomerPersistence {
     customer.setAddress(address);
     customer.setIsLocal(isLocal);
     customerRepository.save(customer);
+
+    customer = null;
+
+    customer = customerRepository.findCustomerByUsername(username);
     assertEquals(username, customer.getUsername());
     assertEquals(password, customer.getPassword());
     assertEquals(email, customer.getEmail());
@@ -83,32 +85,23 @@ public class TestCustomerPersistence {
   }
 
   @Test
-  public void testPurchase() {
+  public void testAsssociationCustomer() {
     String username = "TestCustomer";
     Purchase p1 = new Purchase();
-    p1.setIsDelivery(false);
     Purchase p2 = new Purchase();
-    p2.setIsDelivery(true);
-    purchaseRepository.save(p1);
-    purchaseRepository.save(p2);
     Customer customer = new Customer();
     customer.setUsername(username);
     customer.addPurchase(p1);
     customer.addPurchase(p2);
     customerRepository.save(customer);
     assertEquals(2, customer.getPurchases().size());
-    
+
     customer = null;
-    
+
     Purchase p3 = new Purchase();
-    p3.setIsDelivery(true);
-    purchaseRepository.save(p3);
     customer = customerRepository.findCustomerByUsername(username);
     customer.addPurchase(p3);
     assertEquals(3, customer.getPurchases().size());
-    customerRepository.save(customer);
-    customer = null;
-    customer = customerRepository.findCustomerByUsername(username);
     customer.removePurchase(p3);
     assertEquals(2, customer.getPurchases().size());
   }

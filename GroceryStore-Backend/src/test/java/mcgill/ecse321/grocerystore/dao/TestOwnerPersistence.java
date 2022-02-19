@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import mcgill.ecse321.grocerystore.model.Customer;
 import mcgill.ecse321.grocerystore.model.Owner;
 
 @ExtendWith(SpringExtension.class)
@@ -20,6 +19,7 @@ import mcgill.ecse321.grocerystore.model.Owner;
 public class TestOwnerPersistence {
   @Autowired
   private OwnerRepository ownerRepository;
+
   @BeforeEach
   @AfterEach
   public void clearDatabase() {
@@ -36,8 +36,7 @@ public class TestOwnerPersistence {
     owner.setEmail(email);
     owner.setPassword(password);
     ownerRepository.save(owner);
-    System.out.println("saved");
-    
+
     owner = null;
 
     owner = ownerRepository.findOwnerByUsername(username);
@@ -46,9 +45,9 @@ public class TestOwnerPersistence {
     assertEquals(password, owner.getPassword());
     assertEquals(email, owner.getEmail());
   }
-  
+
   @Test
-  public void testAttributeCustomer() {
+  public void testAttributeOwner() {
     String username = "TestOwner";
     Owner owner = new Owner();
     owner.setUsername(username);
@@ -64,6 +63,10 @@ public class TestOwnerPersistence {
     owner.setEmail(email);
     owner.setPassword(password);
     ownerRepository.save(owner);
+
+    owner = null;
+
+    owner = ownerRepository.findOwnerByUsername(username);
     assertEquals(username, owner.getUsername());
     assertEquals(password, owner.getPassword());
     assertEquals(email, owner.getEmail());

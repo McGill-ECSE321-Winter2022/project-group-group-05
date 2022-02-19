@@ -24,12 +24,20 @@ public class OpeningHours {
     return this.startTime;
   }
 
+  public void setStartTime(String value) {
+    this.startTime = Time.valueOf(value);
+  }
+
   public void setStartTime(Time value) {
     this.startTime = value;
   }
 
   public Time getEndTime() {
     return this.endTime;
+  }
+
+  public void setEndTime(String value) {
+    this.endTime = Time.valueOf(value);
   }
 
   public void setEndTime(Time value) {
