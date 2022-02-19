@@ -5,5 +5,6 @@ import mcgill.ecse321.grocerystore.model.SpecificItem;
 
 public interface SpecificItemRepository extends CrudRepository<SpecificItem, Long> {
 
+  SpecificItem findSpecificItemById(long id);
 
 }

@@ -81,26 +81,15 @@ public class Employee {
     if (employeeSchedules == null) {
       employeeSchedules = new HashSet<EmployeeSchedule>();
     }
-    return employeeSchedules == null ? false : employeeSchedules.add(employeeSchedule);
+    return employeeSchedules.add(employeeSchedule);
   }
 
   /**
-   * The .remove(Object o) method isn't helpful when classes are loaded from the database. Instead,
-   * this method will search for an instance of EmployeeSchedule with the specified ID and remove it
-   * if found.
-   * 
    * @param scheduleId - The id of the EmployeeSchedule to be removed.
    * @return boolean - True if the EmployeeSchedule was successfully removed.
    */
-  public boolean removeEmployeeSchedule(long scheduleId) {
-    EmployeeSchedule tempSchedule = null;
-    for (var schedule : employeeSchedules) {
-      if (schedule.getId() == scheduleId) {
-        tempSchedule = schedule;
-        break;
-      }
-    }
-    return tempSchedule == null ? false : employeeSchedules.remove(null);
+  public boolean removeEmployeeSchedule(EmployeeSchedule employeeSchedule) {
+    return employeeSchedules == null ? false : employeeSchedules.remove(employeeSchedule);
   }
 
 }

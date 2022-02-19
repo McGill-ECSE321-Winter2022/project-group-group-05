@@ -3,6 +3,7 @@ package mcgill.ecse321.grocerystore.model;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +14,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * 
+ * @author Jimmy Sheng
+ *
+ */
 @Entity
 public class Purchase {
 
@@ -75,14 +81,34 @@ public class Purchase {
     return this.timeOfPurchaseMillis;
   }
 
-  public void addSpecificItem(SpecificItem anItem) {
-    this.specificItems.add(anItem);
+  public boolean addSpecificItem(SpecificItem anItem) {
+    return this.specificItems.add(anItem);
   }
 
+  /**
+   * Remove the specificItem from the purchase. Runs in O(1) time.
+   * 
+   * @param anItem
+   * @return true if the purchase contains the specificItem
+   */
   public boolean removeSpecificItem(SpecificItem anItem) {
-    if (this.specificItems.contains(anItem)) {
-      this.specificItems.remove(anItem);
-      return true;
+    return this.specificItems.remove(anItem);
+  }
+
+  /**
+   * Alternative way to remove specificItem by id. Runs in O(n) time.
+   * 
+   * @param id
+   * @return true if the purchase contains the specificItem with given id
+   */
+  public boolean removeSpecificItem(long id) {
+    Iterator<SpecificItem> i = this.specificItems.iterator();
+    while (i.hasNext()) {
+      SpecificItem spItem = i.next();
+      if (spItem.getId() == id) {
+        i.remove();
+        return true;
+      }
     }
     return false;
   }
@@ -97,6 +123,37 @@ public class Purchase {
 
   public void setTimeOfPurchaseMillis() {
     this.timeOfPurchaseMillis = System.currentTimeMillis();
+  }
+
+  /**
+   * At creation, Purchase will have default Object.hashCode(). <br>
+   * Once saved to the database, their hashCode() will be their id.
+   */
+  @Override
+  public int hashCode() {
+    if (this.getId() == 0)
+      return super.hashCode();
+    return (int) this.getId();
+  }
+
+  /**
+   * Two Purchases are not equal if they both have id of 0 because they haven't been saved to the
+   * database yet, unless they're equal by == as defined in Object. <br>
+   * Otherwise, they're equal if they have the same id.
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (o == null)
+      return false;
+    if (o == this)
+      return true;
+    if (o.getClass() == this.getClass()) {
+      Purchase obj = (Purchase) o;
+      if (obj.getId() == 0)
+        return false;
+      return obj.getId() == this.getId();
+    }
+    return false;
   }
 
 }
