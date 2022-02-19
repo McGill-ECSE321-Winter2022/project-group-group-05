@@ -71,7 +71,6 @@ public class SpecificItem {
     return (int) this.getId();
   }
 
-
   /**
    * Two SpecificItems are not equal if they both have id of 0 because they haven't been saved to
    * the database yet, unless they're equal by == as defined in Object. <br>

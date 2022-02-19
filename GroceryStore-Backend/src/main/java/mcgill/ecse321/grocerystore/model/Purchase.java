@@ -99,4 +99,35 @@ public class Purchase {
     this.timeOfPurchaseMillis = System.currentTimeMillis();
   }
 
+  /**
+   * At creation, Purchase will have default Object.hashCode(). <br>
+   * Once saved to the database, their hashCode() will be their id.
+   */
+  @Override
+  public int hashCode() {
+    if (this.getId() == 0)
+      return super.hashCode();
+    return (int) this.getId();
+  }
+
+  /**
+   * Two Purchases are not equal if they both have id of 0 because they haven't been saved to the
+   * database yet, unless they're equal by == as defined in Object. <br>
+   * Otherwise, they're equal if they have the same id.
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (o == null)
+      return false;
+    if (o == this)
+      return true;
+    if (o.getClass() == this.getClass()) {
+      SpecificItem obj = (SpecificItem) o;
+      if (obj.getId() == 0)
+        return false;
+      return obj.getId() == this.getId();
+    }
+    return false;
+  }
+
 }
