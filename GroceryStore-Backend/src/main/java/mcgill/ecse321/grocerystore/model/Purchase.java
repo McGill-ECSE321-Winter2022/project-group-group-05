@@ -14,6 +14,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * 
+ * @author Jimmy Sheng
+ *
+ */
 @Entity
 public class Purchase {
 
@@ -76,8 +81,8 @@ public class Purchase {
     return this.timeOfPurchaseMillis;
   }
 
-  public void addSpecificItem(SpecificItem anItem) {
-    this.specificItems.add(anItem);
+  public boolean addSpecificItem(SpecificItem anItem) {
+    return this.specificItems.add(anItem);
   }
 
   /**
