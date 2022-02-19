@@ -15,7 +15,6 @@ import mcgill.ecse321.grocerystore.model.Owner;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
 public class TestOwnerPersistence {
   @Autowired
   private OwnerRepository ownerRepository;

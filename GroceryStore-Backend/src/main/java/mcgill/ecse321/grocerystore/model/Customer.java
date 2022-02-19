@@ -66,8 +66,8 @@ public class Customer {
     this.purchases = set;
   }
 
-  public void addPurchase(Purchase value) {
-    this.purchases.add(value);
+  public boolean addPurchase(Purchase value) {
+    return this.purchases.add(value);
   }
 
   public boolean removePurchase(Purchase value) {

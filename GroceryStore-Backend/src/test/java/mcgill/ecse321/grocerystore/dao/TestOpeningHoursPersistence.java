@@ -15,7 +15,6 @@ import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
 public class TestOpeningHoursPersistence {
   @Autowired
   private OpeningHoursRepository openingHoursRepository;
