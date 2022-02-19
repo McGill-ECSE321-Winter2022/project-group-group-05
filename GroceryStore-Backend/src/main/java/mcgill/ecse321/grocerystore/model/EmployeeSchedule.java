@@ -91,9 +91,10 @@ public class EmployeeSchedule {
    * <p>
    * The behavior of this method is as follows:
    * <ul>
-   * <li>if this.getId() == 0 and o.getId() == 0 -> return this.equals(o); If the primary key of
-   * both instances of EmployeeSchedule are 0, then neither object has interacted with the database
-   * yet. Therefore, we may substitute the standard behavior of equals().</li>
+   * <li>if this.getId() == 0 and o.getId() == 0 -> return o == this; If the id of both objects is
+   * 0, neither of the two objects has interacted with the database yet. Therefore, the objects may
+   * be evaluated identically to how super.equals() works. This is already done at the start of the
+   * method.</li>
    * <li>if this.getId() != 0 xor o.getId() != 0 -> return false; If only one of the two objects has
    * been added to the database, the equality of both objects becomes unpredictable. They may be the
    * same object, but we cannot definitively assert that they are the same object. Therefore, return
