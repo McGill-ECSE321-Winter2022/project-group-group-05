@@ -5,12 +5,11 @@ import javax.persistence.Id;
 
 @Entity
 public class Holiday {
+	@Id
+    private String name;
+    private int month;
+    private int day;
 
-    private String name
-    private int month
-    private int day
-
-  @Id
   public String getName() {
       return this.name;
   }
@@ -23,16 +22,16 @@ public class Holiday {
       return this.day;
   }
 
-  public void setName(String name) {
-      this.name = name;
+  public void setName(String value) {
+      this.name = value;
   }
 
-  public void setMonth(int month) {
-      this.month = month;
+  public void setMonth(int value) {
+      this.month = value;
   }
 
-  public void setDay(int day) {
-      this.day = day;
+  public void setDay(int value) {
+      this.day = value;
   }
 
 }
