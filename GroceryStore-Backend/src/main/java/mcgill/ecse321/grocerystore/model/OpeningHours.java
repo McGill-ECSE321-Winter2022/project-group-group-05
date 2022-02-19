@@ -6,12 +6,11 @@ import javax.persistence.Id;
 
 @Entity
 public class OpeningHours {
-
+  @Id
   private String daysOfWeek;
   private Time startTime;
   private Time endTime;
 
-  @Id
   public String getDaysOfWeek() {
     return this.daysOfWeek;
   }
