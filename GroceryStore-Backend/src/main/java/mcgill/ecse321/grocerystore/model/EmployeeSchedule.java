@@ -114,9 +114,6 @@ public class EmployeeSchedule {
     // if o is not an instance of EmployeeSchedule, or is null, this code will not run
     if (o instanceof EmployeeSchedule) {
       long objectId = ((EmployeeSchedule) o).getId();
-      if (objectId == 0 && id == 0) {
-        return super.equals(o);
-      }
       return objectId != 0 && id == objectId;
     }
     return false;
