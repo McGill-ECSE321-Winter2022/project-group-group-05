@@ -2,7 +2,6 @@ package mcgill.ecse321.grocerystore.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -72,11 +71,7 @@ public class Customer {
   }
 
   public boolean removePurchase(Purchase value) {
-    if (this.purchases.contains(value)) {
-      this.purchases.remove(value);
-      return true;
-    }
-    return false;
+    return this.purchases.remove(value);
   }
 
   public Set<Purchase> getPurchases() {
