@@ -115,7 +115,7 @@ public class EmployeeSchedule {
     if (o instanceof EmployeeSchedule) {
       long objectId = ((EmployeeSchedule) o).getId();
       if (objectId == 0 && id == 0) {
-        return this.equals(o);
+        return super.equals(o);
       }
       return objectId != 0 && id == objectId;
     }
