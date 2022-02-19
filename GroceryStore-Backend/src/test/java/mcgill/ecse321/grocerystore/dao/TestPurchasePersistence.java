@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Set;
 import org.junit.jupiter.api.AfterAll;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
@@ -27,7 +27,7 @@ public class TestPurchasePersistence {
   private PurchaseRepository purchaseRepo;
 
   @Autowired
-  private CrudRepository<SpecificItem, Long> specificItemRepo;
+  private SpecificItemRepository specificItemRepo;
 
   @BeforeEach
   @AfterAll
@@ -95,7 +95,7 @@ public class TestPurchasePersistence {
   }
 
   @Test
-  public void addRemoveSpecificItems() {
+  public void addSpecificItems() {
     Purchase myCart = new Purchase();
     myCart.addSpecificItem(new SpecificItem());
     myCart = purchaseRepo.save(myCart);
@@ -118,6 +118,24 @@ public class TestPurchasePersistence {
     // finish
     retrieveCart = purchaseRepo.findPurchaseById(myCartId);
     assertEquals(0, retrieveCart.getSpecificItems().size());
+  }
+
+  @Test
+  public void removeSpecificItems() {
+    Purchase myCart = new Purchase();
+    SpecificItem apple = new SpecificItem();
+    apple.setPurchasePrice(50);
+    apple.setPurchaseQuantity(2);
+    // add first item
+    myCart.addSpecificItem(apple);
+    myCart = purchaseRepo.save(myCart);
+    long cartId = myCart.getId();
+    long appleId = apple.getId();
+    // retrieve cart
+    Purchase retrievedCart = purchaseRepo.findPurchaseById(cartId);
+    SpecificItem retrievedApple = specificItemRepo.findSpecificItemById(appleId);
+    // remove retrieved apple
+    assertTrue(retrievedCart.removeSpecificItem(retrievedApple));
   }
 
 }
