@@ -17,11 +17,14 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 public class TestCustomerPersistence {
   @Autowired
   private CustomerRepository customerRepository;
+  @Autowired
+  private PurchaseRepository purchaseRepository;
 
   @BeforeEach
   @AfterEach
   public void clearDatabase() {
     customerRepository.deleteAll();
+    purchaseRepository.deleteAll();
   }
 
   @Test
@@ -89,6 +92,8 @@ public class TestCustomerPersistence {
     String username = "TestCustomer";
     Purchase p1 = new Purchase();
     Purchase p2 = new Purchase();
+    purchaseRepository.save(p1);
+    purchaseRepository.save(p2);
     Customer customer = new Customer();
     customer.setUsername(username);
     customer.addPurchase(p1);
@@ -99,10 +104,12 @@ public class TestCustomerPersistence {
     customer = null;
 
     Purchase p3 = new Purchase();
+    purchaseRepository.save(p3);
     customer = customerRepository.findCustomerByUsername(username);
     customer.addPurchase(p3);
     assertEquals(3, customer.getPurchases().size());
     customer.removePurchase(p3);
+    purchaseRepository.delete(p3);
     assertEquals(2, customer.getPurchases().size());
   }
 

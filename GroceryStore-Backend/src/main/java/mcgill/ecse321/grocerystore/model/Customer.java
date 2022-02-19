@@ -16,7 +16,7 @@ public class Customer {
   private String email;
   private String address;
   private boolean isLocal;
-  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER)
   private Set<Purchase> purchases;
 
   public Customer() {
