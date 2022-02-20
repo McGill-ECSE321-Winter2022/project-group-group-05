@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 
 public interface ItemRepository extends CrudRepository<Item, String> {
-
+Item  findItemByName(String name);
 
 }

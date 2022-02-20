@@ -15,7 +15,7 @@ public class Item {
 	private boolean canDeliver;
 	private boolean canPickUp;
 	private boolean isDiscontinued;
-	// aewffaewfawef
+	
 
 	// This class has no association
 	public Item() {
@@ -28,15 +28,15 @@ public class Item {
 
 	}
 
-	public String getname() {
+	public String getName() {
 		return this.name;
 	}
 
-	public double getprice() {
+	public double getPrice() {
 		return this.price;
 	}
 
-	public int getinventory() {
+	public int getInventory() {
 		return this.inventory;
 
 	}
@@ -49,19 +49,19 @@ public class Item {
 		return this.canPickUp;
 	}
 
-	public boolean getisAvailable() {
+	public boolean getisDiscontinued() {
 		return this.isDiscontinued;
 	}
 
-	public void setname(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setprice(double price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
-	public void setinventory(int inventory) {
+	public void setInventory(int inventory) {
 		this.inventory = inventory;
 	}
 
@@ -73,7 +73,8 @@ public class Item {
 		this.canPickUp = canPickUp;
 	}
 
-	public void setisAvailable(boolean isAvailable) {
-		this.isDiscontinued = isAvailable;
+	public void setisDiscontinued(boolean isDiscontinued) {
+		this.isDiscontinued = isDiscontinued;
 	}
+
 }
