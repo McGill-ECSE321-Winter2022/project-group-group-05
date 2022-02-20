@@ -3,7 +3,7 @@ package mcgill.ecse321.grocerystore.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import mcgill.ecse321.grocerystore.model.ItemCategory;
 @TestInstance(Lifecycle.PER_CLASS)
 
 
-public class TestItemCategoryPersistence{
+public class TestItemCategoryPersistence {
 
   @Autowired
   private ItemCategoryRepository ItemCategoryRepo;
@@ -34,56 +34,55 @@ public class TestItemCategoryPersistence{
   @BeforeEach
   @AfterAll
   public void clearDatabase() {
-	  ItemCategoryRepo.deleteAll();
-      ItemRepo.deleteAll();
+    ItemCategoryRepo.deleteAll();
+    ItemRepo.deleteAll();
   }
 
-   @Test
+  @Test
   public void testPersistAndLoadItemCategory() {
-   String name="Food";
-   ItemCategory category=new ItemCategory();
-   category.setName(name);
-   ItemCategoryRepo.save(category);
-   
-   //Delete instance of ItemCategory
-   category=null;
-   
+    String name = "Food";
+    ItemCategory category = new ItemCategory();
+    category.setName(name);
+    ItemCategoryRepo.save(category);
+
+    // Delete instance of ItemCategory
+    category = null;
+
     // assert
-  category=ItemCategoryRepo.findItemCategoryByName(name);
-   assertEquals(name,category.getName());
-   
+    category = ItemCategoryRepo.findItemCategoryByName(name);
+    assertEquals(name, category.getName());
+
   }
 
   @Test
   public void testAssociationItemCategory() {
-	 //creating ItemCategory and Item instance
+    // creating ItemCategory and Item instance
     ItemCategory category = new ItemCategory();
-    Item coke=new Item();
-    Item sprite=new Item();
+    Item coke = new Item();
+    Item sprite = new Item();
     coke.setName("coke");
     sprite.setName("sprite");
     category.setName("food");
-    //adding item into ItemCategory
-    category.addSItem(sprite);
-    category.addSItem(coke);
-    //save the itemcategory instance
+    // adding item into ItemCategory;
+  assertTrue(category.addItem(sprite));
+  assertTrue(category.addItem(coke));  
+    // save the itemcategory instance
     ItemCategoryRepo.save(category);
-    
-    //Delete instance ofItemCategory
-   category=null;
-    //fetching the ItemCategory instance
-    category=ItemCategoryRepo.findItemCategoryByName ("food");
   
+
+    // Delete instance ofItemCategory
+    category = null;
+    // fetching the ItemCategory instance
+    category = ItemCategoryRepo.findItemCategoryByName("food");
+
     /*
      * Cascading: if ItemCategory is saved then its Item should be saved
      */
     assertNotNull(category);
-    assertEquals(2,category.getItem().size());
+    assertEquals(2, category.getItem().size());
+    assertTrue(category.removeItem(coke));
   }
- 
-	    
-	  
-		   
-	    
-	  
+
+
+
 }
