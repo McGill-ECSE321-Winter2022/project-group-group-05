@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import mcgill.ecse321.grocerystore.model.Holiday;
 import mcgill.ecse321.grocerystore.model.Item;
-import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -30,6 +28,7 @@ public class TestItemPersistence {
 
   @Test
   public void testPersistAndLoadItem() {
+    // Creating item instance
     Item item = new Item();
     String itemname = "Coke";
     Double price = 3.99;
@@ -45,10 +44,11 @@ public class TestItemPersistence {
     item.setisDiscontinued(isDiscontinued);
     itemRepository.save(item);
 
-
+    // delete item instance
     item = null;
-
+    // fetching item instance
     item = itemRepository.findItemByName(itemname);
+    // asserts
     assertNotNull(item);
     assertEquals(itemname, item.getName());
     assertEquals(price, item.getPrice());
@@ -60,6 +60,7 @@ public class TestItemPersistence {
 
   @Test
   public void testAtributeItem() {
+    // Creating item instance
     Item item = new Item();
     String name = "coke";
     item.setName(name);
@@ -69,21 +70,25 @@ public class TestItemPersistence {
     item.setInventory(5);
     item.setisDiscontinued(false);
 
-
+    // Saving item instance
     itemRepository.save(item);
+    // delete item instance
     item = null;
 
+    /// fetching item instance
     item = itemRepository.findItemByName(name);
     item.setcanDeliver(true);
     item.setcanPickUp(true);
     item.setInventory(3);
     item.setisDiscontinued(true);
     item.setPrice(4);
-
+    // Saving item instance
     itemRepository.save(item);
+    // delete item instance
     item = null;
-
+    // fetching item instance
     item = itemRepository.findItemByName(name);
+    // asserts
     assertNotNull(item);
     assertEquals(name, item.getName());
     assertEquals(3, item.getInventory());
