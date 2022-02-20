@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import mcgill.ecse321.grocerystore.model.Holiday;
 import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
@@ -29,13 +30,13 @@ public class TestItemPersistence {
 
   @Test
   public void testPersistAndLoadItem() {
-    Item item  = new Item();
+    Item item = new Item();
     String itemname = "Coke";
-    Double price=3.99;
+    Double price = 3.99;
     int inventory = 3;
-    boolean canDeliver=true;
-    boolean canPickUp =true;
-    boolean isDiscontinued=true;
+    boolean canDeliver = true;
+    boolean canPickUp = true;
+    boolean isDiscontinued = true;
     item.setName(itemname);
     item.setPrice(price);
     item.setInventory(inventory);
@@ -43,19 +44,56 @@ public class TestItemPersistence {
     item.setcanPickUp(canPickUp);
     item.setisDiscontinued(isDiscontinued);
     itemRepository.save(item);
-    
+
 
     item = null;
 
     item = itemRepository.findItemByName(itemname);
     assertNotNull(item);
-    assertEquals(itemname,item.getName());
+    assertEquals(itemname, item.getName());
     assertEquals(price, item.getPrice());
     assertEquals(inventory, item.getInventory());
-    assertEquals(canDeliver,item.getcanDeliver());
-    assertEquals(canPickUp,item.getcanPickUp());
-    assertEquals(isDiscontinued,item.getisDiscontinued());
+    assertEquals(canDeliver, item.getcanDeliver());
+    assertEquals(canPickUp, item.getcanPickUp());
+    assertEquals(isDiscontinued, item.getisDiscontinued());
   }
 
- 
+  @Test
+  public void testAtributeItem() {
+    Item item = new Item();
+    String name = "coke";
+    item.setName(name);
+    item.setPrice(10);
+    item.setcanDeliver(false);
+    item.setcanPickUp(false);
+    item.setInventory(5);
+    item.setisDiscontinued(false);
+
+
+    itemRepository.save(item);
+    item = null;
+
+    item = itemRepository.findItemByName(name);
+    item.setcanDeliver(true);
+    item.setcanPickUp(true);
+    item.setInventory(3);
+    item.setisDiscontinued(true);
+    item.setPrice(4);
+
+    itemRepository.save(item);
+    item = null;
+
+    item = itemRepository.findItemByName(name);
+    assertNotNull(item);
+    assertEquals(name, item.getName());
+    assertEquals(3, item.getInventory());
+    assertEquals(4, item.getPrice());
+    assertEquals(true, item.getcanDeliver());
+    assertEquals(true, item.getcanPickUp());
+    assertEquals(true, item.getisDiscontinued());
+
+
+  }
+
 }
+

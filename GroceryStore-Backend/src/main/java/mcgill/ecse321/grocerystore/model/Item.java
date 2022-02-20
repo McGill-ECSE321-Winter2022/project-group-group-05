@@ -1,7 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
@@ -9,7 +8,7 @@ public class Item {
 
 	@Id
 	private String name;
-	// Attributes
+	//  Item Attributes
 	private double price;
 	private int inventory;
 	private boolean canDeliver;
@@ -18,16 +17,11 @@ public class Item {
 	
 
 	// This class has no association
-	public Item() {
-		this.price = 0.0;
-		this.name = null;
-		this.inventory = 0;
-		this.canDeliver = false;
-		this.canPickUp = false;
-		this.isDiscontinued = false;
-
-	}
-
+	
+	
+	
+    //getter methods
+	//--------------
 	public String getName() {
 		return this.name;
 	}
@@ -52,7 +46,8 @@ public class Item {
 	public boolean getisDiscontinued() {
 		return this.isDiscontinued;
 	}
-
+    //setter methods
+	//--------------
 	public void setName(String name) {
 		this.name = name;
 	}

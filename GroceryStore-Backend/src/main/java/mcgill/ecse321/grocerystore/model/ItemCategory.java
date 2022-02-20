@@ -23,32 +23,29 @@ public class ItemCategory {
  public ItemCategory() {
 	    this.item = new HashSet<Item>();
 	  }
-  //setters
+  //Getters
   public String getName() {
 	  return this.name;
   }
-  
-  //getters
+  public Set<Item> getItem(){
+	  return this.item;
+  }
+  //Setters
+ public void setItem(Set<Item> set) {
+	    this.item = set;
+	  }
   public void setName(String name) {
 	  this.name=name;
   }
+  //Helper methods
   public boolean addSItem(Item item) {
 	    return this.item.add(item);
 	  }
   
-  public boolean addItem(String name) {
-	  Iterator<Item> i = this.item.iterator();
-	    while (i.hasNext()) {
-	      Item spItem = i.next();
-	      if (spItem.getName()==name) {
-	        this.item.add(spItem);
-	        return true;
-	      }
-	    }
-	    return false;
-  }
+  
   
   public boolean removeItem(Item item) {
+
     return this.item.remove(item);
   }
   public boolean removeItem(String name) {
@@ -63,8 +60,16 @@ public class ItemCategory {
 	    return false;
 
 	}
+  
+
+
+  
+}
+
+
 	
 
   
 
-}
+
+
