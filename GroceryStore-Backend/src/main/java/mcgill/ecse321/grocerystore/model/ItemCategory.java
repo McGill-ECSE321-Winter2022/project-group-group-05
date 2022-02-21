@@ -3,7 +3,6 @@ package mcgill.ecse321.grocerystore.model;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -18,10 +17,10 @@ public class ItemCategory {
   private String name;
   // ItemCategory Associations
   @OneToMany(fetch = FetchType.EAGER)
-  private Set<Item> item;
+  private Set<Item> items;
 
   public ItemCategory() {
-    this.item = new HashSet<Item>();
+    this.items = new HashSet<Item>();
   }
 
   // Getters
@@ -29,29 +28,21 @@ public class ItemCategory {
     return this.name;
   }
 
-  public Set<Item> getItem() {
-    return this.item;
+  public Set<Item> getItems() {
+    return this.items;
   }
 
   // Setters
-  public void setItem(Set<Item> set) {
-    this.item = set;
-  }
-
   public void setName(String name) {
     this.name = name;
   }
 
-  // Helper methods
   public boolean addItem(Item item) {
-    return this.item.add(item);
+    return this.items.add(item);
   }
 
-
-
   public boolean removeItem(Item item) {
-
-    return this.item.remove(item);
+    return this.items.remove(item);
   }
 
   /**
@@ -61,19 +52,16 @@ public class ItemCategory {
    * @return true if the item is removed
    */
   public boolean removeItem(String name) {
-    Iterator<Item> i = this.item.iterator();
+    Iterator<Item> i = this.items.iterator();
     while (i.hasNext()) {
       Item spItem = i.next();
-      if (spItem.getName().equals(null)) {
+      if (spItem.getName().equals(name)) {
         i.remove();
         return true;
       }
     }
     return false;
-
   }
-
-
 
 }
 

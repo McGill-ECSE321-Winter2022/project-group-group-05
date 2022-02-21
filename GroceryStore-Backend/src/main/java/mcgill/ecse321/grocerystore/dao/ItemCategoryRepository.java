@@ -5,8 +5,7 @@ import mcgill.ecse321.grocerystore.model.ItemCategory;
 
 
 public interface ItemCategoryRepository extends CrudRepository<ItemCategory, String> {
-	 
-	ItemCategory findItemCategoryByName(String name);
-	 
+
+  ItemCategory findItemCategoryByName(String name);
 
 }
