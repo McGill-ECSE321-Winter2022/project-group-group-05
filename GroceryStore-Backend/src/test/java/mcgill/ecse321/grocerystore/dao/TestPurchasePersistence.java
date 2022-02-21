@@ -59,7 +59,7 @@ public class TestPurchasePersistence {
     ArrayList<Purchase> notDeliveries = purchaseRepo.findByIsDelivery(false);
     ArrayList<Purchase> inPaidState =
         purchaseRepo.findByStateOrderByTimeOfPurchaseMillis(PurchaseState.Paid);
-    Purchase aPaidPurchase = purchaseRepo.findPurchaseById(p3id);
+    Purchase aPaidPurchase = purchaseRepo.findById(p3id);
     // assert
     assertEquals(PurchaseState.Paid, aPaidPurchase.getState());
     assertEquals(3, purchaseRepo.count());
@@ -84,7 +84,7 @@ public class TestPurchasePersistence {
     /*
      * Cascading: if Purchase is saved then its SpecificItems should be saved
      */
-    Purchase retrieveCart = purchaseRepo.findPurchaseById(myCart.getId());
+    Purchase retrieveCart = purchaseRepo.findById(myCart.getId());
     // id should be valid after save
     assertNotNull(retrieveCart);
     Set<SpecificItem> cartItems = retrieveCart.getSpecificItems();
@@ -106,8 +106,8 @@ public class TestPurchasePersistence {
     long cartId = myCart.getId();
     long appleId = apple1.getId();
     // retrieve cart
-    Purchase retrievedCart = purchaseRepo.findPurchaseById(cartId);
-    SpecificItem retrievedApple = specificItemRepo.findSpecificItemById(appleId);
+    Purchase retrievedCart = purchaseRepo.findById(cartId);
+    SpecificItem retrievedApple = specificItemRepo.findById(appleId);
     // remove retrieved apple
     assertTrue(retrievedCart.removeSpecificItem(retrievedApple));
   }

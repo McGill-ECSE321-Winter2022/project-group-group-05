@@ -7,7 +7,7 @@ import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 
 public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
 
-  Purchase findPurchaseById(long id);
+  Purchase findById(long id);
 
   ArrayList<Purchase> findByIsDelivery(boolean isDelivery);
 

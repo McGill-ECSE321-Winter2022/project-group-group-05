@@ -36,7 +36,7 @@ public class TestSpecificItemPersistence {
     pfgtInCart = specificItemRepo.save(pfgtInCart);
     long spId = pfgtInCart.getId();
     // retrieve
-    SpecificItem spItem = specificItemRepo.findSpecificItemById(spId);
+    SpecificItem spItem = specificItemRepo.findById(spId);
     assertEquals(pfgt, spItem.getItem());
     assertEquals(2, spItem.getPurchaseQuantity());
     assertEquals(6.75, spItem.getPurchasePrice());
@@ -50,17 +50,17 @@ public class TestSpecificItemPersistence {
     mtInCart = specificItemRepo.save(mtInCart);
     long mtInCartId = mtInCart.getId();
     // modify
-    Item item = itemRepo.findItemByName("Brown Sugar Milk Tea");
+    Item item = itemRepo.findByName("Brown Sugar Milk Tea");
     item.setPrice(7.65);
     item = itemRepo.save(item);
     // check current stored info
-    SpecificItem spItem = specificItemRepo.findSpecificItemById(mtInCartId);
+    SpecificItem spItem = specificItemRepo.findById(mtInCartId);
     assertEquals(5.0, spItem.getPurchasePrice());
     // verify
     assertEquals(7.65, spItem.updatePurchasePrice());
     spItem = specificItemRepo.save(spItem);
     // verify check 2
-    SpecificItem sp = specificItemRepo.findSpecificItemById(mtInCartId);
+    SpecificItem sp = specificItemRepo.findById(mtInCartId);
     assertEquals(7.65, sp.getPurchasePrice());
   }
 

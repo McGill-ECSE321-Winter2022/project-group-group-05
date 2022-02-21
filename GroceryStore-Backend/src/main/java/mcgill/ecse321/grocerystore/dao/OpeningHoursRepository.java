@@ -4,5 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 public interface OpeningHoursRepository extends CrudRepository<OpeningHours, String> {
-  OpeningHours findOpeningHoursByDaysOfWeek(String daysOfWeek);
+  OpeningHours findByDaysOfWeek(String daysOfWeek);
 }
