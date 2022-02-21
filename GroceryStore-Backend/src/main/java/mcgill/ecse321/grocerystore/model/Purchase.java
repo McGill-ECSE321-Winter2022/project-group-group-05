@@ -61,7 +61,11 @@ public class Purchase {
     return this.specificItems;
   }
 
-  public String getState() {
+  public PurchaseState getState() {
+    return this.state;
+  }
+
+  public String getStateFullName() {
     return this.state.toString();
   }
 
