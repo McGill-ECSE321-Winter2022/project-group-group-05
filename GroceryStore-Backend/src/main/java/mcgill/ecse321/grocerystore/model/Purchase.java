@@ -65,6 +65,12 @@ public class Purchase {
     return this.state.toString();
   }
 
+  /**
+   * If a Purchase belongs to a normal customer (i.e. not a point-of-sale) and is not for delivery,
+   * then it is for pickup
+   * 
+   * @return if this Purchase is for delivery
+   */
   public boolean getIsDelivery() {
     return this.isDelivery;
   }

@@ -1,7 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -18,8 +17,7 @@ public class SpecificItem {
   @GeneratedValue
   private long id;
 
-  // TODO: set (optional = false) once Item class is implemented
-  @ManyToOne(optional = true, fetch = FetchType.EAGER)
+  @ManyToOne(optional = false)
   private Item item;
 
   private int purchaseQuantity;
@@ -30,6 +28,27 @@ public class SpecificItem {
    * Providing default constructor for Spring
    */
   public SpecificItem() {}
+
+  /**
+   * Create a specificItem with the given item and 0 quantity
+   * 
+   * @param item
+   */
+  public SpecificItem(Item item) {
+    this(item, 0);
+  }
+
+  /**
+   * Create a specificItem with the given item and quantity
+   * 
+   * @param item
+   * @param qty
+   */
+  public SpecificItem(Item item, int qty) {
+    this.setItem(item);
+    this.setPurchaseQuantity(qty);
+    this.setPurchasePrice(item.getPrice());
+  }
 
   /**
    * <b>IMPORTANT: id is set automatically only after saving to database</b> <br>
@@ -53,6 +72,12 @@ public class SpecificItem {
     return this.purchasePrice;
   }
 
+  /**
+   * This method should only be used once at the creation of the specificItem<br>
+   * Once set, the linked item should not be modified
+   * 
+   * @param anItem
+   */
   public void setItem(Item anItem) {
     this.item = anItem;
   }
@@ -61,8 +86,28 @@ public class SpecificItem {
     this.purchaseQuantity = qty;
   }
 
-  public void setPurchasePrice(int price) {
+  /**
+   * This method generally <b>should not be used</b><br>
+   * Use updatePurchasePrice to automatically get the price of the linked item
+   * 
+   * @param price
+   */
+  public void setPurchasePrice(double price) {
     this.purchasePrice = price;
+  }
+
+  /**
+   * Update the recorded purchasePrice to the current price of the item
+   * 
+   * @return The updated price if item is not null<br>
+   *         Otherwise returns -1
+   */
+  public double updatePurchasePrice() {
+    if (this.item != null) {
+      this.purchasePrice = this.item.getPrice();
+      return this.purchasePrice;
+    }
+    return -1;
   }
 
   /**

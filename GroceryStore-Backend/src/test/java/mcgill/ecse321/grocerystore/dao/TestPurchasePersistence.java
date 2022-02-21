@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 import mcgill.ecse321.grocerystore.model.SpecificItem;
@@ -29,11 +30,15 @@ public class TestPurchasePersistence {
   @Autowired
   private SpecificItemRepository specificItemRepo;
 
+  @Autowired
+  private ItemRepository itemRepo;
+
   @BeforeEach
   @AfterAll
   public void clearDatabase() {
     purchaseRepo.deleteAll();
     specificItemRepo.deleteAll();
+    itemRepo.deleteAll();
   }
 
   @Test
@@ -76,12 +81,17 @@ public class TestPurchasePersistence {
   }
 
   @Test
-  public void saveSpecificItems() {
-    SpecificItem tomato = new SpecificItem();
-    SpecificItem potato = new SpecificItem();
+  public void addSpecificItems() {
+    Item tomato = new Item("Tomato");
+    Item potato = new Item("Potato");
+    tomato = itemRepo.save(tomato);
+    potato = itemRepo.save(potato);
+    SpecificItem tomato1 = new SpecificItem(tomato);
+    SpecificItem potato1 = new SpecificItem(potato);
     Purchase myCart = new Purchase();
-    myCart.addSpecificItem(tomato);
-    myCart.addSpecificItem(potato);
+    myCart.addSpecificItem(tomato1);
+    myCart.addSpecificItem(potato1);
+    myCart.addSpecificItem(null);
     purchaseRepo.save(myCart);
     /*
      * Cascading: if Purchase is saved then its SpecificItems should be saved
@@ -92,45 +102,21 @@ public class TestPurchasePersistence {
     Set<SpecificItem> cartItems = retrieveCart.getSpecificItems();
     // verify cascading
     assertEquals(2, cartItems.size());
-  }
-
-  @Test
-  public void addSpecificItems() {
-    Purchase myCart = new Purchase();
-    myCart.addSpecificItem(new SpecificItem());
-    myCart = purchaseRepo.save(myCart);
-    long myCartId = myCart.getId();
-    // 1st retrieval
-    Purchase retrieveCart = purchaseRepo.findPurchaseById(myCartId);
-    assertEquals(1, retrieveCart.getSpecificItems().size());
-    retrieveCart.addSpecificItem(new SpecificItem());
-    purchaseRepo.save(retrieveCart);
-    // 2nd retrieval
-    retrieveCart = purchaseRepo.findPurchaseById(myCartId);
-    assertEquals(2, retrieveCart.getSpecificItems().size());
-    retrieveCart.addSpecificItem(new SpecificItem());
-    purchaseRepo.save(retrieveCart);
-    // 3rd retrieval
-    retrieveCart = purchaseRepo.findPurchaseById(myCartId);
-    assertEquals(3, retrieveCart.getSpecificItems().size());
-    retrieveCart.getSpecificItems().clear();
-    purchaseRepo.save(retrieveCart);
-    // finish
-    retrieveCart = purchaseRepo.findPurchaseById(myCartId);
-    assertEquals(0, retrieveCart.getSpecificItems().size());
+    assertTrue(cartItems.contains(potato1));
+    assertTrue(cartItems.contains(tomato1));
   }
 
   @Test
   public void removeSpecificItems() {
+    Item apple = new Item("Apple", 2.99, 100);
+    apple = itemRepo.save(apple);
     Purchase myCart = new Purchase();
-    SpecificItem apple = new SpecificItem();
-    apple.setPurchasePrice(50);
-    apple.setPurchaseQuantity(2);
+    SpecificItem apple1 = new SpecificItem(apple, 2);
     // add first item
-    myCart.addSpecificItem(apple);
+    myCart.addSpecificItem(apple1);
     myCart = purchaseRepo.save(myCart);
     long cartId = myCart.getId();
-    long appleId = apple.getId();
+    long appleId = apple1.getId();
     // retrieve cart
     Purchase retrievedCart = purchaseRepo.findPurchaseById(cartId);
     SpecificItem retrievedApple = specificItemRepo.findSpecificItemById(appleId);

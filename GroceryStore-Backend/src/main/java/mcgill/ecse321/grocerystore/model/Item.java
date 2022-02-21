@@ -15,13 +15,70 @@ public class Item {
   private boolean canPickUp;
   private boolean isDiscontinued;
 
+  // default constructor
+  /**
+   * <b>IMPORTANT: Name must be set before saving to database</b> <br>
+   * Providing default constructor for Spring
+   */
+  public Item() {}
 
-  // This class has no association
+  /**
+   * Create an item with the specified name.<br>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   */
+  public Item(String name) {
+    this(name, 0.0, 0, false, false);
+  }
 
+  /**
+   * Create an item with the specified name and price<br>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   * @param price
+   */
+  public Item(String name, double price) {
+    this(name, price, 0, false, false);
+  }
 
+  /**
+   * Create an item with the specified name, price, and inventory<br>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   * @param price
+   * @param inventory
+   */
+  public Item(String name, double price, int inventory) {
+    this(name, price, inventory, false, false);
+  }
+
+  /**
+   * Create an item with the specified attributes.<br>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   * @param price
+   * @param inventory
+   * @param canDeliver
+   * @param canPickUp
+   */
+  public Item(String name, double price, int inventory, boolean canDeliver, boolean canPickUp) {
+    this.setName(name);
+    this.setPrice(price);
+    this.setInventory(inventory);
+    this.setCanDeliver(canDeliver);
+    this.setCanPickUp(canPickUp);
+  }
 
   // getter methods
   // --------------
+  /**
+   * 
+   * @return the primary key of this Item
+   */
   public String getName() {
     return this.name;
   }
@@ -32,7 +89,6 @@ public class Item {
 
   public int getInventory() {
     return this.inventory;
-
   }
 
   public boolean getCanDeliver() {
@@ -49,6 +105,11 @@ public class Item {
 
   // setter methods
   // --------------
+  /**
+   * This method should <b>only be used once at the creation</b> of the Item
+   * 
+   * @param name
+   */
   public void setName(String name) {
     this.name = name;
   }
@@ -71,6 +132,33 @@ public class Item {
 
   public void setIsDiscontinued(boolean isDiscontinued) {
     this.isDiscontinued = isDiscontinued;
+  }
+
+  // utility methods
+  /**
+   * Increment the inventory of this item by the specified value
+   * 
+   * @param addValue
+   * @return the new total inventory of this item
+   */
+  public int addInventory(int addValue) {
+    this.inventory += addValue;
+    return this.inventory;
+  }
+
+  /**
+   * Decrement the inventory of this item by the specified value if there is enough inventory
+   * 
+   * @param subtractValue
+   * @return The new total inventory of this item<br>
+   *         <b>Returns -1 if there's not enough inventory</b>
+   */
+  public int subInventory(int subtractValue) {
+    if (this.inventory >= subtractValue) {
+      this.inventory -= subtractValue;
+      return this.inventory;
+    }
+    return -1;
   }
 
   /**
