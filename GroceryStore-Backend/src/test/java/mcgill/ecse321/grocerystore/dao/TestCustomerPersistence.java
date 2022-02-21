@@ -44,7 +44,7 @@ public class TestCustomerPersistence {
 
     customer = null;
 
-    customer = customerRepository.findCustomerByUsername(username);
+    customer = customerRepository.findByUsername(username);
     assertNotNull(customer);
     assertEquals(username, customer.getUsername());
     assertEquals(password, customer.getPassword());
@@ -66,7 +66,7 @@ public class TestCustomerPersistence {
 
     customer = null;
 
-    customer = customerRepository.findCustomerByUsername(username);
+    customer = customerRepository.findByUsername(username);
     String password = "strong-password";
     String email = "new-customer@email.ca";
     String address = "14-address";
@@ -79,7 +79,7 @@ public class TestCustomerPersistence {
 
     customer = null;
 
-    customer = customerRepository.findCustomerByUsername(username);
+    customer = customerRepository.findByUsername(username);
     assertEquals(username, customer.getUsername());
     assertEquals(password, customer.getPassword());
     assertEquals(email, customer.getEmail());
@@ -105,14 +105,14 @@ public class TestCustomerPersistence {
 
     Purchase p3 = new Purchase();
     purchaseRepository.save(p3);
-    customer = customerRepository.findCustomerByUsername(username);
+    customer = customerRepository.findByUsername(username);
     customer.addPurchase(p3);
     assertEquals(3, customer.getPurchases().size());
     customerRepository.save(customer);
 
     customer = null;
 
-    customer = customerRepository.findCustomerByUsername(username);
+    customer = customerRepository.findByUsername(username);
     customer.removePurchase(p3);
     assertEquals(2, customer.getPurchases().size());
   }

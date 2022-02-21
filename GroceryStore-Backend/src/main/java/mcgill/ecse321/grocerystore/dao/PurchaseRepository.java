@@ -7,7 +7,7 @@ import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 
 public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
 
-  Purchase findPurchaseById(long id);
+  Purchase findById(long id);
 
   ArrayList<Purchase> findByIsDelivery(boolean isDelivery);
 
@@ -16,6 +16,8 @@ public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
   ArrayList<Purchase> findByStateOrderByTimeOfPurchaseMillis(PurchaseState state);
 
   ArrayList<Purchase> findByStateOrderByTimeOfPurchaseMillisDesc(PurchaseState state);
+
+  ArrayList<Purchase> findByStateOrderByTimeOfPurchaseMillisAsc(PurchaseState state);
 
   ArrayList<Purchase> findByTimeOfPurchaseMillisGreaterThanEqual(long time);
 

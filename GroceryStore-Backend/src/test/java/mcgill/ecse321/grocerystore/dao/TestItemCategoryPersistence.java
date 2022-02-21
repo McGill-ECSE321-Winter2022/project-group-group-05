@@ -41,7 +41,7 @@ public class TestItemCategoryPersistence {
     category = null;
 
     // assert
-    category = itemCategoryRepo.findItemCategoryByName(name);
+    category = itemCategoryRepo.findByName(name);
     assertEquals(name, category.getName());
 
   }
@@ -67,7 +67,7 @@ public class TestItemCategoryPersistence {
     // Delete instance ofItemCategory
     category = null;
     // fetching the ItemCategory instance
-    category = itemCategoryRepo.findItemCategoryByName("food");
+    category = itemCategoryRepo.findByName("food");
     assertNotNull(category);
     assertEquals(2, category.getItems().size());
     assertTrue(category.removeItem(coke));

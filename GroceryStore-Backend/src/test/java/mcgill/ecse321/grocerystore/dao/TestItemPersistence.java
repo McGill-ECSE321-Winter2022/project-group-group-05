@@ -44,7 +44,7 @@ public class TestItemPersistence {
     // delete item instance
     item = null;
     // fetching item instance
-    item = itemRepository.findItemByName(itemname);
+    item = itemRepository.findByName(itemname);
     // asserts
     assertNotNull(item);
     assertEquals(itemname, item.getName());
@@ -56,7 +56,7 @@ public class TestItemPersistence {
   }
 
   @Test
-  public void testAtributeItem() {
+  public void testAttributeItem() {
     // Creating item instance
     Item item = new Item();
     String name = "Coke";
@@ -73,7 +73,7 @@ public class TestItemPersistence {
     item = null;
 
     /// fetching item instance
-    item = itemRepository.findItemByName(name);
+    item = itemRepository.findByName(name);
     item.setCanDeliver(true);
     item.setCanPickUp(true);
     item.setInventory(3);
@@ -84,7 +84,7 @@ public class TestItemPersistence {
     // delete item instance
     item = null;
     // fetching item instance
-    item = itemRepository.findItemByName(name);
+    item = itemRepository.findByName(name);
     // asserts
     assertNotNull(item);
     assertEquals(name, item.getName());

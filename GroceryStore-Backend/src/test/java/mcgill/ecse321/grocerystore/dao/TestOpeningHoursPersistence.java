@@ -36,7 +36,7 @@ public class TestOpeningHoursPersistence {
 
     openingH = null;
 
-    openingH = openingHoursRepository.findOpeningHoursByDaysOfWeek(daysOfWeek);
+    openingH = openingHoursRepository.findByDaysOfWeek(daysOfWeek);
     assertNotNull(openingH);
     assertEquals(daysOfWeek, openingH.getDaysOfWeek());
     assertEquals(startH, openingH.getStartTime().toString());
@@ -56,7 +56,7 @@ public class TestOpeningHoursPersistence {
 
     String startH = "09:00:00";
     String endH = "22:00:00";
-    openingH = openingHoursRepository.findOpeningHoursByDaysOfWeek(daysOfWeek);
+    openingH = openingHoursRepository.findByDaysOfWeek(daysOfWeek);
     openingH.setDaysOfWeek(daysOfWeek);
     openingH.setStartTime(startH);
     openingH.setEndTime(endH);
@@ -64,7 +64,7 @@ public class TestOpeningHoursPersistence {
 
     openingH = null;
 
-    openingH = openingHoursRepository.findOpeningHoursByDaysOfWeek(daysOfWeek);
+    openingH = openingHoursRepository.findByDaysOfWeek(daysOfWeek);
     assertEquals(daysOfWeek, openingH.getDaysOfWeek());
     assertEquals(startH, openingH.getStartTime().toString());
     assertEquals(endH, openingH.getEndTime().toString());

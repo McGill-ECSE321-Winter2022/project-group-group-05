@@ -61,7 +61,11 @@ public class Purchase {
     return this.specificItems;
   }
 
-  public String getState() {
+  public PurchaseState getState() {
+    return this.state;
+  }
+
+  public String getStateFullName() {
     return this.state.toString();
   }
 
@@ -87,12 +91,19 @@ public class Purchase {
     return this.timeOfPurchaseMillis;
   }
 
+  /**
+   * This should only be performed when this is in the <b>Cart</b> state
+   * 
+   * @param anItem
+   * @return true if the specificItem is added to the set
+   */
   public boolean addSpecificItem(SpecificItem anItem) {
     return this.specificItems.add(anItem);
   }
 
   /**
-   * Remove the specificItem from the purchase. Runs in O(1) time.
+   * Remove the specificItem from the purchase. Runs in O(1) time.<br>
+   * This should only be performed when this is in the <b>Cart</b> state
    * 
    * @param anItem
    * @return true if the purchase contains the specificItem
@@ -102,7 +113,8 @@ public class Purchase {
   }
 
   /**
-   * Alternative way to remove specificItem by id. Runs in O(n) time.
+   * Alternative way to remove specificItem by id. Runs in O(n) time.<br>
+   * This should only be performed when this is in the <b>Cart</b> state
    * 
    * @param id
    * @return true if the purchase contains the specificItem with given id
@@ -119,16 +131,27 @@ public class Purchase {
     return false;
   }
 
-  public void setState(PurchaseState paid) {
-    this.state = paid;
+  public void setState(PurchaseState state) {
+    this.state = state;
   }
 
+  /**
+   * Should only be performed when this is in the <b>Cart</b> state
+   * 
+   * @param b
+   */
   public void setIsDelivery(boolean b) {
     this.isDelivery = b;
   }
 
-  public void setTimeOfPurchaseMillis() {
+  /**
+   * Should only be performed once when this transitions from <b>Cart</b> to <b>Paid</b> state
+   * 
+   * @return system time in milliseconds
+   */
+  public long setTimeOfPurchaseMillis() {
     this.timeOfPurchaseMillis = System.currentTimeMillis();
+    return this.timeOfPurchaseMillis;
   }
 
   /**

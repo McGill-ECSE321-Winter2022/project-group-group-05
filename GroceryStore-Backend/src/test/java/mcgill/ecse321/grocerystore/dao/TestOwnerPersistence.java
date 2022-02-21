@@ -36,7 +36,7 @@ public class TestOwnerPersistence {
 
     owner = null;
 
-    owner = ownerRepository.findOwnerByUsername(username);
+    owner = ownerRepository.findByUsername(username);
     assertNotNull(owner);
     assertEquals(username, owner.getUsername());
     assertEquals(password, owner.getPassword());
@@ -54,7 +54,7 @@ public class TestOwnerPersistence {
 
     owner = null;
 
-    owner = ownerRepository.findOwnerByUsername(username);
+    owner = ownerRepository.findByUsername(username);
     String password = "strong-password";
     String email = "new-customer@email.ca";
     owner.setEmail(email);
@@ -63,7 +63,7 @@ public class TestOwnerPersistence {
 
     owner = null;
 
-    owner = ownerRepository.findOwnerByUsername(username);
+    owner = ownerRepository.findByUsername(username);
     assertEquals(username, owner.getUsername());
     assertEquals(password, owner.getPassword());
     assertEquals(email, owner.getEmail());
