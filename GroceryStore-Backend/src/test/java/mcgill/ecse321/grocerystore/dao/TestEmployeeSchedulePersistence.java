@@ -61,7 +61,7 @@ public class TestEmployeeSchedulePersistence {
 
   // Test EmployeeSchedule Attribute
   @Test
-  public void testAttributeEmployee() {
+  public void testAttributeEmployeeSchedule() {
     // Create Test Stub Instance of Shift.
     String shiftStubName = "testShiftStub";
     Shift shiftStub = new Shift();
@@ -87,19 +87,20 @@ public class TestEmployeeSchedulePersistence {
     assertEquals(newDate, testSchedule.getDate().toString());
   }
 
-  // Test EmployeeSchedule Reference
+  /*
+   * Test EmployeeSchedule Reference
+   * 
+   * Because the reference to shift in EmployeeSchedule is immutable as defined by the Class
+   * Diagram, testing modifications to this reference is irrelevant. Instead, this method ensures
+   * that changes made to an EmployeSchedule's shift reference are preserved in the database.
+   */
   @Test
-  public void testReferenceEmployee() {
+  public void testReferenceEmployeeSchedule() {
     // Create Test Stub Instances of Shift.
     String shiftStubName = "testShiftStub";
     Shift shiftStub = new Shift();
     shiftStub.setName(shiftStubName);
     shiftRepository.save(shiftStub);
-
-    String newShiftStubName = "newTestShiftStub";
-    Shift newShiftStub = new Shift();
-    newShiftStub.setName(newShiftStubName);
-    shiftRepository.save(newShiftStub);
 
     // Create Instance of EmployeeSchedule and save it to database.
     EmployeeSchedule testSchedule = new EmployeeSchedule();
@@ -108,16 +109,18 @@ public class TestEmployeeSchedulePersistence {
     long testId = testSchedule.getId();
 
     // Change Shift reference.
-    testSchedule.setShift(newShiftStub);
-    employeeScheduleRepository.save(testSchedule);
+    String startTime = "08:00:00";
+    shiftStub.setStartTime(startTime);
+    shiftRepository.save(shiftStub);
 
     // Reload testSchedule.
     testSchedule = null;
     testSchedule = employeeScheduleRepository.findById(testId);
 
-    // Verify that reference to shiftStub was preserved
+    // Verify that the change to shiftStub was preserved
     assertNotNull(testSchedule.getShift());
-    assertEquals(newShiftStubName, testSchedule.getShift().getName());
+    assertEquals(startTime, testSchedule.getShift().getStartTime().toString());
+
 
   }
 
