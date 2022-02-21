@@ -22,6 +22,34 @@ public class Item {
    */
   public Item() {}
 
+  /**
+   * Create an item with the specified name.<br>
+   * <b>Input must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   */
+  public Item(String name) {
+    this(name, 0.0, 0, false, false);
+  }
+
+  /**
+   * Create an item with the specified attributes.<br>
+   * <b>Inputs must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   * @param price
+   * @param inventory
+   * @param canDeliver
+   * @param canPickUp
+   */
+  public Item(String name, double price, int inventory, boolean canDeliver, boolean canPickUp) {
+    this.setName(name);
+    this.setPrice(price);
+    this.setInventory(inventory);
+    this.setCanDeliver(canDeliver);
+    this.setCanPickUp(canPickUp);
+  }
+
   // getter methods
   // --------------
   public String getName() {

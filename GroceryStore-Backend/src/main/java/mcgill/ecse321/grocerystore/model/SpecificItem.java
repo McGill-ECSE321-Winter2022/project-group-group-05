@@ -30,6 +30,28 @@ public class SpecificItem {
   public SpecificItem() {}
 
   /**
+   * Create a specificItem with the given item
+   * 
+   * @param item
+   */
+  public SpecificItem(Item item) {
+    this(item, 0, 0.0);
+  }
+
+  /**
+   * Create a specificItem with the given attributes
+   * 
+   * @param item
+   * @param qty
+   * @param price
+   */
+  public SpecificItem(Item item, int qty, double price) {
+    this.setItem(item);
+    this.setPurchaseQuantity(qty);
+    this.setPurchasePrice(price);
+  }
+
+  /**
    * <b>IMPORTANT: id is set automatically only after saving to database</b> <br>
    * Do not use this before saving to database
    * 
@@ -59,7 +81,7 @@ public class SpecificItem {
     this.purchaseQuantity = qty;
   }
 
-  public void setPurchasePrice(int price) {
+  public void setPurchasePrice(double price) {
     this.purchasePrice = price;
   }
 
