@@ -42,38 +42,26 @@ public class TestPurchasePersistence {
   }
 
   @Test
-  public void saveFindByIsDeliveryFindByState() {
-    /*
-     * Trying to figure out how auto generated id works
-     */
+  public void savePurchaseFindByIsDeliveryFindByState() {
     Purchase purchase = new Purchase();
     Purchase purchase2 = new Purchase();
     purchase2.setIsDelivery(true);
     Purchase purchase3 = new Purchase();
     purchase3.setIsDelivery(true);
     purchase3.setState(PurchaseState.Paid);
-    System.out.println("Purchase 3's id is now: " + purchase3.getId());
     // save
     purchaseRepo.save(purchase);
     purchaseRepo.save(purchase2);
-    purchaseRepo.save(purchase3);
-    System.out.println("After saving, Purchase 3's id is: " + purchase3.getId());
+    purchase3 = purchaseRepo.save(purchase3);
+    long p3id = purchase3.getId();
     // load
     ArrayList<Purchase> deliveries = purchaseRepo.findByIsDelivery(true);
     ArrayList<Purchase> notDeliveries = purchaseRepo.findByIsDelivery(false);
     ArrayList<Purchase> inPaidState =
         purchaseRepo.findByStateOrderByTimeOfPurchaseMillis(PurchaseState.Paid);
-    for (Purchase p : deliveries) {
-      if (p.getState().equals("Paid")) {
-        System.out.println("This order is paid!");
-        System.out.println("This order's id is: " + p.getId());
-        System.out.println("After loading, Purchase 3's id is: " + purchase3.getId());
-        if (p.getId() == inPaidState.get(0).getId()) {
-          System.out.println("It is in the inPaidState list!");
-        }
-      }
-    }
+    Purchase aPaidPurchase = purchaseRepo.findPurchaseById(p3id);
     // assert
+    assertEquals(PurchaseState.Paid, aPaidPurchase.getState());
     assertEquals(3, purchaseRepo.count());
     assertEquals(2, deliveries.size());
     assertEquals(1, notDeliveries.size());

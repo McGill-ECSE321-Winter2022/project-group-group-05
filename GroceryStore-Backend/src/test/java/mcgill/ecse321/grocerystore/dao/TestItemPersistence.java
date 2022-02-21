@@ -56,7 +56,7 @@ public class TestItemPersistence {
   }
 
   @Test
-  public void testAtributeItem() {
+  public void testAttributeItem() {
     // Creating item instance
     Item item = new Item();
     String name = "Coke";
