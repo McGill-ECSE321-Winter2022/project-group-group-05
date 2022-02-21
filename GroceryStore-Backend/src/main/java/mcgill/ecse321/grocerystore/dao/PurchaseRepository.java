@@ -17,6 +17,8 @@ public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
 
   ArrayList<Purchase> findByStateOrderByTimeOfPurchaseMillisDesc(PurchaseState state);
 
+  ArrayList<Purchase> findByStateOrderByTimeOfPurchaseMillisAsc(PurchaseState state);
+
   ArrayList<Purchase> findByTimeOfPurchaseMillisGreaterThanEqual(long time);
 
 }
