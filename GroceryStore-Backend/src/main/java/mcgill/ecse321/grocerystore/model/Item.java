@@ -15,10 +15,12 @@ public class Item {
   private boolean canPickUp;
   private boolean isDiscontinued;
 
-
-  // This class has no association
-
-
+  // default constructor
+  /**
+   * <b>IMPORTANT: Name must be set before saving to database</b> <br>
+   * Providing default constructor for Spring
+   */
+  public Item() {}
 
   // getter methods
   // --------------
@@ -32,7 +34,6 @@ public class Item {
 
   public int getInventory() {
     return this.inventory;
-
   }
 
   public boolean getCanDeliver() {
@@ -71,6 +72,33 @@ public class Item {
 
   public void setIsDiscontinued(boolean isDiscontinued) {
     this.isDiscontinued = isDiscontinued;
+  }
+
+  // utility methods
+  /**
+   * Increment the inventory of this item by the specified value
+   * 
+   * @param addValue
+   * @return the new total inventory of this item
+   */
+  public int addInventory(int addValue) {
+    this.inventory += addValue;
+    return this.inventory;
+  }
+
+  /**
+   * Decrement the inventory of this item by the specified value if there is enough inventory
+   * 
+   * @param subtractValue
+   * @return The new total inventory of this item<br>
+   *         <b>Returns -1 if there's not enough inventory</b>
+   */
+  public int subInventory(int subtractValue) {
+    if (this.inventory >= subtractValue) {
+      this.inventory -= subtractValue;
+      return this.inventory;
+    }
+    return -1;
   }
 
   /**
