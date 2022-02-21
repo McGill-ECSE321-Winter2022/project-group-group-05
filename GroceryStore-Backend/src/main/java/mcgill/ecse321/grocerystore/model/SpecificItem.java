@@ -1,7 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -18,8 +17,7 @@ public class SpecificItem {
   @GeneratedValue
   private long id;
 
-  // TODO: set (optional = false) once Item class is implemented
-  @ManyToOne(optional = true, fetch = FetchType.EAGER)
+  @ManyToOne(optional = false)
   private Item item;
 
   private int purchaseQuantity;
@@ -63,6 +61,20 @@ public class SpecificItem {
 
   public void setPurchasePrice(int price) {
     this.purchasePrice = price;
+  }
+
+  /**
+   * Update the recorded purchasePrice to the current price of the item
+   * 
+   * @return The updated price if item is not null<br>
+   *         Otherwise returns -1
+   */
+  public double updatePurchasePrice() {
+    if (this.item != null) {
+      this.purchasePrice = this.item.getPrice();
+      return this.purchasePrice;
+    }
+    return -1;
   }
 
   /**
