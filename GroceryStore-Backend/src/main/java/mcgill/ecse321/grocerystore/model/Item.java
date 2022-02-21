@@ -24,7 +24,7 @@ public class Item {
 
   /**
    * Create an item with the specified name.<br>
-   * <b>Input must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
    * 
    * @param name
    */
@@ -33,8 +33,31 @@ public class Item {
   }
 
   /**
+   * Create an item with the specified name and price<br>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   * @param price
+   */
+  public Item(String name, double price) {
+    this(name, price, 0, false, false);
+  }
+
+  /**
+   * Create an item with the specified name, price, and inventory<br>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * 
+   * @param name
+   * @param price
+   * @param inventory
+   */
+  public Item(String name, double price, int inventory) {
+    this(name, price, inventory, false, false);
+  }
+
+  /**
    * Create an item with the specified attributes.<br>
-   * <b>Inputs must be validated (i.e. no duplicate) prior to calling this constructor</b>
+   * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
    * 
    * @param name
    * @param price
@@ -52,6 +75,10 @@ public class Item {
 
   // getter methods
   // --------------
+  /**
+   * 
+   * @return the primary key of this Item
+   */
   public String getName() {
     return this.name;
   }
@@ -78,6 +105,11 @@ public class Item {
 
   // setter methods
   // --------------
+  /**
+   * This method should <b>only be used once at the creation</b> of the Item
+   * 
+   * @param name
+   */
   public void setName(String name) {
     this.name = name;
   }

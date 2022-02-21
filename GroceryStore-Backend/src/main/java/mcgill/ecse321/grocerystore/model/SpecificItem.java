@@ -30,25 +30,24 @@ public class SpecificItem {
   public SpecificItem() {}
 
   /**
-   * Create a specificItem with the given item
+   * Create a specificItem with the given item and 0 quantity
    * 
    * @param item
    */
   public SpecificItem(Item item) {
-    this(item, 0, 0.0);
+    this(item, 0);
   }
 
   /**
-   * Create a specificItem with the given attributes
+   * Create a specificItem with the given item and quantity
    * 
    * @param item
    * @param qty
-   * @param price
    */
-  public SpecificItem(Item item, int qty, double price) {
+  public SpecificItem(Item item, int qty) {
     this.setItem(item);
     this.setPurchaseQuantity(qty);
-    this.setPurchasePrice(price);
+    this.setPurchasePrice(item.getPrice());
   }
 
   /**
@@ -73,6 +72,12 @@ public class SpecificItem {
     return this.purchasePrice;
   }
 
+  /**
+   * This method should only be used once at the creation of the specificItem<br>
+   * Once set, the linked item should not be modified
+   * 
+   * @param anItem
+   */
   public void setItem(Item anItem) {
     this.item = anItem;
   }
@@ -81,6 +86,12 @@ public class SpecificItem {
     this.purchaseQuantity = qty;
   }
 
+  /**
+   * This method generally <b>should not be used</b><br>
+   * Use updatePurchasePrice to automatically get the price of the linked item
+   * 
+   * @param price
+   */
   public void setPurchasePrice(double price) {
     this.purchasePrice = price;
   }
