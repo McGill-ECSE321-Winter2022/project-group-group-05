@@ -30,9 +30,9 @@ public class TestSpecificItemPersistence {
 
   @Test
   public void saveSpecificItem() {
-    Item pfgt = new Item("Passion Fruit Green Tea");
+    Item pfgt = new Item("Passion Fruit Green Tea", 6.75, 100);
     pfgt = itemRepo.save(pfgt);
-    SpecificItem pfgtInCart = new SpecificItem(pfgt, 2, 6.75);
+    SpecificItem pfgtInCart = new SpecificItem(pfgt, 2);
     pfgtInCart = specificItemRepo.save(pfgtInCart);
     long spId = pfgtInCart.getId();
     // retrieve
@@ -46,7 +46,7 @@ public class TestSpecificItemPersistence {
   public void modifySpecificItem() {
     Item mt = new Item("Brown Sugar Milk Tea", 5.0, 132, true, true);
     mt = itemRepo.save(mt);
-    SpecificItem mtInCart = new SpecificItem(mt, 3, 5.0);
+    SpecificItem mtInCart = new SpecificItem(mt, 3);
     mtInCart = specificItemRepo.save(mtInCart);
     long mtInCartId = mtInCart.getId();
     // modify

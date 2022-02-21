@@ -91,6 +91,7 @@ public class TestPurchasePersistence {
     Purchase myCart = new Purchase();
     myCart.addSpecificItem(tomato1);
     myCart.addSpecificItem(potato1);
+    myCart.addSpecificItem(null);
     purchaseRepo.save(myCart);
     /*
      * Cascading: if Purchase is saved then its SpecificItems should be saved
@@ -107,10 +108,10 @@ public class TestPurchasePersistence {
 
   @Test
   public void removeSpecificItems() {
-    Item apple = new Item("Apple", 25.0, 7, false, false);
+    Item apple = new Item("Apple", 2.99, 100);
     apple = itemRepo.save(apple);
     Purchase myCart = new Purchase();
-    SpecificItem apple1 = new SpecificItem(apple, 2, 50.0);
+    SpecificItem apple1 = new SpecificItem(apple, 2);
     // add first item
     myCart.addSpecificItem(apple1);
     myCart = purchaseRepo.save(myCart);
