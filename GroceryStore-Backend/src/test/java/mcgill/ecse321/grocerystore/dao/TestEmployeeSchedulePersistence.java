@@ -92,7 +92,7 @@ public class TestEmployeeSchedulePersistence {
    * 
    * Because the reference to shift in EmployeeSchedule is immutable as defined by the Class
    * Diagram, testing modifications to this reference is irrelevant. Instead, this method ensures
-   * that changes made to an EmployeSchedule's shift reference are preserved in the database.
+   * that changes made to an EmployeeSchedule's shift reference are preserved in the database.
    */
   @Test
   public void testReferenceEmployeeSchedule() {
