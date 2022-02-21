@@ -5,13 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import mcgill.ecse321.grocerystore.model.Item;
 
 @ExtendWith(SpringExtension.class)
@@ -39,9 +36,9 @@ public class TestItemPersistence {
     item.setName(itemname);
     item.setPrice(price);
     item.setInventory(inventory);
-    item.setcanDeliver(canDeliver);
-    item.setcanPickUp(canPickUp);
-    item.setisDiscontinued(isDiscontinued);
+    item.setCanDeliver(canDeliver);
+    item.setCanPickUp(canPickUp);
+    item.setIsDiscontinued(isDiscontinued);
     itemRepository.save(item);
 
     // delete item instance
@@ -53,22 +50,22 @@ public class TestItemPersistence {
     assertEquals(itemname, item.getName());
     assertEquals(price, item.getPrice());
     assertEquals(inventory, item.getInventory());
-    assertEquals(canDeliver, item.getcanDeliver());
-    assertEquals(canPickUp, item.getcanPickUp());
-    assertEquals(isDiscontinued, item.getisDiscontinued());
+    assertEquals(canDeliver, item.getCanDeliver());
+    assertEquals(canPickUp, item.getCanPickUp());
+    assertEquals(isDiscontinued, item.getIsDiscontinued());
   }
 
   @Test
   public void testAtributeItem() {
     // Creating item instance
     Item item = new Item();
-    String name = "coke";
+    String name = "Coke";
     item.setName(name);
     item.setPrice(10);
-    item.setcanDeliver(false);
-    item.setcanPickUp(false);
+    item.setCanDeliver(false);
+    item.setCanPickUp(false);
     item.setInventory(5);
-    item.setisDiscontinued(false);
+    item.setIsDiscontinued(false);
 
     // Saving item instance
     itemRepository.save(item);
@@ -77,10 +74,10 @@ public class TestItemPersistence {
 
     /// fetching item instance
     item = itemRepository.findItemByName(name);
-    item.setcanDeliver(true);
-    item.setcanPickUp(true);
+    item.setCanDeliver(true);
+    item.setCanPickUp(true);
     item.setInventory(3);
-    item.setisDiscontinued(true);
+    item.setIsDiscontinued(true);
     item.setPrice(4);
     // Saving item instance
     itemRepository.save(item);
@@ -93,9 +90,9 @@ public class TestItemPersistence {
     assertEquals(name, item.getName());
     assertEquals(3, item.getInventory());
     assertEquals(4, item.getPrice());
-    assertEquals(true, item.getcanDeliver());
-    assertEquals(true, item.getcanPickUp());
-    assertEquals(true, item.getisDiscontinued());
+    assertEquals(true, item.getCanDeliver());
+    assertEquals(true, item.getCanPickUp());
+    assertEquals(true, item.getIsDiscontinued());
 
 
   }
