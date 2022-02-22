@@ -23,7 +23,7 @@ Below can be found the time spent in hours by each team member on each sprint. P
 | Jimmy Sheng | Software Developer | 24 | &mdash; | &mdash; | &mdash; |
 | Harrison Wang | Software Developer | 21.5 | &mdash; | &mdash; | &mdash; |
 
-## Sprint 1
+## [Sprint 1](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-1-Project-Report)
 
 ### Objectives to complete:
 Started on Feb 8, 2022
