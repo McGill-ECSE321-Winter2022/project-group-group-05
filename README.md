@@ -16,12 +16,12 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
-| Peini Cheng  | Software Developer | 14 | &mdash; | &mdash; | &mdash; |
+| Peini Cheng  | Software Architect | 14 | &mdash; | &mdash; | &mdash; |
 | Sibo Huang | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
-| Annie Kang | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
+| Annie Kang | Business Analyst | 12 | &mdash; | &mdash; | &mdash; |
 | Yida Pan | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
-| Jimmy Sheng | Software Developer | 24 | &mdash; | &mdash; | &mdash; |
-| Harrison Wang | Software Developer | 21.5 | &mdash; | &mdash; | &mdash; |
+| Jimmy Sheng | Team Lead | 24 | &mdash; | &mdash; | &mdash; |
+| Harrison Wang | Documentation Lead | 21.5 | &mdash; | &mdash; | &mdash; |
 
 ## [Sprint 1](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-1-Project-Report)
 
