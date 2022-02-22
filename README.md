@@ -16,17 +16,19 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
-| Peini Cheng  | Software Developer | &mdash; | &mdash; | &mdash; | &mdash; |
-| Sibo Huang | Software Developer | &mdash; | &mdash; | &mdash; | &mdash; |
-| Annie Kang | Software Developer | &mdash; | &mdash; | &mdash; | &mdash; |
-| Yida Pan | Software Developer | &mdash; | &mdash; | &mdash; | &mdash; |
-| Jimmy Sheng | Software Developer | &mdash; | &mdash; | &mdash; | &mdash; |
-| Harrison Wang | Software Developer | &mdash; | &mdash; | &mdash; | &mdash; |
+| Peini Cheng  | Software Developer | 14 | &mdash; | &mdash; | &mdash; |
+| Sibo Huang | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
+| Annie Kang | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
+| Yida Pan | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
+| Jimmy Sheng | Software Developer | 24 | &mdash; | &mdash; | &mdash; |
+| Harrison Wang | Software Developer | 21.5 | &mdash; | &mdash; | &mdash; |
 
 ## Sprint 1
 
 ### Objectives to complete:
 Started on Feb 8, 2022
+* Set up Github repo
+* Set up project drive and timesheet
 * Requirements Model
 * Domain Model
 * Persistence Layer
@@ -35,9 +37,10 @@ Started on Feb 8, 2022
 * Project Report
 
 ### Tasks completed by each member:
-* **Peini**:
-* **Sibo**:
-* **Annie**:
-* **Yida**:
-* **Jimmy**:
-* **Harrison**:
+* **Peini**: Designed UML Class Diagram, JPA + CRUD and tests for Customer, Owner, and OpeningHours classes, One detailed use case, 3 System Requirements
+* **Sibo**: Wrote README.md, JPA + CRUD and tests for Holiday, One detailed use case, 2 System Requirements
+* **Annie**: Recorded meeting minutes, Designed Use Case Diagram, One detailed use case, 2 System Requirements
+* **Yida**: JPA + CRUD and tests for Item, ItemCategory classes, One detailed use case, 2 System Requirements
+* **Jimmy**: Set up Github repository, CI Actions, template class files, and Heroku backend database, Reviewed pull requests, Revised Domain Model, Revised Use Case Diagram
+JPA + CRUD and tests for Purchase, SpecificItem classes, Fixed JPA and tests for Item, ItemCategory classes, One detailed use case, 3 System Requirements
+* **Harrison**: Set up project Google Drive and project Timesheet, Revised Domain Model, Revised Use Case Diagram, Helped review pull requests, Helped review detailed use cases, JPA + CRUD and tests for Employee, EmployeeSchedule, and Shift classes, One detailed use case, 3 System Requirements, Outlined Project Wiki and wrote Class Diagram Rationale, Domain Model Constraints, and Sprint 1 Project Report
