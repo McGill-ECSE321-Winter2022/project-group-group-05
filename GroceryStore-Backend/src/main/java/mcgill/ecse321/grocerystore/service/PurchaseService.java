@@ -104,6 +104,17 @@ public class PurchaseService {
   }
 
   /**
+   * Get a list of all purchases, ordered from newest to oldest by time of purchase. This list is
+   * backed by an arraylist. (RQ9)
+   * 
+   * @return a list
+   */
+  @Transactional
+  public List<Purchase> getAllDesc() {
+    return purchaseRepo.findAllByOrderByTimeOfPurchaseMillisAsc();
+  }
+
+  /**
    * Get a list of all purchases in the completed state, ordered from oldest to newest by time of
    * purchase. This list is backed by an arraylist.
    * 
@@ -406,7 +417,7 @@ public class PurchaseService {
 
   @Transactional
   private Customer getCustomer(String username) throws IllegalArgumentException {
-    if (username == null) {
+    if (username == null || username.trim().equals("")) {
       throw new IllegalArgumentException("Username cannot be empty.");
     }
     if (username.equals("kiosk")) {
@@ -421,7 +432,7 @@ public class PurchaseService {
 
   @Transactional
   private Item getItem(String itemName) throws IllegalArgumentException {
-    if (itemName == null) {
+    if (itemName == null || itemName.trim().equals("")) {
       throw new IllegalArgumentException("Item name cannot be empty.");
     }
     Item item = itemRepo.findByName(itemName);
