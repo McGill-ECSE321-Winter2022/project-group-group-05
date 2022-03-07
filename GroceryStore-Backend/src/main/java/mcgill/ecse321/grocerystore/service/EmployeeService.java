@@ -108,6 +108,43 @@ public class EmployeeService {
   }
 
   /**
+   * Changes the email of the specified Employee
+   * 
+   * @param username - username of the employee to be modified
+   * @param newEmail - the new email value to change to
+   * @throws IllegalArgumentException when the employee to be modified doesn't exist
+   */
+  @Transactional
+  public void setEmployeeEmail(String username, String newEmail) throws IllegalArgumentException {
+    var employee = getEmployee(username);
+    if (newEmail.contains(" ") || !newEmail.contains(".") || newEmail.indexOf("@") < 1
+        || newEmail.indexOf(".") <= newEmail.indexOf("@") + 1
+        || newEmail.lastIndexOf(".") >= newEmail.length() - 1) {
+      throw new IllegalArgumentException("Employee email is invalid!");
+    }
+    employee.setEmail(newEmail);
+    employeeRepository.save(employee);
+  }
+
+  /**
+   * Changes the password of the specified Employee
+   * 
+   * @param username - username of the employee to be modified
+   * @param newPassword - the new password value to change to
+   * @throws IllegalArgumentException when the employee to be modified doesn't exist
+   */
+  @Transactional
+  public void setEmployeePassword(String username, String newPassword)
+      throws IllegalArgumentException {
+    var employee = getEmployee(username);
+    if (newPassword == null || newPassword.trim().length() == 0) {
+      throw new IllegalArgumentException("Employee password cannot be empty!");
+    }
+    employee.setPassword(newPassword);
+    employeeRepository.save(employee);
+  }
+
+  /**
    * Assigns a schedule to an Employee. (RQ13)
    * 
    * @param username - username of the Employee to assign the schedule to
