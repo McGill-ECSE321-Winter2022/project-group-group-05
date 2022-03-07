@@ -20,7 +20,7 @@ public class SpecificItemService {
 	@Transactional
 	public SpecificItem createSpecificItem(String itemName, int qty)
 			throws IllegalArgumentException {
-		if (itemRepository.findByName(itemName) != null) {
+		if (itemRepository.findByName(itemName) == null) {
 			throw new IllegalArgumentException("This type of item does not exist!");
 		}
 		Item item = itemRepository.findByName(itemName);
@@ -55,6 +55,15 @@ public class SpecificItemService {
 		}
 		specificItemRepository.delete(specificItem);
 		return specificItem;
+	}
+
+	@Transactional
+	public int getItemInventory(long specificitemID) throws IllegalArgumentException {
+		SpecificItem specificItem = specificItemRepository.findById(specificitemID);
+		if (specificItem == null) {
+			throw new IllegalArgumentException("The specific item with ID \"" + specificitemID + "\" does not exist!");
+		}
+		return specificItem.getItem().getInventory();
 	}
 
 }

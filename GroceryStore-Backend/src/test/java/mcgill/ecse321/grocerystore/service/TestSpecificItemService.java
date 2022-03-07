@@ -1,9 +1,9 @@
 package mcgill.ecse321.grocerystore.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -11,8 +11,8 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -85,6 +85,7 @@ public class TestSpecificItemService {
 			return invocation.getArgument(0);
 		};
 
+		lenient().when(itemDao.save(any(Item.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(specificItemDao.save(any(SpecificItem.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(mockSpecificItem.getId()).thenAnswer((e) -> {
 			return SPECIFICITEM_KEY;
@@ -97,13 +98,13 @@ public class TestSpecificItemService {
 		// Test for class createItem
 		  @Test
 		  public void testCreateSpecificItem() {
-		    int qty = 10;
-			String itemName = EXISTING_ITEM_KEY;
+				int qty = 2;
+			String itemName = ITEM_KEY;
 		    SpecificItem specificitem = null;
 		    try {
 				specificitem = service.createSpecificItem(itemName, qty);
 		    } catch (IllegalArgumentException e) {
-		      fail();
+				fail();
 		    }
 		    assertNotNull(specificitem);
 		    assertEquals(qty, specificitem.getPurchaseQuantity());
@@ -114,15 +115,15 @@ public class TestSpecificItemService {
 		  @Test
 		  public void testCreateSpecificItemNoneExistingItem() {
 				String error = "";
-		    int qty = 10;
+				int qty = 2;
 			String itemName = FAKE_ITEM_KEY;
 		    SpecificItem specificitem = null;
 		    try {
 				specificitem = service.createSpecificItem(itemName, qty);
 		    } catch (IllegalArgumentException e) {
-		      fail();
+				error = e.getMessage();
 		    }
-		    assertNotNull(specificitem);
+			assertNull(specificitem);
 			assertEquals("This type of item does not exist!", error);
 		}
 
@@ -130,14 +131,14 @@ public class TestSpecificItemService {
 		public void testCreateSpecificItemInvalidQuantity() {
 			String error = "";
 			int qty = -10;
-			String itemName = EXISTING_ITEM_KEY;
+			String itemName = ITEM_KEY;
 			SpecificItem specificitem = null;
 			try {
 				specificitem = service.createSpecificItem(itemName, qty);
 			} catch (IllegalArgumentException e) {
-				fail();
+				error = e.getMessage();
 			}
-			assertNotNull(specificitem);
+			assertNull(specificitem);
 			assertEquals("Item quantity should be positive!", error);
 		  
 		  }
@@ -151,9 +152,9 @@ public class TestSpecificItemService {
 				try {
 					specificitem = service.createSpecificItem(itemName, qty);
 				} catch (IllegalArgumentException e) {
-					fail();
+					error = e.getMessage();
 				}
-				assertNotNull(specificitem);
+				assertNull(specificitem);
 				assertEquals("Item quantity exceeds avaliable quantitiy!", error);
 
 			}
@@ -193,7 +194,7 @@ public class TestSpecificItemService {
 				} catch (IllegalArgumentException e) {
 					fail();
 				}
-				verify(itemDao, times(1)).deleteById(anyString());
+				verify(itemDao, times(0)).deleteById(anyString());
 				assertNotNull(specificItem);
 				assertEquals(SPECIFICITEM_KEY.longValue(), specificItem.getId());
 			}

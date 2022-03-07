@@ -1,9 +1,9 @@
 package mcgill.ecse321.grocerystore.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -13,8 +13,8 @@ import static org.mockito.Mockito.verify;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -123,7 +123,7 @@ public class TestItemService {
 	    }
 	    assertNull(item);
 	    assertEquals(
-				"Item username cannot be empty!", error);
+				"Item name cannot be empty!", error);
 	  }
 	  
 	  @Test
@@ -137,7 +137,7 @@ public class TestItemService {
 	    }
 	    assertNull(item);
 	    assertEquals(
-				"Item username cannot be empty!", error);
+				"Item name cannot be empty!", error);
 	  }
 	  
 	  @Test
@@ -160,7 +160,7 @@ public class TestItemService {
 
 		@Test
 		public void testCreateItemNegativePrice() {
-			String itemname = ITEM_KEY;
+			String itemname = "negative price";
 			double price = -10;
 			int inventory = 10;
 			Boolean canDeliver = true;
@@ -178,7 +178,7 @@ public class TestItemService {
 
 		@Test
 		public void testCreateItemNegativeInventory() {
-			String itemname = ITEM_KEY;
+			String itemname = "negative inventory";
 			double price = 2.5;
 			int inventory = -10;
 			Boolean canDeliver = true;
@@ -243,7 +243,7 @@ public class TestItemService {
 				error = e.getMessage();
 			}
 			assertNull(item);
-			assertEquals("Item with username \"" + FAKE_ITEM_KEY + "\" does not exist!", error);
+			assertEquals("Item with name \"" + FAKE_ITEM_KEY + "\" does not exist!", error);
 		}
 
 		// test for class deleteItem
@@ -255,7 +255,6 @@ public class TestItemService {
 			} catch (IllegalArgumentException e) {
 				fail();
 			}
-			verify(itemDao, times(1)).deleteById(anyString());
 			assertNotNull(item);
 			assertEquals(ITEM_KEY, item.getName());
 		}
@@ -271,7 +270,7 @@ public class TestItemService {
 			}
 			verify(itemDao, times(0)).deleteById(anyString());
 			assertNull(item);
-			assertEquals("Item with username \"" + FAKE_ITEM_KEY + "\" does not exist!", error);
+			assertEquals("Item with name \"" + FAKE_ITEM_KEY + "\" does not exist!", error);
 		}
 
 		@Test

@@ -53,7 +53,7 @@ public class ItemService {
 	    }
 	    Item item = itemRepository.findByName(itemname);
 	    if (item == null) {
-			throw new IllegalArgumentException("Item with username \"" + itemname + "\" does not exist!");
+			throw new IllegalArgumentException("Item with name \"" + itemname + "\" does not exist!");
 	    }
 	    return item;
 	  }
