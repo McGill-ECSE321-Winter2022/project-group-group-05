@@ -3,13 +3,14 @@ package mcgill.ecse321.grocerystore.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import java.util.HashSet;
-import java.util.Set;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ import mcgill.ecse321.grocerystore.model.Customer;
 import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.Owner;
 import mcgill.ecse321.grocerystore.model.Purchase;
+import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 
 @ExtendWith(MockitoExtension.class)
 public class TestCustomerService {
@@ -46,8 +48,9 @@ public class TestCustomerService {
   private static final String OWNER_KEY = "TestOwner";
   private static final String EMPLOYEE_KEY = "TestEmployee";
   private static final String NONEXISTING_KEY = "NotACustomer";
-  private static final Purchase PURCHASE_ONE = new Purchase();
-  private static final Purchase PURCHASE_TWO = new Purchase();
+  private static Purchase PURCHASE_ONE = new Purchase();
+  private static Purchase PURCHASE_TWO = new Purchase();
+  private static Purchase PURCHASE_THREE = new Purchase();
 
   @BeforeEach
   public void setMockOutput() {
@@ -56,8 +59,11 @@ public class TestCustomerService {
           if (invocation.getArgument(0).equals(CUSTOMER_KEY)) {
             Customer customer = new Customer();
             customer.setUsername(CUSTOMER_KEY);
+            PURCHASE_TWO.setState(PurchaseState.Paid);
+            PURCHASE_THREE.setState(PurchaseState.Completed);
             customer.addPurchase(PURCHASE_ONE);
             customer.addPurchase(PURCHASE_TWO);
+            customer.addPurchase(PURCHASE_THREE);
             return customer;
           } else {
             return null;
@@ -329,8 +335,9 @@ public class TestCustomerService {
     assertEquals("Email cannot be empty!", error);
   }
 
+  // check if the email address contains "."
   @Test
-  public void testCreateCustomerMissingPeriodEmai() {
+  public void testCreateCustomerMissingPeriodEmail() {
     String username = "test";
     String password = "password";
     String email = "123@gmailcom";
@@ -347,6 +354,7 @@ public class TestCustomerService {
     assertEquals("Email is invalid!", error);
   }
 
+  // check if the email address contains "@"
   @Test
   public void testCreateCustomerMissingAtEmail() {
     String username = "test";
@@ -365,6 +373,7 @@ public class TestCustomerService {
     assertEquals("Email is invalid!", error);
   }
 
+  // check if the email address contains "@"
   @Test
   public void createCustomerInvalidEmailDomain() {
     String username = "test";
@@ -383,6 +392,7 @@ public class TestCustomerService {
     assertEquals("Email is invalid!", error);
   }
 
+  // check if the last character isn't "."
   @Test
   public void testCreateCustomerInvalidEmailTopLevelDomain() {
     String username = "test";
@@ -506,11 +516,11 @@ public class TestCustomerService {
 
   @Test
   public void testGetPurchasesByUsername() {
-    Set<Purchase> purchases = new HashSet<Purchase>();
-    purchases.add(PURCHASE_ONE);
+    List<Purchase> purchases = new ArrayList<Purchase>();
+    purchases.add(PURCHASE_THREE);
     purchases.add(PURCHASE_TWO);
-    Set<Purchase> purchaseSet = service.getPurchasesByUsername(CUSTOMER_KEY);
-    assertEquals(purchases, purchaseSet);
+    List<Purchase> purchaseList = service.getPurchasesByUsername(CUSTOMER_KEY);
+    assertEquals(purchases, purchaseList);
   }
 
   @Test
@@ -554,6 +564,64 @@ public class TestCustomerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertEquals("User does not exist!", error);
+  }
+
+  @Test
+  public void testDeleteCustomer() {
+    try {
+      service.deleteCustomer(CUSTOMER_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    verify(customerDao).delete(any());
+  }
+
+  @Test
+  public void testDeleteNullCustomer() {
+    String error = null;
+    try {
+      service.deleteCustomer(null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(customerDao, times(0)).delete(any());
+    assertEquals("Username cannot be empty!", error);
+  }
+
+  @Test
+  public void testDeleteEmptyCustomer() {
+    String error = null;
+    try {
+      service.deleteCustomer("");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(customerDao, times(0)).delete(any());
+    assertEquals("Username cannot be empty!", error);
+  }
+
+  @Test
+  public void testDeleteSpacesCustomer() {
+    String error = null;
+    try {
+      service.deleteCustomer("   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(customerDao, times(0)).delete(any());
+    assertEquals("Username cannot be empty!", error);
+  }
+
+  @Test
+  public void testDeleteNonExistingCustomer() {
+    String error = null;
+    try {
+      service.deleteCustomer(NONEXISTING_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(customerDao, times(0)).delete(any());
     assertEquals("User does not exist!", error);
   }
 }

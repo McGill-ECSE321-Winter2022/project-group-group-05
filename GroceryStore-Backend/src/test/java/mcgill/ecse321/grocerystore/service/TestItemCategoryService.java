@@ -20,7 +20,6 @@ import org.mockito.stubbing.Answer;
 import mcgill.ecse321.grocerystore.dao.ItemCategoryRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
-import mcgill.ecse321.grocerystore.model.Purchase;
 
 @ExtendWith(MockitoExtension.class)
 public class TestItemCategoryService {
@@ -131,6 +130,39 @@ public class TestItemCategoryService {
   }
 
   @Test
+  public void testGetNullItemCategory() {
+    String error = null;
+    try {
+      service.getItemCategory(null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testGetEmptyItemCategory() {
+    String error = null;
+    try {
+      service.getItemCategory("");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testGetSpacesItemCategory() {
+    String error = null;
+    try {
+      service.getItemCategory("   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
   public void testGetNonExistingItemCategory() {
     String error = null;
     try {
@@ -154,7 +186,7 @@ public class TestItemCategoryService {
   public void testGetItemsByNullItemCategory() {
     String error = null;
     try {
-      service.getItemCategory(null);
+      service.getItemsByItemCategory(null);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -165,7 +197,7 @@ public class TestItemCategoryService {
   public void testGetItemsByEmptyItemCategory() {
     String error = null;
     try {
-      service.getItemCategory("");
+      service.getItemsByItemCategory("");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -176,7 +208,7 @@ public class TestItemCategoryService {
   public void testGetItemsBySpacesItemCategory() {
     String error = null;
     try {
-      service.getItemCategory("   ");
+      service.getItemsByItemCategory("   ");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }

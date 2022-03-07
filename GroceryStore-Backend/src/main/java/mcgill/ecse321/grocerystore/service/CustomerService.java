@@ -1,8 +1,9 @@
 package mcgill.ecse321.grocerystore.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import mcgill.ecse321.grocerystore.dao.OwnerRepository;
 import mcgill.ecse321.grocerystore.dao.PurchaseRepository;
 import mcgill.ecse321.grocerystore.model.Customer;
 import mcgill.ecse321.grocerystore.model.Purchase;
+import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 
 @Service
 public class CustomerService {
@@ -71,13 +73,30 @@ public class CustomerService {
     return customer;
   }
 
+  /**
+   * return a list of purchases sorted by purchase time from newest to oldest
+   * 
+   * @param username
+   * @return a sorted list of purchases
+   * @throws IllegalArgumentException
+   */
   @Transactional
-  public Set<Purchase> getPurchasesByUsername(String username) throws IllegalArgumentException {
+  public List<Purchase> getPurchasesByUsername(String username) throws IllegalArgumentException {
     if (username == null || username.trim().length() == 0) {
       throw new IllegalArgumentException("Username cannot be empty!");
     }
     Customer customer = getCustomer(username);
-    Set<Purchase> purchaseList = customer.getPurchases();
+    List<Purchase> purchaseList = new ArrayList<Purchase>();
+    for (Purchase purchase : customer.getPurchases()) {
+      if (purchase.getState() != PurchaseState.Cart)
+        purchaseList.add(purchase);
+    }
+    Collections.sort(purchaseList, new Comparator<Purchase>() {
+      @Override
+      public int compare(Purchase p1, Purchase p2) {
+        return (int) (p2.getTimeOfPurchaseMillis() - p1.getTimeOfPurchaseMillis());
+      }
+    });
     return purchaseList;
   }
 
