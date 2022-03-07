@@ -63,4 +63,13 @@ public class OwnerService {
     return owner;
   }
 
+  @Transactional
+  public void deleteOwner(String username) throws IllegalArgumentException {
+    if (username == null || username.trim().length() == 0) {
+      throw new IllegalArgumentException("Username cannot be empty!");
+    }
+    Owner owner = getOwner(username);
+    ownerRepository.delete(owner);
+  }
+
 }
