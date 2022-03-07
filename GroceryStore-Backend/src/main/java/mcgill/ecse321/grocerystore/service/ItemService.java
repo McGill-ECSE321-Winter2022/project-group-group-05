@@ -22,13 +22,13 @@ public class ItemService {
 	      throw new IllegalArgumentException("Item name cannot be empty!");
 	    }
 	    if (itemRepository.findByName(name) != null) {
-	      throw new IllegalArgumentException(" Item name is already taken!");
+			throw new IllegalArgumentException("Item name is already taken!");
 	    }
 	    if (price < 0.0) {
-	      throw new IllegalArgumentException("Item price cannot be negative.");
+			throw new IllegalArgumentException("Item price cannot be negative!");
 	    }
 	    if (inventory < 0) {
-	      throw new IllegalArgumentException("Item inventory cannot be negative.");
+			throw new IllegalArgumentException("Item inventory cannot be negative!");
 	    }
 	    
 	    Item item = new Item();
@@ -48,18 +48,19 @@ public class ItemService {
 	    }
 	    Item item = itemRepository.findByName(itemname);
 	    if (item == null) {
-	      throw new IllegalArgumentException("Item does not exist!");
+			throw new IllegalArgumentException("Item with username \"" + itemname + "\" does not exist!");
 	    }
 	    return item;
 	  }
 
 	  @Transactional
-	  public void deleteItem(String itemname) throws IllegalArgumentException {
+		public Item deleteItem(String itemname) throws IllegalArgumentException {
 	    if (itemname == null || itemname.trim().length() == 0) {
 	      throw new IllegalArgumentException("Item name cannot be empty!");
 	    }
 	    Item item = getItem(itemname);
 	    itemRepository.delete(item);
+		return item;
 	  }
 
 	  @Transactional
