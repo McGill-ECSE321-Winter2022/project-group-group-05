@@ -22,10 +22,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import mcgill.ecse321.grocerystore.dao.CustomerRepository;
-import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
 import mcgill.ecse321.grocerystore.dao.ItemRepository;
-import mcgill.ecse321.grocerystore.dao.OwnerRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 
 /**
@@ -38,12 +35,6 @@ public class TestItemService {
 
 	@Mock
 	private ItemRepository itemDao;
-	@Mock
-	private EmployeeScheduleRepository employeeScheduleDao;
-	@Mock
-	private CustomerRepository customerDao;
-	@Mock
-	private OwnerRepository ownerDao;
 	@Mock
 	private Item mockItem;
 
@@ -93,7 +84,10 @@ public class TestItemService {
 	lenient().when(mockItem.getName()).thenAnswer((e) -> {
       return ITEM_KEY;
     });
-
+	// mock output for mock object keys
+	lenient().when(mockItem.getName()).thenAnswer((e) -> {
+		return ITEM_KEY;
+	});
   }
 
 	// Test for class createItem
@@ -240,7 +234,7 @@ public class TestItemService {
 		}
 
 		@Test
-		public void testGetEmployeeNonExistent() {
+		public void testGetItemNonExistent() {
 			Item item = null;
 			String error = "";
 			try {
@@ -254,7 +248,7 @@ public class TestItemService {
 
 		// test for class deleteItem
 		@Test
-		public void testDeleteEmployee() {
+		public void testDeleteItem() {
 			Item item = null;
 			try {
 				item = service.deleteItem(ITEM_KEY);
@@ -267,7 +261,7 @@ public class TestItemService {
 		}
 
 		@Test
-		public void testDeleteEmployeeNonExistent() {
+		public void testDeleteItemNonExistent() {
 			Item item = null;
 			String error = "";
 			try {
