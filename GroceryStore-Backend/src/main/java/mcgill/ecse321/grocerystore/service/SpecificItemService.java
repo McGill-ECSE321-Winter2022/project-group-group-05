@@ -1,8 +1,5 @@
 package mcgill.ecse321.grocerystore.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +18,17 @@ public class SpecificItemService {
 	SpecificItemRepository specificItemRepository;
 
 	@Transactional
-	public SpecificItem createSpecificItem(Item item, int qty)
+	public SpecificItem createSpecificItem(String itemName, int qty)
 			throws IllegalArgumentException {
-		if (itemRepository.findByName(item.getName()) != null) {
-			throw new IllegalArgumentException(" This item does not exist");
+		if (itemRepository.findByName(itemName) != null) {
+			throw new IllegalArgumentException("This type of item does not exist!");
 		}
+		Item item = itemRepository.findByName(itemName);
 		if (qty <= 0) {
-			throw new IllegalArgumentException("Item quantity should be positive");
+			throw new IllegalArgumentException("Item quantity should be positive!");
 		}
 		if (qty >= item.getInventory()) {
-			throw new IllegalArgumentException("Item quantity exceeds avaliable quantitiy");
+			throw new IllegalArgumentException("Item quantity exceeds avaliable quantitiy!");
 		}
 
 		SpecificItem specificitem = new SpecificItem();
@@ -50,18 +48,13 @@ public class SpecificItemService {
 	}
 
 	@Transactional
-	public void deleteItem(long specificitemID) throws IllegalArgumentException {
+	public SpecificItem deleteSpecificItem(long specificitemID) throws IllegalArgumentException {
 		SpecificItem specificItem = specificItemRepository.findById(specificitemID);
 		if (specificItem == null) {
-			throw new IllegalArgumentException("Item with provided ID does not exist!");
+			throw new IllegalArgumentException("The specific item with ID \"" + specificitemID + "\" does not exist!");
 		}
 		specificItemRepository.delete(specificItem);
-	}
-
-	@Transactional
-	public List<SpecificItem> getAllSpecificItems() {
-		ArrayList<SpecificItem> specificitemList = (ArrayList<SpecificItem>) specificItemRepository.findAll();
-		return specificitemList;
+		return specificItem;
 	}
 
 }

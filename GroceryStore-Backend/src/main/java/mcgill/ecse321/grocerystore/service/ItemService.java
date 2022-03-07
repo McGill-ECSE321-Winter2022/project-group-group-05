@@ -10,6 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 
+/**
+ * 
+ * @author Annie Kang
+ *
+ */
 @Service
 public class ItemService {
 	  @Autowired
@@ -78,39 +83,39 @@ public class ItemService {
 			}
 		}
 		return itemList;
-	   }
+	}
 
-		@Transactional
-		public List<Item> getAllCanDeliver() {
-			ArrayList<Item> itemList = new ArrayList<Item>();
-			for (Item i : itemRepository.findAll()) {
-				if (i.getCanDeliver() == true) {
-					itemList.add(i);
-				}
+	@Transactional
+	public List<Item> getAllCanDeliver() {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		for (Item i : itemRepository.findAll()) {
+			if (i.getCanDeliver() == true) {
+				itemList.add(i);
 			}
-			return itemList;
 		}
+		return itemList;
+	}
 
-		@Transactional
-		public List<Item> getAllCanPickUp() {
-			ArrayList<Item> itemList = new ArrayList<Item>();
-			for (Item i : itemRepository.findAll()) {
-				if (i.getCanPickUp() == true) {
-					itemList.add(i);
-				}
+	@Transactional
+	public List<Item> getAllCanPickUp() {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		for (Item i : itemRepository.findAll()) {
+			if (i.getCanPickUp() == true) {
+				itemList.add(i);
 			}
-			return itemList;
 		}
+		return itemList;
+	}
 
-		@Transactional
-		public List<Item> getAllisDiscontinued() {
-			ArrayList<Item> itemList = new ArrayList<Item>();
-			for (Item i : itemRepository.findAll()) {
-				if (i.getIsDiscontinued() == true) {
-					itemList.add(i);
-				}
+	@Transactional
+	public List<Item> getAllisDiscontinued() {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		for (Item i : itemRepository.findAll()) {
+			if (i.getIsDiscontinued() == true) {
+				itemList.add(i);
 			}
-			return itemList;
 		}
+		return itemList;
+	}
 
 }
