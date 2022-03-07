@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -353,7 +355,7 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertEquals("User does not exist!", error);
+    assertEquals("Owner does not exist!", error);
   }
 
   @Test
@@ -387,6 +389,64 @@ public class TestOwnerService {
       error = e.getMessage();
     }
     assertEquals("Username cannot be empty!", error);
+  }
+
+  @Test
+  public void testDeleteOwner() {
+    try {
+      service.deleteOwner(OWNER_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    verify(ownerDao).delete(any());
+  }
+
+  @Test
+  public void testDeleteNullOwner() {
+    String error = null;
+    try {
+      service.deleteOwner(null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(ownerDao, times(0)).delete(any());
+    assertEquals("Username cannot be empty!", error);
+  }
+
+  @Test
+  public void testDeleteEmptyOwner() {
+    String error = null;
+    try {
+      service.deleteOwner("");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(ownerDao, times(0)).delete(any());
+    assertEquals("Username cannot be empty!", error);
+  }
+
+  @Test
+  public void testDeleteSpacesOwner() {
+    String error = null;
+    try {
+      service.deleteOwner("   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(ownerDao, times(0)).delete(any());
+    assertEquals("Username cannot be empty!", error);
+  }
+
+  @Test
+  public void testDeleteNonExistingOwner() {
+    String error = null;
+    try {
+      service.deleteOwner(NONEXISTING_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(ownerDao, times(0)).delete(any());
+    assertEquals("Owner does not exist!", error);
   }
 
 }

@@ -58,7 +58,7 @@ public class OwnerService {
     }
     Owner owner = ownerRepository.findByUsername(username);
     if (owner == null) {
-      throw new IllegalArgumentException("User does not exist!");
+      throw new IllegalArgumentException("Owner does not exist!");
     }
     return owner;
   }
