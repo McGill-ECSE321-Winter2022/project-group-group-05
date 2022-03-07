@@ -517,6 +517,13 @@ public class TestCustomerService {
   @Test
   public void testGetPurchasesByUsername() {
     List<Purchase> purchases = new ArrayList<Purchase>();
+    PURCHASE_TWO.setTimeOfPurchaseMillis();
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    PURCHASE_THREE.setTimeOfPurchaseMillis();
     purchases.add(PURCHASE_THREE);
     purchases.add(PURCHASE_TWO);
     List<Purchase> purchaseList = service.getPurchasesByUsername(CUSTOMER_KEY);
