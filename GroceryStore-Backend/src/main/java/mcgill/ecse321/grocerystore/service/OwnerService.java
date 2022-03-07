@@ -32,7 +32,7 @@ public class OwnerService {
       throw new IllegalArgumentException("Username is already taken!");
     }
     if (password == null || password.trim().length() == 0) {
-      throw new IllegalArgumentException("Password cannot be emtpy!");
+      throw new IllegalArgumentException("Password cannot be empty!");
     }
     if (email == null || email.trim().length() == 0) {
       throw new IllegalArgumentException("Email cannot be empty!");
@@ -57,6 +57,9 @@ public class OwnerService {
       throw new IllegalArgumentException("Username cannot be empty!");
     }
     Owner owner = ownerRepository.findByUsername(username);
+    if (owner == null) {
+      throw new IllegalArgumentException("User does not exist!");
+    }
     return owner;
   }
 
