@@ -16,7 +16,7 @@ public class CustomerService {
   CustomerRepository customerRepository;
 
   @Transactional
-  public Customer createPerson(String username, String password, String email, String address,
+  public Customer createCustomer(String username, String password, String email, String address,
       Boolean isLocal) {
     if (username == null || username.trim().length() == 0) {
       throw new IllegalArgumentException("Username cannot be empty!");
@@ -31,7 +31,7 @@ public class CustomerService {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
     if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") > email.indexOf("@") + 1 || email.indexOf(".") < email.length() - 1) {
+        || email.indexOf(".") <= email.indexOf("@") + 1 || email.lastIndexOf(".") >= email.length() - 1) {
       throw new IllegalArgumentException("Email is invalid!");
     }
     if (address == null || address.trim().length() == 0) {
