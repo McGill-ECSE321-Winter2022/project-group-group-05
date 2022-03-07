@@ -2,26 +2,38 @@ package mcgill.ecse321.grocerystore.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mcgill.ecse321.grocerystore.dao.CustomerRepository;
+import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
+import mcgill.ecse321.grocerystore.dao.OwnerRepository;
+import mcgill.ecse321.grocerystore.dao.PurchaseRepository;
 import mcgill.ecse321.grocerystore.model.Customer;
+import mcgill.ecse321.grocerystore.model.Purchase;
 
 @Service
 public class CustomerService {
   @Autowired
   CustomerRepository customerRepository;
+  @Autowired
+  OwnerRepository ownerRepository;
+  @Autowired
+  EmployeeRepository employeeRepository;
+  @Autowired
+  PurchaseRepository purchaseRepository;
 
   @Transactional
   public Customer createCustomer(String username, String password, String email, String address,
-      Boolean isLocal) {
+      Boolean isLocal) throws IllegalArgumentException {
     if (username == null || username.trim().length() == 0) {
       throw new IllegalArgumentException("Username cannot be empty!");
     }
-    if (customerRepository.findByUsername(username) != null) {
+    if (customerRepository.findByUsername(username) != null
+        || ownerRepository.findByUsername(username) != null
+        || employeeRepository.findByUsername(username) != null) {
       throw new IllegalArgumentException("Username is already taken!");
     }
     if (password == null || password.trim().length() == 0) {
@@ -44,29 +56,43 @@ public class CustomerService {
     customer.setEmail(email);
     customer.setAddress(address);
     customer.setIsLocal(isLocal);
-    customerRepository.save(customer);
-    return customer;
+    return customerRepository.save(customer);
   }
 
   @Transactional
-  public Customer getCustomer(String username) {
+  public Customer getCustomer(String username) throws IllegalArgumentException {
     if (username == null || username.trim().length() == 0) {
       throw new IllegalArgumentException("Username cannot be empty!");
     }
     Customer customer = customerRepository.findByUsername(username);
+    if (customer == null) {
+      throw new IllegalArgumentException("User does not exist!");
+    }
     return customer;
   }
 
   @Transactional
-  public List<Customer> getAllCustomers() {
-    return toList(customerRepository.findAll());
+  public Set<Purchase> getPurchasesByUsername(String username) throws IllegalArgumentException {
+    if (username == null || username.trim().length() == 0) {
+      throw new IllegalArgumentException("Username cannot be empty!");
+    }
+    Customer customer = getCustomer(username);
+    Set<Purchase> purchaseList = customer.getPurchases();
+    return purchaseList;
   }
 
-  private <T> List<T> toList(Iterable<T> iterable) {
-    List<T> resultList = new ArrayList<T>();
-    for (T t : iterable) {
-      resultList.add(t);
+  @Transactional
+  public void deleteCustomer(String username) throws IllegalArgumentException {
+    if (username == null || username.trim().length() == 0) {
+      throw new IllegalArgumentException("Username cannot be empty!");
     }
-    return resultList;
+    Customer customer = getCustomer(username);
+    customerRepository.delete(customer);
+  }
+
+  @Transactional
+  public List<Customer> getAllCustomers() {
+    ArrayList<Customer> customerList = customerRepository.findAllByOrderByUsername();
+    return customerList;
   }
 }
