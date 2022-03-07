@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
+import java.util.ArrayList;
 import java.util.HashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -210,9 +211,40 @@ public class TestPurchaseService {
   }
 
   @Test
+  public void deleteAll() {
+    Purchase p = purchaseRepo.findById(PURCHASE_ID_1);
+    Customer c = customerRepo.findByUsername(CUSTOMER_USERNAME_1);
+    c.addPurchase(p);
+    c = customerRepo.save(c);
+    try {
+      service.deleteAll();
+      assertEquals(0, purchaseData.size());
+    } catch (IllegalArgumentException e) {
+      fail(e.getMessage());
+    }
+  }
+
+  @Test
+  public void deleteInvalidCustomer() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+      service.delete("not_a_customer", PURCHASE_ID_1);
+    });
+    assertEquals("Customer not found.", thrown.getMessage());
+  }
+
+  @Test
+  public void deleteNotBelongToCustomer() {
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+      service.delete(CUSTOMER_USERNAME_1, PURCHASE_ID_1);
+    });
+    assertEquals("Purchase does not belong to customer.", thrown.getMessage());
+  }
+
+  @Test
   public void getAll() {
     // these are not actually tested since all they do is call the CRUD repository
-    assertEquals(0, service.getAll().size());
+    // only getAll() has a fake mock that doesn't implement sorting
+    assertEquals(2, service.getAll().size());
     assertEquals(0, service.getAllCompleted().size());
     assertEquals(0, service.getAllDesc().size());
     assertEquals(0, service.getAllPaid().size());
@@ -740,6 +772,15 @@ public class TestPurchaseService {
       }
       return null;
     });
+    // NOTE: fake mock, does not implement sorting but returns the entire list
+    lenient().when(purchaseRepo.findAllByOrderByTimeOfPurchaseMillisAsc())
+        .thenAnswer((InvocationOnMock invocation) -> {
+          ArrayList<Purchase> list = new ArrayList<>();
+          for (Purchase p : purchaseData) {
+            list.add(p);
+          }
+          return list;
+        });
     lenient().when(specificItemRepo.findById(anyLong()))
         .thenAnswer((InvocationOnMock invocation) -> {
           for (SpecificItem s : specificItemData) {
@@ -766,6 +807,9 @@ public class TestPurchaseService {
           }
           return null;
         });
+    lenient().when(customerRepo.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+      return this.customerData;
+    });
   }
 
   private void setSaveMocks() {

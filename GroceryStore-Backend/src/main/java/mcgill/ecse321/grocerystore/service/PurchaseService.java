@@ -93,6 +93,61 @@ public class PurchaseService {
   }
 
   /**
+   * Delete this purchase. Can be used by both POS, online, or orphan (i.e. not associated with any
+   * customer)
+   * 
+   * @param purchaseId
+   * @throws IllegalArgumentException
+   */
+  @Transactional
+  public void delete(long purchaseId) throws IllegalArgumentException {
+    Purchase purchase = this.getPurchase(purchaseId);
+    for (Customer c : customerRepo.findAll()) {
+      if (c.getPurchases().contains(purchase)) {
+        this.delete(c.getUsername(), purchaseId);
+        return;
+      }
+    }
+    // orphan purchase
+    purchaseRepo.delete(purchase);
+  }
+
+  /**
+   * Delete this purchase, belonging to the specified customer. Can be used by both POS or online.
+   * 
+   * @param username
+   * @param purchaseId
+   * @throws IllegalArgumentException
+   */
+  @Transactional
+  public void delete(String username, long purchaseId) throws IllegalArgumentException {
+    Purchase purchase = this.getPurchase(purchaseId);
+    Customer customer = customerRepo.findByUsername(username);
+    if (customer == null) {
+      throw new IllegalArgumentException("Customer not found.");
+    }
+    if (!customer.getPurchases().contains(purchase)) {
+      throw new IllegalArgumentException("Purchase does not belong to customer.");
+    }
+    customer.removePurchase(purchase);
+    customer = customerRepo.save(customer);
+    purchaseRepo.delete(purchase);
+  }
+
+  /**
+   * Delete all purchases in the system.
+   * 
+   * @throws IllegalArgumentException
+   */
+  @Transactional
+  public void deleteAll() throws IllegalArgumentException {
+    List<Purchase> allPurchases = this.getAll();
+    for (Purchase p : allPurchases) {
+      this.delete(p.getId());
+    }
+  }
+
+  /**
    * Get a list of all purchases, ordered from oldest to newest by time of purchase. This list is
    * backed by an arraylist. (RQ9)
    * 
@@ -100,17 +155,6 @@ public class PurchaseService {
    */
   @Transactional
   public List<Purchase> getAll() {
-    return purchaseRepo.findAllByOrderByTimeOfPurchaseMillisAsc();
-  }
-
-  /**
-   * Get a list of all purchases, ordered from newest to oldest by time of purchase. This list is
-   * backed by an arraylist. (RQ9)
-   * 
-   * @return a list
-   */
-  @Transactional
-  public List<Purchase> getAllDesc() {
     return purchaseRepo.findAllByOrderByTimeOfPurchaseMillisAsc();
   }
 
@@ -123,6 +167,17 @@ public class PurchaseService {
   @Transactional
   public List<Purchase> getAllCompleted() {
     return this.getByState(PurchaseState.Completed);
+  }
+
+  /**
+   * Get a list of all purchases, ordered from newest to oldest by time of purchase. This list is
+   * backed by an arraylist. (RQ9)
+   * 
+   * @return a list
+   */
+  @Transactional
+  public List<Purchase> getAllDesc() {
+    return purchaseRepo.findAllByOrderByTimeOfPurchaseMillisDesc();
   }
 
   /**
