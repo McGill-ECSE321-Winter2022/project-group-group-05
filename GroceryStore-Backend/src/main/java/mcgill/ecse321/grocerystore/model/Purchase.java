@@ -23,7 +23,7 @@ import javax.persistence.OneToMany;
 public class Purchase {
 
   public enum PurchaseState {
-    Cart, Paid, Prepared, Completed
+    Cart, Paid, Prepared, Completed, Cancelled
   };
 
   @Id
