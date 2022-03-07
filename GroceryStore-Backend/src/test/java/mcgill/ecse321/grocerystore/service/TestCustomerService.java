@@ -126,7 +126,7 @@ public class TestCustomerService {
     assertNull(customer);
     assertEquals("Username cannot be empty!", error);
   }
-  
+
   @Test
   public void testCreateCustomerExistingUsername() {
     String password = "password";
@@ -198,7 +198,7 @@ public class TestCustomerService {
     assertNull(customer);
     assertEquals("Password cannot be empty!", error);
   }
-  
+
   @Test
   public void testCreateCustomerNullEmail() {
     String username = "test";
@@ -252,7 +252,7 @@ public class TestCustomerService {
     assertNull(customer);
     assertEquals("Email cannot be empty!", error);
   }
-  
+
   @Test
   public void testCreateCustomerInvalidEmail1() {
     String username = "test";
@@ -396,7 +396,7 @@ public class TestCustomerService {
     assertNull(customer);
     assertEquals("Address cannot be empty!", error);
   }
-  
+
   @Test
   public void testGetExistingPerson() {
     assertEquals(CUSTOMER_KEY, service.getCustomer(CUSTOMER_KEY).getUsername());
