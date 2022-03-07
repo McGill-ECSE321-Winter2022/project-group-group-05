@@ -8,8 +8,8 @@ public interface EmployeeRepository extends CrudRepository<Employee, String> {
 
   Employee findByUsername(String name);
 
-  List<Employee> findByUsernameContainingOrderByUsername(String nameFragment);
+  List<Employee> findByUsernameIgnoreCaseContainingOrderByUsername(String nameFragment);
 
-  List<Employee> findByUsernameContainingOrderByUsernameDesc(String nameFragment);
+  List<Employee> findByUsernameIgnoreCaseContainingOrderByUsernameDesc(String nameFragment);
 
 }
