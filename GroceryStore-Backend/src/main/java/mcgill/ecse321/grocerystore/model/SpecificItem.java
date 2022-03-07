@@ -73,6 +73,15 @@ public class SpecificItem {
   }
 
   /**
+   * For mockito testing only. The id should never be set manually otherwise.
+   * 
+   * @param id
+   */
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  /**
    * This method should only be used once at the creation of the specificItem<br>
    * Once set, the linked item should not be modified
    * 
