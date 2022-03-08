@@ -1,6 +1,5 @@
 package mcgill.ecse321.grocerystore.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -243,13 +242,16 @@ public class EmployeeService {
     return requestedEmployee;
   }
 
+  /**
+   * Implemented using .findByUsernameIgnoreCaseContainingOrderByUsername() to automatically sort
+   * the list. An empty string is passed to the above method, because all usernames in the database
+   * will contain an empty string.
+   * 
+   * @return sorted list (ascending lexicographical order) of employees
+   */
   @Transactional
   public List<Employee> getAllEmployees() {
-    List<Employee> employeeList = new ArrayList<Employee>();
-    for (var employee : employeeRepository.findAll()) {
-      employeeList.add(employee);
-    }
-    return employeeList;
+    return employeeRepository.findByUsernameIgnoreCaseContainingOrderByUsername("");
   }
 
   /**

@@ -122,16 +122,16 @@ public class TestEmployeeService {
       }
     });
     // simulates finding EMPLOYEE_KEY and EMPLOYEE2_KEY in the database
-    lenient().when(employeeDao.findAll()).thenAnswer(i -> {
-      List<Employee> employeeList = new ArrayList<Employee>();
-      var employeeOne = new Employee();
-      employeeOne.setUsername(EMPLOYEE_KEY);
-      var employeeTwo = new Employee();
-      employeeTwo.setUsername(EMPLOYEE2_KEY);
-      employeeList.add(employeeOne);
-      employeeList.add(employeeTwo);
-      return employeeList;
-    });
+//    lenient().when(employeeDao.findOrderByUsername()).thenAnswer(i -> {
+//      List<Employee> employeeList = new ArrayList<Employee>();
+//      var employeeOne = new Employee();
+//      employeeOne.setUsername(EMPLOYEE_KEY);
+//      var employeeTwo = new Employee();
+//      employeeTwo.setUsername(EMPLOYEE2_KEY);
+//      employeeList.add(employeeOne);
+//      employeeList.add(employeeTwo);
+//      return employeeList;
+//    });
     lenient().when(employeeDao.findByUsernameIgnoreCaseContainingOrderByUsername(anyString()))
         .thenAnswer(i -> {
           List<Employee> employeeList = new ArrayList<Employee>();
