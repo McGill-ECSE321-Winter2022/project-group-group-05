@@ -127,14 +127,14 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testCreateOpeningHoursExistingDaysOfWeek() {
+  public void testCreateOpeningHoursExistingOpeningHours() {
+    String daysOfWeek = OPENINGHOURS_KEY;
     Time startH = Time.valueOf("12:00:00");
     Time endH = Time.valueOf("20:00:00");
     OpeningHours openingH = null;
     String error = null;
-    openingH = null;
     try {
-      openingH = service.createOpeningHours(OPENINGHOURS_KEY, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
