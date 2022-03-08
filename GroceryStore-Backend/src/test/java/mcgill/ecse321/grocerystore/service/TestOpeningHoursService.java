@@ -22,7 +22,6 @@ import org.mockito.stubbing.Answer;
 import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
-
 @ExtendWith(MockitoExtension.class)
 public class TestOpeningHoursService {
   @Mock
@@ -186,6 +185,23 @@ public class TestOpeningHoursService {
     assertNull(openingH);
     assertEquals("Start time must be earlier than end time!", error);
   }
+
+  @Test
+  public void testCreateOpeningHoursInvalidDaysOfWeek() {
+    String daysOfWeek = "Robert";
+    Time startH = Time.valueOf("10:00:00");
+    Time endH = Time.valueOf("09:00:00");
+    OpeningHours openingH = null;
+    String error = null;
+    try {
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(openingH);
+    assertEquals("Day of week is not valid!", error);
+  }
+
 
   @Test
   public void testGetExistingOpeningHours() {
