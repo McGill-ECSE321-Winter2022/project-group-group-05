@@ -32,13 +32,13 @@ public class EmployeeController {
   @Autowired
   private EmployeeService service;
   
-  @PostMapping(value = {"/employees/{username}", "/employees/{username}/"})
+  @PostMapping(value = {"/employee/{username}", "/employee/{username}/"})
   public EmployeeDto createEmployee(@PathVariable("username") String username,
       @RequestParam String email, @RequestParam String password) throws IllegalArgumentException {
     return convertToDto(service.createEmployee(username, email, password));
   }
 
-  @DeleteMapping(value = {"/employees/{username}", "/employees/{username}/"})
+  @DeleteMapping(value = {"/employee/{username}", "/employee/{username}/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void deleteEmployee(@PathVariable("username") String username)
       throws IllegalArgumentException {
@@ -47,35 +47,35 @@ public class EmployeeController {
   
   // Patch Mappings
 
-  @PatchMapping(value = {"/employees/{username}/changeEmail", "/employees/{username}/changeEmail/"})
+  @PatchMapping(value = {"/employee/{username}/changeEmail", "/employee/{username}/changeEmail/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void setEmployeeEmail(@PathVariable("username") String username,
       @RequestParam String newEmail) throws IllegalArgumentException {
     service.setEmployeeEmail(username, newEmail);
   }
 
-  @PatchMapping(value = {"/employees/{username}/changePassword", "/employees/{username}/changePassword/"})
+  @PatchMapping(value = {"/employee/{username}/changePassword", "/employee/{username}/changePassword/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void setEmployeePassword(@PathVariable("username") String username,
       @RequestParam String newPassword) throws IllegalArgumentException {
     service.setEmployeePassword(username, newPassword);
   }
 
-  @PatchMapping(value = {"/employees/{username}/addSchedules", "/employees/{username}/addSchedules/"})
+  @PatchMapping(value = {"/employee/{username}/addSchedules", "/employee/{username}/addSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void addSchedule(@PathVariable("username") String username,
       @RequestParam long[] scheduleId) throws IllegalArgumentException {
     service.addSchedules(username, scheduleId);
   }
 
-  @PatchMapping(value = {"/employees/{username}/removeSchedules", "/employees/{username}/removeSchedules/"})
+  @PatchMapping(value = {"/employee/{username}/removeSchedules", "/employee/{username}/removeSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void removeSchedule(@PathVariable("username") String username,
       @RequestParam long[] scheduleId) throws IllegalArgumentException {
     service.removeSchedules(username, scheduleId);
   }
 
-  @PatchMapping(value = {"/employees/{username}/removeAllSchedules", "/employees/{username}/removeAllSchedules/"})
+  @PatchMapping(value = {"/employee/{username}/removeAllSchedules", "/employee/{username}/removeAllSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void removeAllSchedules(@PathVariable("username") String username)
       throws IllegalArgumentException {
@@ -84,13 +84,13 @@ public class EmployeeController {
 
   // Get Mappings
 
-  @GetMapping(value = {"/employees/{username}", "/employees/{username}/"})
+  @GetMapping(value = {"/employee/{username}", "/employee/{username}/"})
   public EmployeeDto getEmployee(@PathVariable("username") String username)
       throws IllegalArgumentException {
     return convertToDto(service.getEmployee(username));
   }
 
-  @GetMapping(value = {"/employees", "/employees/"})
+  @GetMapping(value = {"/employee/getAll", "/employee/getAll/"})
   public List<EmployeeDto> getAllEmployees() {
     ArrayList<EmployeeDto> employees = new ArrayList<EmployeeDto>();
     for (var employee : service.getAllEmployees()) {
@@ -99,7 +99,7 @@ public class EmployeeController {
     return employees;
   }
 
-  @GetMapping(value = {"/employees/searchAscending", "/employees/searchAscending/"})
+  @GetMapping(value = {"/employee/searchAscending", "/employee/searchAscending/"})
   public List<EmployeeDto> searchEmployeesAscending(@RequestParam String searchQuery)
       throws IllegalArgumentException {
     ArrayList<EmployeeDto> employees = new ArrayList<EmployeeDto>();
@@ -109,7 +109,7 @@ public class EmployeeController {
     return employees;
   }
 
-  @GetMapping(value = {"/employees/searchDescending", "/employees/searchDescending/"})
+  @GetMapping(value = {"/employee/searchDescending", "/employee/searchDescending/"})
   public List<EmployeeDto> searchEmployeesDescending(@RequestParam String searchQuery)
       throws IllegalArgumentException {
     ArrayList<EmployeeDto> employees = new ArrayList<EmployeeDto>();
