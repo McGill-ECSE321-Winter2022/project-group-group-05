@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -175,10 +175,10 @@ public class TestItemCategoryService {
 
   @Test
   public void testGetItemsByItemCategory() {
-    Set<Item> items = new HashSet<Item>();
+    List<Item> items = new ArrayList<Item>();
     items.add(ITEM_ONE);
     items.add(ITEM_TWO);
-    Set<Item> itemSet = service.getItemsByItemCategory(ITEMCATEGORY_KEY);
+    List<Item> itemSet = service.getItemsByItemCategory(ITEMCATEGORY_KEY);
     assertEquals(items, itemSet);
   }
 

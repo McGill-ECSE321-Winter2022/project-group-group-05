@@ -44,13 +44,15 @@ public class TestCustomerService {
   @InjectMocks
   private CustomerService service;
 
-  private static final String CUSTOMER_KEY = "TestCustomer";
+  private static final String CUSTOMER_KEY = "TestCustomerOne";
+  private static final String TEST = "TestCustomerTwo";
   private static final String OWNER_KEY = "TestOwner";
   private static final String EMPLOYEE_KEY = "TestEmployee";
   private static final String NONEXISTING_KEY = "NotACustomer";
   private static Purchase PURCHASE_ONE = new Purchase();
   private static Purchase PURCHASE_TWO = new Purchase();
   private static Purchase PURCHASE_THREE = new Purchase();
+  private static Customer CUSTOMER_TEST = new Customer();
 
   @BeforeEach
   public void setMockOutput() {
@@ -65,6 +67,9 @@ public class TestCustomerService {
             customer.addPurchase(PURCHASE_TWO);
             customer.addPurchase(PURCHASE_THREE);
             return customer;
+          } else if (invocation.getArgument(0).equals(TEST)) {
+            CUSTOMER_TEST.setUsername(TEST);
+            return CUSTOMER_TEST;
           } else {
             return null;
           }
@@ -464,6 +469,202 @@ public class TestCustomerService {
     assertNull(customer);
     assertEquals("Address cannot be empty!", error);
   }
+
+  @Test
+  public void testSetCustomerPassword() {
+    String password = "password";
+    try {
+      service.setCustomerPassword(TEST, password);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertEquals(password, CUSTOMER_TEST.getPassword());
+  }
+
+  @Test
+  public void testSetCustomerNullPassword() {
+    String error = null;
+    try {
+      service.setCustomerPassword(TEST, null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Password cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerEmptyPassword() {
+    String error = null;
+    try {
+      service.setCustomerPassword(TEST, "");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Password cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerSpacesPassword() {
+    String error = null;
+    try {
+      service.setCustomerPassword(TEST, "   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Password cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerEmail() {
+    String email = "abc@gmail.com";
+    try {
+      service.setCustomerEmail(TEST, email);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertEquals(email, CUSTOMER_TEST.getEmail());
+  }
+
+  @Test
+  public void testSetCustomerNullEmail() {
+    String error = null;
+    try {
+      service.setCustomerEmail(TEST, null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Email cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerEmptyEmail() {
+    String error = null;
+    try {
+      service.setCustomerEmail(TEST, "");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Email cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerSpacesEmail() {
+    String error = null;
+    try {
+      service.setCustomerEmail(TEST, "   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Email cannot be empty!", error);
+  }
+
+  // check if the email address contains "."
+  @Test
+  public void testSetCustomerMissingPeriodEmail() {
+    String email = "abc@gmailcom";
+    String error = null;
+    try {
+      service.setCustomerEmail(TEST, email);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Email is invalid!", error);
+  }
+
+  // check if the email address contains "@"
+  @Test
+  public void testSetCustomerMissingAtEmail() {
+    String email = "abcgmail.com";
+    String error = null;
+    try {
+      service.setCustomerEmail(TEST, email);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Email is invalid!", error);
+  }
+
+  // check if the email address contains "@"
+  @Test
+  public void createSetInvalidEmailDomain() {
+    String email = "abc@.com";
+    String error = null;
+    try {
+      service.setCustomerEmail(TEST, email);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Email is invalid!", error);
+  }
+
+  // check if the last character isn't "."
+  @Test
+  public void testSetCustomerInvalidEmailTopLevelDomain() {
+    String email = "abd@gmail.";
+    String error = null;
+    try {
+      service.setCustomerEmail(TEST, email);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Email is invalid!", error);
+  }
+
+  @Test
+  public void testSetCustomerAddress() {
+    String address = "address";
+    try {
+      service.setCustomerAddress(TEST, address);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertEquals(address, CUSTOMER_TEST.getAddress());
+  }
+
+  @Test
+  public void testSetCustomerNullAddress() {
+    String error = null;
+    try {
+      service.setCustomerAddress(TEST, null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Address cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerEmptyAddress() {
+    String error = null;
+    try {
+      service.setCustomerAddress(TEST, "");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Address cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerSpacesAddress() {
+    String error = null;
+    try {
+      service.setCustomerAddress(TEST, "   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Address cannot be empty!", error);
+  }
+
+  @Test
+  public void testSetCustomerIsLocal() {
+    boolean isLocal = true;
+    try {
+      service.setCustomerIsLocal(TEST, isLocal);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertEquals(isLocal, CUSTOMER_TEST.getIsLocal());
+  }
+
 
   @Test
   public void testGetExistingPerson() {

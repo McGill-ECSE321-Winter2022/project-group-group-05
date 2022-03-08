@@ -1,7 +1,7 @@
 package mcgill.ecse321.grocerystore.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,12 +41,16 @@ public class ItemCategoryService {
   }
 
   @Transactional
-  public Set<Item> getItemsByItemCategory(String name) throws IllegalArgumentException {
+  public List<Item> getItemsByItemCategory(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Category name cannot be empty!");
     }
     ItemCategory itemCategory = getItemCategory(name);
-    return itemCategory.getItems();
+    List<Item> itemList = new ArrayList<Item>();
+    for (Item item : itemCategory.getItems()) {
+      itemList.add(item);
+    }
+    return itemList;
   }
 
   @Transactional
