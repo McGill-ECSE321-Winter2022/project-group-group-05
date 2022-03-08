@@ -23,7 +23,7 @@ import javax.persistence.OneToMany;
 public class Purchase {
 
   public enum PurchaseState {
-    Cart, Paid, Prepared, Completed
+    Cart, Paid, Prepared, Completed, Cancelled
   };
 
   @Id
@@ -131,6 +131,15 @@ public class Purchase {
     return false;
   }
 
+  /**
+   * For mockito testing only. The id should never be set manually otherwise.
+   * 
+   * @param id
+   */
+  public void setId(long id) {
+    this.id = id;
+  }
+
   public void setState(PurchaseState state) {
     this.state = state;
   }
@@ -152,6 +161,16 @@ public class Purchase {
   public long setTimeOfPurchaseMillis() {
     this.timeOfPurchaseMillis = System.currentTimeMillis();
     return this.timeOfPurchaseMillis;
+  }
+
+
+  /**
+   * For mockito testing only. The time should never be set manually otherwise.
+   * 
+   * @param timeOfPurchaseMillis
+   */
+  public void setTimeOfPurchaseMillis(long timeOfPurchaseMillis) {
+    this.timeOfPurchaseMillis = timeOfPurchaseMillis;
   }
 
   /**
