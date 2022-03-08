@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,37 +45,37 @@ public class EmployeeController {
     service.deleteEmployee(username);
   }
   
-  // Put Mappings
+  // Patch Mappings
 
-  @PutMapping(value = {"/employees/{username}/changeEmail", "/employees/{username}/changeEmail/"})
+  @PatchMapping(value = {"/employees/{username}/changeEmail", "/employees/{username}/changeEmail/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void setEmployeeEmail(@PathVariable("username") String username,
       @RequestParam String newEmail) throws IllegalArgumentException {
     service.setEmployeeEmail(username, newEmail);
   }
 
-  @PutMapping(value = {"/employees/{username}/changePassword", "/employees/{username}/changePassword/"})
+  @PatchMapping(value = {"/employees/{username}/changePassword", "/employees/{username}/changePassword/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void setEmployeePassword(@PathVariable("username") String username,
       @RequestParam String newPassword) throws IllegalArgumentException {
     service.setEmployeePassword(username, newPassword);
   }
 
-  @PutMapping(value = {"/employees/{username}/addSchedules", "/employees/{username}/addSchedules/"})
+  @PatchMapping(value = {"/employees/{username}/addSchedules", "/employees/{username}/addSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void addSchedule(@PathVariable("username") String username,
       @RequestParam long[] scheduleId) throws IllegalArgumentException {
     service.addSchedules(username, scheduleId);
   }
 
-  @PutMapping(value = {"/employees/{username}/removeSchedules", "/employees/{username}/removeSchedules/"})
+  @PatchMapping(value = {"/employees/{username}/removeSchedules", "/employees/{username}/removeSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void removeSchedule(@PathVariable("username") String username,
       @RequestParam long[] scheduleId) throws IllegalArgumentException {
     service.removeSchedules(username, scheduleId);
   }
 
-  @PutMapping(value = {"/employees/{username}/removeAllSchedules", "/employees/{username}/removeAllSchedules/"})
+  @PatchMapping(value = {"/employees/{username}/removeAllSchedules", "/employees/{username}/removeAllSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void removeAllSchedules(@PathVariable("username") String username)
       throws IllegalArgumentException {
