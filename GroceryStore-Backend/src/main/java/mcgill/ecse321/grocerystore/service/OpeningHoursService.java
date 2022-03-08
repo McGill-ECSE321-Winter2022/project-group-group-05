@@ -1,11 +1,14 @@
 package mcgill.ecse321.grocerystore.service;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
+import mcgill.ecse321.grocerystore.model.Customer;
+import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 @Service
@@ -91,8 +94,8 @@ public class OpeningHoursService {
 
   @Transactional
   public List<OpeningHours> getAllOpeningHours() {
-    return openingHoursRepository.findAll("");
-
+    ArrayList<OpeningHours> openingHoursList = openingHoursRepository.findAllByOrderByDaysOfWeek();
+    return openingHoursList;
   }
 
 }
