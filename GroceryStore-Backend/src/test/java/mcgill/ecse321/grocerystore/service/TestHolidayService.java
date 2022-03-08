@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import java.sql.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,29 +55,26 @@ public class TestHolidayService {
   @Test
   public void testCreateHoliday() {
     String name = "Christmas";
-    int month = 12;
-    int day = 25;
+    Date date = Date.valueOf("2022-02-02");
     Holiday holiday = null;
     try {
-      holiday = service.createHoliday(name, month, day);
+      holiday = service.createHoliday(name, date);
     } catch (IllegalArgumentException e) {
       fail();
     }
     assertNotNull(holiday);
     assertEquals(name, holiday.getName());
-    assertEquals(month, holiday.getMonth());
-    assertEquals(day, holiday.getDay());
+    assertEquals(date, holiday.getDate());
   }
 
   @Test
   public void testCreateHolidayNullName() {
     String name = null;
-    int month = 12;
-    int day = 25;
+    Date date = Date.valueOf("2022-02-02");
     Holiday holiday = null;
     String error = null;
     try {
-      holiday = service.createHoliday(name, month, day);
+      holiday = service.createHoliday(name, date);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -87,12 +85,11 @@ public class TestHolidayService {
   @Test
   public void testCreateHolidayEmptyName() {
     String name = "";
-    int month = 12;
-    int day = 25;
+    Date date = Date.valueOf("2022-02-02");
     Holiday holiday = null;
     String error = null;
     try {
-      holiday = service.createHoliday(name, month, day);
+      holiday = service.createHoliday(name, date);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -103,12 +100,11 @@ public class TestHolidayService {
   @Test
   public void testCreateHolidaySpacesName() {
     String name = "  ";
-    int month = 12;
-    int day = 25;
+    Date date = Date.valueOf("2022-02-02");
     Holiday holiday = null;
     String error = null;
     try {
-      holiday = service.createHoliday(name, month, day);
+      holiday = service.createHoliday(name, date);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -118,13 +114,12 @@ public class TestHolidayService {
 
   @Test
   public void testCreateHolidayExistingHoliday() {
-    int month = 12;
-    int day = 25;
+    Date date = Date.valueOf("2022-02-02");
     Holiday holiday = null;
     String error = null;
     holiday = null;
     try {
-      holiday = service.createHoliday(HOLIDAY_KEY, month, day);
+      holiday = service.createHoliday(HOLIDAY_KEY, date);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -133,67 +128,18 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testCreateHolidayZeroMonth() {
+  public void testCreateHolidayNullDate() {
     String name = "Christmas";
-    int month = 0;
-    int day = 25;
+    Date date = null;
     Holiday holiday = null;
     String error = null;
     try {
-      holiday = service.createHoliday(name, month, day);
+      holiday = service.createHoliday(name, date);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(holiday);
-    assertEquals("Month is out of range!", error);
-  }
-
-  @Test
-  public void testCreateHolidayLargeMonth() {
-    String name = "Christmas";
-    int month = 88;
-    int day = 25;
-    Holiday holiday = null;
-    String error = null;
-    try {
-      holiday = service.createHoliday(name, month, day);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(holiday);
-    assertEquals("Month is out of range!", error);
-  }
-
-  @Test
-  public void testCreateHolidayZeroDay() {
-    String name = "Christmas";
-    int month = 12;
-    int day = 0;
-    Holiday holiday = null;
-    String error = null;
-    try {
-      holiday = service.createHoliday(name, month, day);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(holiday);
-    assertEquals("Day is out of range!", error);
-  }
-
-  @Test
-  public void testCreateHolidayLargeDay() {
-    String name = "Christmas";
-    int month = 12;
-    int day = 88;
-    Holiday holiday = null;
-    String error = null;
-    try {
-      holiday = service.createHoliday(name, month, day);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(holiday);
-    assertEquals("Day is out of range!", error);
+    assertEquals("Date cannot be empty!", error);
   }
 
   @Test

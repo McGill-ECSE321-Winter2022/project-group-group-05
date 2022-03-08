@@ -1,5 +1,7 @@
 package mcgill.ecse321.grocerystore.service;
 
+import java.sql.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +17,21 @@ public class HolidayService {
 
 
   @Transactional
-  public Holiday createHoliday(String name, int month, int day) {
+  public Holiday createHoliday(String name, Date date) {
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
     if (holidayRepository.findByName(name) != null) {
       throw new IllegalArgumentException("Holiday already exists!");
     }
-    if ((month == 0) || (month > 12)) {
-      throw new IllegalArgumentException("Month is out of range!");
-    }
-    if ((day == 0) || (day > 31)) {
-      throw new IllegalArgumentException("Day is out of range!");
+    if (date == null) {
+      throw new IllegalArgumentException("Date cannot be empty!");
     }
 
     Holiday holiday = new Holiday();
     holiday.setName(name);
-    holiday.setMonth(month);
-    holiday.setDay(day);
-    holidayRepository.save(holiday);
-    return holiday;
+    holiday.setDate(date);
+    return holidayRepository.save(holiday);
   }
 
   @Transactional
@@ -59,31 +56,27 @@ public class HolidayService {
   }
 
   @Transactional
-  public Holiday updateHoliday(Holiday holiday, String name, int month, int day) {
+  public Holiday updateHoliday(String name, Date date) {
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
-    if ((month == 0) || (month > 12)) {
-      throw new IllegalArgumentException("Month is out of range!");
+    if (date == null) {
+      throw new IllegalArgumentException("Date cannot be empty!");
     }
-    if ((day == 0) || (day > 31)) {
-      throw new IllegalArgumentException("Day is out of range!");
-    }
-    holiday.setName(name);
-    holiday.setMonth(month);
-    holiday.setDay(day);
-    this.holidayRepository.save(holiday);
-    holiday = null;
+    Holiday holiday = this.getHoliday(name);
+    holiday.setDate(date);
+    holiday = holidayRepository.save(holiday);
     return holiday;
+
   }
 
 
   @Transactional
-  public List<Holiday> getAllHoliday() {
-    ArrayList<Holiday> holidayList = holidayRepository.findAllByOrderByName();
-    return holidayList;
+  public List<Holiday> getAll() {
+    return holidayRepository.findAllByOrderByName();
   }
 
 }
 
 
+;

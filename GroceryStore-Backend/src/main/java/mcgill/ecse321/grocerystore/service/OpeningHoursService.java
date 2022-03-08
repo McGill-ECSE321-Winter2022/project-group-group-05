@@ -15,11 +15,17 @@ public class OpeningHoursService {
   OpeningHoursRepository openingHoursRepository;
 
   @Transactional
-  public OpeningHours createOpeningHours(String daysOfWeek, Time startH, Time endH) {
+  public OpeningHours createOpeningHours(String daysOfWeek, Time startH, Time endH)
+      throws IllegalArgumentException {
 
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of week cannot be empty!");
     }
+    // if (daysOfWeek != "Monday" || daysOfWeek != "Tuesday" || daysOfWeek != "Wednesday"
+    // || daysOfWeek != "Thursday" || daysOfWeek != "Friday" || daysOfWeek != "Saturday"
+    // || daysOfWeek != "Sunday") {
+    // throw new IllegalArgumentException("Day of week is invalid!");
+    // }
     if (openingHoursRepository.findByDaysOfWeek(daysOfWeek) != null) {
       throw new IllegalArgumentException("This opening hour already exist!");
     }
@@ -37,21 +43,23 @@ public class OpeningHoursService {
     openingH.setDaysOfWeek(daysOfWeek);
     openingH.setStartTime(startH);
     openingH.setEndTime(endH);
+    openingHoursRepository.save(openingH);
     return openingH;
   }
 
   @Transactional
-  public OpeningHours getOpeningHours(String daysOfWeek) {
+  public OpeningHours getOpeningHours(String daysOfWeek) throws IllegalArgumentException {
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of week cannot be empty!");
     }
     OpeningHours openingH = openingHoursRepository.findByDaysOfWeek(daysOfWeek);
     if (openingH == null) {
-      throw new IllegalArgumentException("This opneing hour does not exist!");
+      throw new IllegalArgumentException("This opening hour does not exist!");
     }
     return openingH;
   }
 
+  // need to modify
   @Transactional
   public OpeningHours updateOpeningHours(OpeningHours openingH, String daysOfWeek, Time startH,
       Time endH) {
@@ -64,9 +72,10 @@ public class OpeningHoursService {
     if (endH == null) {
       throw new IllegalArgumentException("End time cannot be empty!");
     }
-    if (startH != null && startH != null && endH.before(startH)) {
+    if (endH.before(startH)) {
       throw new IllegalArgumentException("Start time must be earlier than end time!");
     }
+
     openingH.setDaysOfWeek(daysOfWeek);
     openingH.setStartTime(startH);
     openingH.setEndTime(endH);

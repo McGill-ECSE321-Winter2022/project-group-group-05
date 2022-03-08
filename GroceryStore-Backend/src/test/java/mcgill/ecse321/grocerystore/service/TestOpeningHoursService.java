@@ -22,9 +22,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
-import mcgill.ecse321.grocerystore.model.Holiday;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
-import mcgill.ecse321.grocerystore.model.Owner;
+
 
 @ExtendWith(MockitoExtension.class)
 public class TestOpeningHoursService {
@@ -63,16 +62,16 @@ public class TestOpeningHoursService {
     String daysOfWeek = "Friday";
     Time startH = Time.valueOf("12:00:00");
     Time endH = Time.valueOf("20:00:00");
-    OpeningHours openingHours = null;
+    OpeningHours openingH = null;
     try {
-      openingHours = service.createOpeningHours(daysOfWeek, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       fail();
     }
-    assertNotNull(openingHours);
-    assertEquals(daysOfWeek, openingHours.getDaysOfWeek());
-    assertEquals(startH, openingHours.getStartTime());
-    assertEquals(endH, openingHours.getEndTime());
+    assertNotNull(openingH);
+    assertEquals(daysOfWeek, openingH.getDaysOfWeek());
+    assertEquals(startH, openingH.getStartTime());
+    assertEquals(endH, openingH.getEndTime());
   }
 
   @Test
@@ -80,14 +79,14 @@ public class TestOpeningHoursService {
     String daysOfWeek = null;
     Time startH = Time.valueOf("12:00:00");
     Time endH = Time.valueOf("20:00:00");
-    OpeningHours openingHours = null;
+    OpeningHours openingH = null;
     String error = null;
     try {
-      openingHours = service.createOpeningHours(daysOfWeek, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(openingHours);
+    assertNull(openingH);
     assertEquals("Day of week cannot be empty!", error);
   }
 
@@ -96,14 +95,14 @@ public class TestOpeningHoursService {
     String daysOfWeek = "";
     Time startH = Time.valueOf("12:00:00");
     Time endH = Time.valueOf("20:00:00");
-    OpeningHours openingHours = null;
+    OpeningHours openingH = null;
     String error = null;
     try {
-      openingHours = service.createOpeningHours(daysOfWeek, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(openingHours);
+    assertNull(openingH);
     assertEquals("Day of week cannot be empty!", error);
   }
 
@@ -112,14 +111,14 @@ public class TestOpeningHoursService {
     String daysOfWeek = "  ";
     Time startH = Time.valueOf("12:00:00");
     Time endH = Time.valueOf("20:00:00");
-    OpeningHours openingHours = null;
+    OpeningHours openingH = null;
     String error = null;
     try {
-      openingHours = service.createOpeningHours(daysOfWeek, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(openingHours);
+    assertNull(openingH);
     assertEquals("Day of week cannot be empty!", error);
   }
 
@@ -144,14 +143,14 @@ public class TestOpeningHoursService {
     String daysOfWeek = "Friday";
     Time startH = null;
     Time endH = Time.valueOf("20:00:00");
-    OpeningHours openingHours = null;
+    OpeningHours openingH = null;
     String error = null;
     try {
-      openingHours = service.createOpeningHours(daysOfWeek, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(openingHours);
+    assertNull(openingH);
     assertEquals("Start time cannot be empty!", error);
   }
 
@@ -160,14 +159,14 @@ public class TestOpeningHoursService {
     String daysOfWeek = "Friday";
     Time startH = Time.valueOf("10:00:00");
     Time endH = null;
-    OpeningHours openingHours = null;
+    OpeningHours openingH = null;
     String error = null;
     try {
-      openingHours = service.createOpeningHours(daysOfWeek, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(openingHours);
+    assertNull(openingH);
     assertEquals("End time cannot be empty!", error);
   }
 
@@ -176,14 +175,14 @@ public class TestOpeningHoursService {
     String daysOfWeek = "Friday";
     Time startH = Time.valueOf("10:00:00");
     Time endH = Time.valueOf("09:00:00");
-    OpeningHours openingHours = null;
+    OpeningHours openingH = null;
     String error = null;
     try {
-      openingHours = service.createOpeningHours(daysOfWeek, startH, endH);
+      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(openingHours);
+    assertNull(openingH);
     assertEquals("Start time must be earlier than end time!", error);
   }
 
@@ -200,7 +199,7 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertEquals("This opneing hour does not exist!", error);
+    assertEquals("This opening hour does not exist!", error);
   }
 
   @Test
@@ -291,7 +290,7 @@ public class TestOpeningHoursService {
       error = e.getMessage();
     }
     verify(openingHoursDao, times(0)).delete(any());
-    assertEquals("This opneing hour does not exist!", error);
+    assertEquals("This opening hour does not exist!", error);
   }
 
 
