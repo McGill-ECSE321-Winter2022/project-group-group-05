@@ -37,7 +37,7 @@ public class TestHolidayService {
   public void setMockOutput() {
     lenient().when(holidayDao.findByName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
       if (invocation.getArgument(0).equals(HOLIDAY_KEY)) {
-        Holiday holiday = new Holiday();;
+        Holiday holiday = new Holiday();
         holiday.setName(HOLIDAY_KEY);
         return holiday;
       } else {

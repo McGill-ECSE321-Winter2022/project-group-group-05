@@ -15,25 +15,29 @@ public class OpeningHoursService {
   OpeningHoursRepository openingHoursRepository;
 
   @Transactional
-  public OpeningHours createOpeningHours(String daysOfWeek, Time startTime, Time endTime) {
+  public OpeningHours createOpeningHours(String daysOfWeek, Time startH, Time endH) {
+
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of Week cannot be empty!");
     }
     if (openingHoursRepository.findByDaysOfWeek(daysOfWeek) != null) {
       throw new IllegalArgumentException("This opening hour already exists");
     }
-    if (startTime == null || endTime == null) {
-      throw new IllegalArgumentException("Start and end time cannot be empty!");
+    if (startH == null) {
+      throw new IllegalArgumentException("Start time cannot be empty!");
     }
-    if (endTime.before(startTime)) {
+    if (endH == null) {
+      throw new IllegalArgumentException("End time cannot be empty!");
+    }
+    if (startH != null && startH != null && endH.before(startH)) {
       throw new IllegalArgumentException("Start time must be earlier than end time!");
     }
 
-    OpeningHours openingHours = new OpeningHours();
-    openingHours.setDaysOfWeek(daysOfWeek);
-    openingHours.setStartTime(startTime);
-    openingHours.setEndTime(endTime);
-    return openingHours;
+    OpeningHours openingH = new OpeningHours();
+    openingH.setDaysOfWeek(daysOfWeek);
+    openingH.setStartTime(startH);
+    openingH.setEndTime(endH);
+    return openingH;
   }
 
   @Transactional
@@ -41,11 +45,11 @@ public class OpeningHoursService {
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of week cannot be empty!");
     }
-    OpeningHours openingHours = openingHoursRepository.findByDaysOfWeek(daysOfWeek);
-    if (openingHours == null) {
+    OpeningHours openingH = openingHoursRepository.findByDaysOfWeek(daysOfWeek);
+    if (openingH == null) {
       throw new IllegalArgumentException("This opneing hour does not exist!");
     }
-    return openingHours;
+    return openingH;
   }
 
   @Transactional
@@ -53,34 +57,8 @@ public class OpeningHoursService {
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of week cannot be empty!");
     }
-    OpeningHours openingHours = getOpeningHours(daysOfWeek);
-    openingHoursRepository.delete(openingHours);
-  }
-
-  @Transactional
-  public OpeningHours updateOpeningHours(OpeningHours openingHours, String daysOfWeek,
-      Time startTime, Time endTime) {
-    if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
-      throw new IllegalArgumentException("Day of week cannot be empty!");
-    }
-
-    if (startTime == null) {
-      throw new IllegalArgumentException("OpeningHours must have a starting time!");
-    }
-
-    if (endTime == null) {
-      throw new IllegalArgumentException("OpeningHours must have a ending time!");
-    }
-
-    if (endTime.before(startTime)) {
-      throw new IllegalArgumentException("Start time must be earlier than end time!");
-    }
-    openingHours.setDaysOfWeek(daysOfWeek);
-    openingHours.setStartTime(startTime);
-    openingHours.setEndTime(endTime);
-    this.openingHoursRepository.save(openingHours);
-    openingHours = null;
-    return openingHours;
+    OpeningHours openingH = getOpeningHours(daysOfWeek);
+    openingHoursRepository.delete(openingH);
   }
 
   @Transactional
