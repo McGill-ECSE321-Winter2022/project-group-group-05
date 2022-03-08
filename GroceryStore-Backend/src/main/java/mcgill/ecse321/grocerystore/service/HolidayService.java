@@ -58,15 +58,25 @@ public class HolidayService {
     holidayRepository.delete(holidy);
   }
 
-  /*
-   * @Transactional public Holiday updateHoliday(Holiday holiday, String name, int month, int day) {
-   * if (name == null || name.trim().length() == 0) { throw new
-   * IllegalArgumentException("Name cannot be empty!"); } if ((month == 0) || (month > 12)) { throw
-   * new IllegalArgumentException("Month is out of range!"); } if ((day == 0) || (day > 31)) { throw
-   * new IllegalArgumentException("Day is out of range!"); } holiday.setName(name);
-   * holiday.setMonth(month); holiday.setDay(day); this.holidayRepository.save(holiday); holiday =
-   * null; return holiday; }
-   */
+  @Transactional
+  public Holiday updateHoliday(Holiday holiday, String name, int month, int day) {
+    if (name == null || name.trim().length() == 0) {
+      throw new IllegalArgumentException("Name cannot be empty!");
+    }
+    if ((month == 0) || (month > 12)) {
+      throw new IllegalArgumentException("Month is out of range!");
+    }
+    if ((day == 0) || (day > 31)) {
+      throw new IllegalArgumentException("Day is out of range!");
+    }
+    holiday.setName(name);
+    holiday.setMonth(month);
+    holiday.setDay(day);
+    this.holidayRepository.save(holiday);
+    holiday = null;
+    return holiday;
+  }
+
 
   @Transactional
   public List<Holiday> getAllHoliday() {

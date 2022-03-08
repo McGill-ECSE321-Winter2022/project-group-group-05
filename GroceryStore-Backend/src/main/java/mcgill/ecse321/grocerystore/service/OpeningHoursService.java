@@ -53,6 +53,30 @@ public class OpeningHoursService {
   }
 
   @Transactional
+  public OpeningHours updateOpeningHours(OpeningHours openingH, String daysOfWeek, Time startH,
+      Time endH) {
+    if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
+      throw new IllegalArgumentException("Day of week cannot be empty!");
+    }
+    if (startH == null) {
+      throw new IllegalArgumentException("Start time cannot be empty!");
+    }
+    if (endH == null) {
+      throw new IllegalArgumentException("End time cannot be empty!");
+    }
+    if (startH != null && startH != null && endH.before(startH)) {
+      throw new IllegalArgumentException("Start time must be earlier than end time!");
+    }
+    openingH.setDaysOfWeek(daysOfWeek);
+    openingH.setStartTime(startH);
+    openingH.setEndTime(endH);
+    this.openingHoursRepository.save(openingH);
+    openingH = null;
+    return openingH;
+  }
+
+
+  @Transactional
   public void deleteOpeningHours(String daysOfWeek) throws IllegalArgumentException {
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of week cannot be empty!");
