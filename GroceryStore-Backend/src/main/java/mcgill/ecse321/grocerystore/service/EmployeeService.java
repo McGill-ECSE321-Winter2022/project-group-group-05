@@ -1,6 +1,5 @@
 package mcgill.ecse321.grocerystore.service;
 
-import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import mcgill.ecse321.grocerystore.dao.CustomerRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
-import mcgill.ecse321.grocerystore.dao.ShiftRepository;
 import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 
@@ -33,11 +31,9 @@ public class EmployeeService {
   @Autowired
   EmployeeRepository employeeRepository;
 
-  // these repositories are referenced for business methods used to fulfill RQ13.
+  // this repository is referenced for business methods used to fulfill RQ13.
   @Autowired
   EmployeeScheduleRepository scheduleRepository;
-  @Autowired
-  ShiftRepository shiftRepository;
 
   // these repositories are referenced to ensure uniqueness of the Employee username.
   @Autowired
@@ -100,10 +96,10 @@ public class EmployeeService {
    * @throws IllegalArgumentException when the employee to be deleted doesn't exist
    */
   @Transactional
-  public Employee deleteEmployee(String username) throws IllegalArgumentException {
-    Employee deletedEmployee = getEmployee(username);
-    employeeRepository.deleteById(username);
-    return deletedEmployee;
+  public void deleteEmployee(String username) throws IllegalArgumentException {
+    // clear the employee's schedule before deleting
+    removeAllSchedules(username);
+    employeeRepository.delete(getEmployee(username));
   }
 
   /**
@@ -155,11 +151,12 @@ public class EmployeeService {
   public void addSchedule(String username, long scheduleId) throws IllegalArgumentException {
     var employee = getEmployee(username);
     EmployeeSchedule schedule = verifyScheduleId(scheduleId);
-    boolean successful = employee.addEmployeeSchedule(schedule);
-    employeeRepository.save(employee);
-    if (!successful)
+    if (employee.addEmployeeSchedule(schedule)) {
+      employeeRepository.save(employee);
+    } else {
       throw new IllegalArgumentException("EmployeeSchedule with id '" + scheduleId
           + "' could not be assigned to Employee with username \"" + username + "\"");
+    }
   }
 
   /**
@@ -188,11 +185,13 @@ public class EmployeeService {
   public void removeSchedule(String username, long scheduleId) throws IllegalArgumentException {
     var employee = getEmployee(username);
     EmployeeSchedule schedule = verifyScheduleId(scheduleId);
-    boolean successful = employee.removeEmployeeSchedule(schedule);
-    employeeRepository.save(employee);
-    if (!successful)
+    if (employee.removeEmployeeSchedule(schedule)) {
+      scheduleRepository.delete(schedule);
+      employeeRepository.save(employee);
+    } else {
       throw new IllegalArgumentException("EmployeeSchedule with id '" + scheduleId
           + "' could not be removed from Employee with username \"" + username + "\"");
+    }
   }
 
   /**
@@ -211,7 +210,8 @@ public class EmployeeService {
   }
 
   /**
-   * Clears all schedules assigned to the Employee
+   * Clears all schedules assigned to the Employee. Generates a list of all the EmployeeSchedule
+   * ids, then calls removeSchedule on all of them
    *
    * @param username - username of the employee to clear
    * @throws IllegalArgumentException when the username does not correspond to an employee
@@ -219,8 +219,17 @@ public class EmployeeService {
   @Transactional
   public void removeAllSchedules(String username) throws IllegalArgumentException {
     var employee = getEmployee(username);
-    employee.setEmployeeSchedules(new HashSet<EmployeeSchedule>());
-    employeeRepository.save(employee);
+    if (employee.getEmployeeSchedules() == null) {
+      // if the schedule set is null, all schedules have already been removed.
+      return;
+    }
+    long[] scheduleIds = new long[employee.getEmployeeSchedules().size()];
+    int i = 0;
+    for (var schedule : employee.getEmployeeSchedules()) {
+      scheduleIds[i] = schedule.getId();
+      i++;
+    }
+    removeSchedules(username, scheduleIds);
   }
 
   /**
