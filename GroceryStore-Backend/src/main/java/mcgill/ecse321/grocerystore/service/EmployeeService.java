@@ -140,27 +140,7 @@ public class EmployeeService {
   }
 
   /**
-   * Assigns a schedule to an Employee. (RQ13)
-   * 
-   * @param username - username of the Employee to assign the schedule to
-   * @param scheduleId - id of the schedule to be assigned
-   * @throws IllegalArgumentException when an input parameter is invalid or corresponds to
-   *         non-existent objects, or when the schedule could not be assigned.
-   */
-  @Transactional
-  public void addSchedule(String username, long scheduleId) throws IllegalArgumentException {
-    var employee = getEmployee(username);
-    EmployeeSchedule schedule = verifyScheduleId(scheduleId);
-    if (employee.addEmployeeSchedule(schedule)) {
-      employeeRepository.save(employee);
-    } else {
-      throw new IllegalArgumentException("EmployeeSchedule with id '" + scheduleId
-          + "' could not be assigned to Employee with username \"" + username + "\"");
-    }
-  }
-
-  /**
-   * Wrapper method for <code>addSchedule</code> which accepts lists of schedules to add
+   * Assigns a schedule(s) to an Employee. (RQ13)
    * 
    * @param username - username of the employee to add schedules to
    * @param scheduleIds - ids for all the schedules to be added
@@ -174,28 +154,40 @@ public class EmployeeService {
   }
 
   /**
-   * Removes a schedule to an Employee. (RQ13)
+   * helper method for addSchedules(String, long...)
+   * <p>
+   * Fails if one of the following is true:
+   * <ul>
+   * <li>schedule already exists in employee</li>
+   * <li>employee contains a schedule with the same time and shift</li>
+   * </ul>
    * 
-   * @param username - username of the Employee to remove the schedule from
-   * @param scheduleId - id of the schedule to be removed
+   * @param username - username of the Employee to assign the schedule to
+   * @param scheduleId - id of the schedule to be assigned
    * @throws IllegalArgumentException when an input parameter is invalid or corresponds to
-   *         non-existent objects, or when the schedule could not be removed.
+   *         non-existent objects, or when the schedule is already assigned.
    */
   @Transactional
-  public void removeSchedule(String username, long scheduleId) throws IllegalArgumentException {
+  private void addSchedule(String username, long scheduleId) throws IllegalArgumentException {
     var employee = getEmployee(username);
     EmployeeSchedule schedule = verifyScheduleId(scheduleId);
-    if (employee.removeEmployeeSchedule(schedule)) {
-      scheduleRepository.delete(schedule);
-      employeeRepository.save(employee);
-    } else {
-      throw new IllegalArgumentException("EmployeeSchedule with id '" + scheduleId
-          + "' could not be removed from Employee with username \"" + username + "\"");
+    if (employee.getEmployeeSchedules() != null) {
+      for (var existingSchedule : employee.getEmployeeSchedules()) {
+        if (schedule.equals(existingSchedule)
+            || (schedule.getDate().toString().equals(existingSchedule.getDate().toString())
+                && schedule.getShift().getName().equals(existingSchedule.getShift().getName()))) {
+          throw new IllegalArgumentException(
+              "That schedule is already assigned to Employee with username \""
+                  + employee.getUsername() + "\"!");
+        }
+      }
     }
+    employee.addEmployeeSchedule(schedule);
+    employeeRepository.save(employee);
   }
 
   /**
-   * Wrapper method for <code>removeSchedule</code> which accepts lists of schedules to remove
+   * Removes a schedule(s) to an Employee. (RQ13)
    * 
    * @param username - username of the employee to remove schedules from
    * @param scheduleIds - ids for all the schedules to be removed
@@ -230,6 +222,27 @@ public class EmployeeService {
       i++;
     }
     removeSchedules(username, scheduleIds);
+  }
+
+  /**
+   * helper method for removeSchedules(String, long...)
+   * 
+   * @param username - username of the Employee to remove the schedule from
+   * @param scheduleId - id of the schedule to be removed
+   * @throws IllegalArgumentException when an input parameter is invalid or corresponds to
+   *         non-existent objects, or when the schedule could not be removed.
+   */
+  @Transactional
+  private void removeSchedule(String username, long scheduleId) throws IllegalArgumentException {
+    var employee = getEmployee(username);
+    EmployeeSchedule schedule = verifyScheduleId(scheduleId);
+    if (employee.removeEmployeeSchedule(schedule)) {
+      scheduleRepository.delete(schedule);
+      employeeRepository.save(employee);
+    } else {
+      throw new IllegalArgumentException("EmployeeSchedule with id '" + scheduleId
+          + "' could not be removed from Employee with username \"" + username + "\"");
+    }
   }
 
   /**
