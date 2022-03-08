@@ -21,11 +21,12 @@ public class OpeningHoursService {
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of week cannot be empty!");
     }
-    // if (daysOfWeek != "Monday" || daysOfWeek != "Tuesday" || daysOfWeek != "Wednesday"
-    // || daysOfWeek != "Thursday" || daysOfWeek != "Friday" || daysOfWeek != "Saturday"
-    // || daysOfWeek != "Sunday") {
-    // throw new IllegalArgumentException("Day of week is invalid!");
-    // }
+    if ((!daysOfWeek.equals("Monday")) && (!daysOfWeek.equals("Tuesday"))
+        && (!daysOfWeek.equals("Wednesday")) && (!daysOfWeek.equals("Thursday"))
+        && (!daysOfWeek.equals("Friday")) && (!daysOfWeek.equals("Saturday"))
+        && (!daysOfWeek.equals("Sunday"))) {
+      throw new IllegalArgumentException("Day of week is not valid!");
+    }
     if (openingHoursRepository.findByDaysOfWeek(daysOfWeek) != null) {
       throw new IllegalArgumentException("This opening hour already exist!");
     }
@@ -59,10 +60,8 @@ public class OpeningHoursService {
     return openingH;
   }
 
-  // need to modify
   @Transactional
-  public OpeningHours updateOpeningHours(OpeningHours openingH, String daysOfWeek, Time startH,
-      Time endH) {
+  public OpeningHours updateOpeningHours(String daysOfWeek, Time startH, Time endH) {
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
       throw new IllegalArgumentException("Day of week cannot be empty!");
     }
@@ -75,13 +74,10 @@ public class OpeningHoursService {
     if (endH.before(startH)) {
       throw new IllegalArgumentException("Start time must be earlier than end time!");
     }
-
-    openingH.setDaysOfWeek(daysOfWeek);
+    OpeningHours openingH = getOpeningHours(daysOfWeek);
     openingH.setStartTime(startH);
     openingH.setEndTime(endH);
-    this.openingHoursRepository.save(openingH);
-    openingH = null;
-    return openingH;
+    return this.openingHoursRepository.save(openingH);
   }
 
 
@@ -96,8 +92,8 @@ public class OpeningHoursService {
 
   @Transactional
   public List<OpeningHours> getAllOpeningHours() {
-    ArrayList<OpeningHours> openingHoursList = openingHoursRepository.findAllByOrderByDaysOfWeek();
-    return openingHoursList;
+    return openingHoursRepository.findAllByOrderByDaysOfWeek("");
+
   }
 
 }

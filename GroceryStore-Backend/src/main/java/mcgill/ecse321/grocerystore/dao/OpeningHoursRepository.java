@@ -8,5 +8,5 @@ public interface OpeningHoursRepository extends CrudRepository<OpeningHours, Str
 
   OpeningHours findByDaysOfWeek(String daysOfWeek);
 
-  ArrayList<OpeningHours> findAllByOrderByDaysOfWeek();
+  ArrayList<OpeningHours> findAllByOrderByDaysOfWeek(String nameFragment);
 }
