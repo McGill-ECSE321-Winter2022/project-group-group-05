@@ -295,7 +295,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testCreateOwnerInvalidEmailDomain1() {
+  public void testCreateOwnerMissingDotDomain() {
     String username = "bruno";
     String password = "mars";
     String email = "brunomars@gmailcom";
@@ -311,7 +311,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testCreateOwnerInvalidEmailDomain2() {
+  public void testCreateOwnerInvalidEmailDomain() {
     String username = "bruno";
     String password = "mars";
     String email = "brunomars@.com";
@@ -327,7 +327,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testCreateOwnerInvalidEmailDomain3() {
+  public void testCreateOwnerInvalidEmailTopLevelDomain() {
     String username = "bruno";
     String password = "mars";
     String email = "brunomars@gmail.";

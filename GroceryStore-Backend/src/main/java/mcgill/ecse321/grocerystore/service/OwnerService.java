@@ -52,7 +52,7 @@ public class OwnerService {
   }
 
   @Transactional
-  public Owner getOwner(String username) {
+  public Owner getOwner(String username) throws IllegalArgumentException {
     if (username == null || username.trim().length() == 0) {
       throw new IllegalArgumentException("Username cannot be empty!");
     }
