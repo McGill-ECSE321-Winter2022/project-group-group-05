@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.model;
 
+import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,30 +8,22 @@ import javax.persistence.Id;
 public class Holiday {
   @Id
   private String name;
-  private int month;
-  private int day;
+  private Date date;
 
   public String getName() {
     return this.name;
   }
 
-  public int getMonth() {
-    return this.month;
+  public Date getDate() {
+    return this.date;
   }
 
-  public int getDay() {
-    return this.day;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public void setName(String value) {
-    this.name = value;
+  public void setDate(Date date) {
+    this.date = date;
   }
 
-  public void setMonth(int value) {
-    this.month = value;
-  }
-
-  public void setDay(int value) {
-    this.day = value;
-  }
 }

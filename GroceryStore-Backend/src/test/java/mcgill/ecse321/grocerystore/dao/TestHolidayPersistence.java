@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.sql.Date;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,9 @@ public class TestHolidayPersistence {
   public void testPersistAndLoadHoliday() {
     Holiday testHoliday = new Holiday();
     String name = "Christmas";
-    int month = 12;
-    int day = 25;
+    Date date = Date.valueOf("2022-12-25");
     testHoliday.setName(name);
-    testHoliday.setMonth(month);
-    testHoliday.setDay(day);
+    testHoliday.setDate(date);
     holidayRepository.save(testHoliday);
 
     testHoliday = null;
@@ -47,39 +46,32 @@ public class TestHolidayPersistence {
     testHoliday = holidayRepository.findByName(name);
     assertNotNull(testHoliday);
     assertEquals(name, testHoliday.getName());
-    assertEquals(month, testHoliday.getMonth());
-    assertEquals(day, testHoliday.getDay());
-
+    assertEquals(date, testHoliday.getDate());
   }
 
 
   @Test
-  public void testAtributeHoliday() {
+  public void testAttributeHoliday() {
     Holiday testHoliday = new Holiday();
     String name = "Christmas";
+    Date date = Date.valueOf("2022-11-24");
     testHoliday.setName(name);
-    testHoliday.setMonth(11);
-    testHoliday.setDay(24);
+    testHoliday.setDate(date);
     holidayRepository.save(testHoliday);
 
     testHoliday = null;
 
-    int month = 12;
-    int day = 25;
+    date = Date.valueOf("2022-12-25");
     testHoliday = holidayRepository.findByName(name);
     testHoliday.setName(name);
-    testHoliday.setMonth(month);
-    testHoliday.setDay(day);
+    testHoliday.setDate(date);
     holidayRepository.save(testHoliday);
 
     testHoliday = null;
 
     testHoliday = holidayRepository.findByName(name);
     assertEquals(name, testHoliday.getName());
-    assertEquals(month, testHoliday.getMonth());
-    assertEquals(day, testHoliday.getDay());
-
-
+    assertEquals(date, testHoliday.getDate());
   }
 
 }
