@@ -74,6 +74,7 @@ public class TestEmployeeService {
   public void setMockOutput() {
     mockEmployeeDao();
     mockEmployee();
+    mockSchedules();
     // imitate finding two EmployeeSchedule objects in the database
     lenient().when(employeeScheduleDao.findById(anyLong())).thenAnswer(i -> {
       if (i.getArgument(0).equals(SCHEDULE_KEY)) {
@@ -117,21 +118,15 @@ public class TestEmployeeService {
     lenient().when(employeeDao.findByUsername(anyString())).thenAnswer(i -> {
       if (i.getArgument(0).equals(EMPLOYEE_KEY)) {
         return mockEmployee;
+      } else if (i.getArgument(0).equals(EMPLOYEE2_KEY)) {
+        Employee employee = new Employee();
+        employee.setUsername(EMPLOYEE2_KEY);
+        return employee;
       } else {
         return null;
       }
     });
     // simulates finding EMPLOYEE_KEY and EMPLOYEE2_KEY in the database
-//    lenient().when(employeeDao.findOrderByUsername()).thenAnswer(i -> {
-//      List<Employee> employeeList = new ArrayList<Employee>();
-//      var employeeOne = new Employee();
-//      employeeOne.setUsername(EMPLOYEE_KEY);
-//      var employeeTwo = new Employee();
-//      employeeTwo.setUsername(EMPLOYEE2_KEY);
-//      employeeList.add(employeeOne);
-//      employeeList.add(employeeTwo);
-//      return employeeList;
-//    });
     lenient().when(employeeDao.findByUsernameIgnoreCaseContainingOrderByUsername(anyString()))
         .thenAnswer(i -> {
           List<Employee> employeeList = new ArrayList<Employee>();
@@ -184,6 +179,21 @@ public class TestEmployeeService {
           return i.getArgument(0).equals(existingMockScheduleOne)
               || i.getArgument(0).equals(existingMockScheduleTwo);
         });
+    lenient().when(mockEmployee.getEmployeeSchedules()).thenAnswer(i -> {
+      HashSet<EmployeeSchedule> mockSet = new HashSet<EmployeeSchedule>();
+      mockSet.add(existingMockScheduleOne);
+      mockSet.add(existingMockScheduleTwo);
+      return mockSet;
+    });
+  }
+
+  /**
+   * imitates EmployeeSchedule objects with auto-generated ids EXISTING_SCHEDULE_KEY and
+   * EXISTING_SCHEDULE2_KEY
+   */
+  private void mockSchedules() {
+    lenient().when(existingMockScheduleOne.getId()).thenReturn(EXISTING_SCHEDULE_KEY);
+    lenient().when(existingMockScheduleTwo.getId()).thenReturn(EXISTING_SCHEDULE2_KEY);
   }
 
   // Tests for createEmployee(String, String, String)
@@ -371,28 +381,26 @@ public class TestEmployeeService {
 
   @Test
   public void testDeleteEmployee() {
-    Employee employee = null;
     try {
-      employee = service.deleteEmployee(EMPLOYEE_KEY);
+      service.deleteEmployee(EMPLOYEE_KEY);
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(employeeDao, times(1)).deleteById(anyString());
-    assertNotNull(employee);
-    assertEquals(EMPLOYEE_KEY, employee.getUsername());
+    verify(employeeScheduleDao, times(1)).delete(existingMockScheduleOne);
+    verify(employeeScheduleDao, times(1)).delete(existingMockScheduleTwo);
+    verify(employeeDao, times(1)).delete(any(Employee.class));
   }
 
   @Test
   public void testDeleteEmployeeNonExistent() {
-    Employee employee = null;
     String error = "";
     try {
-      employee = service.deleteEmployee(FAKE_EMPLOYEE_KEY);
+      service.deleteEmployee(FAKE_EMPLOYEE_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(employeeDao, times(0)).deleteById(anyString());
-    assertNull(employee);
+    verify(employeeScheduleDao, times(0)).delete(any(EmployeeSchedule.class));
+    verify(employeeDao, times(0)).delete(any(Employee.class));
     assertEquals("Employee with username \"" + FAKE_EMPLOYEE_KEY + "\" does not exist!", error);
   }
 
@@ -577,6 +585,7 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       fail();
     }
+    verify(employeeScheduleDao, times(1)).delete(existingMockScheduleOne);
     verify(mockEmployee, times(1)).removeEmployeeSchedule(existingMockScheduleOne);
   }
 
@@ -588,6 +597,7 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    verify(employeeScheduleDao, times(0)).delete(existingMockScheduleOne);
     verify(mockEmployee, times(1)).removeEmployeeSchedule(mockScheduleOne);
     assertEquals("EmployeeSchedule with id '" + SCHEDULE_KEY
         + "' could not be removed from Employee with username \"" + EMPLOYEE_KEY + "\"", error);
@@ -601,6 +611,7 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    verify(employeeScheduleDao, times(0)).delete(any());
     verify(mockEmployee, times(0)).removeEmployeeSchedule(any());
     assertEquals("EmployeeSchedule with id '" + FAKE_SCHEDULE_KEY + "' does not exist!", error);
   }
@@ -617,6 +628,7 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       fail();
     }
+    verify(employeeScheduleDao, times(2)).delete(any());
     verify(mockEmployee, times(2)).removeEmployeeSchedule(any());
   }
 
@@ -632,7 +644,21 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(mockEmployee, times(1)).setEmployeeSchedules(new HashSet<EmployeeSchedule>());
+    verify(employeeScheduleDao, times(2)).delete(any());
+    verify(mockEmployee, times(2)).removeEmployeeSchedule(any());
+  }
+  
+  @Test
+  public void testRemoveAllSchedulesNull() {
+    try {
+      // Try to remove all schedules from an Employee who never had an schedules added
+      // i.e. employee.getEmployeeSchedules() == null
+      service.removeAllSchedules(EMPLOYEE2_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    verify(employeeScheduleDao, times(0)).delete(any());
+    verify(mockEmployee, times(0)).removeEmployeeSchedule(any());
   }
 
   // Tests for getEmployee(String)
