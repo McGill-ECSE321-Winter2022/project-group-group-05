@@ -51,8 +51,8 @@ public class HolidayService {
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
-    Holiday holidy = getHoliday(name);
-    holidayRepository.delete(holidy);
+    Holiday holidy = this.getHoliday(name);
+    this.holidayRepository.delete(holidy);
   }
 
   @Transactional
@@ -63,13 +63,10 @@ public class HolidayService {
     if (date == null) {
       throw new IllegalArgumentException("Date cannot be empty!");
     }
-    Holiday holiday = this.getHoliday(name);
+    Holiday holiday = getHoliday(name);
     holiday.setDate(date);
-    holiday = holidayRepository.save(holiday);
-    return holiday;
-
+    return this.holidayRepository.save(holiday);
   }
-
 
   @Transactional
   public List<Holiday> getAll() {

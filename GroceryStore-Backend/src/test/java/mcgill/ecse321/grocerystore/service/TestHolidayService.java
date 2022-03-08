@@ -34,6 +34,8 @@ public class TestHolidayService {
   private static final String HOLIDAY_KEY = "TestHoliday";
   private static final String NONEXISTING_KEY = "NotAHoliday";
 
+  private static final Date DATE_KEY = Date.valueOf("2022-02-02");
+
   @BeforeEach
   public void setMockOutput() {
     lenient().when(holidayDao.findByName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
@@ -143,6 +145,77 @@ public class TestHolidayService {
   }
 
   @Test
+  public void testUpdateHoliday() {
+    Holiday holiday = null;
+    try {
+      holiday = service.updateHoliday(HOLIDAY_KEY, DATE_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    verify(holidayDao, times(0)).delete(any());
+    assertNotNull(holiday);
+    assertEquals(HOLIDAY_KEY, holiday.getName());
+  }
+
+  @Test
+  public void testUpdateHolidayNullName() {
+    Holiday holiday = null;
+    String error = "";
+    try {
+      holiday = service.updateHoliday(null, DATE_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(holidayDao, times(0)).delete(any());
+    assertNull(holiday);
+    assertEquals("Name cannot be empty!", error);
+  }
+
+  @Test
+  public void testUpdateHolidayEmptyName() {
+    Holiday holiday = null;
+    String error = "";
+    try {
+      holiday = service.updateHoliday("", DATE_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(holidayDao, times(0)).delete(any());
+    assertNull(holiday);
+    assertEquals("Name cannot be empty!", error);
+  }
+
+  @Test
+  public void testUpdateHolidaySpaceName() {
+    Holiday holiday = null;
+    String error = "";
+    try {
+      holiday = service.updateHoliday("  ", DATE_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(holidayDao, times(0)).delete(any());
+    assertNull(holiday);
+    assertEquals("Name cannot be empty!", error);
+  }
+
+  @Test
+  public void testUpdateNonExistingHoliday() {
+    Holiday holiday = null;
+    String error = "";
+    try {
+      holiday = service.updateHoliday(NONEXISTING_KEY, DATE_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(holidayDao, times(0)).delete(any());
+    assertNull(holiday);
+    assertEquals("Holiday does not exist!", error);
+  }
+
+
+
+  @Test
   public void testDeleteHoliday() {
     try {
       service.deleteHoliday(HOLIDAY_KEY);
@@ -153,7 +226,7 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testDeleteNullHoliday() {
+  public void testDeleteHolidayNullName() {
     String error = null;
     try {
       service.deleteHoliday(null);
@@ -165,7 +238,7 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testDeleteEmptyHoliday() {
+  public void testDeleteHolidayEmptyName() {
     String error = null;
     try {
       service.deleteHoliday("");
@@ -177,7 +250,7 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testDeleteSpacesHoliday() {
+  public void testDeleteHolidaySpacesName() {
     String error = null;
     try {
       service.deleteHoliday("  ");
