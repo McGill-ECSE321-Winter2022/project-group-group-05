@@ -42,6 +42,11 @@ public class TestItemCategoryService {
             ItemCategory itemCategory = new ItemCategory();
             itemCategory.setName(ITEMCATEGORY_KEY);
             itemCategory.addItem(ITEM_ONE);
+            try {
+              Thread.sleep(50);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
             itemCategory.addItem(ITEM_TWO);
             return itemCategory;
           } else {
