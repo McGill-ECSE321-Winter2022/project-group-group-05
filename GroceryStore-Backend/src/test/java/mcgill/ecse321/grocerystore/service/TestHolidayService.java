@@ -145,6 +145,50 @@ public class TestHolidayService {
   }
 
   @Test
+  public void testGetNonExistingHoliday() {
+    String error = null;
+    try {
+      service.getHoliday(NONEXISTING_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Holiday does not exist!", error);
+  }
+
+  @Test
+  public void testGetNonExistingHolidayNullName() {
+    String error = null;
+    try {
+      service.getHoliday(null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Name cannot be empty!", error);
+  }
+
+  @Test
+  public void testGetNonExistingHolidayEmptyName() {
+    String error = null;
+    try {
+      service.getHoliday("");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Name cannot be empty!", error);
+  }
+
+  @Test
+  public void testGetNonExistingHolidaySpacesName() {
+    String error = null;
+    try {
+      service.getHoliday("  ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Name cannot be empty!", error);
+  }
+
+  @Test
   public void testUpdateHoliday() {
     Holiday holiday = null;
     try {
@@ -212,8 +256,6 @@ public class TestHolidayService {
     assertNull(holiday);
     assertEquals("Holiday does not exist!", error);
   }
-
-
 
   @Test
   public void testDeleteHoliday() {
