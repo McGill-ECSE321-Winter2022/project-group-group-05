@@ -24,27 +24,20 @@ public class EmployeeScheduleService {
 
 
   @Transactional
-  public EmployeeSchedule createEmployeeSchedule(Date date, long id)
+  public EmployeeSchedule createEmployeeSchedule(Date date, String shiftName)
       throws IllegalArgumentException {
-
-
     if (date == null) {
-      throw new IllegalArgumentException("Date cannot be empty");
+      throw new IllegalArgumentException("Date cannot be empty.");
     }
-
-    if (this.employeeScheduleRepo.findById(id) != null) {
-      throw new IllegalArgumentException("The id is already used.");
-    }
-
-
-
+    Shift shift = this.getShift(shiftName);
     EmployeeSchedule aEmployeeSchedule = new EmployeeSchedule();
+    // link the schedule with a Shift.
+    aEmployeeSchedule.setShift(shift);
     return employeeScheduleRepo.save(aEmployeeSchedule);
   }
 
+
   @Transactional
-
-
   public EmployeeSchedule getEmployeeSchedule(long id) throws IllegalArgumentException {
 
     EmployeeSchedule schedule = this.employeeScheduleRepo.findById(id);
@@ -58,22 +51,21 @@ public class EmployeeScheduleService {
   @Transactional
   // Get all the schedules sorted by date in order
   public List<EmployeeSchedule> getAllEmployeeSchedulByDateInOrder() {
-    return toList(this.employeeScheduleRepo.findAllByOrderByDate());
+    return employeeScheduleRepo.findAllByOrderByDate();
   }
 
   @Transactional
   // Get all the schedules sorted by date in order
   public List<EmployeeSchedule> getAllEmployeeSchedulByDateInReverseOrder() {
-    return toList(this.employeeScheduleRepo.findAllByOrderByDateDesc());
+    return employeeScheduleRepo.findAllByOrderByDateDesc();
   }
-
 
   @Transactional
   public List<EmployeeSchedule> getEmployeeScheduleByDate(Date date) {
-    if (this.employeeScheduleRepo.findAllByDate(date) == null) {
-      throw new IllegalArgumentException("No schedules exist on this date.");
+    if (date == null) {
+      throw new IllegalArgumentException("Date cannot be empty.");
     }
-    return toList(employeeScheduleRepo.findAllByDate(date));
+    return employeeScheduleRepo.findAllByDate(date);
   }
 
   @Transactional
@@ -87,7 +79,7 @@ public class EmployeeScheduleService {
       throw new IllegalArgumentException("Shift cannot be null.");
     }
     if (this.employeeScheduleRepo.findById(schedule.getId()) == null) {
-      throw new IllegalArgumentException("Schedule does not exist in the repo.");
+      throw new IllegalArgumentException("Schedule does not exist.");
     }
     if (this.shiftRepo.findByName(shift.getName()) == null) {
       this.shiftRepo.save(shift);
@@ -96,13 +88,6 @@ public class EmployeeScheduleService {
     schedule.setShift(shift);
     return this.employeeScheduleRepo.save(schedule);
   }
-  /*
-   * ----------------------------------------------------------------------------
-   * -----------------------------------Shifts-----------------------------------
-   * ----------------------------------------------------------------------------
-   */
-
-
 
   /**
    * Get the employeeSchedule of a employee given the name
@@ -111,7 +96,7 @@ public class EmployeeScheduleService {
    * @return List<EmployeeSchedule>
    */
   @Transactional
-  public List<EmployeeSchedule> getAllShiftsByEmployee(String userName) {
+  public List<EmployeeSchedule> getAllScheduleByEmployee(String userName) {
     if (userName == null || userName.trim().length() == 0) {
       throw new IllegalArgumentException("Employee must have a name.");
     }
@@ -124,18 +109,25 @@ public class EmployeeScheduleService {
   }
 
   @Transactional
-  public EmployeeSchedule deleteEmployeeSchedule(long ID) throws IllegalArgumentException {
+  public void deleteEmployeeSchedule(long ID) throws IllegalArgumentException {
 
     EmployeeSchedule schedule = this.employeeScheduleRepo.findById(ID);
-    if (schedule == null) {
-      throw new IllegalArgumentException(
-          "The specific item with ID \"" + ID + "\" does not exist.");
-    }
     this.employeeScheduleRepo.delete(schedule);
-    return schedule;
+
   }
 
 
+  private Shift getShift(String name) throws IllegalArgumentException {
+    if (name == null || name.trim().length() == 0) {
+      throw new IllegalArgumentException("Shift name cannot be empty.");
+    }
+    Shift shift = this.shiftRepo.findByName(name);
+    if (shift == null) {
+      throw new IllegalArgumentException("Shift with name '" + name + "' does not exist.");
+    }
+
+    return shift;
+  }
 
   private <T> List<T> toList(Iterable<T> iterable) {
     List<T> resultList = new ArrayList<T>();
