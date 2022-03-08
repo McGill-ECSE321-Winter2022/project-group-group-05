@@ -2,7 +2,6 @@ package mcgill.ecse321.grocerystore.service;
 
 import java.sql.Time;
 import java.util.List;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,7 @@ public class OpeningHoursService {
     if (endH == null) {
       throw new IllegalArgumentException("End time cannot be empty!");
     }
-    if (startH != null && startH != null && endH.before(startH)) {
+    if (endH.before(startH)) {
       throw new IllegalArgumentException("Start time must be earlier than end time!");
     }
 
@@ -92,7 +91,7 @@ public class OpeningHoursService {
 
   @Transactional
   public List<OpeningHours> getAllOpeningHours() {
-    return openingHoursRepository.findAllByOrderByDaysOfWeek("");
+    return openingHoursRepository.findAll("");
 
   }
 

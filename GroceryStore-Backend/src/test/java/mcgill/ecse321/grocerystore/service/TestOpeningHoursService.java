@@ -10,8 +10,6 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.sql.Time;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
-import mcgill.ecse321.grocerystore.model.Holiday;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 
@@ -34,7 +31,7 @@ public class TestOpeningHoursService {
   @InjectMocks
   private OpeningHoursService service;
 
-  private static final String OPENINGHOURS_KEY = "TestOpeningHours";
+  private static final String OPENINGHOURS_KEY = "Monday";
   private static final String NONEXISTING_KEY = "NotAOpeningHours";
 
   private static final Time START_KEY = Time.valueOf("12:00:00");
