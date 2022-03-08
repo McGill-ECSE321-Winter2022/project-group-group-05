@@ -20,5 +20,8 @@ public interface ShiftRepository extends CrudRepository<Shift, String> {
   List<Shift> findByEndTimeBefore(Time time);
 
 
+  List<Shift> findAllByOrderByName();
+
+
 
 }

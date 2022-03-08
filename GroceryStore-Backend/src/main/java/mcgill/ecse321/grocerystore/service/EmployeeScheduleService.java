@@ -31,7 +31,7 @@ public class EmployeeScheduleService {
     if (date == null) {
       throw new IllegalArgumentException("Date cannot be empty");
     }
-    
+
     if (this.employeeScheduleRepo.findById(id) != null) {
       throw new IllegalArgumentException("The id is already used.");
     }
@@ -102,36 +102,37 @@ public class EmployeeScheduleService {
    * ----------------------------------------------------------------------------
    */
 
-  
 
 
-/**
- * Get the employeeSchedule of a employee given the name
- * @param userName
- * @return List<EmployeeSchedule>
- */
+  /**
+   * Get the employeeSchedule of a employee given the name
+   * 
+   * @param userName
+   * @return List<EmployeeSchedule>
+   */
   @Transactional
   public List<EmployeeSchedule> getAllShiftsByEmployee(String userName) {
     if (userName == null || userName.trim().length() == 0) {
       throw new IllegalArgumentException("Employee must have a name.");
     }
-    if(this.employeeRepo.findByUsername(userName)==null) {
+    if (this.employeeRepo.findByUsername(userName) == null) {
       throw new IllegalArgumentException("employee cannot be null.");
     }
-    Employee employee=this.employeeRepo.findByUsername(userName);
+    Employee employee = this.employeeRepo.findByUsername(userName);
     return toList(employee.getEmployeeSchedules());
-   
+
   }
-  
+
   @Transactional
   public EmployeeSchedule deleteEmployeeSchedule(long ID) throws IllegalArgumentException {
-   
-      EmployeeSchedule schedule = this.employeeScheduleRepo.findById(ID);
-      if (schedule == null) {
-          throw new IllegalArgumentException("The specific item with ID \"" + ID + "\" does not exist.");
-      }
-      this.employeeScheduleRepo.delete(schedule);
-      return schedule;
+
+    EmployeeSchedule schedule = this.employeeScheduleRepo.findById(ID);
+    if (schedule == null) {
+      throw new IllegalArgumentException(
+          "The specific item with ID \"" + ID + "\" does not exist.");
+    }
+    this.employeeScheduleRepo.delete(schedule);
+    return schedule;
   }
 
 

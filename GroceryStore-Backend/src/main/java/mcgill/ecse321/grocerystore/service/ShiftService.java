@@ -22,13 +22,13 @@ public class ShiftService {
 
 
     if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Shift name cannot be empty.");
+      throw new IllegalArgumentException("Shift name cannot be empty!");
     }
     if (this.shiftRepo.findByName(name) != null) {
-      throw new IllegalArgumentException("Name is already taken.");
+      throw new IllegalArgumentException("Name is already taken!");
     }
     if (endTime.before(startTime)) {
-      throw new IllegalArgumentException("Shift end time cannot be before its start time");
+      throw new IllegalArgumentException("Shift end-time cannot be before its start-time!");
     }
 
 
@@ -48,39 +48,34 @@ public class ShiftService {
 
   public Shift getShift(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Shift name cannot be empty.");
+      throw new IllegalArgumentException("Shift name cannot be empty!");
+    }
+    Shift shift = this.shiftRepo.findByName(name);
+    if (shift == null) {
+      throw new IllegalArgumentException( "Shift with name '" + name + "' does not exist!");
     }
 
-    if (shiftRepo.findByName(name) == null) {
-
-      throw new IllegalArgumentException("Shift with this name does not exist.");
-    }
-
-    return shiftRepo.findByName(name);
+    return shift;
   }
 
 
 
   @Transactional
   // Get all the shifts sorted by name in order
-  public List<Shift> getAllShiftsByNameInOrder(String name) {
-    return toList(shiftRepo.findByNameIgnoreCaseContainingOrderByName(name));
-  }
-
-  @Transactional
-  public List<Shift> getAllShiftsByNameInReverseOrder(String name) {
-    return toList(shiftRepo.findByNameIgnoreCaseContainingOrderByNameDesc(name));
+  public List<Shift> getAllShifts() {
+    return toList(shiftRepo.findAllByOrderByName());
   }
 
 
+/*
   // Get all the shifts before a given time
   @Transactional
   public List<Shift> getAllShiftsBefore(Time beforeTime) throws IllegalArgumentException {
     if (beforeTime == null) {
-      throw new IllegalArgumentException("The input time shall not be null");
+      throw new IllegalArgumentException("The input beforetime cannot be null!");
     }
     if (shiftRepo.findByEndTimeBefore(beforeTime) == null) {
-      throw new IllegalArgumentException("No shift starts before this time in the repository");
+      throw new IllegalArgumentException("No shift starts before this time in the repository!");
     }
     return toList(shiftRepo.findByEndTimeBefore(beforeTime));
 
@@ -90,57 +85,52 @@ public class ShiftService {
   @Transactional
   public List<Shift> getAllShiftsAfter(Time afterTime) throws IllegalArgumentException {
     if (afterTime == null) {
-      throw new IllegalArgumentException("The input time shall not be null");
+      throw new IllegalArgumentException("The input aftertime cannot be null!");
     }
     if (shiftRepo.findByStartTimeAfter(afterTime) == null) {
-      throw new IllegalArgumentException("No shift starts after this time in the repository");
+      throw new IllegalArgumentException("No shift starts after this time in the repository!");
     }
     return toList(shiftRepo.findByStartTimeAfter(afterTime));
 
   }
 
-
-  @Transactional
-  public Shift deleteShift(Shift shift) throws IllegalArgumentException {
-    if (shift == null) {
-      throw new IllegalArgumentException("Input shift cannot be null");
-    }
-    shiftRepo.delete(shift);
-    return shift;
-  }
-
+*/
 
   @Transactional
   public Shift deleteShiftByName(String name) {
     if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Shift name cannot be empty.");
+      throw new IllegalArgumentException("Shift name cannot be empty!");
     }
-    if (this.shiftRepo.findByName(name) == null) {
-      throw new IllegalArgumentException("Shift with this name does not exist.");
-    }
-    this.shiftRepo.delete(this.shiftRepo.findByName(name));
-    return null;
+
+    Shift deletedShift = getShift(name);
+    this.shiftRepo.deleteById(name);
+    return deletedShift;
   }
+  
 
 
   @Transactional
-  public Shift updateShift(Shift shift, String name, Time startTime, Time endTime) {
-    // Make sure every argument is valid
+  public Shift updateShift(String name, Time startTime, Time endTime) {
 
 
+    // check input
     if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Shift must have a name.");
+      throw new IllegalArgumentException("Shift name cannot be empty!");
     }
 
     if (endTime.before(startTime)) {
-      throw new IllegalArgumentException("Shift end time cannot be before its start time.");
+      throw new IllegalArgumentException("Shift end-time cannot be before its start-time!");
     }
+    // get the shift with the name
+    Shift shift = getShift(name);
+    // update the shift
     shift.setEndTime(endTime);
     shift.setStartTime(startTime);
-    shift.setName(name);
-    this.shiftRepo.save(shift);
-    shift = null;
-    return shift;
+    // save the updated shift
+
+
+
+    return this.shiftRepo.save(shift);
   }
 
 
