@@ -51,8 +51,7 @@ public class EmployeeController {
   @ResponseStatus(value = HttpStatus.OK)
   public void updateEmployee(@PathVariable("username") String username,
       @RequestParam(required = false) String newEmail,
-      @RequestParam(required = false) String newPassword,
-      @RequestParam(required = false) long[] scheduleIds) throws IllegalArgumentException {
+      @RequestParam(required = false) String newPassword) throws IllegalArgumentException {
     if (newEmail != null)
       service.setEmployeeEmail(username, newEmail);
     if (newPassword != null)
