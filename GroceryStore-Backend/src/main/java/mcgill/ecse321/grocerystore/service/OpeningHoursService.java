@@ -18,10 +18,10 @@ public class OpeningHoursService {
   public OpeningHours createOpeningHours(String daysOfWeek, Time startH, Time endH) {
 
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
-      throw new IllegalArgumentException("Day of Week cannot be empty!");
+      throw new IllegalArgumentException("Day of week cannot be empty!");
     }
     if (openingHoursRepository.findByDaysOfWeek(daysOfWeek) != null) {
-      throw new IllegalArgumentException("This opening hour already exists");
+      throw new IllegalArgumentException("This opening hour already exist!");
     }
     if (startH == null) {
       throw new IllegalArgumentException("Start time cannot be empty!");

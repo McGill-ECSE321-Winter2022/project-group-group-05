@@ -254,8 +254,6 @@ public class TestHolidayService {
     assertEquals("Holiday does not exist!", error);
   }
 
-
-
 }
 
 
