@@ -154,7 +154,7 @@ public class CustomerService {
   private void setIsLocal(Customer customer, boolean isLocal) {
     customer.setIsLocal(isLocal);
   }
-  
+
   /**
    * Used to match the email string to a regex which checks for proper email format. We define a
    * proper email to have the format {content1}@{content2}.{content3}
@@ -164,10 +164,8 @@ public class CustomerService {
    *         that the email is valid.
    */
   private boolean verifyEmail(String email) {
-    Pattern emailRegex =
-        Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    Matcher regexMatcher = emailRegex.matcher(email);
-    return regexMatcher.find();
+    return Pattern.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", email);
   }
-  
+
 }
