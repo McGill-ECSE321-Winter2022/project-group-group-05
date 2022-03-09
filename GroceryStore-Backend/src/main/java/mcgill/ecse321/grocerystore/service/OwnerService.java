@@ -1,11 +1,14 @@
 package mcgill.ecse321.grocerystore.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.CustomerRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
+import mcgill.ecse321.grocerystore.model.Customer;
 import mcgill.ecse321.grocerystore.model.Owner;
 
 @Service
@@ -70,6 +73,12 @@ public class OwnerService {
     }
     Owner owner = getOwner(username);
     ownerRepository.delete(owner);
+  }
+
+  @Transactional
+  public List<Owner> getAllOwners() {
+    ArrayList<Owner> ownerList = ownerRepository.findAllByOrderByUsername();
+    return ownerList;
   }
 
 }
