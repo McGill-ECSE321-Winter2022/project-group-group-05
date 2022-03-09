@@ -66,11 +66,27 @@ public class OwnerService {
 
   @Transactional
   public void deleteOwner(String username) throws IllegalArgumentException {
-    if (username == null || username.trim().length() == 0) {
-      throw new IllegalArgumentException("Username cannot be empty!");
-    }
     Owner owner = getOwner(username);
     ownerRepository.delete(owner);
+  }
+
+  @Transactional
+  public Owner updateOwner(String username, String password, String email) {
+    if (password == null || password.trim().length() == 0) {
+      throw new IllegalArgumentException("Password cannot be empty!");
+    }
+    if (email == null || email.trim().length() == 0) {
+      throw new IllegalArgumentException("Email cannot be empty!");
+    }
+    if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
+        || email.indexOf(".") <= email.indexOf("@") + 1
+        || email.lastIndexOf(".") >= email.length() - 1) {
+      throw new IllegalArgumentException("Email is invalid!");
+    }
+    Owner owner = getOwner(username);
+    owner.setPassword(password);
+    owner.setEmail(email);
+    return this.ownerRepository.save(owner);
   }
 
   @Transactional

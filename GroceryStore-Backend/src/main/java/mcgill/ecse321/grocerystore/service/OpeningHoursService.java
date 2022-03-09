@@ -60,10 +60,8 @@ public class OpeningHoursService {
   }
 
   @Transactional
-  public OpeningHours updateOpeningHours(String daysOfWeek, Time startH, Time endH) {
-    if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
-      throw new IllegalArgumentException("Day of week cannot be empty!");
-    }
+  public OpeningHours updateOpeningHours(String daysOfWeek, Time startH, Time endH)
+      throws IllegalArgumentException {
     if (startH == null) {
       throw new IllegalArgumentException("Start time cannot be empty!");
     }
@@ -82,9 +80,6 @@ public class OpeningHoursService {
 
   @Transactional
   public void deleteOpeningHours(String daysOfWeek) throws IllegalArgumentException {
-    if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
-      throw new IllegalArgumentException("Day of week cannot be empty!");
-    }
     OpeningHours openingH = getOpeningHours(daysOfWeek);
     openingHoursRepository.delete(openingH);
   }

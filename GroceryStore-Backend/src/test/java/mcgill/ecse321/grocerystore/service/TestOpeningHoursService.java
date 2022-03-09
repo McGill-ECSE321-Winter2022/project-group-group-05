@@ -10,7 +10,6 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.sql.Time;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +18,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
 import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
-import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 @ExtendWith(MockitoExtension.class)
@@ -208,6 +205,13 @@ public class TestOpeningHoursService {
 
   @Test
   public void testGetExistingOpeningHours() {
+    OpeningHours openingH = null;
+    try {
+      openingH = service.getOpeningHours(OPENINGHOURS_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertNotNull(openingH);
     assertEquals(OPENINGHOURS_KEY, service.getOpeningHours(OPENINGHOURS_KEY).getDaysOfWeek());
   }
 
@@ -254,14 +258,6 @@ public class TestOpeningHoursService {
     }
     assertEquals("Day of week cannot be empty!", error);
   }
-
-  // @Test
-  // public void testGetAllOpeningHours() {
-  // List<OpeningHours> openingHoursList = service.getAllOpeningHours();
-  // assertEquals(2, openingHoursList.size());
-  // assertEquals(OPENINGHOURS_KEY, openingHoursList.get(0).getDaysOfWeek());
-  // assertEquals(OPENINGHOURS2_KEY, openingHoursList.get(1).getDaysOfWeek());
-  // }
 
   @Test
   public void testUpdateOpeningHours() {

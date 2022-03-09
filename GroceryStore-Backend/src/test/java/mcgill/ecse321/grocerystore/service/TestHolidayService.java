@@ -10,7 +10,6 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.sql.Date;
-import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
 import mcgill.ecse321.grocerystore.dao.HolidayRepository;
 import mcgill.ecse321.grocerystore.model.Holiday;
 
@@ -143,6 +141,18 @@ public class TestHolidayService {
     }
     assertNull(holiday);
     assertEquals("Date cannot be empty!", error);
+  }
+
+  @Test
+  public void testGetExistingHoliday() {
+    Holiday holiday = null;
+    try {
+      holiday = service.getHoliday(HOLIDAY_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertNotNull(holiday);
+    assertEquals(HOLIDAY_KEY, service.getHoliday(HOLIDAY_KEY).getName());
   }
 
   @Test
