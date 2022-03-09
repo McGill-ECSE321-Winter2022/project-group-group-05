@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,9 +46,7 @@ public class CustomerService {
     if (email == null || email.trim().length() == 0) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
-    if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") <= email.indexOf("@") + 1
-        || email.lastIndexOf(".") >= email.length() - 1) {
+    if (!verifyEmail(email)) {
       throw new IllegalArgumentException("Email is invalid!");
     }
     if (address == null || address.trim().length() == 0) {
@@ -114,4 +114,20 @@ public class CustomerService {
     ArrayList<Customer> customerList = customerRepository.findAllByOrderByUsername();
     return customerList;
   }
+  
+  /**
+   * Used to match the email string to a regex which checks for proper email format. We define a
+   * proper email to have the format {content1}@{content2}.{content3}
+   * 
+   * @param email - the email string to be checked
+   * @return a boolean indicating whether the email conforms to standards or not. True indicates
+   *         that the email is valid.
+   */
+  private boolean verifyEmail(String email) {
+    Pattern emailRegex =
+        Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    Matcher regexMatcher = emailRegex.matcher(email);
+    return regexMatcher.find();
+  }
+  
 }
