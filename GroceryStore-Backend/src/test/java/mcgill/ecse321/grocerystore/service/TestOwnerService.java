@@ -352,7 +352,7 @@ public class TestOwnerService {
       fail();
     }
     assertNotNull(owner);
-    assertEquals(OWNER_KEY, service.getOwner(OWNER_KEY).getUsername());
+    assertEquals(OWNER_KEY, owner.getUsername());
   }
 
   @Test
@@ -407,7 +407,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNotNull(owner);
     assertEquals(OWNER_KEY, owner.getUsername());
   }
@@ -421,7 +420,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Username cannot be empty!", error);
   }
@@ -435,7 +433,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Username cannot be empty!", error);
   }
@@ -449,7 +446,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Username cannot be empty!", error);
   }
@@ -463,7 +459,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Password cannot be empty!", error);
   }
@@ -477,7 +472,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Password cannot be empty!", error);
   }
@@ -491,7 +485,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Password cannot be empty!", error);
   }
@@ -505,7 +498,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Email cannot be empty!", error);
   }
@@ -519,7 +511,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Email cannot be empty!", error);
   }
@@ -533,7 +524,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Email cannot be empty!", error);
   }
@@ -547,7 +537,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Email is invalid!", error);
   }
@@ -561,7 +550,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Email is invalid!", error);
   }
@@ -575,7 +563,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Email is invalid!", error);
   }
@@ -589,7 +576,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Email is invalid!", error);
   }
@@ -603,7 +589,6 @@ public class TestOwnerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(ownerDao, times(0)).delete(any());
     assertNull(owner);
     assertEquals("Owner does not exist!", error);
   }

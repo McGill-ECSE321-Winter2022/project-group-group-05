@@ -212,7 +212,7 @@ public class TestOpeningHoursService {
       fail();
     }
     assertNotNull(openingH);
-    assertEquals(OPENINGHOURS_KEY, service.getOpeningHours(OPENINGHOURS_KEY).getDaysOfWeek());
+    assertEquals(OPENINGHOURS_KEY, openingH.getDaysOfWeek());
   }
 
   @Test
@@ -267,7 +267,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNotNull(openingH);
     assertEquals(OPENINGHOURS_KEY, openingH.getDaysOfWeek());
   }
@@ -281,7 +280,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNull(openingH);
     assertEquals("Day of week cannot be empty!", error);
   }
@@ -295,7 +293,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNull(openingH);
     assertEquals("Day of week cannot be empty!", error);
   }
@@ -309,7 +306,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNull(openingH);
     assertEquals("Day of week cannot be empty!", error);
   }
@@ -323,7 +319,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNull(openingH);
     assertEquals("Start time cannot be empty!", error);
   }
@@ -337,7 +332,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNull(openingH);
     assertEquals("End time cannot be empty!", error);
   }
@@ -351,7 +345,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNull(openingH);
     assertEquals("Start time must be earlier than end time!", error);
   }
@@ -365,7 +358,6 @@ public class TestOpeningHoursService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(openingHoursDao, times(0)).delete(any());
     assertNull(openingH);
     assertEquals("This opening hour does not exist!", error);
   }

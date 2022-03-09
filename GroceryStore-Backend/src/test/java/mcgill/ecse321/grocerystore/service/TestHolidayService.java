@@ -152,7 +152,7 @@ public class TestHolidayService {
       fail();
     }
     assertNotNull(holiday);
-    assertEquals(HOLIDAY_KEY, service.getHoliday(HOLIDAY_KEY).getName());
+    assertEquals(HOLIDAY_KEY, holiday.getName());
   }
 
   @Test
@@ -207,7 +207,6 @@ public class TestHolidayService {
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(holidayDao, times(0)).delete(any());
     assertNotNull(holiday);
     assertEquals(HOLIDAY_KEY, holiday.getName());
   }
@@ -221,7 +220,6 @@ public class TestHolidayService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(holidayDao, times(0)).delete(any());
     assertNull(holiday);
     assertEquals("Name cannot be empty!", error);
   }
@@ -235,7 +233,6 @@ public class TestHolidayService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(holidayDao, times(0)).delete(any());
     assertNull(holiday);
     assertEquals("Name cannot be empty!", error);
   }
@@ -249,7 +246,6 @@ public class TestHolidayService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(holidayDao, times(0)).delete(any());
     assertNull(holiday);
     assertEquals("Name cannot be empty!", error);
   }
@@ -263,7 +259,6 @@ public class TestHolidayService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(holidayDao, times(0)).delete(any());
     assertNull(holiday);
     assertEquals("Date cannot be empty!", error);
   }
@@ -277,7 +272,6 @@ public class TestHolidayService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(holidayDao, times(0)).delete(any());
     assertNull(holiday);
     assertEquals("Holiday does not exist!", error);
   }
