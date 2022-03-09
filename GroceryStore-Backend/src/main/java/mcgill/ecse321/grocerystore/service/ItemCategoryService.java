@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import mcgill.ecse321.grocerystore.dao.ItemCategoryRepository;
+import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
 
@@ -14,6 +14,8 @@ import mcgill.ecse321.grocerystore.model.ItemCategory;
 public class ItemCategoryService {
   @Autowired
   ItemCategoryRepository itemCategoryRepository;
+  @Autowired
+  ItemRepository itemRepository;
 
   @Transactional
   public ItemCategory createItemCategory(String name) throws IllegalArgumentException {
@@ -38,6 +40,47 @@ public class ItemCategoryService {
       throw new IllegalArgumentException("This category does not exist!");
     }
     return itemCategory;
+  }
+
+  @Transactional
+  public boolean addItemToItemCategory(String itemName, String categoryName)
+      throws IllegalArgumentException {
+    if (itemName == null || itemName.trim().length() == 0) {
+      throw new IllegalArgumentException("Item name cannot be empty!");
+    }
+    if (categoryName == null || categoryName.trim().length() == 0) {
+      throw new IllegalArgumentException("Category name cannot be empty!");
+    }
+    Item item = itemRepository.findByName(itemName);
+    if (item == null) {
+      throw new IllegalArgumentException("This item does not exist!");
+    }
+    ItemCategory itemCategory = getItemCategory(categoryName);
+    for (ItemCategory ic : getAllItemCategories()) {
+      for (Item i : ic.getItems()) {
+        if (i.equals(item)) {
+          throw new IllegalArgumentException("This item already belongs to a category!");
+        }
+      }
+    }
+    return itemCategory.addItem(item);
+  }
+
+  @Transactional
+  public boolean removeItemFromItemCategory(String itemName, String categoryName)
+      throws IllegalArgumentException {
+    if (itemName == null || itemName.trim().length() == 0) {
+      throw new IllegalArgumentException("Item name cannot be empty!");
+    }
+    if (categoryName == null || categoryName.trim().length() == 0) {
+      throw new IllegalArgumentException("Category name cannot be empty!");
+    }
+    Item item = itemRepository.findByName(itemName);
+    if (item == null) {
+      throw new IllegalArgumentException("This item does not exist!");
+    }
+    ItemCategory itemCategory = getItemCategory(categoryName);
+    return itemCategory.removeItem(item);
   }
 
   @Transactional

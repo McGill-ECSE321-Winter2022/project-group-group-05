@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import mcgill.ecse321.grocerystore.dto.ItemCategoryDto;
 import mcgill.ecse321.grocerystore.dto.ItemDto;
@@ -40,10 +42,22 @@ public class ItemCategoryController {
     return convertToDto(service.getItemCategory(name));
   }
 
-  @GetMapping(value = {"/purchase/itemCategory/{name}", "/purchase/itemCategory/{name}/"})
+  @GetMapping(value = {"/itemCategory/{name}/getItems", "/itemCategory/{name}/getItems/"})
   public List<ItemDto> getItemsOfItemCategory(@PathVariable("name") ItemCategoryDto iDto) {
     ItemCategory i = convertToDomainObject(iDto);
     return createItemDtosForItemCategory(i);
+  }
+
+  @PatchMapping(value = {"/itemCategory/{name}/addItem", "/itemCategory/{name}/addItem/"})
+  public void addItemToItemCategory(@PathVariable("name") String name,
+      @RequestParam String itemName) throws IllegalArgumentException {
+    service.addItemToItemCategory(itemName, name);
+  }
+
+  @PatchMapping(value = {"/itemCategory/{name}/removeItem", "/itemCategory/{name}/removeItem/"})
+  public void removeItemFromItemCategory(@PathVariable("name") String name,
+      @RequestParam String itemName) throws IllegalArgumentException {
+    service.removeItemFromItemCategory(itemName, name);
   }
 
   private List<ItemDto> createItemDtosForItemCategory(ItemCategory i) {
