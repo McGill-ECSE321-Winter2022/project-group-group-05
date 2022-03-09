@@ -246,7 +246,7 @@ public class TestEmployeeService {
   @Test
   public void testCreateEmployee() {
     String username = "testEmployee";
-    String email = "fake@email.com";
+    String email = "fake.name@email.com";
     String password = "password";
     Employee employee = null;
     try {
@@ -355,9 +355,9 @@ public class TestEmployeeService {
   }
 
   @Test
-  public void testCreateEmployeeNoDomainEmail() {
+  public void testCreateEmployeeNoAtEmail() {
     String username = "testEmployee";
-    String email = "fake@emailcom";
+    String email = "fakeemail.com";
     String password = "password";
     Employee employee = null;
     String error = "";
@@ -406,6 +406,22 @@ public class TestEmployeeService {
   public void testCreateEmployeeNoTopLevelDomainEmail() {
     String username = "testEmployee";
     String email = "fake@email.";
+    String password = "password";
+    Employee employee = null;
+    String error = "";
+    try {
+      employee = service.createEmployee(username, email, password);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(employee);
+    assertEquals("Employee email is invalid!", error);
+  }
+  
+  @Test
+  public void testCreateEmployeeTopLevelDomainTooLargeEmail() {
+    String username = "testEmployee";
+    String email = "fake@email.totallyRealWebsite";
     String password = "password";
     Employee employee = null;
     String error = "";
