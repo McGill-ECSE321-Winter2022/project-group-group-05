@@ -57,11 +57,6 @@ public class TestItemCategoryService {
             ITEM_TWO.setName(ITEM_TWO_NAME);
             Set<Item> set = new HashSet<Item>();
             set.add(ITEM_ONE);
-            try {
-              Thread.sleep(50);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
             set.add(ITEM_TWO);
             itemCategory.setItems(set);
             return itemCategory;
@@ -447,11 +442,6 @@ public class TestItemCategoryService {
   public void testGetItemsByItemCategory() {
     List<Item> items = new ArrayList<Item>();
     items.add(ITEM_ONE);
-    try {
-      Thread.sleep(50);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
     items.add(ITEM_TWO);
     List<Item> itemSet = service.getItemsByItemCategory(ITEMCATEGORY_KEY);
     assertEquals(items, itemSet);
