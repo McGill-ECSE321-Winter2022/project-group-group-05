@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.CustomerRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
-import mcgill.ecse321.grocerystore.model.Customer;
 import mcgill.ecse321.grocerystore.model.Owner;
 
 @Service
@@ -50,8 +49,7 @@ public class OwnerService {
     owner.setUsername(username);
     owner.setPassword(password);
     owner.setEmail(email);
-    ownerRepository.save(owner);
-    return owner;
+    return ownerRepository.save(owner);
   }
 
   @Transactional

@@ -44,8 +44,7 @@ public class OpeningHoursService {
     openingH.setDaysOfWeek(daysOfWeek);
     openingH.setStartTime(startH);
     openingH.setEndTime(endH);
-    openingHoursRepository.save(openingH);
-    return openingH;
+    return openingHoursRepository.save(openingH);
   }
 
   @Transactional
