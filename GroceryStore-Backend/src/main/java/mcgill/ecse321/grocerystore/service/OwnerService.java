@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +40,7 @@ public class OwnerService {
     if (email == null || email.trim().length() == 0) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
-    if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") <= email.indexOf("@") + 1
-        || email.lastIndexOf(".") >= email.length() - 1) {
+    if (!verifyEmail(email)) {
       throw new IllegalArgumentException("Email is invalid!");
     }
 
@@ -93,6 +92,20 @@ public class OwnerService {
   public List<Owner> getAllOwners() {
     ArrayList<Owner> ownerList = ownerRepository.findAllByOrderByUsername();
     return ownerList;
+  }
+
+  /**
+   * Used to match the email string to a regex which checks for proper email format. The
+   * restrictions for an email to be considered valid can be found <a href=
+   * "https://www.baeldung.com/java-email-validation-regex#strict-regular-expression-validation">here</a>
+   * 
+   * @param email - the email string to be checked
+   * @return a boolean indicating whether the email conforms to standards or not. True indicates
+   *         that the email is valid.
+   */
+  private boolean verifyEmail(String email) {
+    return Pattern.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", email);
   }
 
 }
