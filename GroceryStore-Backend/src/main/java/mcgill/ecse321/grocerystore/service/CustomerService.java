@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +40,24 @@ public class CustomerService {
         || employeeRepository.findByUsername(username) != null) {
       throw new IllegalArgumentException("Username is already taken!");
     }
+    if (password == null || password.trim().length() == 0) {
+      throw new IllegalArgumentException("Password cannot be empty!");
+    }
+    if (email == null || email.trim().length() == 0) {
+      throw new IllegalArgumentException("Email cannot be empty!");
+    }
+    if (!verifyEmail(email)) {
+      throw new IllegalArgumentException("Email is invalid!");
+    }
+    if (address == null || address.trim().length() == 0) {
+      throw new IllegalArgumentException("Address cannot be empty!");
+    }
     Customer customer = new Customer();
     customer.setUsername(username);
-    setPassword(customer, password);
-    setEmail(customer, email);
-    setAddress(customer, address);
-    setIsLocal(customer, isLocal);
+    customer.setPassword(password);
+    customer.setEmail(email);
+    customer.setAddress(address);
+    customer.setIsLocal(isLocal);
     return customerRepository.save(customer);
   }
 
@@ -57,31 +71,6 @@ public class CustomerService {
       throw new IllegalArgumentException("User does not exist!");
     }
     return customer;
-  }
-
-  @Transactional
-  public void setCustomerPassword(String username, String password)
-      throws IllegalArgumentException {
-    Customer customer = getCustomer(username);
-    setPassword(customer, password);
-  }
-
-  @Transactional
-  public void setCustomerEmail(String username, String email) throws IllegalArgumentException {
-    Customer customer = getCustomer(username);
-    setEmail(customer, email);
-  }
-
-  @Transactional
-  public void setCustomerAddress(String username, String address) throws IllegalArgumentException {
-    Customer customer = getCustomer(username);
-    setAddress(customer, address);
-  }
-
-  @Transactional
-  public void setCustomerIsLocal(String username, boolean isLocal) throws IllegalArgumentException {
-    Customer customer = getCustomer(username);
-    setIsLocal(customer, isLocal);
   }
 
   /**
@@ -125,34 +114,20 @@ public class CustomerService {
     ArrayList<Customer> customerList = customerRepository.findAllByOrderByUsername();
     return customerList;
   }
-
-  private void setPassword(Customer customer, String password) throws IllegalArgumentException {
-    if (password == null || password.trim().length() == 0) {
-      throw new IllegalArgumentException("Password cannot be empty!");
-    }
-    customer.setPassword(password);
+  
+  /**
+   * Used to match the email string to a regex which checks for proper email format. We define a
+   * proper email to have the format {content1}@{content2}.{content3}
+   * 
+   * @param email - the email string to be checked
+   * @return a boolean indicating whether the email conforms to standards or not. True indicates
+   *         that the email is valid.
+   */
+  private boolean verifyEmail(String email) {
+    Pattern emailRegex =
+        Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    Matcher regexMatcher = emailRegex.matcher(email);
+    return regexMatcher.find();
   }
-
-  private void setEmail(Customer customer, String email) throws IllegalArgumentException {
-    if (email == null || email.trim().length() == 0) {
-      throw new IllegalArgumentException("Email cannot be empty!");
-    }
-    if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") <= email.indexOf("@") + 1
-        || email.lastIndexOf(".") >= email.length() - 1) {
-      throw new IllegalArgumentException("Email is invalid!");
-    }
-    customer.setEmail(email);
-  }
-
-  private void setAddress(Customer customer, String address) throws IllegalArgumentException {
-    if (address == null || address.trim().length() == 0) {
-      throw new IllegalArgumentException("Address cannot be empty!");
-    }
-    customer.setAddress(address);
-  }
-
-  private void setIsLocal(Customer customer, boolean isLocal) {
-    customer.setIsLocal(isLocal);
-  }
+  
 }
