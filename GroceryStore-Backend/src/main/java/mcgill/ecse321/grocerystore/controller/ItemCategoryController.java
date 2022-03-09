@@ -24,7 +24,7 @@ public class ItemCategoryController {
   private ItemCategoryService service;
 
   @GetMapping(value = {"/itemCategory", "/itemCategory/"})
-  public List<ItemCategoryDto> getAllItemCategoriess() {
+  public List<ItemCategoryDto> getAllItemCategories() {
     return service.getAllItemCategories().stream().map(p -> convertToDto(p))
         .collect(Collectors.toList());
   }
@@ -43,9 +43,9 @@ public class ItemCategoryController {
   }
 
   @GetMapping(value = {"/itemCategory/{name}/getItems", "/itemCategory/{name}/getItems/"})
-  public List<ItemDto> getItemsOfItemCategory(@PathVariable("name") ItemCategoryDto iDto) {
-    ItemCategory i = convertToDomainObject(iDto);
-    return createItemDtosForItemCategory(i);
+  public List<ItemDto> getItemsOfItemCategory(@PathVariable("name") String name) {
+    return service.getItemsByItemCategory(name).stream().map(i -> this.convertToDto(i))
+        .collect(Collectors.toList());
   }
 
   @PatchMapping(value = {"/itemCategory/{name}/addItem", "/itemCategory/{name}/addItem/"})
@@ -84,15 +84,5 @@ public class ItemCategoryController {
     ItemCategoryDto itemCategoryDto =
         new ItemCategoryDto(i.getName(), createItemDtosForItemCategory(i));
     return itemCategoryDto;
-  }
-
-  private ItemCategory convertToDomainObject(ItemCategoryDto iDto) {
-    List<ItemCategory> allItemCategories = service.getAllItemCategories();
-    for (ItemCategory itemCategory : allItemCategories) {
-      if (itemCategory.getName().equals(iDto.getName())) {
-        return itemCategory;
-      }
-    }
-    return null;
   }
 }

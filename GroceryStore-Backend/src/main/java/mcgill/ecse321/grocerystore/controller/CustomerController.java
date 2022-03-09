@@ -49,9 +49,9 @@ public class CustomerController {
   }
 
   @GetMapping(value = {"/customer/{username}/getPurchases", "/customer/{username}/getPurchases/"})
-  public List<PurchaseDto> getPurchasesOfCustomer(@PathVariable("username") CustomerDto cDto) {
-    Customer c = convertToDomainObject(cDto);
-    return createPurchaseDtosForCustomer(c);
+  public List<PurchaseDto> getPurchasesOfCustomer(@PathVariable("username") String username) {
+    return service.getPurchasesByUsername(username).stream().map(c -> this.convertToDto(c))
+        .collect(Collectors.toList());
   }
 
   @DeleteMapping(value = {"/customer/{username}", "/customer/{username}/"})
@@ -128,15 +128,5 @@ public class CustomerController {
     }
     return new ItemDto(i.getName(), i.getPrice(), i.getInventory(), i.getCanDeliver(),
         i.getCanPickUp(), i.getIsDiscontinued());
-  }
-
-  private Customer convertToDomainObject(CustomerDto cDto) {
-    List<Customer> allCustomers = service.getAllCustomers();
-    for (Customer customer : allCustomers) {
-      if (customer.getUsername().equals(cDto.getUsername())) {
-        return customer;
-      }
-    }
-    return null;
   }
 }
