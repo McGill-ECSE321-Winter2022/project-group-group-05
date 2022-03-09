@@ -1,6 +1,8 @@
 package mcgill.ecse321.grocerystore.service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,9 +77,7 @@ public class EmployeeService {
         || ownerRepository.findByUsername(username) != null)
       throw new IllegalArgumentException("Username is already taken!");
     // valid email check
-    if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") <= email.indexOf("@") + 1
-        || email.lastIndexOf(".") >= email.length() - 1) {
+    if (!verifyEmail(email)) {
       throw new IllegalArgumentException("Employee email is invalid!");
     }
     Employee newEmployee = new Employee();
@@ -112,9 +112,7 @@ public class EmployeeService {
   @Transactional
   public void setEmployeeEmail(String username, String newEmail) throws IllegalArgumentException {
     var employee = getEmployee(username);
-    if (newEmail.contains(" ") || !newEmail.contains(".") || newEmail.indexOf("@") < 1
-        || newEmail.indexOf(".") <= newEmail.indexOf("@") + 1
-        || newEmail.lastIndexOf(".") >= newEmail.length() - 1) {
+    if (!verifyEmail(newEmail)) {
       throw new IllegalArgumentException("Employee email is invalid!");
     }
     employee.setEmail(newEmail);
@@ -310,6 +308,21 @@ public class EmployeeService {
     return employeeRepository.findByUsernameIgnoreCaseContainingOrderByUsernameDesc(searchQuery);
   }
 
+  /**
+   * Used to match the email string to a regex which checks for proper email format. We define a
+   * proper email to have the format {content1}@{content2}.{content3}
+   * 
+   * @param email - the email string to be checked
+   * @return a boolean indicating whether the email conforms to standards or not. True indicates
+   *         that the email is valid.
+   */
+  private boolean verifyEmail(String email) {
+    Pattern emailRegex =
+        Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    Matcher regexMatcher = emailRegex.matcher(email);
+    return regexMatcher.find();
+  }
+  
   /**
    * Used to validate and fetch an instance of EmployeeSchedule given an id
    * 
