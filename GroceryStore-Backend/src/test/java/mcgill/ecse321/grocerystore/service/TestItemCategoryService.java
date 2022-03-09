@@ -1,13 +1,17 @@
 package mcgill.ecse321.grocerystore.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +22,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import mcgill.ecse321.grocerystore.dao.ItemCategoryRepository;
+import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
 
@@ -25,12 +30,19 @@ import mcgill.ecse321.grocerystore.model.ItemCategory;
 public class TestItemCategoryService {
   @Mock
   private ItemCategoryRepository itemCategoryDao;
+  @Mock
+  private ItemRepository itemDao;
 
   @InjectMocks
   private ItemCategoryService service;
 
   private static final String ITEMCATEGORY_KEY = "TestItemCategory";
+  private static final String ITEMCATEGORY_TWO = "ItemCategoryTwo";
   private static final String NONEXISTING_KEY = "NotAnItemCategory";
+  private static final String ITEM_THREE = "TestItem";
+  private static final String NONEXISTING_ITEM = "NotAnItem";
+  private static final String ITEM_ONE_NAME = "ItemOne";
+  private static final String ITEM_TWO_NAME = "ItemTwo";
   private static final Item ITEM_ONE = new Item();
   private static final Item ITEM_TWO = new Item();
 
@@ -41,14 +53,47 @@ public class TestItemCategoryService {
           if (invocation.getArgument(0).equals(ITEMCATEGORY_KEY)) {
             ItemCategory itemCategory = new ItemCategory();
             itemCategory.setName(ITEMCATEGORY_KEY);
-            itemCategory.addItem(ITEM_ONE);
-            itemCategory.addItem(ITEM_TWO);
+            ITEM_ONE.setName(ITEM_ONE_NAME);
+            ITEM_TWO.setName(ITEM_TWO_NAME);
+            Set<Item> set = new HashSet<Item>();
+            set.add(ITEM_ONE);
+            set.add(ITEM_TWO);
+            itemCategory.setItems(set);
+            return itemCategory;
+          } else if (invocation.getArgument(0).equals(ITEMCATEGORY_TWO)) {
+            ItemCategory itemCategory = new ItemCategory();
+            itemCategory.setName(ITEMCATEGORY_TWO);
             return itemCategory;
           } else {
             return null;
           }
         });
 
+    lenient().when(itemCategoryDao.findAllByOrderByName())
+        .thenAnswer((InvocationOnMock invocation) -> {
+          List<ItemCategory> list = new ArrayList<ItemCategory>();
+          ItemCategory itemCategory = new ItemCategory();
+          itemCategory.setName(ITEMCATEGORY_KEY);
+          ITEM_ONE.setName(ITEM_ONE_NAME);
+          ITEM_TWO.setName(ITEM_TWO_NAME);
+          itemCategory.addItem(ITEM_ONE);
+          itemCategory.addItem(ITEM_TWO);
+          list.add(itemCategory);
+          return list;
+        });
+
+    lenient().when(itemDao.findByName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+      if (invocation.getArgument(0).equals(ITEM_THREE)) {
+        Item item = new Item();
+        item.setName(ITEM_THREE);
+        return item;
+      } else if (invocation.getArgument(0).equals(ITEM_ONE_NAME)) {
+        ITEM_ONE.setName(ITEM_ONE_NAME);
+        return ITEM_ONE;
+      } else {
+        return null;
+      }
+    });
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
@@ -125,6 +170,226 @@ public class TestItemCategoryService {
   }
 
   @Test
+  public void testAddItemToItemCategory() {
+    boolean success = false;
+    try {
+      success = service.addItemToItemCategory(ITEM_THREE, ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertTrue(success);
+  }
+
+  @Test
+  public void testAddOtherTypeItemToItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_TWO);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("This item already belongs to a category!", error);
+  }
+
+  @Test
+  public void testAddNullItemToItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(null, ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Item name cannot be empty!", error);
+  }
+
+  @Test
+  public void testAddEmptyItemToItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory("", ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Item name cannot be empty!", error);
+  }
+
+  @Test
+  public void testAddSpacesItemToItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory("   ", ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Item name cannot be empty!", error);
+  }
+
+  @Test
+  public void testAddNonExistingItemToItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(NONEXISTING_ITEM, ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("This item does not exist!", error);
+  }
+
+  @Test
+  public void testAddItemToNullItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(ITEM_THREE, null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testAddItemToEmptyItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(ITEM_THREE, "");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testAddItemToSpacesItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(ITEM_THREE, "   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testAddItemToNonExistingItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(ITEM_THREE, NONEXISTING_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("This category does not exist!", error);
+  }
+
+  @Test
+  public void testRemoveItemFromItemCategory() {
+    boolean success = false;
+    try {
+      success = service.removeItemFromItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertTrue(success);
+  }
+
+  @Test
+  public void testRemoveOtherTypeItemFromItemCategory() {
+    boolean success = false;
+    try {
+      success = service.removeItemFromItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_TWO);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertFalse(success);
+  }
+
+  @Test
+  public void testRemoveNullItemFromItemCategory() {
+    String error = null;
+    try {
+      service.removeItemFromItemCategory(null, ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Item name cannot be empty!", error);
+  }
+
+  @Test
+  public void testRemoveEmptyItemFromItemCategory() {
+    String error = null;
+    try {
+      service.removeItemFromItemCategory("", ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Item name cannot be empty!", error);
+  }
+
+  @Test
+  public void testRemoveSpacesItemFromItemCategory() {
+    String error = null;
+    try {
+      service.removeItemFromItemCategory("   ", ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Item name cannot be empty!", error);
+  }
+
+  @Test
+  public void testRemoveNonExistingItemFromItemCategory() {
+    String error = null;
+    try {
+      service.removeItemFromItemCategory(NONEXISTING_ITEM, ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("This item does not exist!", error);
+  }
+
+  @Test
+  public void testRemoveItemFromNullItemCategory() {
+    String error = null;
+    try {
+      service.removeItemFromItemCategory(ITEM_ONE_NAME, null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testRemoveItemFromEmptyItemCategory() {
+    String error = null;
+    try {
+      service.removeItemFromItemCategory(ITEM_ONE_NAME, "");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testRemoveItemFromSpacesItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(ITEM_ONE_NAME, "   ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("Category name cannot be empty!", error);
+  }
+
+  @Test
+  public void testRemoveItemFromNonExistingItemCategory() {
+    String error = null;
+    try {
+      service.addItemToItemCategory(ITEM_ONE_NAME, NONEXISTING_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertEquals("This category does not exist!", error);
+  }
+
+  @Test
   public void testGetExistingItemCategory() {
     assertEquals(ITEMCATEGORY_KEY, service.getItemCategory(ITEMCATEGORY_KEY).getName());
   }
@@ -175,10 +440,10 @@ public class TestItemCategoryService {
 
   @Test
   public void testGetItemsByItemCategory() {
-    Set<Item> items = new HashSet<Item>();
+    List<Item> items = new ArrayList<Item>();
     items.add(ITEM_ONE);
     items.add(ITEM_TWO);
-    Set<Item> itemSet = service.getItemsByItemCategory(ITEMCATEGORY_KEY);
+    List<Item> itemSet = service.getItemsByItemCategory(ITEMCATEGORY_KEY);
     assertEquals(items, itemSet);
   }
 
