@@ -42,6 +42,7 @@ public class TestItemCategoryService {
   private static final String ITEM_THREE = "TestItem";
   private static final String NONEXISTING_ITEM = "NotAnItem";
   private static final String ITEM_ONE_NAME = "ItemOne";
+  private static final String ITEM_TWO_NAME = "ItemTwo";
   private static final Item ITEM_ONE = new Item();
   private static final Item ITEM_TWO = new Item();
 
@@ -53,6 +54,7 @@ public class TestItemCategoryService {
             ItemCategory itemCategory = new ItemCategory();
             itemCategory.setName(ITEMCATEGORY_KEY);
             ITEM_ONE.setName(ITEM_ONE_NAME);
+            ITEM_TWO.setName(ITEM_TWO_NAME);
             Set<Item> set = new HashSet<Item>();
             set.add(ITEM_ONE);
             try {
@@ -78,6 +80,7 @@ public class TestItemCategoryService {
           ItemCategory itemCategory = new ItemCategory();
           itemCategory.setName(ITEMCATEGORY_KEY);
           ITEM_ONE.setName(ITEM_ONE_NAME);
+          ITEM_TWO.setName(ITEM_TWO_NAME);
           itemCategory.addItem(ITEM_ONE);
           itemCategory.addItem(ITEM_TWO);
           list.add(itemCategory);

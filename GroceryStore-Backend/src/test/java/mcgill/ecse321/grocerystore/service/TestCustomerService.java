@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -718,13 +719,8 @@ public class TestCustomerService {
   @Test
   public void testGetPurchasesByUsername() {
     List<Purchase> purchases = new ArrayList<Purchase>();
-    PURCHASE_TWO.setTimeOfPurchaseMillis();
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    PURCHASE_THREE.setTimeOfPurchaseMillis();
+    PURCHASE_TWO.setTimeOfPurchaseMillis(Time.valueOf("09:17:32").getTime());
+    PURCHASE_THREE.setTimeOfPurchaseMillis(Time.valueOf("09:18:45").getTime());
     purchases.add(PURCHASE_THREE);
     purchases.add(PURCHASE_TWO);
     List<Purchase> purchaseList = service.getPurchasesByUsername(CUSTOMER_KEY);
