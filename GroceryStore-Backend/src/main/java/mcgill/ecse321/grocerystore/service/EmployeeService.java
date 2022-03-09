@@ -76,7 +76,6 @@ public class EmployeeService {
       throw new IllegalArgumentException("Username is already taken!");
     // valid email check
     if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") <= email.indexOf("@") + 1
         || email.lastIndexOf(".") >= email.length() - 1) {
       throw new IllegalArgumentException("Employee email is invalid!");
     }
@@ -113,7 +112,6 @@ public class EmployeeService {
   public void setEmployeeEmail(String username, String newEmail) throws IllegalArgumentException {
     var employee = getEmployee(username);
     if (newEmail.contains(" ") || !newEmail.contains(".") || newEmail.indexOf("@") < 1
-        || newEmail.indexOf(".") <= newEmail.indexOf("@") + 1
         || newEmail.lastIndexOf(".") >= newEmail.length() - 1) {
       throw new IllegalArgumentException("Employee email is invalid!");
     }

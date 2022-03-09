@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import mcgill.ecse321.grocerystore.dao.CustomerRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
@@ -138,7 +137,6 @@ public class CustomerService {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
     if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") <= email.indexOf("@") + 1
         || email.lastIndexOf(".") >= email.length() - 1) {
       throw new IllegalArgumentException("Email is invalid!");
     }
