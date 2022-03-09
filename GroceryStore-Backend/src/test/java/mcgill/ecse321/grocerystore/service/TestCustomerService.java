@@ -416,25 +416,6 @@ public class TestCustomerService {
     assertNull(customer);
     assertEquals("Email is invalid!", error);
   }
-  
-  // check if the top-level domain isn't valid
-  @Test
-  public void testCreateCustomerInvalidEmailTopLevelDomainTooLarge() {
-    String username = "test";
-    String password = "password";
-    String email = "123@gmail.totallyRealWebsite";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email is invalid!", error);
-  }
 
   @Test
   public void testCreateCustomerNullAddress() {

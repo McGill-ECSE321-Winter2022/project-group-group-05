@@ -417,22 +417,6 @@ public class TestEmployeeService {
     assertNull(employee);
     assertEquals("Employee email is invalid!", error);
   }
-  
-  @Test
-  public void testCreateEmployeeTopLevelDomainTooLargeEmail() {
-    String username = "testEmployee";
-    String email = "fake@email.totallyRealWebsite";
-    String password = "password";
-    Employee employee = null;
-    String error = "";
-    try {
-      employee = service.createEmployee(username, email, password);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(employee);
-    assertEquals("Employee email is invalid!", error);
-  }
 
   // Tests for deleteEmployee(String)
   // --------------------------------
