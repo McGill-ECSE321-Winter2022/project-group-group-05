@@ -108,7 +108,7 @@ public class TestCustomerService {
   public void testCreateCustomer() {
     String username = "test";
     String password = "password";
-    String email = "123@gmail.com";
+    String email = "123.456@gmail.com";
     String address = "McGill";
     Boolean isLocal = true;
     Customer customer = null;

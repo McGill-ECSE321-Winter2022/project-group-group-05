@@ -246,7 +246,7 @@ public class TestEmployeeService {
   @Test
   public void testCreateEmployee() {
     String username = "testEmployee";
-    String email = "fake@email.com";
+    String email = "fake.name@email.com";
     String password = "password";
     Employee employee = null;
     try {
@@ -355,9 +355,9 @@ public class TestEmployeeService {
   }
 
   @Test
-  public void testCreateEmployeeNoDomainEmail() {
+  public void testCreateEmployeeNoAtEmail() {
     String username = "testEmployee";
-    String email = "fake@emailcom";
+    String email = "fakeemail.com";
     String password = "password";
     Employee employee = null;
     String error = "";
