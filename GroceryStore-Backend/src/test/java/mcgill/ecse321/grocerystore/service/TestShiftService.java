@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.service;
 
 
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -72,6 +73,9 @@ public class TestShiftService {
       List<Shift> shiftList = new ArrayList<Shift>();
       var shiftOne = new Shift();
       shiftOne.setName(TEST_NAME1);
+      this.mockShift.setName(FAKE_NAME);
+      System.out.println(mockShift.getName());
+      System.out.println(shiftOne.getName());
       shiftOne.setStartTime(TEST_START_TIME);
       shiftOne.setEndTime(TEST_END_TIME);
       var shiftTwo = new Shift();
@@ -103,6 +107,10 @@ public class TestShiftService {
     }
 
     assertNotNull(shift);
+    assertEquals(startTime,shift.getStartTime());
+    assertEquals(endTime,shift.getEndTime());
+    assertEquals(name,shift.getName());
+    
   }
 
   @Test
@@ -310,9 +318,6 @@ public class TestShiftService {
     assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
   }
 
-  // Tests for getAllEmployees()
-  // ---------------------------
-
   @Test
   public void testGetAllShifts() {
     List<Shift> shiftList = this.shiftService.getAllShifts();
@@ -332,7 +337,6 @@ public class TestShiftService {
       fail();
     }
 
-    verify(shiftDao, times(0)).deleteById(anyString());
     assertNotNull(shift);
     assertEquals(TEST_NAME, shift.getName());
     assertEquals(TEST_START_TIME1, shift.getStartTime());
@@ -351,7 +355,6 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(anyString());
     assertNull(shift);
     assertEquals("Shift name cannot be empty.", error);
 
@@ -367,7 +370,6 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(anyString());
     assertNull(shift);
     assertEquals("Shift name cannot be empty.", error);
 
@@ -383,7 +385,6 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(anyString());
     assertNull(shift);
     assertEquals("Shift name cannot be empty.", error);
 
@@ -399,7 +400,6 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(anyString());
     assertNull(shift);
     assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
 
@@ -415,38 +415,12 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(anyString());
     assertNull(shift);
     assertEquals("Shift end-time cannot be before its start-time.", error);
 
   }
 
-  /*
-   * @Test public void testGetShiftBefore() { List<Shift> shiftList= null;
-   * 
-   * try { this.shiftService.createShift(TEST_NAME1, TEST_START_TIME, TEST_END_TIME);
-   * this.shiftService.createShift(TEST_NAME2, TEST_START_TIME1, TEST_END_TIME1);
-   * shiftList=shiftService.getAllShiftsBefore(TEST_END_TIME1);
-   * 
-   * } catch (IllegalArgumentException e) { fail(); }
-   * 
-   * assertNotNull(shiftList); assertEquals(2, shiftList.size());
-   * 
-   * }
-   * 
-   * @Test public void testGetShiftAfter() { List<Shift> shiftList= null;
-   * 
-   * try { this.shiftService.createShift(TEST_NAME1, TEST_START_TIME, TEST_END_TIME);
-   * this.shiftService.createShift(TEST_NAME2, TEST_START_TIME1, TEST_END_TIME1);
-   * shiftList=shiftService.getAllShiftsAfter(TEST_START_TIME);
-   * 
-   * } catch (IllegalArgumentException e) { fail(); }
-   * 
-   * assertNotNull(shiftList); System.out.println(shiftList.get(0).getName()); assertEquals(2,
-   * shiftList.size());
-   * 
-   * }
-   */
+  
 
 
 

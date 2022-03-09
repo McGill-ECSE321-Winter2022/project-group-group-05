@@ -57,40 +57,10 @@ public class ShiftService {
   @Transactional
   // Get all the shifts sorted by name in order
   public List<Shift> getAllShifts() {
-    return toList(shiftRepo.findAllByOrderByName());
+    return shiftRepo.findAllByOrderByName();
   }
-
-
-  /*
-   * // Get all the shifts before a given time
-   * 
-   * @Transactional public List<Shift> getAllShiftsBefore(Time beforeTime) throws
-   * IllegalArgumentException { if (beforeTime == null) { throw new
-   * IllegalArgumentException("The input beforetime cannot be null!"); } if
-   * (shiftRepo.findByEndTimeBefore(beforeTime) == null) { throw new
-   * IllegalArgumentException("No shift starts before this time in the repository!"); } return
-   * toList(shiftRepo.findByEndTimeBefore(beforeTime));
-   * 
-   * }
-   * 
-   * // Get all the shifts after a given time
-   * 
-   * @Transactional public List<Shift> getAllShiftsAfter(Time afterTime) throws
-   * IllegalArgumentException { if (afterTime == null) { throw new
-   * IllegalArgumentException("The input aftertime cannot be null!"); } if
-   * (shiftRepo.findByStartTimeAfter(afterTime) == null) { throw new
-   * IllegalArgumentException("No shift starts after this time in the repository!"); } return
-   * toList(shiftRepo.findByStartTimeAfter(afterTime));
-   * 
-   * }
-   * 
-   */
-
   @Transactional
   public void deleteShiftByName(String name) {
-    if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Shift name cannot be empty.");
-    }
     Shift shift=this.getShift(name);
     this.shiftRepo.deleteById(shift.getName());
   }
@@ -99,13 +69,14 @@ public class ShiftService {
 
   @Transactional
   public Shift updateShift(String name, Time startTime, Time endTime) {
-
-
-    // check input
-    if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Shift name cannot be empty.");
+   
+  
+    if (startTime==null) {
+      throw new IllegalArgumentException("Shift start-timr cannot be null.");
     }
-
+    if (endTime==null) {
+      throw new IllegalArgumentException("Shift end-time cannot be null.");
+    }
     if (endTime.before(startTime)) {
       throw new IllegalArgumentException("Shift end-time cannot be before its start-time.");
     }
@@ -119,11 +90,5 @@ public class ShiftService {
   }
 
 
-  private <T> List<T> toList(Iterable<T> iterable) {
-    List<T> resultList = new ArrayList<T>();
-    for (T t : iterable) {
-      resultList.add(t);
-    }
-    return resultList;
-  }
+ 
 }

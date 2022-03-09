@@ -31,6 +31,7 @@ public class EmployeeScheduleService {
     }
     Shift shift = this.getShift(shiftName);
     EmployeeSchedule aEmployeeSchedule = new EmployeeSchedule();
+    aEmployeeSchedule.setDate(date);
     // link the schedule with a Shift.
     aEmployeeSchedule.setShift(shift);
     return employeeScheduleRepo.save(aEmployeeSchedule);
@@ -44,49 +45,32 @@ public class EmployeeScheduleService {
     if (schedule != null) {
       return schedule;
     }
-    throw new IllegalArgumentException("Schedule of this id does not exist.");
+    throw new IllegalArgumentException("EmployeeSchedule with id '" + id + "' does not exist.");
 
   }
 
   @Transactional
   // Get all the schedules sorted by date in order
-  public List<EmployeeSchedule> getAllEmployeeSchedulByDateInOrder() {
+  public List<EmployeeSchedule> getAllSchedulesOrderedByDate() {
     return employeeScheduleRepo.findAllByOrderByDate();
   }
 
-  @Transactional
-  // Get all the schedules sorted by date in order
-  public List<EmployeeSchedule> getAllEmployeeSchedulByDateInReverseOrder() {
-    return employeeScheduleRepo.findAllByOrderByDateDesc();
-  }
 
+
+  // Update Schedule with new shift
   @Transactional
-  public List<EmployeeSchedule> getEmployeeScheduleByDate(Date date) {
+  public EmployeeSchedule updateEmployeeSchedule(Long scheduleId, String shiftName, Date date)
+      throws IllegalArgumentException {
+
+    EmployeeSchedule schedule = getEmployeeSchedule(scheduleId);
+    Shift shift = getShift(shiftName);
     if (date == null) {
       throw new IllegalArgumentException("Date cannot be empty.");
     }
-    return employeeScheduleRepo.findAllByDate(date);
-  }
-
-  @Transactional
-  public EmployeeSchedule updateEmployeeSchedule(EmployeeSchedule schedule, Shift shift)
-      throws IllegalArgumentException {
-    if (schedule == null) {
-      throw new IllegalArgumentException("Schedule canot be null.");
-    }
-
-    if (shift == null) {
-      throw new IllegalArgumentException("Shift cannot be null.");
-    }
-    if (this.employeeScheduleRepo.findById(schedule.getId()) == null) {
-      throw new IllegalArgumentException("Schedule does not exist.");
-    }
-    if (this.shiftRepo.findByName(shift.getName()) == null) {
-      this.shiftRepo.save(shift);
-    }
-
+    schedule.setDate(date);
     schedule.setShift(shift);
-    return this.employeeScheduleRepo.save(schedule);
+    return employeeScheduleRepo.save(schedule);
+
   }
 
   /**
@@ -98,20 +82,39 @@ public class EmployeeScheduleService {
   @Transactional
   public List<EmployeeSchedule> getAllScheduleByEmployee(String userName) {
     if (userName == null || userName.trim().length() == 0) {
-      throw new IllegalArgumentException("Employee must have a name.");
+      throw new IllegalArgumentException("Employee username cannot be empty!");
     }
     if (this.employeeRepo.findByUsername(userName) == null) {
-      throw new IllegalArgumentException("employee cannot be null.");
+      throw new IllegalArgumentException(
+          "Employee with username '" + userName + "' does not exist!");
     }
     Employee employee = this.employeeRepo.findByUsername(userName);
     return toList(employee.getEmployeeSchedules());
 
   }
 
+  /**
+   * This method deletes the schedule with the ID,it first checks the invalidty of the shcedule
+   * instance then it literates through the employeeRepo to find the emplyee instance that has
+   * asscociation with the schedule and removes the association and then saves the edited employee
+   * instance.Then it deletes the schedule instance
+   * 
+   * @param ID
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public void deleteEmployeeSchedule(long ID) throws IllegalArgumentException {
-
-    EmployeeSchedule schedule = this.employeeScheduleRepo.findById(ID);
+    // Get the schedule instance
+    EmployeeSchedule schedule = this.getEmployeeSchedule(ID);
+    // literate throught the employee
+    for (Employee employee : this.employeeRepo.findAll()) {
+      if (employee.getEmployeeSchedules().contains(schedule)) {
+        // remove the association
+        this.employeeRepo.findByUsername(employee.getUsername()).removeEmployeeSchedule(schedule);
+        // save the edited employee
+        this.employeeRepo.save(employeeRepo.findByUsername(employee.getUsername()));
+      }
+    }
     this.employeeScheduleRepo.delete(schedule);
 
   }
