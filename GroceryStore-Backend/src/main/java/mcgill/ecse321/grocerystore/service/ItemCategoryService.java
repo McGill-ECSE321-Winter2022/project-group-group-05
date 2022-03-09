@@ -11,7 +11,6 @@ import mcgill.ecse321.grocerystore.dao.ItemCategoryRepository;
 import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
-import mcgill.ecse321.grocerystore.model.Purchase;
 
 @Service
 public class ItemCategoryService {
