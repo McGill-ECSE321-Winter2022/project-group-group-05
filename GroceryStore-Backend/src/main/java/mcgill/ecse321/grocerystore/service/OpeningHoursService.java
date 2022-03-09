@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
-import mcgill.ecse321.grocerystore.model.Customer;
-import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 @Service

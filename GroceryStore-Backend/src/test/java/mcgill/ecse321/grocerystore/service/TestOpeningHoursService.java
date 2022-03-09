@@ -33,7 +33,7 @@ public class TestOpeningHoursService {
   private OpeningHoursService service;
 
   private static final String OPENINGHOURS_KEY = "Monday";
-  private static final String OPENINGHOURS2_KEY = "Sunday";
+  // private static final String OPENINGHOURS2_KEY = "Sunday";
   private static final String NONEXISTING_KEY = "NotAOpeningHours";
 
   private static final Time START_KEY = Time.valueOf("12:00:00");
@@ -264,7 +264,7 @@ public class TestOpeningHoursService {
   // }
 
   @Test
-  public void testUpdateHoliday() {
+  public void testUpdateOpeningHours() {
     OpeningHours openingH = null;
     try {
       openingH = service.updateOpeningHours(OPENINGHOURS_KEY, START_KEY, END_KEY);
@@ -277,7 +277,7 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testUpdateHolidayNullDaysOfWeek() {
+  public void testUpdateOpeningHoursNullDaysOfWeek() {
     OpeningHours openingH = null;
     String error = "";
     try {
@@ -291,7 +291,7 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testUpdateHolidayEmptyDaysOfWeek() {
+  public void testUpdateOpeningHoursEmptyDaysOfWeek() {
     OpeningHours openingH = null;
     String error = "";
     try {
@@ -305,7 +305,7 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testUpdateHolidaySpacesDaysOfWeek() {
+  public void testUpdateOpeningHoursSpacesDaysOfWeek() {
     OpeningHours openingH = null;
     String error = "";
     try {
@@ -319,7 +319,49 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testUpdateNonExistingHoliday() {
+  public void testUpdateOpeningHoursNullStartTime() {
+    OpeningHours openingH = null;
+    String error = "";
+    try {
+      openingH = service.updateOpeningHours(OPENINGHOURS_KEY, null, END_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(openingHoursDao, times(0)).delete(any());
+    assertNull(openingH);
+    assertEquals("Start time cannot be empty!", error);
+  }
+
+  @Test
+  public void testUpdateOpeningHoursNullEndTime() {
+    OpeningHours openingH = null;
+    String error = "";
+    try {
+      openingH = service.updateOpeningHours(OPENINGHOURS_KEY, START_KEY, null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(openingHoursDao, times(0)).delete(any());
+    assertNull(openingH);
+    assertEquals("End time cannot be empty!", error);
+  }
+
+  @Test
+  public void testUpdateOpeningHoursEndBeforeStart() {
+    OpeningHours openingH = null;
+    String error = "";
+    try {
+      openingH = service.updateOpeningHours(OPENINGHOURS_KEY, END_KEY, START_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(openingHoursDao, times(0)).delete(any());
+    assertNull(openingH);
+    assertEquals("Start time must be earlier than end time!", error);
+  }
+
+  @Test
+  public void testUpdateNonExistingOpeningHours() {
     OpeningHours openingH = null;
     String error = "";
     try {

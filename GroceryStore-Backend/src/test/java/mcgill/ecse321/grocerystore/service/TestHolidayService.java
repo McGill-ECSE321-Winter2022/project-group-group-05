@@ -10,6 +10,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.sql.Date;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -241,6 +242,20 @@ public class TestHolidayService {
     verify(holidayDao, times(0)).delete(any());
     assertNull(holiday);
     assertEquals("Name cannot be empty!", error);
+  }
+
+  @Test
+  public void testUpdateHolidayNullDate() {
+    Holiday holiday = null;
+    String error = "";
+    try {
+      holiday = service.updateHoliday(HOLIDAY_KEY, null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(holidayDao, times(0)).delete(any());
+    assertNull(holiday);
+    assertEquals("Date cannot be empty!", error);
   }
 
   @Test
