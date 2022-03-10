@@ -21,8 +21,7 @@ import mcgill.ecse321.grocerystore.service.ItemService;
  * 
  * @author Annie Kang
  */
-@CrossOrigin(origins = "*") 
-@RestController
+@CrossOrigin(origins = "*") @RestController
 public class ItemController {
 	@Autowired
 	private ItemService service;
@@ -65,33 +64,33 @@ public class ItemController {
 	}
 
 	@PatchMapping(value = { "/item/{name}/setPrice", "/item/{name}/setPrice/" })
-	public void setPrice(@PathVariable("name") String name, @RequestParam double price)
+	public ItemDto setPrice(@PathVariable("name") String name, @RequestParam double price)
 			throws IllegalArgumentException {
-		service.setPrice(name, price);
+		return convertToDto(service.setPrice(name, price));
 	}
 
 	@PatchMapping(value = { "/item/{name}/setInventory", "/item/{name}/setInventory/" })
-	public void setInventory(@PathVariable("name") String name, @RequestParam int inventory)
+	public ItemDto setInventory(@PathVariable("name") String name, @RequestParam int inventory)
 			throws IllegalArgumentException {
-		service.setInventory(name, inventory);
+		return convertToDto(service.setInventory(name, inventory));
 	}
 
 	@PatchMapping(value = { "/item/{name}/setCanDeliver", "/item/{name}/setCanDeliver/" })
-	public void setCanDeliver(@PathVariable("name") String name, @RequestParam boolean canDeliver)
+	public ItemDto setCanDeliver(@PathVariable("name") String name, @RequestParam boolean canDeliver)
 			throws IllegalArgumentException {
-		service.setCanDeliver(name, canDeliver);
+		return convertToDto(service.setCanDeliver(name, canDeliver));
 	}
 
 	@PatchMapping(value = { "/item/{name}/setCanPickUp", "/item/{name}/setCanPickUp/" })
-	public void setCanPickUp(@PathVariable("name") String name, @RequestParam boolean canPickUp)
+	public ItemDto setCanPickUp(@PathVariable("name") String name, @RequestParam boolean canPickUp)
 			throws IllegalArgumentException {
-		service.setCanPickUp(name, canPickUp);
+		return convertToDto(service.setCanPickUp(name, canPickUp));
 	}
 
 	@PatchMapping(value = { "/item/{name}/setIsDiscontinued", "/item/{name}/setIsDiscontinued/" })
-	public void setIsDiscontinued(@PathVariable("name") String name, @RequestParam boolean isDiscontinued)
+	public ItemDto setIsDiscontinued(@PathVariable("name") String name, @RequestParam boolean isDiscontinued)
 			throws IllegalArgumentException {
-		service.setIsDiscontinued(name, isDiscontinued);
+		return convertToDto(service.setIsDiscontinued(name, isDiscontinued));
 	}
 
 	private ItemDto convertToDto(Item i) throws IllegalArgumentException {
