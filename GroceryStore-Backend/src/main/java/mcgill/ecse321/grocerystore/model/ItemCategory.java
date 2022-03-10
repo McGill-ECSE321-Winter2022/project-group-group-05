@@ -37,8 +37,8 @@ public class ItemCategory {
     this.name = name;
   }
 
-  public void setItems(Set set) {
-    this.items = set;
+  public void setItems(Set<Item> items) {
+    this.items = items;
   }
 
   public boolean addItem(Item item) {
