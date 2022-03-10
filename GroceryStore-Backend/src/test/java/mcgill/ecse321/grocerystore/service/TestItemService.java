@@ -82,9 +82,9 @@ public class TestItemService {
 			List<Item> itemList = new ArrayList<Item>();
 			var itemOne = new Item();
 			itemOne.setName(ITEM_KEY);
-			itemOne.setCanDeliver(false);
+			itemOne.setCanDeliver(true);
 			itemOne.setCanPickUp(true);
-			itemOne.setInventory(0);
+			itemOne.setInventory(1);
 			itemOne.setIsDiscontinued(false);
 
 			var itemTwo = new Item();
@@ -289,7 +289,7 @@ public class TestItemService {
 	// test for getAllItems
 	@Test
 	public void testGetAllItems() {
-		List<Item> itemList = service.getAllitems();
+		List<Item> itemList = service.getAllItems();
 		assertEquals(2, itemList.size());
 		assertEquals(ITEM_KEY, itemList.get(0).getName());
 		assertEquals(ITEM2_KEY, itemList.get(1).getName());
@@ -300,7 +300,7 @@ public class TestItemService {
 	public void testGetAllInStockItems() {
 		List<Item> itemList = service.getAllInStock();
 		assertEquals(1, itemList.size());
-		assertEquals(ITEM2_KEY, itemList.get(0).getName());
+		assertEquals(ITEM_KEY, itemList.get(0).getName());
 	}
 
 	// test for getAllCanDeliver
@@ -308,7 +308,7 @@ public class TestItemService {
 	public void testGetAllCanDeliverItems() {
 		List<Item> itemList = service.getAllCanDeliver();
 		assertEquals(1, itemList.size());
-		assertEquals(ITEM2_KEY, itemList.get(0).getName());
+		assertEquals(ITEM_KEY, itemList.get(0).getName());
 	}
 
 	// test for getAllCanPickUP
@@ -332,8 +332,7 @@ public class TestItemService {
 		Item item = null;
 		double newPrice = 9.9;
 		try {
-			item = service.getItem(ITEM_KEY);
-			service.setPrice(item.getName(), newPrice);
+			item = service.setPrice(ITEM_KEY, newPrice);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}

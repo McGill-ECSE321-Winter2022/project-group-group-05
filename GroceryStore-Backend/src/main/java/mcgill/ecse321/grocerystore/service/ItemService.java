@@ -34,7 +34,7 @@ public class ItemService {
 	ItemCategoryRepository itemCatagoryRepository;
 
 	@Transactional
-	public Item createItem(String name, double price, int inventory, Boolean canDeliver, boolean canPickUp)
+	public Item createItem(String name, double price, int inventory, boolean canDeliver, boolean canPickUp)
 			throws IllegalArgumentException {
 		if (name == null || name.trim().length() == 0) {
 			throw new IllegalArgumentException("Item name cannot be empty!");
@@ -60,29 +60,27 @@ public class ItemService {
 	}
 
 	@Transactional
-	public Item getItem(String itemname) throws IllegalArgumentException {
-		if (itemname == null || itemname.trim().length() == 0) {
+	public Item getItem(String itemName) throws IllegalArgumentException {
+		if (itemName == null || itemName.trim().length() == 0) {
 			throw new IllegalArgumentException("Item name cannot be empty!");
 		}
-		Item item = itemRepository.findByName(itemname);
+		Item item = itemRepository.findByName(itemName);
 		if (item == null) {
-			throw new IllegalArgumentException("Item with name \"" + itemname + "\" does not exist!");
+			throw new IllegalArgumentException("Item with name \"" + itemName + "\" does not exist!");
 		}
 		return item;
 	}
 
 	@Transactional
-	public List<Item> getAllitems() {
-		// ArrayList<Item> itemList = (ArrayList<Item>)
-		// itemRepository.findAll();
+	public List<Item> getAllItems() {
 		return itemRepository.findAllByOrderByName();
 	}
 
 	@Transactional
 	public List<Item> getAllInStock() {
 		ArrayList<Item> itemList = new ArrayList<Item>();
-		for (Item i : itemRepository.findAll()) {
-			if (i.getInventory() > 0) {
+		for (Item i : itemRepository.findAllByOrderByName()) {
+			if (i.getInventory() > 0 && !i.getIsDiscontinued()) {
 				itemList.add(i);
 			}
 		}
@@ -92,8 +90,8 @@ public class ItemService {
 	@Transactional
 	public List<Item> getAllCanDeliver() {
 		ArrayList<Item> itemList = new ArrayList<Item>();
-		for (Item i : itemRepository.findAll()) {
-			if (i.getCanDeliver()) {
+		for (Item i : itemRepository.findAllByOrderByName()) {
+			if (i.getCanDeliver() && !i.getIsDiscontinued()) {
 				itemList.add(i);
 			}
 		}
@@ -103,8 +101,8 @@ public class ItemService {
 	@Transactional
 	public List<Item> getAllCanPickUp() {
 		ArrayList<Item> itemList = new ArrayList<Item>();
-		for (Item i : itemRepository.findAll()) {
-			if (i.getCanPickUp()) {
+		for (Item i : itemRepository.findAllByOrderByName()) {
+			if (i.getCanPickUp() && !i.getIsDiscontinued()) {
 				itemList.add(i);
 			}
 		}
@@ -114,7 +112,7 @@ public class ItemService {
 	@Transactional
 	public List<Item> getAllIsDiscontinued() {
 		ArrayList<Item> itemList = new ArrayList<Item>();
-		for (Item i : itemRepository.findAll()) {
+		for (Item i : itemRepository.findAllByOrderByName()) {
 			if (i.getIsDiscontinued()) {
 				itemList.add(i);
 			}
@@ -123,8 +121,8 @@ public class ItemService {
 	}
 
 	@Transactional
-	public Item setPrice(String itemname, double price) {
-		Item item = getItem(itemname);
+	public Item setPrice(String itemName, double price) {
+		Item item = getItem(itemName);
 		if (price < 0.0) {
 			throw new IllegalArgumentException("Item price cannot be negative!");
 		}
@@ -133,8 +131,8 @@ public class ItemService {
 	}
 
 	@Transactional
-	public Item setInventory(String itemname, int inventory) {
-		Item item = getItem(itemname);
+	public Item setInventory(String itemName, int inventory) {
+		Item item = getItem(itemName);
 		if (inventory < 0) {
 			throw new IllegalArgumentException("Item inventory cannot be negative!");
 		}
@@ -143,22 +141,22 @@ public class ItemService {
 	}
 
 	@Transactional
-	public Item setCanDeliver(String itemname, boolean canDeliver) {
-		Item item = getItem(itemname);
+	public Item setCanDeliver(String itemName, boolean canDeliver) {
+		Item item = getItem(itemName);
 		item.setCanDeliver(canDeliver);
 		return itemRepository.save(item);
 	}
 
 	@Transactional
-	public Item setCanPickUp(String itemname, boolean canPickUp) {
-		Item item = getItem(itemname);
+	public Item setCanPickUp(String itemName, boolean canPickUp) {
+		Item item = getItem(itemName);
 		item.setCanPickUp(canPickUp);
 		return itemRepository.save(item);
 	}
 
 	@Transactional
-	public Item setIsDiscontinued(String itemname, boolean isDiscontinued) {
-		Item item = getItem(itemname);
+	public Item setIsDiscontinued(String itemName, boolean isDiscontinued) {
+		Item item = getItem(itemName);
 		item.setIsDiscontinued(isDiscontinued);
 		return itemRepository.save(item);
 	}
