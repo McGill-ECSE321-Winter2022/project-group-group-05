@@ -68,7 +68,7 @@ public class EmployeeController {
   }
 
   @PatchMapping(
-      value = {"/employee/{username}/removeSchedules", "/employee/{username}/removeSchedules/"})
+      value = {"/employee/{username}/removeSchedule", "/employee/{username}/removeSchedule/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void removeSchedule(@PathVariable("username") String username,
       @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
