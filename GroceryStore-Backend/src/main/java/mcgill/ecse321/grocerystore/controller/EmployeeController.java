@@ -18,6 +18,7 @@ import mcgill.ecse321.grocerystore.dto.EmployeeDto;
 import mcgill.ecse321.grocerystore.dto.EmployeeScheduleDto;
 import mcgill.ecse321.grocerystore.dto.ShiftDto;
 import mcgill.ecse321.grocerystore.model.Employee;
+import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 import mcgill.ecse321.grocerystore.service.EmployeeService;
 
@@ -88,6 +89,22 @@ public class EmployeeController {
   public EmployeeDto getEmployee(@PathVariable("username") String username)
       throws IllegalArgumentException {
     return convertToDto(service.getEmployee(username));
+  }
+
+  @GetMapping(value = {"/employee/{username}/getSchedules", "employee/{username}/getSchedules/"})
+  public List<EmployeeScheduleDto> getEmployeeScheduleSorted(
+      @PathVariable("username") String username) {
+    List<EmployeeScheduleDto> schedules = new ArrayList<EmployeeScheduleDto>();
+    // Convert list of EmployeeSchedule to list of EmployeeScheduleDto
+    for (EmployeeSchedule schedule : service.getEmployeeScheduleSorted(username)) {
+      Shift scheduleShift = schedule.getShift();
+      ShiftDto shiftDto = new ShiftDto(scheduleShift.getName(), scheduleShift.getStartTime(),
+          scheduleShift.getEndTime());
+      EmployeeScheduleDto scheduleDto =
+          new EmployeeScheduleDto(schedule.getId(), schedule.getDate(), shiftDto);
+      schedules.add(scheduleDto);
+    }
+    return schedules;
   }
 
   @GetMapping(value = {"/employee/getAll", "/employee/getAll/"})
