@@ -4,19 +4,16 @@ package mcgill.ecse321.grocerystore.service;
 
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
 import mcgill.ecse321.grocerystore.dao.ShiftRepository;
-import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 
 public class ShiftService {
   @Autowired
   ShiftRepository shiftRepo;
-  @Autowired
-  EmployeeScheduleRepository scheduleRepo;
 
 
   @Transactional
@@ -30,15 +27,8 @@ public class ShiftService {
     if (this.shiftRepo.findByName(name) != null) {
       throw new IllegalArgumentException("Name is already taken.");
     }
-    if (startTime == null) {
-      throw new IllegalArgumentException("Shift start time cannot be null.");
-    }
-    if (endTime == null) {
-      throw new IllegalArgumentException("Shift end time cannot be null.");
-    }
-
     if (endTime.before(startTime)) {
-      throw new IllegalArgumentException("Shift end time cannot be before its start time.");
+      throw new IllegalArgumentException("Shift end-time cannot be before its start-time.");
     }
 
     Shift shift = new Shift();
@@ -62,35 +52,33 @@ public class ShiftService {
     return shift;
   }
 
+
+
   @Transactional
   // Get all the shifts sorted by name in order
   public List<Shift> getAllShifts() {
     return shiftRepo.findAllByOrderByName();
   }
-
   @Transactional
   public void deleteShiftByName(String name) {
-    Shift shift = this.getShift(name);
-    for (EmployeeSchedule schedule : this.scheduleRepo.findAllByOrderByDate()) {
-      if (schedule.getShift() == shift) {
-        schedule.setShift(null);
-      }
-
-    }
+    Shift shift=this.getShift(name);
     this.shiftRepo.deleteById(shift.getName());
   }
 
+
+
   @Transactional
   public Shift updateShift(String name, Time startTime, Time endTime) {
-
-    if (startTime == null) {
-      throw new IllegalArgumentException("Shift start time cannot be null.");
+   
+  
+    if (startTime==null) {
+      throw new IllegalArgumentException("Shift start-timr cannot be null.");
     }
-    if (endTime == null) {
-      throw new IllegalArgumentException("Shift end time cannot be null.");
+    if (endTime==null) {
+      throw new IllegalArgumentException("Shift end-time cannot be null.");
     }
     if (endTime.before(startTime)) {
-      throw new IllegalArgumentException("Shift end time cannot be before its start time.");
+      throw new IllegalArgumentException("Shift end-time cannot be before its start-time.");
     }
     // get the shift with the name
     Shift shift = getShift(name);
@@ -101,4 +89,6 @@ public class ShiftService {
     return this.shiftRepo.save(shift);
   }
 
+
+ 
 }

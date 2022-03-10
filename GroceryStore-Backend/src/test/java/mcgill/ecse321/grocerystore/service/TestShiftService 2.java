@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.service;
 
 
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -22,9 +23,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
 import mcgill.ecse321.grocerystore.dao.ShiftRepository;
-import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 
 
@@ -35,8 +34,6 @@ public class TestShiftService {
   @Mock
   private ShiftRepository shiftDao;
   @Mock
-  private EmployeeScheduleRepository scheduleDao;
-  @Mock
   private Shift mockShift;
 
 
@@ -45,7 +42,6 @@ public class TestShiftService {
   private ShiftService shiftService;
 
   private static final String TEST_NAME = "Test";
-  private static final String TEST_MOCK_NAME = "Mock";
   private static final String TEST_NAME1 = "Testname";
   private static final String TEST_NAME2 = "Someone";
   private static final String FAKE_NAME = "Fakename";
@@ -69,8 +65,6 @@ public class TestShiftService {
         shift.setStartTime(TEST_START_TIME);
         shift.setEndTime(TEST_END_TIME);
         return shift;
-      } else if (invocation.getArgument(0).equals(TEST_MOCK_NAME)) {
-        return mockShift;
       } else {
         return null;
       }
@@ -80,6 +74,8 @@ public class TestShiftService {
       var shiftOne = new Shift();
       shiftOne.setName(TEST_NAME1);
       this.mockShift.setName(FAKE_NAME);
+      System.out.println(mockShift.getName());
+      System.out.println(shiftOne.getName());
       shiftOne.setStartTime(TEST_START_TIME);
       shiftOne.setEndTime(TEST_END_TIME);
       var shiftTwo = new Shift();
@@ -89,17 +85,6 @@ public class TestShiftService {
       shiftList.add(shiftOne);
       shiftList.add(shiftTwo);
       return shiftList;
-    });
-    lenient().when(scheduleDao.findAllByOrderByDate()).thenAnswer((InvocationOnMock invocation) -> {
-      List<EmployeeSchedule> scheduleList = new ArrayList<EmployeeSchedule>();
-      EmployeeSchedule schedule1 = new EmployeeSchedule();
-      EmployeeSchedule schedule2 = new EmployeeSchedule();
-
-      schedule1.setShift(mockShift);
-      schedule2.setShift(mockShift);
-      scheduleList.add(schedule1);
-      scheduleList.add(schedule2);
-      return scheduleList;
     });
     // Whenever anything is saved, just return the parameter object
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
@@ -122,9 +107,10 @@ public class TestShiftService {
     }
 
     assertNotNull(shift);
-    assertEquals(startTime, shift.getStartTime());
-    assertEquals(endTime, shift.getEndTime());
-    assertEquals(name, shift.getName());
+    assertEquals(startTime,shift.getStartTime());
+    assertEquals(endTime,shift.getEndTime());
+    assertEquals(name,shift.getName());
+    
   }
 
   @Test
@@ -197,39 +183,7 @@ public class TestShiftService {
     assertEquals("Name is already taken.", error);
   }
 
-  @Test
-  public void testCreateShiftStartTimeNull() {
-    String name = "Testshift";
-    String error = null;
-    Shift shift = null;
-    Time endTime = Time.valueOf("15:00:00");
-    try {
-      shift = shiftService.createShift(name, null, endTime);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
 
-    assertNull(shift);
-    // check error
-    assertEquals("Shift start time cannot be null.", error);
-  }
-
-  @Test
-  public void testCreateShiftEndTimeNull() {
-    String name = "Testshift";
-    String error = null;
-    Shift shift = null;
-    Time startTime = Time.valueOf("15:00:00");
-    try {
-      shift = shiftService.createShift(name, startTime, null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-
-    assertNull(shift);
-    // check error
-    assertEquals("Shift end time cannot be null.", error);
-  }
 
   @Test
   public void testCreateShiftTimeConflict() {
@@ -245,13 +199,15 @@ public class TestShiftService {
       error = e.getMessage();
     }
     assertNull(shift);
-    assertEquals("Shift end time cannot be before its start time.", error);
+    assertEquals("Shift end-time cannot be before its start-time.", error);
   }
+
+
 
   @Test
   public void testDeleteShift() {
     try {
-      shiftService.deleteShiftByName(TEST_MOCK_NAME);
+      shiftService.deleteShiftByName(TEST_NAME);
     } catch (IllegalArgumentException e) {
       fail();
     }
@@ -296,6 +252,7 @@ public class TestShiftService {
 
   @Test
   public void testDeleteShiftNonExistent() {
+
     String error = "";
     try {
       shiftService.deleteShiftByName(FAKE_NAME);
@@ -305,6 +262,8 @@ public class TestShiftService {
     verify(shiftDao, times(0)).deleteById(anyString());
     assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
   }
+
+
 
   @Test
   public void testGetShift() {
@@ -398,6 +357,7 @@ public class TestShiftService {
     }
     assertNull(shift);
     assertEquals("Shift name cannot be empty.", error);
+
   }
 
   @Test
@@ -412,6 +372,7 @@ public class TestShiftService {
     }
     assertNull(shift);
     assertEquals("Shift name cannot be empty.", error);
+
   }
 
   @Test
@@ -426,6 +387,7 @@ public class TestShiftService {
     }
     assertNull(shift);
     assertEquals("Shift name cannot be empty.", error);
+
   }
 
   @Test
@@ -440,6 +402,7 @@ public class TestShiftService {
     }
     assertNull(shift);
     assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
+
   }
 
   @Test
@@ -453,36 +416,14 @@ public class TestShiftService {
       error = e.getMessage();
     }
     assertNull(shift);
-    assertEquals("Shift end time cannot be before its start time.", error);
+    assertEquals("Shift end-time cannot be before its start-time.", error);
+
   }
 
-  @Test
-  public void testUpdateShiftNullStartTime() {
-    Shift shift = null;
-    String error = "";
-    try {
-      shift = this.shiftService.updateShift(TEST_NAME, null, TEST_END_TIME1);
+  
 
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(shift);
-    assertEquals("Shift start time cannot be null.", error);
-  }
 
-  @Test
-  public void testUpdateShiftNullEndTime() {
-    Shift shift = null;
-    String error = "";
-    try {
-      shift = this.shiftService.updateShift(TEST_NAME, TEST_START_TIME1, null);
 
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(shift);
-    assertEquals("Shift end time cannot be null.", error);
-  }
 }
 
 
