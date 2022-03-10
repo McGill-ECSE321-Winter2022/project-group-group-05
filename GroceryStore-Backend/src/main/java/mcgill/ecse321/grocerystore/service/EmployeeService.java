@@ -114,16 +114,18 @@ public class EmployeeService {
    * 
    * @param username - username of the employee to be modified
    * @param newEmail - the new email value to change to
+   * @return the newly modified Employee
    * @throws IllegalArgumentException when the employee to be modified doesn't exist
    */
   @Transactional
-  public void setEmployeeEmail(String username, String newEmail) throws IllegalArgumentException {
+  public Employee setEmployeeEmail(String username, String newEmail)
+      throws IllegalArgumentException {
     var employee = getEmployee(username);
     if (!verifyEmail(newEmail)) {
       throw new IllegalArgumentException("Employee email is invalid!");
     }
     employee.setEmail(newEmail);
-    employeeRepository.save(employee);
+    return employeeRepository.save(employee);
   }
 
   /**
@@ -131,17 +133,18 @@ public class EmployeeService {
    * 
    * @param username - username of the employee to be modified
    * @param newPassword - the new password value to change to
+   * @return the newly modified Employee
    * @throws IllegalArgumentException when the employee to be modified doesn't exist
    */
   @Transactional
-  public void setEmployeePassword(String username, String newPassword)
+  public Employee setEmployeePassword(String username, String newPassword)
       throws IllegalArgumentException {
     var employee = getEmployee(username);
     if (newPassword == null || newPassword.trim().length() == 0) {
       throw new IllegalArgumentException("Employee password cannot be empty!");
     }
     employee.setPassword(newPassword);
-    employeeRepository.save(employee);
+    return employeeRepository.save(employee);
   }
 
   /**
@@ -151,12 +154,13 @@ public class EmployeeService {
    * @param username - the username of the employee account
    * @param date - the date on which the employee has the shift
    * @param shift - the shift to assign to the employee
+   * @return the newly modified Employee
    * @throws IllegalArgumentException when the scheduled shift could not be assigned to the
    *         employee, either because the input parameters were invalid or because the employee has
    *         already been assigned the shift on the same date.
    */
   @Transactional
-  public void addSchedule(String username, Date date, String shift)
+  public Employee addSchedule(String username, Date date, String shift)
       throws IllegalArgumentException {
     var employee = getEmployee(username);
     if (date == null) {
@@ -180,7 +184,7 @@ public class EmployeeService {
     schedule.setShift(shiftToBeAdded);
     scheduleRepository.save(schedule);
     employee.addEmployeeSchedule(schedule);
-    employeeRepository.save(employee);
+    return employeeRepository.save(employee);
   }
 
   /**
@@ -190,12 +194,13 @@ public class EmployeeService {
    * @param username - the username of the employee account
    * @param date - the date on which the employee has the shift
    * @param shift - the shift to delete from the employee
+   * @return the newly modified Employee
    * @throws IllegalArgumentException when the scheduled shift could not be removed, either because
    *         the input parameters were invalid or because the employee hasn't been assigned a
    *         schedule matching the input parameters.
    */
   @Transactional
-  public void removeSchedule(String username, Date date, String shift)
+  public Employee removeSchedule(String username, Date date, String shift)
       throws IllegalArgumentException {
     var employee = getEmployee(username);
     if (date == null) {
@@ -217,7 +222,7 @@ public class EmployeeService {
     }
     employee.removeEmployeeSchedule(scheduleToBeRemoved);
     scheduleRepository.delete(scheduleToBeRemoved);
-    employeeRepository.save(employee);
+    return employeeRepository.save(employee);
   }
 
   /**
@@ -226,14 +231,15 @@ public class EmployeeService {
    * one by one.
    *
    * @param username - username of the employee to clear
+   * @return the newly modified Employee
    * @throws IllegalArgumentException when the username does not correspond to an employee
    */
   @Transactional
-  public void removeAllSchedules(String username) throws IllegalArgumentException {
+  public Employee removeAllSchedules(String username) throws IllegalArgumentException {
     var employee = getEmployee(username);
     if (employee.getEmployeeSchedules() == null) {
       // if the schedule set is null, all schedules have already been removed.
-      return;
+      return employee;
     }
     EmployeeSchedule[] schedules = new EmployeeSchedule[employee.getEmployeeSchedules().size()];
     int i = 0;
@@ -244,8 +250,8 @@ public class EmployeeService {
     for (EmployeeSchedule scheduleToBeRemoved : schedules) {
       employee.removeEmployeeSchedule(scheduleToBeRemoved);
       scheduleRepository.delete(scheduleToBeRemoved);
-      employeeRepository.save(employee);
     }
+    return employeeRepository.save(employee);
   }
 
   /**
