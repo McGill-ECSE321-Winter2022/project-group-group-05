@@ -70,8 +70,8 @@ public class EmployeeController {
       value = {"/employee/{username}/removeSchedules", "/employee/{username}/removeSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void removeSchedule(@PathVariable("username") String username,
-      @RequestParam long[] scheduleId) throws IllegalArgumentException {
-    service.removeSchedules(username, scheduleId);
+      @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
+    service.removeSchedule(username, date, shift);
   }
 
   @PatchMapping(value = {"/employee/{username}/removeAllSchedules",

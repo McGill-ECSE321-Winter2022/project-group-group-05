@@ -181,23 +181,46 @@ public class EmployeeService {
   }
 
   /**
-   * Removes a schedule(s) to an Employee. (RQ13)
+   * Scans through the Employees schedule set and removes the one with the same date and shift
+   * fields as the input parameters.
    * 
-   * @param username - username of the employee to remove schedules from
-   * @param scheduleIds - ids for all the schedules to be removed
-   * @throws IllegalArgumentException if a schedule could not be removed
+   * @param username - the username of the employee account
+   * @param date - the date on which the employee has the shift
+   * @param shift - the shift to delete from the employee
+   * @throws IllegalArgumentException when the scheduled shift could not be removed, either because
+   *         the input parameters were invalid or because the employee hasn't been assigned a
+   *         schedule matching the input parameters.
    */
   @Transactional
-  public void removeSchedules(String username, long... scheduleIds)
+  public void removeSchedule(String username, Date date, String shift)
       throws IllegalArgumentException {
-    for (long scheduleId : scheduleIds) {
-      removeSchedule(username, scheduleId);
+    var employee = getEmployee(username);
+    if (date == null) {
+      throw new IllegalArgumentException("Date must not be null!");
     }
+    EmployeeSchedule scheduleToBeRemoved = null;
+    if (employee.getEmployeeSchedules() != null) {
+      for (var existingSchedule : employee.getEmployeeSchedules()) {
+        if (existingSchedule.getDate().equals(date)
+            && existingSchedule.getShift().getName().equals(shift)) {
+          scheduleToBeRemoved = existingSchedule;
+          break;
+        }
+      }
+    }
+    if (scheduleToBeRemoved == null) {
+      throw new IllegalArgumentException(
+          "No EmployeeSchedule object found with the provided date and Shift");
+    }
+    employee.removeEmployeeSchedule(scheduleToBeRemoved);
+    scheduleRepository.delete(scheduleToBeRemoved);
+    employeeRepository.save(employee);
   }
 
   /**
    * Clears all schedules assigned to the Employee. Generates a list of all the EmployeeSchedule
-   * ids, then calls removeSchedule on all of them
+   * objects associated with the Employee, then removes them from the schedule set and deletes them
+   * one by one.
    *
    * @param username - username of the employee to clear
    * @throws IllegalArgumentException when the username does not correspond to an employee
@@ -209,33 +232,16 @@ public class EmployeeService {
       // if the schedule set is null, all schedules have already been removed.
       return;
     }
-    long[] scheduleIds = new long[employee.getEmployeeSchedules().size()];
+    EmployeeSchedule[] schedules = new EmployeeSchedule[employee.getEmployeeSchedules().size()];
     int i = 0;
     for (var schedule : employee.getEmployeeSchedules()) {
-      scheduleIds[i] = schedule.getId();
+      schedules[i] = schedule;
       i++;
     }
-    removeSchedules(username, scheduleIds);
-  }
-
-  /**
-   * helper method for removeSchedules(String, long...)
-   * 
-   * @param username - username of the Employee to remove the schedule from
-   * @param scheduleId - id of the schedule to be removed
-   * @throws IllegalArgumentException when an input parameter is invalid or corresponds to
-   *         non-existent objects, or when the schedule could not be removed.
-   */
-  @Transactional
-  private void removeSchedule(String username, long scheduleId) throws IllegalArgumentException {
-    var employee = getEmployee(username);
-    EmployeeSchedule schedule = verifyScheduleId(scheduleId);
-    if (employee.removeEmployeeSchedule(schedule)) {
-      scheduleRepository.delete(schedule);
+    for (EmployeeSchedule scheduleToBeRemoved : schedules) {
+      employee.removeEmployeeSchedule(scheduleToBeRemoved);
+      scheduleRepository.delete(scheduleToBeRemoved);
       employeeRepository.save(employee);
-    } else {
-      throw new IllegalArgumentException("EmployeeSchedule with id '" + scheduleId
-          + "' could not be removed from Employee with username \"" + username + "\"");
     }
   }
 
@@ -316,22 +322,6 @@ public class EmployeeService {
   private boolean verifyEmail(String email) {
     return Pattern.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
         + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", email);
-  }
-
-  /**
-   * Used to validate and fetch an instance of EmployeeSchedule given an id
-   * 
-   * @param scheduleId - auto-generated id of the EmployeeSchedule instance
-   * @return EmployeeSchedule instance
-   * @throws IllegalArgumentException when the requested EmployeeSchedule is not in the repository
-   */
-  private EmployeeSchedule verifyScheduleId(long scheduleId) throws IllegalArgumentException {
-    EmployeeSchedule requestedSchedule = scheduleRepository.findById(scheduleId);
-    if (requestedSchedule == null) {
-      throw new IllegalArgumentException(
-          "EmployeeSchedule with id '" + scheduleId + "' does not exist!");
-    }
-    return requestedSchedule;
   }
 
   /**
