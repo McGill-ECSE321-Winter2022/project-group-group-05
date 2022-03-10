@@ -51,36 +51,37 @@ public class EmployeeController {
 
   @PatchMapping(value = {"/employee/{username}", "/employee/{username}/"})
   @ResponseStatus(value = HttpStatus.OK)
-  public void updateEmployee(@PathVariable("username") String username,
+  public EmployeeDto updateEmployee(@PathVariable("username") String username,
       @RequestParam(required = false) String newEmail,
       @RequestParam(required = false) String newPassword) throws IllegalArgumentException {
     if (newEmail != null)
       service.setEmployeeEmail(username, newEmail);
     if (newPassword != null)
       service.setEmployeePassword(username, newPassword);
+    return convertToDto(service.getEmployee(username));
   }
 
   @PatchMapping(value = {"/employee/{username}/addSchedule", "/employee/{username}/addSchedule/"})
   @ResponseStatus(value = HttpStatus.OK)
-  public void addSchedule(@PathVariable("username") String username,
+  public EmployeeDto addSchedule(@PathVariable("username") String username,
       @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
-    service.addSchedule(username, date, shift);
+    return convertToDto(service.addSchedule(username, date, shift));
   }
 
   @PatchMapping(
       value = {"/employee/{username}/removeSchedule", "/employee/{username}/removeSchedule/"})
   @ResponseStatus(value = HttpStatus.OK)
-  public void removeSchedule(@PathVariable("username") String username,
+  public EmployeeDto removeSchedule(@PathVariable("username") String username,
       @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
-    service.removeSchedule(username, date, shift);
+    return convertToDto(service.removeSchedule(username, date, shift));
   }
 
   @PatchMapping(value = {"/employee/{username}/removeAllSchedules",
       "/employee/{username}/removeAllSchedules/"})
   @ResponseStatus(value = HttpStatus.OK)
-  public void removeAllSchedules(@PathVariable("username") String username)
+  public EmployeeDto removeAllSchedules(@PathVariable("username") String username)
       throws IllegalArgumentException {
-    service.removeAllSchedules(username);
+    return convertToDto(service.removeAllSchedules(username));
   }
 
   // Get Mappings

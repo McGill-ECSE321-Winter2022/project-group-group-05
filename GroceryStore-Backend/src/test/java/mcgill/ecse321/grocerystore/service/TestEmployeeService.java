@@ -413,11 +413,13 @@ public class TestEmployeeService {
 
   @Test
   public void testSetEmployeeEmail() {
+    Employee testEmployee = null;
     try {
-      service.setEmployeeEmail(EMPLOYEE_KEY, "new@email.com");
+      testEmployee = service.setEmployeeEmail(EMPLOYEE_KEY, "new@email.com");
     } catch (IllegalArgumentException e) {
       fail();
     }
+    assertNotNull(testEmployee);
     verify(mockEmployeeOne, times(1)).setEmail(anyString());
   }
 
@@ -488,11 +490,13 @@ public class TestEmployeeService {
 
   @Test
   public void testSetEmployeePassword() {
+    Employee testEmployee = null;
     try {
-      service.setEmployeePassword(EMPLOYEE_KEY, "newPassword");
+      testEmployee = service.setEmployeePassword(EMPLOYEE_KEY, "newPassword");
     } catch (IllegalArgumentException e) {
       fail();
     }
+    assertNotNull(testEmployee);
     verify(mockEmployeeOne, times(1)).setPassword(anyString());
   }
 
@@ -527,21 +531,25 @@ public class TestEmployeeService {
 
   @Test
   public void testAddSchedule() {
+    Employee testEmployee = null;
     try {
-      service.addSchedule(EMPLOYEE_KEY, Date.valueOf("2040-03-15"), SHIFT_KEY);
+      testEmployee = service.addSchedule(EMPLOYEE_KEY, Date.valueOf("2040-03-15"), SHIFT_KEY);
     } catch (IllegalArgumentException e) {
       fail();
     }
+    assertNotNull(testEmployee);
     verify(mockEmployeeOne, times(1)).addEmployeeSchedule(any());
   }
 
   @Test
   public void testAddScheduleFirstSchedule() {
+    Employee testEmployee = null;
     try {
-      service.addSchedule(EMPLOYEE2_KEY, Date.valueOf("2040-03-15"), SHIFT_KEY);
+      testEmployee = service.addSchedule(EMPLOYEE2_KEY, Date.valueOf("2040-03-15"), SHIFT_KEY);
     } catch (IllegalArgumentException e) {
       fail();
     }
+    assertNotNull(testEmployee);
     verify(mockEmployeeTwo, times(1)).addEmployeeSchedule(any());
   }
 
@@ -590,11 +598,13 @@ public class TestEmployeeService {
 
   @Test
   public void testRemoveSchedule() {
+    Employee testEmployee = null;
     try {
-      service.removeSchedule(EMPLOYEE_KEY, Date.valueOf("2040-01-03"), SHIFT_KEY);
+      testEmployee = service.removeSchedule(EMPLOYEE_KEY, Date.valueOf("2040-01-03"), SHIFT_KEY);
     } catch (IllegalArgumentException e) {
       fail();
     }
+    assertNotNull(testEmployee);
     verify(employeeScheduleDao, times(1)).delete(any());
     verify(mockEmployeeOne, times(1)).removeEmployeeSchedule(any());
   }
@@ -632,11 +642,13 @@ public class TestEmployeeService {
 
   @Test
   public void testRemoveAllSchedules() {
+    Employee testEmployee = null;
     try {
-      service.removeAllSchedules(EMPLOYEE_KEY);
+      testEmployee = service.removeAllSchedules(EMPLOYEE_KEY);
     } catch (IllegalArgumentException e) {
       fail();
     }
+    assertNotNull(testEmployee);
     verify(employeeScheduleDao, times(3)).delete(any());
     verify(mockEmployeeOne, times(3)).removeEmployeeSchedule(any());
   }
