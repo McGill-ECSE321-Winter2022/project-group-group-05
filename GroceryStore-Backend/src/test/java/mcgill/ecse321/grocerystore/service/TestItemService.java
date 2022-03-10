@@ -99,27 +99,6 @@ public class TestItemService {
 			return itemList;
 		});
 
-		lenient().when(itemDao.findAll()).thenAnswer((InvocationOnMock invocation) -> {
-			List<Item> itemList = new ArrayList<Item>();
-			var itemOne = new Item();
-			itemOne.setName(ITEM_KEY);
-			itemOne.setCanDeliver(false);
-			itemOne.setCanPickUp(true);
-			itemOne.setInventory(0);
-			itemOne.setIsDiscontinued(false);
-
-			var itemTwo = new Item();
-			itemTwo.setName(ITEM2_KEY);
-			itemTwo.setCanDeliver(true);
-			itemTwo.setCanPickUp(false);
-			itemTwo.setInventory(10);
-			itemTwo.setIsDiscontinued(true);
-
-			itemList.add(itemOne);
-			itemList.add(itemTwo);
-			return itemList;
-		});
-
 		// whenever anything is saved, just return the parameter object
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
