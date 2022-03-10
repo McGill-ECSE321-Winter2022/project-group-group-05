@@ -262,7 +262,7 @@ public class TestItemService {
 			error = e.getMessage();
 		}
 		assertNull(item);
-		assertEquals("Item with name \"" + FAKE_ITEM_KEY + "\" does not exist!", error);
+		assertEquals("Item with name " + FAKE_ITEM_KEY + " does not exist!", error);
 	}
 
 	// test for getAllItems
