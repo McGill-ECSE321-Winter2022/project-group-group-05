@@ -159,9 +159,6 @@ public class EmployeeService {
     if (date == null) {
       throw new IllegalArgumentException("Date must not be null!");
     }
-    if (date.before(new Date(System.currentTimeMillis()))) {
-      throw new IllegalArgumentException("Cannot assign a shift in the past!");
-    }
     var shiftToBeAdded = verifyShiftName(shift);
     if (employee.getEmployeeSchedules() != null) {
       // If the employee is already assigned schedules, we need to check them to make sure we aren't

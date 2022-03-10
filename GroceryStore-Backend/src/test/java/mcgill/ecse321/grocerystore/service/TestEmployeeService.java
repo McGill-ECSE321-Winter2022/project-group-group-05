@@ -612,18 +612,6 @@ public class TestEmployeeService {
     verify(mockEmployeeOne, times(0)).addEmployeeSchedule(any());
     assertEquals("Date must not be null!", error);
   }
-  
-  @Test
-  public void testAddSchedulePastDate() {
-    String error = "";
-    try {
-      service.addSchedule(EMPLOYEE_KEY, Date.valueOf("1920-01-23"), SHIFT_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(mockEmployeeOne, times(0)).addEmployeeSchedule(any());
-    assertEquals("Cannot assign a shift in the past!", error);
-  }
 
   @Test
   public void testAddScheduleNonExistentShift() {
