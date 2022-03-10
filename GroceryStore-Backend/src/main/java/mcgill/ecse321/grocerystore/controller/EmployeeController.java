@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import mcgill.ecse321.grocerystore.dto.EmployeeDto;
 import mcgill.ecse321.grocerystore.dto.EmployeeScheduleDto;
 import mcgill.ecse321.grocerystore.dto.ShiftDto;
 import mcgill.ecse321.grocerystore.model.Employee;
+import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 import mcgill.ecse321.grocerystore.service.EmployeeService;
 
@@ -58,19 +60,19 @@ public class EmployeeController {
       service.setEmployeePassword(username, newPassword);
   }
 
-  @PatchMapping(value = {"/employee/{username}/addSchedules", "/employee/{username}/addSchedules/"})
+  @PatchMapping(value = {"/employee/{username}/addSchedule", "/employee/{username}/addSchedule/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void addSchedule(@PathVariable("username") String username,
-      @RequestParam long[] scheduleId) throws IllegalArgumentException {
-    service.addSchedules(username, scheduleId);
+      @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
+    service.addSchedule(username, date, shift);
   }
 
   @PatchMapping(
-      value = {"/employee/{username}/removeSchedules", "/employee/{username}/removeSchedules/"})
+      value = {"/employee/{username}/removeSchedule", "/employee/{username}/removeSchedule/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void removeSchedule(@PathVariable("username") String username,
-      @RequestParam long[] scheduleId) throws IllegalArgumentException {
-    service.removeSchedules(username, scheduleId);
+      @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
+    service.removeSchedule(username, date, shift);
   }
 
   @PatchMapping(value = {"/employee/{username}/removeAllSchedules",
@@ -87,6 +89,22 @@ public class EmployeeController {
   public EmployeeDto getEmployee(@PathVariable("username") String username)
       throws IllegalArgumentException {
     return convertToDto(service.getEmployee(username));
+  }
+
+  @GetMapping(value = {"/employee/{username}/getSchedules", "employee/{username}/getSchedules/"})
+  public List<EmployeeScheduleDto> getEmployeeScheduleSorted(
+      @PathVariable("username") String username) {
+    List<EmployeeScheduleDto> schedules = new ArrayList<EmployeeScheduleDto>();
+    // Convert list of EmployeeSchedule to list of EmployeeScheduleDto
+    for (EmployeeSchedule schedule : service.getEmployeeScheduleSorted(username)) {
+      Shift scheduleShift = schedule.getShift();
+      ShiftDto shiftDto = new ShiftDto(scheduleShift.getName(), scheduleShift.getStartTime(),
+          scheduleShift.getEndTime());
+      EmployeeScheduleDto scheduleDto =
+          new EmployeeScheduleDto(schedule.getId(), schedule.getDate(), shiftDto);
+      schedules.add(scheduleDto);
+    }
+    return schedules;
   }
 
   @GetMapping(value = {"/employee/getAll", "/employee/getAll/"})
