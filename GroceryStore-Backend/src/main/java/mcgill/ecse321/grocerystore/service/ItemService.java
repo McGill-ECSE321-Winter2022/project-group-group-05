@@ -1,0 +1,164 @@
+package mcgill.ecse321.grocerystore.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import mcgill.ecse321.grocerystore.dao.ItemCategoryRepository;
+import mcgill.ecse321.grocerystore.dao.ItemRepository;
+import mcgill.ecse321.grocerystore.dao.PurchaseRepository;
+import mcgill.ecse321.grocerystore.dao.SpecificItemRepository;
+import mcgill.ecse321.grocerystore.model.Item;
+
+/**
+ * 
+ * @author Annie Kang
+ * 
+ * There is no delete item method in this class The item object is preserved in
+ * the database so that purchase history is preserved The method
+ * "setIsDiscontinued" acts as a delete method instead
+ *
+ */
+@Service
+public class ItemService {
+	@Autowired
+	ItemRepository itemRepository;
+	@Autowired
+	PurchaseRepository purchaseRepository;
+	@Autowired
+	SpecificItemRepository specificItemRepository;
+	@Autowired
+	ItemCategoryRepository itemCatagoryRepository;
+
+	@Transactional
+	public Item createItem(String name, double price, int inventory, boolean canDeliver, boolean canPickUp)
+			throws IllegalArgumentException {
+		if (name == null || name.trim().length() == 0) {
+			throw new IllegalArgumentException("Item name cannot be empty!");
+		}
+		if (itemRepository.findByName(name) != null) {
+			throw new IllegalArgumentException("Item name is already taken!");
+		}
+		if (price < 0.0) {
+			throw new IllegalArgumentException("Item price cannot be negative!");
+		}
+		if (inventory < 0) {
+			throw new IllegalArgumentException("Item inventory cannot be negative!");
+		}
+
+		Item item = new Item();
+		item.setName(name);
+		item.setPrice(price);
+		item.setInventory(inventory);
+		item.setCanDeliver(canDeliver);
+		item.setCanPickUp(canPickUp);
+		item.setIsDiscontinued(false);
+		return itemRepository.save(item);
+	}
+
+	@Transactional
+	public Item getItem(String itemName) throws IllegalArgumentException {
+		if (itemName == null || itemName.trim().length() == 0) {
+			throw new IllegalArgumentException("Item name cannot be empty!");
+		}
+		Item item = itemRepository.findByName(itemName);
+		if (item == null) {
+			throw new IllegalArgumentException("Item with name \"" + itemName + "\" does not exist!");
+		}
+		return item;
+	}
+
+	@Transactional
+	public List<Item> getAllItems() {
+		return itemRepository.findAllByOrderByName();
+	}
+
+	@Transactional
+	public List<Item> getAllInStock() {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		for (Item i : itemRepository.findAllByOrderByName()) {
+			if (i.getInventory() > 0 && !i.getIsDiscontinued()) {
+				itemList.add(i);
+			}
+		}
+		return itemList;
+	}
+
+	@Transactional
+	public List<Item> getAllCanDeliver() {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		for (Item i : itemRepository.findAllByOrderByName()) {
+			if (i.getCanDeliver() && !i.getIsDiscontinued()) {
+				itemList.add(i);
+			}
+		}
+		return itemList;
+	}
+
+	@Transactional
+	public List<Item> getAllCanPickUp() {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		for (Item i : itemRepository.findAllByOrderByName()) {
+			if (i.getCanPickUp() && !i.getIsDiscontinued()) {
+				itemList.add(i);
+			}
+		}
+		return itemList;
+	}
+
+	@Transactional
+	public List<Item> getAllIsDiscontinued() {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		for (Item i : itemRepository.findAllByOrderByName()) {
+			if (i.getIsDiscontinued()) {
+				itemList.add(i);
+			}
+		}
+		return itemList;
+	}
+
+	@Transactional
+	public Item setPrice(String itemName, double price) {
+		Item item = getItem(itemName);
+		if (price < 0.0) {
+			throw new IllegalArgumentException("Item price cannot be negative!");
+		}
+		item.setPrice(price);
+		return itemRepository.save(item);
+	}
+
+	@Transactional
+	public Item setInventory(String itemName, int inventory) {
+		Item item = getItem(itemName);
+		if (inventory < 0) {
+			throw new IllegalArgumentException("Item inventory cannot be negative!");
+		}
+		item.setInventory(inventory);
+		return itemRepository.save(item);
+	}
+
+	@Transactional
+	public Item setCanDeliver(String itemName, boolean canDeliver) {
+		Item item = getItem(itemName);
+		item.setCanDeliver(canDeliver);
+		return itemRepository.save(item);
+	}
+
+	@Transactional
+	public Item setCanPickUp(String itemName, boolean canPickUp) {
+		Item item = getItem(itemName);
+		item.setCanPickUp(canPickUp);
+		return itemRepository.save(item);
+	}
+
+	@Transactional
+	public Item setIsDiscontinued(String itemName, boolean isDiscontinued) {
+		Item item = getItem(itemName);
+		item.setIsDiscontinued(isDiscontinued);
+		return itemRepository.save(item);
+	}
+
+}
