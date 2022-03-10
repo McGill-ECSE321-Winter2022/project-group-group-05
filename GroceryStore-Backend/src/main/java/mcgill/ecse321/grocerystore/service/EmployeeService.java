@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import mcgill.ecse321.grocerystore.dao.CustomerRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
+import mcgill.ecse321.grocerystore.dao.ShiftRepository;
 import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
+import mcgill.ecse321.grocerystore.model.Shift;
 
 /**
  * Implementation of the Employee RESTful services for GroceryStoreApplication.
@@ -32,9 +35,11 @@ public class EmployeeService {
   @Autowired
   EmployeeRepository employeeRepository;
 
-  // this repository is referenced for business methods used to fulfill RQ13.
+  // these repositories are referenced for business methods used to fulfill RQ13.
   @Autowired
   EmployeeScheduleRepository scheduleRepository;
+  @Autowired
+  ShiftRepository shiftRepository;
 
   // these repositories are referenced to ensure uniqueness of the Employee username.
   @Autowired
@@ -137,48 +142,43 @@ public class EmployeeService {
   }
 
   /**
-   * Assigns a schedule(s) to an Employee. (RQ13)
+   * Constructs an EmployeeSchedule object from the given parameters and adds it to the specified
+   * Employee
    * 
-   * @param username - username of the employee to add schedules to
-   * @param scheduleIds - ids for all the schedules to be added
-   * @throws IllegalArgumentException if a schedule could not be added
+   * @param username - the username of the employee account
+   * @param date - the date on which the employee has the shift
+   * @param shift - the shift to assign to the employee
+   * @throws IllegalArgumentException when the scheduled shift could not be assigned to the
+   *         employee, either because the input parameters were invalid or because the employee has
+   *         already been assigned the shift on the same date.
    */
   @Transactional
-  public void addSchedules(String username, long... scheduleIds) throws IllegalArgumentException {
-    for (long scheduleId : scheduleIds) {
-      addSchedule(username, scheduleId);
-    }
-  }
-
-  /**
-   * helper method for addSchedules(String, long...)
-   * <p>
-   * Fails if one of the following is true:
-   * <ul>
-   * <li>schedule already exists in employee</li>
-   * <li>employee contains a schedule with the same time and shift</li>
-   * </ul>
-   * 
-   * @param username - username of the Employee to assign the schedule to
-   * @param scheduleId - id of the schedule to be assigned
-   * @throws IllegalArgumentException when an input parameter is invalid or corresponds to
-   *         non-existent objects, or when the schedule is already assigned.
-   */
-  @Transactional
-  private void addSchedule(String username, long scheduleId) throws IllegalArgumentException {
+  public void addSchedule(String username, Date date, String shift)
+      throws IllegalArgumentException {
     var employee = getEmployee(username);
-    EmployeeSchedule schedule = verifyScheduleId(scheduleId);
+    if (date == null) {
+      throw new IllegalArgumentException("Date must not be null!");
+    }
+    if (date.before(new Date(System.currentTimeMillis()))) {
+      throw new IllegalArgumentException("Cannot assign a shift in the past!");
+    }
+    var shiftToBeAdded = verifyShiftName(shift);
     if (employee.getEmployeeSchedules() != null) {
+      // If the employee is already assigned schedules, we need to check them to make sure we aren't
+      // assigning the same shift again.
       for (var existingSchedule : employee.getEmployeeSchedules()) {
-        if (schedule.equals(existingSchedule)
-            || (schedule.getDate().toString().equals(existingSchedule.getDate().toString())
-                && schedule.getShift().getName().equals(existingSchedule.getShift().getName()))) {
+        if (existingSchedule.getDate().equals(date)
+            && existingSchedule.getShift().getName().equals(shift)) {
           throw new IllegalArgumentException(
               "That schedule is already assigned to Employee with username \""
                   + employee.getUsername() + "\"!");
         }
       }
     }
+    EmployeeSchedule schedule = new EmployeeSchedule();
+    schedule.setDate(date);
+    schedule.setShift(shiftToBeAdded);
+    scheduleRepository.save(schedule);
     employee.addEmployeeSchedule(schedule);
     employeeRepository.save(employee);
   }
@@ -335,6 +335,21 @@ public class EmployeeService {
           "EmployeeSchedule with id '" + scheduleId + "' does not exist!");
     }
     return requestedSchedule;
+  }
+
+  /**
+   * Used to validate and fetch an instance of Shift given a name
+   * 
+   * @param name - primary key name of the Shift instance
+   * @return Shift instance
+   * @throws IllegalArgumentException when the requested Shift is not in the repository
+   */
+  private Shift verifyShiftName(String name) throws IllegalArgumentException {
+    Shift requestedShift = shiftRepository.findByName(name);
+    if (requestedShift == null) {
+      throw new IllegalArgumentException("Shift with name '" + name + "' does not exist!");
+    }
+    return requestedShift;
   }
 
 }
