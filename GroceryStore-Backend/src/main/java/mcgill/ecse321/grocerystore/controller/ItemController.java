@@ -21,7 +21,8 @@ import mcgill.ecse321.grocerystore.service.ItemService;
  * 
  * @author Annie Kang
  */
-@CrossOrigin(origins = "*") @RestController
+@CrossOrigin(origins = "*") 
+@RestController
 public class ItemController {
 	@Autowired
 	private ItemService service;
@@ -94,9 +95,6 @@ public class ItemController {
 	}
 
 	private ItemDto convertToDto(Item i) throws IllegalArgumentException {
-		if (i == null) {
-			throw new IllegalArgumentException("Invalid item.");
-		}
 		return new ItemDto(i.getName(), i.getPrice(), i.getInventory(), i.getCanDeliver(), i.getCanPickUp(),
 				i.getIsDiscontinued());
 	}
