@@ -38,6 +38,8 @@ import mcgill.ecse321.grocerystore.model.SpecificItem;
  * RESTful service tests for Item Class.
  * 
  * @author Annie Kang
+ * 
+ *
  */
 @ExtendWith(MockitoExtension.class)
 public class TestItemService {
@@ -346,12 +348,11 @@ public class TestItemService {
 		String error = "";
 		double newPrice = -9.9;
 		try {
-			item = service.getItem(ITEM_KEY);
-			service.setPrice(item.getName(), newPrice);
+			item = service.setPrice(ITEM_KEY, newPrice);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		assertNotNull(item);
+		assertNull(item);
 		verify(mockItem, times(0)).setPrice(anyDouble());
 		assertEquals("Item price cannot be negative!", error);
 	}
@@ -361,8 +362,7 @@ public class TestItemService {
 		Item item = null;
 		int newInventory = 20;
 		try {
-			item = service.getItem(ITEM_KEY);
-			service.setInventory(item.getName(), newInventory);
+			item = service.setInventory(ITEM_KEY, newInventory);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -376,12 +376,11 @@ public class TestItemService {
 		String error = "";
 		int newInventory = -20;
 		try {
-			item = service.getItem(ITEM_KEY);
-			service.setInventory(item.getName(), newInventory);
+			item = service.setInventory(ITEM_KEY, newInventory);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		assertNotNull(item);
+		assertNull(item);
 		verify(mockItem, times(0)).setInventory(anyInt());
 		assertEquals("Item inventory cannot be negative!", error);
 	}
@@ -391,8 +390,7 @@ public class TestItemService {
 		Item item = null;
 		boolean newBoo = true;
 		try {
-			item = service.getItem(ITEM_KEY);
-			service.setCanDeliver(item.getName(), newBoo);
+			item = service.setCanDeliver(ITEM_KEY, newBoo);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -405,8 +403,7 @@ public class TestItemService {
 		Item item = null;
 		boolean newBoo = true;
 		try {
-			item = service.getItem(ITEM_KEY);
-			service.setCanPickUp(item.getName(), newBoo);
+			item = service.setCanPickUp(ITEM_KEY, newBoo);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -419,8 +416,7 @@ public class TestItemService {
 		Item item = null;
 		boolean newBoo = true;
 		try {
-			item = service.getItem(ITEM_KEY);
-			service.setIsDiscontinued(item.getName(), newBoo);
+			item = service.setIsDiscontinued(ITEM_KEY, newBoo);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}

@@ -16,6 +16,10 @@ import mcgill.ecse321.grocerystore.model.Item;
 /**
  * 
  * @author Annie Kang
+ * 
+ * There is no delete item method in this class The item object is preserved in
+ * the database so that purchase history is preserved The method
+ * "setIsDiscontinued" acts as a delete method instead
  *
  */
 @Service
@@ -119,13 +123,13 @@ public class ItemService {
 	}
 
 	@Transactional
-	public void setPrice(String itemname, double price) {
+	public Item setPrice(String itemname, double price) {
 		Item item = getItem(itemname);
 		if (price < 0.0) {
 			throw new IllegalArgumentException("Item price cannot be negative!");
 		}
 		item.setPrice(price);
-		itemRepository.save(item);
+		return itemRepository.save(item);
 	}
 
 	@Transactional
