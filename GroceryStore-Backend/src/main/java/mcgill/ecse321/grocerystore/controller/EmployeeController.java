@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +59,11 @@ public class EmployeeController {
       service.setEmployeePassword(username, newPassword);
   }
 
-  @PatchMapping(value = {"/employee/{username}/addSchedules", "/employee/{username}/addSchedules/"})
+  @PatchMapping(value = {"/employee/{username}/addSchedule", "/employee/{username}/addSchedule/"})
   @ResponseStatus(value = HttpStatus.OK)
   public void addSchedule(@PathVariable("username") String username,
-      @RequestParam long[] scheduleId) throws IllegalArgumentException {
-    service.addSchedules(username, scheduleId);
+      @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
+    service.addSchedule(username, date, shift);
   }
 
   @PatchMapping(
