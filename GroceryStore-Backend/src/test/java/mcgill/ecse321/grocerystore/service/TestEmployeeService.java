@@ -58,10 +58,6 @@ public class TestEmployeeService {
   private EmployeeSchedule mockScheduleTwo;
   @Mock
   private EmployeeSchedule mockScheduleThree;
-  @Mock
-  private EmployeeSchedule existingMockScheduleOne;
-  @Mock
-  private EmployeeSchedule existingMockScheduleTwo;
 
   @InjectMocks
   private EmployeeService service;
@@ -161,24 +157,23 @@ public class TestEmployeeService {
   }
 
   /**
-   * Imitates employe objects with usernames EMPLOYEE_KEY and EMPLOYEE2_KEY
+   * Imitates employee objects with usernames EMPLOYEE_KEY and EMPLOYEE2_KEY
    */
   private void mockEmployee() {
     lenient().when(mockEmployeeOne.getUsername()).thenReturn(EMPLOYEE_KEY);
     lenient().when(mockEmployeeOne.addEmployeeSchedule(any(EmployeeSchedule.class)))
-        .thenAnswer(i -> {
-          return i.getArgument(0).equals(mockScheduleOne)
-              || i.getArgument(0).equals(mockScheduleTwo);
-        });
+        .thenReturn(true);
     lenient().when(mockEmployeeOne.removeEmployeeSchedule(any(EmployeeSchedule.class)))
         .thenAnswer(i -> {
-          return i.getArgument(0).equals(existingMockScheduleOne)
-              || i.getArgument(0).equals(existingMockScheduleTwo);
+          return i.getArgument(0).equals(mockScheduleOne)
+              || i.getArgument(0).equals(mockScheduleTwo)
+              || i.getArgument(0).equals(mockScheduleThree);
         });
     lenient().when(mockEmployeeOne.getEmployeeSchedules()).thenAnswer(i -> {
       HashSet<EmployeeSchedule> mockSet = new HashSet<EmployeeSchedule>();
-      mockSet.add(existingMockScheduleOne);
-      mockSet.add(existingMockScheduleTwo);
+      mockSet.add(mockScheduleOne);
+      mockSet.add(mockScheduleTwo);
+      mockSet.add(mockScheduleThree);
       return mockSet;
     });
     lenient().when(mockEmployeeTwo.getUsername()).thenReturn(EMPLOYEE2_KEY);
@@ -193,34 +188,25 @@ public class TestEmployeeService {
    * imitates EmployeeSchedule objects with auto-generated ids
    */
   private void mockSchedules() {
-    lenient().when(mockScheduleOne.getDate()).thenReturn(Date.valueOf("2040-01-01"));
+    lenient().when(mockScheduleOne.getDate()).thenReturn(Date.valueOf("2040-01-03"));
     lenient().when(mockScheduleOne.getShift()).thenAnswer(i -> {
       Shift mockShift = new Shift();
       mockShift.setName(SHIFT_KEY);
+      mockShift.setStartTime("08:00:00");
       return mockShift;
     });
-    lenient().when(mockScheduleTwo.getDate()).thenReturn(Date.valueOf("2040-01-02"));
+    lenient().when(mockScheduleTwo.getDate()).thenReturn(Date.valueOf("2040-01-04"));
     lenient().when(mockScheduleTwo.getShift()).thenAnswer(i -> {
       Shift mockShift = new Shift();
       mockShift.setName("mockShift2");
+      mockShift.setStartTime("09:00:00");
       return mockShift;
     });
-    lenient().when(mockScheduleThree.getDate()).thenReturn(Date.valueOf("2040-01-03"));
+    lenient().when(mockScheduleThree.getDate()).thenReturn(Date.valueOf("2040-01-04"));
     lenient().when(mockScheduleThree.getShift()).thenAnswer(i -> {
       Shift mockShift = new Shift();
       mockShift.setName("mockShift3");
-      return mockShift;
-    });
-    lenient().when(existingMockScheduleOne.getDate()).thenReturn(Date.valueOf("2040-01-03"));
-    lenient().when(existingMockScheduleOne.getShift()).thenAnswer(i -> {
-      Shift mockShift = new Shift();
-      mockShift.setName(SHIFT_KEY);
-      return mockShift;
-    });
-    lenient().when(existingMockScheduleTwo.getDate()).thenReturn(Date.valueOf("2040-01-04"));
-    lenient().when(existingMockScheduleTwo.getShift()).thenAnswer(i -> {
-      Shift mockShift = new Shift();
-      mockShift.setName("mockShift4");
+      mockShift.setStartTime("10:00:00");
       return mockShift;
     });
   }
@@ -415,8 +401,8 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(employeeScheduleDao, times(1)).delete(existingMockScheduleOne);
-    verify(employeeScheduleDao, times(1)).delete(existingMockScheduleTwo);
+    verify(employeeScheduleDao, times(1)).delete(mockScheduleOne);
+    verify(employeeScheduleDao, times(1)).delete(mockScheduleTwo);
     verify(employeeDao, times(1)).delete(any(Employee.class));
   }
 
@@ -651,8 +637,8 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(employeeScheduleDao, times(2)).delete(any());
-    verify(mockEmployeeOne, times(2)).removeEmployeeSchedule(any());
+    verify(employeeScheduleDao, times(3)).delete(any());
+    verify(mockEmployeeOne, times(3)).removeEmployeeSchedule(any());
   }
 
   @Test
@@ -720,6 +706,26 @@ public class TestEmployeeService {
     }
     assertNull(employee);
     assertEquals("Employee with username \"" + FAKE_EMPLOYEE_KEY + "\" does not exist!", error);
+  }
+
+  // Tests for getEmployeeScheduleSorted(String)
+  // -------------------------------------------
+  // Note: tests for invalid usernames are not included because this method uses getEmployee(String)
+  // internally, which throws errors for invalid username inputs.
+
+  @Test
+  public void testGetEmployeeScheduleSorted() {
+    List<EmployeeSchedule> schedules = null;
+    try {
+      schedules = service.getEmployeeScheduleSorted(EMPLOYEE_KEY);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertNotNull(schedules);
+    assertEquals(3, schedules.size());
+    assertEquals(mockScheduleOne, schedules.get(0));
+    assertEquals(mockScheduleTwo, schedules.get(1));
+    assertEquals(mockScheduleThree, schedules.get(2));
   }
 
   // Tests for getAllEmployees()

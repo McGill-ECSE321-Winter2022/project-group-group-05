@@ -1,6 +1,9 @@
 package mcgill.ecse321.grocerystore.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -262,6 +265,24 @@ public class EmployeeService {
           "Employee with username \"" + username + "\" does not exist!");
     }
     return requestedEmployee;
+  }
+
+  @Transactional
+  public List<EmployeeSchedule> getEmployeeScheduleSorted(String username)
+      throws IllegalArgumentException {
+    Employee employee = getEmployee(username);
+    ArrayList<EmployeeSchedule> schedules =
+        new ArrayList<EmployeeSchedule>(employee.getEmployeeSchedules());
+    Collections.sort(schedules, new Comparator<EmployeeSchedule>() {
+      @Override
+      public int compare(EmployeeSchedule p1, EmployeeSchedule p2) {
+        if (p1.getDate().equals(p2.getDate())) {
+          return p1.getShift().getStartTime().before(p2.getShift().getStartTime()) ? -1 : 1;
+        }
+        return p1.getDate().before(p2.getDate()) ? -1 : 1;
+      }
+    });
+    return schedules;
   }
 
   /**
