@@ -52,16 +52,16 @@ public class OwnerController {
 
   /*
    * Update Owner
-   * 
-   * @PatchMapping(value = {"/owner/{username}", "/owner/{username}/"})
-   * 
-   * @ResponseStatus(value = HttpStatus.OK) public void updateOwner(@PathVariable("username") String
-   * username, @RequestParam String email,
-   * 
-   * @RequestParam String password) throws IllegalArgumentException {
-   * 
-   * }
    */
+  @PatchMapping(value = {"/owner/{username}", "/owner/{username}/"})
+  @ResponseStatus(value = HttpStatus.OK)
+  public OwnerDto updateOwner(@PathVariable("username") String username,
+      @RequestParam(required = false) String email, @RequestParam(required = false) String password)
+      throws IllegalArgumentException {
+    if (email != null && password != null)
+      service.updateOwner(username, password, email);
+    return convertToDto(service.getOwner(username));
+  }
 
   private OwnerDto convertToDto(Owner owner) throws IllegalArgumentException {
     if (owner == null) {

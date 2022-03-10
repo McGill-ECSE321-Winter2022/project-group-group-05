@@ -54,14 +54,15 @@ public class HolidayController {
 
   /*
    * Update Holiday
-   * 
-   * @PatchMapping(value = {"/holiday/{name}", "/holiday/{name}/"})
-   * 
-   * @ResponseStatus(value = HttpStatus.OK) public void updateHoliday(@PathVariable("name") String
-   * name, @RequestParam Date date) throws IllegalArgumentException {
-   * 
-   * }
    */
+  @PatchMapping(value = {"/holiday/{name}", "/holiday/{name}/"})
+  @ResponseStatus(value = HttpStatus.OK)
+  public HolidayDto updateHoliday(@PathVariable("name") String name,
+      @RequestParam(required = false) Date date) throws IllegalArgumentException {
+    if (date != null)
+      service.updateHoliday(name, date);
+    return convertToDto(service.getHoliday(name));
+  }
 
   /*
    * Get All Holidays

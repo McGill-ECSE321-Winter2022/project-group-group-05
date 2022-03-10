@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,23 +54,20 @@ public class OpeningHoursController {
   }
 
   /*
-   * Update Holiday
-   * 
-   * @PatchMapping(value = {"/openingH/{daysOfWeek}", "/openingH/{daysOfWeek}/"})
-   * 
-   * @ResponseStatus(value = HttpStatus.OK) public void editOpeningHours(@PathVariable("daysOfWeek")
-   * String daysOfWeek,
-   * 
-   * @RequestParam(required = false) Time startH, @RequestParam(required = false) Time endH) throws
-   * IllegalArgumentException { OpeningHours openingH = service.getOpeningHours(daysOfWeek);
-   * 
-   * if (startH != null && endH != null) { service.updateOpeningHours(daysOfWeek, startH, endH); }
-   * 
-   * }
+   * Update OpeningHours
    */
+  @PatchMapping(value = {"/openingH/{daysOfWeek}", "/openingH/{daysOfWeek}/"})
+  @ResponseStatus(value = HttpStatus.OK)
+  public OpeningHoursDto updateOpeningHours(@PathVariable("daysOfWeek") String daysOfWeek,
+      @RequestParam(required = false) Time startH, @RequestParam(required = false) Time endH)
+      throws IllegalArgumentException {
+    if (startH != null && endH != null)
+      service.updateOpeningHours(daysOfWeek, startH, endH);
+    return convertToDto(service.getOpeningHours(daysOfWeek));
+  }
 
   /*
-   * Get All Holidays
+   * Get All OpeningHours
    */
   @GetMapping(value = {"/openingH/getAll", "/openingH/getAll/"})
   public List<OpeningHoursDto> getAllOpeningHours() {
