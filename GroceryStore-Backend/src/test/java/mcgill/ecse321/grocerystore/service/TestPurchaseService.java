@@ -93,7 +93,7 @@ public class TestPurchaseService {
       p.addSpecificItem(s);
       p.addSpecificItem(s2);
       p = purchaseRepo.save(p);
-      // test
+      // test adding the item to cart
       service.addItemToCart(PURCHASE_ID_1, ITEM_NAME_1, 20);
       p = purchaseRepo.findById(PURCHASE_ID_1);
       assertEquals(2, p.getSpecificItems().size());
@@ -150,7 +150,7 @@ public class TestPurchaseService {
   }
 
   @Test
-  public void addItemToCartWrongQuantity() {
+  public void addItemToCartNegativeQuantity() {
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
       service.addItemToCart(PURCHASE_ID_1, ITEM_NAME_1, -2);
     });
@@ -287,7 +287,7 @@ public class TestPurchaseService {
       Item item1 = itemRepo.findByName(ITEM_NAME_1);
       double newPrice = 37385.99;
       item1.setPrice(newPrice);
-      // test
+      // test getCart
       Purchase cart = service.getCart(CUSTOMER_USERNAME_1);
       assertEquals(12345, cart.getId());
       assertEquals(PurchaseState.Cart, cart.getState());
@@ -334,7 +334,7 @@ public class TestPurchaseService {
       p = purchaseRepo.save(p);
       c.addPurchase(p);
       c = customerRepo.save(c);
-      // test
+      // test getCart
       Purchase cart = service.getCart(CUSTOMER_USERNAME_1);
       assertNotEquals(12345, cart.getId());
       assertEquals(0, cart.getSpecificItems().size());
@@ -372,6 +372,7 @@ public class TestPurchaseService {
 
   @Test
   public void pay() {
+    // set up
     Purchase cart = purchaseRepo.findById(PURCHASE_ID_1);
     SpecificItem s1 = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), 5);
     SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), 8);
@@ -380,6 +381,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s1);
     cart.addSpecificItem(s2);
     cart = purchaseRepo.save(cart);
+    // test pay
     try {
       service.pay(PURCHASE_ID_1);
       cart = purchaseRepo.findById(PURCHASE_ID_1);
@@ -404,6 +406,7 @@ public class TestPurchaseService {
 
   @Test
   public void payDelivery() {
+    // set up
     Purchase cart = purchaseRepo.findById(PURCHASE_ID_1);
     SpecificItem s1 = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), 5);
     SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), 8);
@@ -413,6 +416,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s2);
     cart.setIsDelivery(true);
     cart = purchaseRepo.save(cart);
+    // test pay
     try {
       service.pay(PURCHASE_ID_1);
       cart = purchaseRepo.findById(PURCHASE_ID_1);
@@ -425,6 +429,7 @@ public class TestPurchaseService {
 
   @Test
   public void payNoInventory() {
+    // set up
     Purchase cart = purchaseRepo.findById(PURCHASE_ID_1);
     SpecificItem s1 = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), Integer.MAX_VALUE);
     SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), Integer.MAX_VALUE);
@@ -433,6 +438,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s1);
     cart.addSpecificItem(s2);
     cart = purchaseRepo.save(cart);
+    // test pay
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
       service.pay(PURCHASE_ID_1);
     });
@@ -441,6 +447,7 @@ public class TestPurchaseService {
 
   @Test
   public void payNotDeliverableItem() {
+    // set up
     Item item1 = itemRepo.findByName(ITEM_NAME_1);
     item1.setCanDeliver(false);
     itemRepo.save(item1);
@@ -453,6 +460,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s2);
     cart.setIsDelivery(true);
     cart = purchaseRepo.save(cart);
+    // test pay
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
       service.pay(PURCHASE_ID_1);
     });
@@ -461,6 +469,7 @@ public class TestPurchaseService {
 
   @Test
   public void payNotPickUpableItem() {
+    // set up
     Item item1 = itemRepo.findByName(ITEM_NAME_1);
     item1.setCanPickUp(false);
     itemRepo.save(item1);
@@ -472,6 +481,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s1);
     cart.addSpecificItem(s2);
     cart = purchaseRepo.save(cart);
+    // test pay
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
       service.pay(PURCHASE_ID_1);
     });
@@ -522,6 +532,7 @@ public class TestPurchaseService {
 
   @Test
   public void posPay() {
+    // set up
     Purchase cart = purchaseRepo.findById(PURCHASE_ID_1);
     SpecificItem s1 = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), 5);
     SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), 8);
@@ -533,6 +544,7 @@ public class TestPurchaseService {
     Customer pos = customerRepo.findByUsername(CUSTOMER_USERNAME_POS);
     pos.addPurchase(cart);
     pos = customerRepo.save(pos);
+    // test pay
     try {
       service.posPay(PURCHASE_ID_1);
       cart = purchaseRepo.findById(PURCHASE_ID_1);
@@ -553,6 +565,7 @@ public class TestPurchaseService {
 
   @Test
   public void posPurgeCarts() {
+    // set up
     Customer pos = customerRepo.findByUsername(CUSTOMER_USERNAME_POS);
     Purchase p1 = purchaseRepo.findById(PURCHASE_ID_1);
     Purchase p2 = purchaseRepo.findById(PURCHASE_ID_2);
@@ -562,6 +575,7 @@ public class TestPurchaseService {
     pos.addPurchase(p1);
     pos.addPurchase(p2);
     pos = customerRepo.save(pos);
+    // test posPurgeCarts
     try {
       service.posPurgeCarts();
       assertEquals(1, customerRepo.findByUsername(CUSTOMER_USERNAME_POS).getPurchases().size());
@@ -597,6 +611,7 @@ public class TestPurchaseService {
 
   @Test
   public void setIsDeliveryNotDeliverableItem() {
+    // set up
     Item item1 = itemRepo.findByName(ITEM_NAME_1);
     item1.setCanDeliver(false);
     itemRepo.save(item1);
@@ -608,6 +623,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s1);
     cart.addSpecificItem(s2);
     cart = purchaseRepo.save(cart);
+    // test setIsDelivery
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
       service.setIsDelivery(PURCHASE_ID_1, true);
     });
@@ -616,6 +632,7 @@ public class TestPurchaseService {
 
   @Test
   public void setIsDeliveryNotPickUpableItem() {
+    // set up
     Item item1 = itemRepo.findByName(ITEM_NAME_1);
     item1.setCanPickUp(false);
     itemRepo.save(item1);
@@ -628,6 +645,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s2);
     cart.setIsDelivery(true);
     cart = purchaseRepo.save(cart);
+    // test setIsDelivery
     IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
       service.setIsDelivery(PURCHASE_ID_1, false);
     });
@@ -636,6 +654,7 @@ public class TestPurchaseService {
 
   @Test
   public void setIsDeliveryTrue() {
+    // set up
     Purchase cart = purchaseRepo.findById(PURCHASE_ID_1);
     SpecificItem s1 = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), 5);
     SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), 8);
@@ -644,6 +663,7 @@ public class TestPurchaseService {
     cart.addSpecificItem(s1);
     cart.addSpecificItem(s2);
     cart = purchaseRepo.save(cart);
+    // test setIsDelivery
     try {
       service.setIsDelivery(PURCHASE_ID_1, true);
       assertTrue(purchaseRepo.findById(PURCHASE_ID_1).getIsDelivery());
@@ -654,6 +674,7 @@ public class TestPurchaseService {
 
   @Test
   public void setItemQuantityExisting() {
+    // set up
     Purchase p = purchaseRepo.findById(PURCHASE_ID_1);
     SpecificItem s = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), 45);
     SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), 1);
@@ -662,6 +683,7 @@ public class TestPurchaseService {
     p.addSpecificItem(s);
     p.addSpecificItem(s2);
     p = purchaseRepo.save(p);
+    // test setItemQuantity
     try {
       service.setItemQuantity(PURCHASE_ID_1, ITEM_NAME_1, 19);
       p = purchaseRepo.findById(PURCHASE_ID_1);
@@ -696,6 +718,7 @@ public class TestPurchaseService {
 
   @Test
   public void setItemQuantityRemove() {
+    // set up
     Purchase p = purchaseRepo.findById(PURCHASE_ID_1);
     SpecificItem s = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), 45);
     SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), 1);
@@ -704,6 +727,7 @@ public class TestPurchaseService {
     p.addSpecificItem(s);
     p.addSpecificItem(s2);
     p = purchaseRepo.save(p);
+    // test setItemQuantity
     try {
       service.setItemQuantity(PURCHASE_ID_1, ITEM_NAME_1, -1);
       p = purchaseRepo.findById(PURCHASE_ID_1);
@@ -717,6 +741,8 @@ public class TestPurchaseService {
   }
 
   private void populateData() {
+    // populate the simulated database (hashsets) with Purchase, SpecificItem, Item, and Customer
+    // objects
     purchaseData = new HashSet<>();
     specificItemData = new HashSet<>();
     itemData = new HashSet<>();
