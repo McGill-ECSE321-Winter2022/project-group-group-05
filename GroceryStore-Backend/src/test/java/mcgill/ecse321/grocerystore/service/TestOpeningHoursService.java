@@ -30,7 +30,6 @@ public class TestOpeningHoursService {
   private OpeningHoursService service;
 
   private static final String OPENINGHOURS_KEY = "Monday";
-  // private static final String OPENINGHOURS2_KEY = "Sunday";
   private static final String NONEXISTING_KEY = "NotAOpeningHours";
 
   private static final Time START_KEY = Time.valueOf("12:00:00");
