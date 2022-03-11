@@ -4,6 +4,7 @@ package mcgill.ecse321.grocerystore.service;
 
 
 import java.sql.Time;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,20 +77,21 @@ public class ShiftService {
   @Transactional
   public void deleteShiftByName(String shiftName) {
     Shift shift = this.getShift(shiftName);
-    EmployeeSchedule schedule = null;
-    for (Employee employee : this.employeeRepo.findAll()) {
-      // each shcedule instance should be in only one employee instance
-      for (EmployeeSchedule deletedschedule : employee.getEmployeeSchedules()) {
-        if (deletedschedule.getShift().equals(shift)) {
-          schedule = deletedschedule;
-          break;
+    // remove associations
+    Iterator<Employee> employeeIter = employeeRepo.findAll().iterator();
+    while (employeeIter.hasNext()) {
+      Employee employee = employeeIter.next();
+      Iterator<EmployeeSchedule> scheduleIter = employee.getEmployeeSchedules().iterator();
+      while (scheduleIter.hasNext()) {
+        EmployeeSchedule schedule = scheduleIter.next();
+        if (schedule.getShift().equals(shift)) {
+          scheduleIter.remove();
+          employee = employeeRepo.save(employee);
+          scheduleRepo.delete(schedule);
         }
       }
-      employee.removeEmployeeSchedule(schedule);
-      this.employeeRepo.save(employee);
-      this.scheduleRepo.delete(schedule);
     }
-    this.shiftRepo.delete(shift);
+    shiftRepo.delete(shift);
   }
 
 
