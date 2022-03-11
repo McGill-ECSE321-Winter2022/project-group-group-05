@@ -71,14 +71,12 @@ public class TestShiftService {
     mockShift.setName(TEST_NAME);
     lenient().when(shiftDao.findByName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
       if (invocation.getArgument(0).equals(TEST_NAME)) {
-
         Shift shift = new Shift();
         shift.setName(TEST_NAME);
         shift.setStartTime(TEST_START_TIME);
         shift.setEndTime(TEST_END_TIME);
         return shift;
       } else if (invocation.getArgument(0).equals(TEST_DELETED_SHIFT)) {
-
         return deletedShift;
       } else {
         return null;
