@@ -37,13 +37,14 @@ public class ShiftController {
   }
 
   @DeleteMapping(value = {"/shift/{name}", "/shift/{name}/"})
-  public void deleteEmployee(@PathVariable("name") String name) throws IllegalArgumentException {
+  public void deleteShift(@PathVariable("name") String name) throws IllegalArgumentException {
     service.deleteShiftByName(name);
   }
 
   @PatchMapping(value = {"/shift/{name}", "/shift/{name}/"})
-  public ShiftDto updateEmployee(@PathVariable("name") String name, @RequestParam Time startTime,
-      @RequestParam Time endTime) throws IllegalArgumentException {
+  public ShiftDto updateShift(@PathVariable("name") String name,
+      @RequestParam(required = false) Time startTime, @RequestParam(required = false) Time endTime)
+      throws IllegalArgumentException {
     service.updateShift(name, startTime, endTime);
     return convertToDto(service.getShift(name));
   }
