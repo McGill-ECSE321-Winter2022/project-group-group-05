@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.sql.Time;
 import org.junit.jupiter.api.BeforeEach;
@@ -91,22 +90,6 @@ public class TestOpeningHoursService {
 
   @Test
   public void testCreateOpeningHoursEmptyDaysOfWeek() {
-    String daysOfWeek = "";
-    Time startH = Time.valueOf("12:00:00");
-    Time endH = Time.valueOf("20:00:00");
-    OpeningHours openingH = null;
-    String error = null;
-    try {
-      openingH = service.createOpeningHours(daysOfWeek, startH, endH);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(openingH);
-    assertEquals("Day of week cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateOpeningHoursSpacesDaysOfWeek() {
     String daysOfWeek = "  ";
     Time startH = Time.valueOf("12:00:00");
     Time endH = Time.valueOf("20:00:00");
@@ -240,17 +223,6 @@ public class TestOpeningHoursService {
   public void testGetOpeningHoursEmptyDaysOfWeek() {
     String error = null;
     try {
-      service.getOpeningHours("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Day of week cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetOpeningHoursSpacesDaysOfWeek() {
-    String error = null;
-    try {
       service.getOpeningHours("  ");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -268,45 +240,6 @@ public class TestOpeningHoursService {
     }
     assertNotNull(openingH);
     assertEquals(OPENINGHOURS_KEY, openingH.getDaysOfWeek());
-  }
-
-  @Test
-  public void testUpdateOpeningHoursNullDaysOfWeek() {
-    OpeningHours openingH = null;
-    String error = "";
-    try {
-      openingH = service.updateOpeningHours(null, START_KEY, END_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(openingH);
-    assertEquals("Day of week cannot be empty!", error);
-  }
-
-  @Test
-  public void testUpdateOpeningHoursEmptyDaysOfWeek() {
-    OpeningHours openingH = null;
-    String error = "";
-    try {
-      openingH = service.updateOpeningHours("", START_KEY, END_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(openingH);
-    assertEquals("Day of week cannot be empty!", error);
-  }
-
-  @Test
-  public void testUpdateOpeningHoursSpacesDaysOfWeek() {
-    OpeningHours openingH = null;
-    String error = "";
-    try {
-      openingH = service.updateOpeningHours("  ", START_KEY, END_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(openingH);
-    assertEquals("Day of week cannot be empty!", error);
   }
 
   @Test
@@ -349,19 +282,6 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testUpdateNonExistingOpeningHours() {
-    OpeningHours openingH = null;
-    String error = "";
-    try {
-      openingH = service.updateOpeningHours(NONEXISTING_KEY, START_KEY, END_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(openingH);
-    assertEquals("This opening hour does not exist!", error);
-  }
-
-  @Test
   public void testDeleteOpeningHours() {
     try {
       service.deleteOpeningHours(OPENINGHOURS_KEY);
@@ -370,56 +290,6 @@ public class TestOpeningHoursService {
     }
     verify(openingHoursDao).delete(any());
   }
-
-  @Test
-  public void testDeleteNullsOpeningHours() {
-    String error = null;
-    try {
-      service.deleteOpeningHours(null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(openingHoursDao, times(0)).delete(any());
-    assertEquals("Day of week cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteEmptyOpeningHours() {
-    String error = null;
-    try {
-      service.deleteOpeningHours("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(openingHoursDao, times(0)).delete(any());
-    assertEquals("Day of week cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteSpacesOpeningHours() {
-    String error = null;
-    try {
-      service.deleteOpeningHours("  ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(openingHoursDao, times(0)).delete(any());
-    assertEquals("Day of week cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteNonExistingOpeningHours() {
-    String error = null;
-    try {
-      service.deleteOpeningHours(NONEXISTING_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(openingHoursDao, times(0)).delete(any());
-    assertEquals("This opening hour does not exist!", error);
-  }
-
-
 
 }
 

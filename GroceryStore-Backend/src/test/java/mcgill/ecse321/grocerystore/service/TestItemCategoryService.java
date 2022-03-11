@@ -130,20 +130,6 @@ public class TestItemCategoryService {
 
   @Test
   public void testCreateItemCategoryEmpty() {
-    String name = "";
-    ItemCategory itemCategory = null;
-    String error = null;
-    try {
-      itemCategory = service.createItemCategory(name);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(itemCategory);
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateItemCategorySpaces() {
     String name = "   ";
     ItemCategory itemCategory = null;
     String error = null;
@@ -206,17 +192,6 @@ public class TestItemCategoryService {
   public void testAddEmptyItemToItemCategory() {
     String error = null;
     try {
-      service.addItemToItemCategory("", ITEMCATEGORY_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Item name cannot be empty!", error);
-  }
-
-  @Test
-  public void testAddSpacesItemToItemCategory() {
-    String error = null;
-    try {
       service.addItemToItemCategory("   ", ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -233,50 +208,6 @@ public class TestItemCategoryService {
       error = e.getMessage();
     }
     assertEquals("This item does not exist!", error);
-  }
-
-  @Test
-  public void testAddItemToNullItemCategory() {
-    String error = null;
-    try {
-      service.addItemToItemCategory(ITEM_THREE, null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testAddItemToEmptyItemCategory() {
-    String error = null;
-    try {
-      service.addItemToItemCategory(ITEM_THREE, "");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testAddItemToSpacesItemCategory() {
-    String error = null;
-    try {
-      service.addItemToItemCategory(ITEM_THREE, "   ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testAddItemToNonExistingItemCategory() {
-    String error = null;
-    try {
-      service.addItemToItemCategory(ITEM_THREE, NONEXISTING_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("This category does not exist!", error);
   }
 
   @Test
@@ -316,17 +247,6 @@ public class TestItemCategoryService {
   public void testRemoveEmptyItemFromItemCategory() {
     String error = null;
     try {
-      service.removeItemFromItemCategory("", ITEMCATEGORY_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Item name cannot be empty!", error);
-  }
-
-  @Test
-  public void testRemoveSpacesItemFromItemCategory() {
-    String error = null;
-    try {
       service.removeItemFromItemCategory("   ", ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -343,50 +263,6 @@ public class TestItemCategoryService {
       error = e.getMessage();
     }
     assertEquals("This item does not exist!", error);
-  }
-
-  @Test
-  public void testRemoveItemFromNullItemCategory() {
-    String error = null;
-    try {
-      service.removeItemFromItemCategory(ITEM_ONE_NAME, null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testRemoveItemFromEmptyItemCategory() {
-    String error = null;
-    try {
-      service.removeItemFromItemCategory(ITEM_ONE_NAME, "");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testRemoveItemFromSpacesItemCategory() {
-    String error = null;
-    try {
-      service.addItemToItemCategory(ITEM_ONE_NAME, "   ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testRemoveItemFromNonExistingItemCategory() {
-    String error = null;
-    try {
-      service.addItemToItemCategory(ITEM_ONE_NAME, NONEXISTING_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("This category does not exist!", error);
   }
 
   @Test
@@ -407,17 +283,6 @@ public class TestItemCategoryService {
 
   @Test
   public void testGetEmptyItemCategory() {
-    String error = null;
-    try {
-      service.getItemCategory("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetSpacesItemCategory() {
     String error = null;
     try {
       service.getItemCategory("   ");
@@ -447,36 +312,4 @@ public class TestItemCategoryService {
     assertEquals(items, itemSet);
   }
 
-  @Test
-  public void testGetItemsByNullItemCategory() {
-    String error = null;
-    try {
-      service.getItemsByItemCategory(null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetItemsByEmptyItemCategory() {
-    String error = null;
-    try {
-      service.getItemsByItemCategory("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetItemsBySpacesItemCategory() {
-    String error = null;
-    try {
-      service.getItemsByItemCategory("   ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Category name cannot be empty!", error);
-  }
 }
