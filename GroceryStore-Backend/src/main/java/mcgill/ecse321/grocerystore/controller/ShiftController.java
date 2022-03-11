@@ -42,9 +42,10 @@ public class ShiftController {
   }
 
   @PatchMapping(value = {"/shift/{name}", "/shift/{name}/"})
-  public void updateEmployee(@PathVariable("name") String name, @RequestParam Time startTime,
+  public ShiftDto updateEmployee(@PathVariable("name") String name, @RequestParam Time startTime,
       @RequestParam Time endTime) throws IllegalArgumentException {
     service.updateShift(name, startTime, endTime);
+    return convertToDto(service.getShift(name));
   }
 
   @GetMapping(value = {"/shift/{name}", "/shift/{name}/"})
@@ -60,8 +61,6 @@ public class ShiftController {
     }
     return shifts;
   }
-
-
 
   /**
    * Converts domain objects to data transfer objects
