@@ -668,12 +668,12 @@ public class TestCustomerService {
 
 
   @Test
-  public void testGetExistingPerson() {
+  public void testGetCustomer() {
     assertEquals(CUSTOMER_KEY, service.getCustomer(CUSTOMER_KEY).getUsername());
   }
 
   @Test
-  public void testGetNonExistingPerson() {
+  public void testGetNonExistingCustomer() {
     String error = null;
     try {
       service.getCustomer(NONEXISTING_KEY);
@@ -684,7 +684,7 @@ public class TestCustomerService {
   }
 
   @Test
-  public void testGetNonExistingPersonNullUserame() {
+  public void testGetCustomerNullUserame() {
     String error = null;
     try {
       service.getCustomer(null);
@@ -695,7 +695,7 @@ public class TestCustomerService {
   }
 
   @Test
-  public void testGetNonExistingPersonEmptyUserame() {
+  public void testGetCustomerEmptyUserame() {
     String error = null;
     try {
       service.getCustomer("");
@@ -706,7 +706,7 @@ public class TestCustomerService {
   }
 
   @Test
-  public void testGetNonExistingPersonSpacesUserame() {
+  public void testGetCustomerSpacesUserame() {
     String error = null;
     try {
       service.getCustomer("   ");
