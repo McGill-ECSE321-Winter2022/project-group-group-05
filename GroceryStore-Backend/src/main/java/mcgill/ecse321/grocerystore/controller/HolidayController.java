@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import mcgill.ecse321.grocerystore.dto.HolidayDto;
 import mcgill.ecse321.grocerystore.model.Holiday;
@@ -39,7 +37,6 @@ public class HolidayController {
    * Delete Holiday
    */
   @DeleteMapping(value = {"/holiday/{name}", "/holiday/{name}/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public void deleteHoliday(@PathVariable("name") String name) throws IllegalArgumentException {
     service.deleteHoliday(name);
   }
@@ -56,12 +53,13 @@ public class HolidayController {
    * Update Holiday
    */
   @PatchMapping(value = {"/holiday/{name}", "/holiday/{name}/"})
-  @ResponseStatus(value = HttpStatus.OK)
-  public HolidayDto updateHoliday(@PathVariable("name") String name,
-      @RequestParam(required = false) Date date) throws IllegalArgumentException {
-    if (date != null)
-      service.updateHoliday(name, date);
-    return convertToDto(service.getHoliday(name));
+  public HolidayDto updateHoliday(@PathVariable("name") String name, @RequestParam Date date)
+      throws IllegalArgumentException {
+    HolidayDto holiday = getHoliday(name);
+    if (date == null) {
+      date = holiday.getDate();
+    }
+    return convertToDto(service.updateHoliday(name, date));
   }
 
   /*

@@ -1,7 +1,6 @@
 package mcgill.ecse321.grocerystore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import mcgill.ecse321.grocerystore.dto.OwnerDto;
 import mcgill.ecse321.grocerystore.model.Owner;
@@ -23,7 +21,7 @@ public class OwnerController {
   private OwnerService service;
 
   /*
-   * Create Owner (needs to fix)
+   * Create Owner
    */
   @PostMapping(value = {"/owner/{username}", "/owner/{username}/"})
   public OwnerDto createOwner(@PathVariable("username") String username,
@@ -44,7 +42,6 @@ public class OwnerController {
    * Delete Owner
    */
   @DeleteMapping(value = {"/owner/{username}", "/owner/{username}/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public void deleteOwner(@PathVariable("username") String username)
       throws IllegalArgumentException {
     service.deleteOwner(username);
@@ -54,13 +51,17 @@ public class OwnerController {
    * Update Owner
    */
   @PatchMapping(value = {"/owner/{username}", "/owner/{username}/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public OwnerDto updateOwner(@PathVariable("username") String username,
       @RequestParam(required = false) String email, @RequestParam(required = false) String password)
       throws IllegalArgumentException {
-    if (email != null && password != null)
-      service.updateOwner(username, password, email);
-    return convertToDto(service.getOwner(username));
+    OwnerDto owner = getOwner(username);
+    if (email == null) {
+      email = owner.getEmail();
+    }
+    if (password == null) {
+      password = owner.getPassword();
+    }
+    return convertToDto(service.updateOwner(username, password, email));
   }
 
   private OwnerDto convertToDto(Owner owner) throws IllegalArgumentException {
