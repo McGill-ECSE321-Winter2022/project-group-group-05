@@ -50,9 +50,6 @@ public class ItemCategoryService {
     if (itemName == null || itemName.trim().length() == 0) {
       throw new IllegalArgumentException("Item name cannot be empty!");
     }
-    if (categoryName == null || categoryName.trim().length() == 0) {
-      throw new IllegalArgumentException("Category name cannot be empty!");
-    }
     Item item = itemRepository.findByName(itemName);
     if (item == null) {
       throw new IllegalArgumentException("This item does not exist!");
@@ -74,9 +71,6 @@ public class ItemCategoryService {
     if (itemName == null || itemName.trim().length() == 0) {
       throw new IllegalArgumentException("Item name cannot be empty!");
     }
-    if (categoryName == null || categoryName.trim().length() == 0) {
-      throw new IllegalArgumentException("Category name cannot be empty!");
-    }
     Item item = itemRepository.findByName(itemName);
     if (item == null) {
       throw new IllegalArgumentException("This item does not exist!");
@@ -94,9 +88,6 @@ public class ItemCategoryService {
    */
   @Transactional
   public List<Item> getItemsByItemCategory(String name) throws IllegalArgumentException {
-    if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Category name cannot be empty!");
-    }
     ItemCategory itemCategory = getItemCategory(name);
     List<Item> itemList = new ArrayList<Item>();
     for (Item item : itemCategory.getItems()) {
