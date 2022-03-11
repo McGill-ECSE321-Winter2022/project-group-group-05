@@ -88,7 +88,6 @@ public class ShiftService {
           scheduleIter.remove();
           employee = employeeRepo.save(employee);
           scheduleRepo.delete(schedule);
-          break;
         }
       }
     }
