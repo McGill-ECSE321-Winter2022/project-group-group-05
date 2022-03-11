@@ -1,10 +1,8 @@
 package mcgill.ecse321.grocerystore.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -157,111 +155,127 @@ public class TestItemCategoryService {
 
   @Test
   public void testAddItemToItemCategory() {
-    boolean success = false;
+    ItemCategory itemCategory = null;
     try {
-      success = service.addItemToItemCategory(ITEM_THREE, ITEMCATEGORY_KEY);
+      itemCategory = service.addItemToItemCategory(ITEM_THREE, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       fail();
     }
-    assertTrue(success);
+    assertNotNull(itemCategory);
   }
-
+  
   @Test
-  public void testAddOtherTypeItemToItemCategory() {
+  public void testAddExistingItemToItemCategory() {
+    ItemCategory itemCategory = null;
     String error = null;
     try {
-      service.addItemToItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_TWO);
+      itemCategory = service.addItemToItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertEquals("This item already belongs to a category!", error);
+    assertNull(itemCategory);
+    assertEquals("This item is already in this category!", error);
   }
 
   @Test
   public void testAddNullItemToItemCategory() {
+    ItemCategory itemCategory = null;
     String error = null;
     try {
-      service.addItemToItemCategory(null, ITEMCATEGORY_KEY);
+      itemCategory = service.addItemToItemCategory(null, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(itemCategory);
     assertEquals("Item name cannot be empty!", error);
   }
 
   @Test
   public void testAddEmptyItemToItemCategory() {
+    ItemCategory itemCategory = null;
     String error = null;
     try {
-      service.addItemToItemCategory("   ", ITEMCATEGORY_KEY);
+      itemCategory = service.addItemToItemCategory("   ", ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(itemCategory);
     assertEquals("Item name cannot be empty!", error);
   }
 
   @Test
   public void testAddNonExistingItemToItemCategory() {
+    ItemCategory itemCategory = null;
     String error = null;
     try {
-      service.addItemToItemCategory(NONEXISTING_ITEM, ITEMCATEGORY_KEY);
+      itemCategory = service.addItemToItemCategory(NONEXISTING_ITEM, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(itemCategory);
     assertEquals("This item does not exist!", error);
   }
 
   @Test
   public void testRemoveItemFromItemCategory() {
-    boolean success = false;
+    ItemCategory itemCategory = null;
     try {
-      success = service.removeItemFromItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_KEY);
+      itemCategory = service.removeItemFromItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       fail();
     }
-    assertTrue(success);
+    assertNotNull(itemCategory);
   }
 
   @Test
-  public void testRemoveOtherTypeItemFromItemCategory() {
-    boolean success = false;
+  public void testRemoveNotPresentItemFromItemCategory() {
+    ItemCategory itemCategory = null;
+    String error = null;
     try {
-      success = service.removeItemFromItemCategory(ITEM_ONE_NAME, ITEMCATEGORY_TWO);
+      itemCategory = service.removeItemFromItemCategory(ITEM_THREE, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
-      fail();
+      error = e.getMessage();
     }
-    assertFalse(success);
+    assertNull(itemCategory);
+    assertEquals("This item isn't in this category!", error);
   }
 
   @Test
   public void testRemoveNullItemFromItemCategory() {
+    ItemCategory itemCategory = null;
     String error = null;
     try {
-      service.removeItemFromItemCategory(null, ITEMCATEGORY_KEY);
+      itemCategory = service.removeItemFromItemCategory(null, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(itemCategory);
     assertEquals("Item name cannot be empty!", error);
   }
 
   @Test
   public void testRemoveEmptyItemFromItemCategory() {
+    ItemCategory itemCategory = null;
     String error = null;
     try {
-      service.removeItemFromItemCategory("   ", ITEMCATEGORY_KEY);
+      itemCategory = service.removeItemFromItemCategory("   ", ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(itemCategory);
     assertEquals("Item name cannot be empty!", error);
   }
 
   @Test
   public void testRemoveNonExistingItemFromItemCategory() {
+    ItemCategory itemCategory = null;
     String error = null;
     try {
-      service.removeItemFromItemCategory(NONEXISTING_ITEM, ITEMCATEGORY_KEY);
+      itemCategory = service.removeItemFromItemCategory(NONEXISTING_ITEM, ITEMCATEGORY_KEY);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(itemCategory);
     assertEquals("This item does not exist!", error);
   }
 
