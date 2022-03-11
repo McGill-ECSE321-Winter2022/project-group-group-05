@@ -39,7 +39,6 @@ import mcgill.ecse321.grocerystore.model.SpecificItem;
  * 
  * @author Annie Kang
  * 
- *
  */
 @ExtendWith(MockitoExtension.class)
 public class TestItemService {
@@ -77,7 +76,7 @@ public class TestItemService {
         return null;
       }
     });
-
+    // imitate getting an ordered list of item objects
     lenient().when(itemDao.findAllByOrderByName()).thenAnswer((InvocationOnMock invocation) -> {
       List<Item> itemList = new ArrayList<Item>();
       var itemOne = new Item();
@@ -98,22 +97,19 @@ public class TestItemService {
       itemList.add(itemTwo);
       return itemList;
     });
-
     // whenever anything is saved, just return the parameter object
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
-
     lenient().when(itemDao.save(any(Item.class))).thenAnswer(returnParameterAsAnswer);
     lenient().when(mockItem.getName()).thenAnswer((e) -> {
       return ITEM_KEY;
     });
-
     this.setMockForDelete();
   }
 
   private void setMockForDelete() {
-    // mock for testDelete
+    // mock for testDelete purchase
     lenient().when(purchaseDao.findAllByOrderByTimeOfPurchaseMillisDesc())
         .thenAnswer((InvocationOnMock invocation) -> {
           ArrayList<Purchase> purchases = new ArrayList<>();
@@ -130,6 +126,17 @@ public class TestItemService {
     });
     lenient().when(mockItem.getName()).thenAnswer((InvocationOnMock invocation) -> {
       return ITEM_KEY;
+    });
+    // mock for testDelete itemCategory
+    lenient().when(itemCategoryDao.findAllByOrderByName()).thenAnswer((InvocationOnMock invocation) -> {
+      ArrayList<ItemCategory> itemCategories = new ArrayList<>();
+      itemCategories.add(mockItemCategory);
+      return itemCategories;
+    });
+    lenient().when(mockItemCategory.getItems()).thenAnswer((InvocationOnMock invocation) -> {
+      HashSet<Item> items = new HashSet<>();
+      items.add(mockItem);
+      return items;
     });
   }
 
@@ -242,8 +249,9 @@ public class TestItemService {
     } catch (IllegalArgumentException e) {
       fail(e.getMessage());
     }
-    InOrder deleteOrder = inOrder(specificItemDao, itemDao);
+    InOrder deleteOrder = inOrder(specificItemDao, mockItemCategory, itemDao);
     deleteOrder.verify(specificItemDao, times(1)).delete(mockSpecificItem);
+    deleteOrder.verify(mockItemCategory, times(1)).removeItem(mockItem);
     deleteOrder.verify(itemDao, times(1)).delete(mockItem);
   }
 
