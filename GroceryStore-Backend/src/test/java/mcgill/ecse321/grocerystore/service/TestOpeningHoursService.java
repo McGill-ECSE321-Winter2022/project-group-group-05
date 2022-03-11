@@ -189,8 +189,8 @@ public class TestOpeningHoursService {
   @Test
   public void testCreateOpeningHoursInvalidDaysOfWeek() {
     String daysOfWeek = "Robert";
-    Time startH = Time.valueOf("10:00:00");
-    Time endH = Time.valueOf("09:00:00");
+    Time startH = Time.valueOf("09:00:00");
+    Time endH = Time.valueOf("10:00:00");
     OpeningHours openingH = null;
     String error = null;
     try {
