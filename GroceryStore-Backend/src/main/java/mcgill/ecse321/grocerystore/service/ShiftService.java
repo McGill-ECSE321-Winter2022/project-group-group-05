@@ -2,7 +2,6 @@
 package mcgill.ecse321.grocerystore.service;
 
 
-
 import java.sql.Time;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +15,7 @@ import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 
 public class ShiftService {
+  
   @Autowired
   ShiftRepository shiftRepo;
   @Autowired
@@ -23,12 +23,9 @@ public class ShiftService {
   @Autowired
   EmployeeRepository employeeRepo;
 
-
   @Transactional
   public Shift createShift(String name, Time startTime, Time endTime)
       throws IllegalArgumentException {
-
-
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Shift name cannot be empty.");
     }
@@ -45,7 +42,6 @@ public class ShiftService {
     if (endTime.before(startTime)) {
       throw new IllegalArgumentException("Shift end time cannot be before its start time.");
     }
-
     Shift shift = new Shift();
     shift.setName(name);
     shift.setStartTime(startTime);
@@ -55,7 +51,6 @@ public class ShiftService {
 
   @Transactional
   // Get the shift with the specific name
-
   public Shift getShift(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Shift name cannot be empty.");
@@ -72,7 +67,6 @@ public class ShiftService {
   public List<Shift> getAllShifts() {
     return shiftRepo.findAllByOrderByName();
   }
-
 
   @Transactional
   public void deleteShiftByName(String shiftName) {
