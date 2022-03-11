@@ -1,9 +1,11 @@
 package mcgill.ecse321.grocerystore.controller;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +45,19 @@ public class ShiftController {
 
   @PatchMapping(value = {"/shift/{name}", "/shift/{name}/"})
   public ShiftDto updateShift(@PathVariable("name") String name,
-      @RequestParam(required = false) Time startTime, @RequestParam(required = false) Time endTime)
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,
+          pattern = "HH:mm") LocalTime startTime,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,
+          pattern = "HH:mm") LocalTime endTime)
       throws IllegalArgumentException {
-    service.updateShift(name, startTime, endTime);
+    Shift shift = service.getShift(name);
+    if (startTime == null) {
+      startTime = shift.getStartTime().toLocalTime();
+    }
+    if (endTime == null) {
+      endTime = shift.getEndTime().toLocalTime();
+    }
+    service.updateShift(name, Time.valueOf(startTime), Time.valueOf(endTime));
     return convertToDto(service.getShift(name));
   }
 
