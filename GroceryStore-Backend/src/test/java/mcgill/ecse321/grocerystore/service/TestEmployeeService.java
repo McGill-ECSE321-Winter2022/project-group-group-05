@@ -404,7 +404,7 @@ public class TestEmployeeService {
       fail();
     }
     InOrder deleteOrder = inOrder(employeeScheduleDao, employeeDao);
-    deleteOrder.verify(employeeScheduleDao, times(3)).delete(any());
+    deleteOrder.verify(employeeScheduleDao, times(3)).delete(any(EmployeeSchedule.class));
     deleteOrder.verify(employeeDao, times(1)).delete(any(Employee.class));
   }
 
@@ -540,7 +540,7 @@ public class TestEmployeeService {
       fail();
     }
     assertNotNull(testEmployee);
-    verify(mockEmployeeOne, times(1)).addEmployeeSchedule(any());
+    verify(mockEmployeeOne, times(1)).addEmployeeSchedule(any(EmployeeSchedule.class));
   }
 
   @Test
@@ -552,7 +552,7 @@ public class TestEmployeeService {
       fail();
     }
     assertNotNull(testEmployee);
-    verify(mockEmployeeTwo, times(1)).addEmployeeSchedule(any());
+    verify(mockEmployeeTwo, times(1)).addEmployeeSchedule(any(EmployeeSchedule.class));
   }
 
   @Test
@@ -608,8 +608,8 @@ public class TestEmployeeService {
     }
     assertNotNull(testEmployee);
     InOrder removeOrder = inOrder(mockEmployeeOne, employeeScheduleDao);
-    removeOrder.verify(mockEmployeeOne, times(1)).removeEmployeeSchedule(any());
-    removeOrder.verify(employeeScheduleDao, times(1)).delete(any());
+    removeOrder.verify(mockEmployeeOne, times(1)).removeEmployeeSchedule(any(EmployeeSchedule.class));
+    removeOrder.verify(employeeScheduleDao, times(1)).delete(any(EmployeeSchedule.class));
   }
 
   @Test
