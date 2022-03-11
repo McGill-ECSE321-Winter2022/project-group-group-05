@@ -144,7 +144,7 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testGetExistingHoliday() {
+  public void testGetHoliday() {
     Holiday holiday = null;
     try {
       holiday = service.getHoliday(HOLIDAY_KEY);
