@@ -1,6 +1,7 @@
 package mcgill.ecse321.grocerystore.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,14 +11,12 @@ import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.dao.PurchaseRepository;
 import mcgill.ecse321.grocerystore.dao.SpecificItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
+import mcgill.ecse321.grocerystore.model.Purchase;
+import mcgill.ecse321.grocerystore.model.SpecificItem;
 
 /**
  * 
  * @author Annie Kang
- * 
- *         There is no delete item method in this class The item object is preserved in the database
- *         so that purchase history is preserved The method "setIsDiscontinued" acts as a delete
- *         method instead
  *
  */
 @Service
@@ -55,6 +54,38 @@ public class ItemService {
     item.setCanPickUp(canPickUp);
     item.setIsDiscontinued(false);
     return itemRepository.save(item);
+  }
+
+  /**
+   * Delete the item with the given name, while also removing any SpecificItems associated with this
+   * Item.<br>
+   * <b>This action should not be done under normal circumstances.</b><br>
+   * The removal of an item from the store should be done through setIsDiscontinued. This method is
+   * provided for maintenance purposes only and would alter purchase histories kept in the system.
+   * 
+   * @param itemName
+   * @throws IllegalArgumentException
+   */
+  @Transactional
+  public void delete(String itemName) throws IllegalArgumentException {
+    Item item = this.getItem(itemName);
+    // remove associations
+    Iterator<Purchase> pIter =
+        purchaseRepository.findAllByOrderByTimeOfPurchaseMillisDesc().iterator();
+    while (pIter.hasNext()) {
+      Purchase p = pIter.next();
+      Iterator<SpecificItem> sIter = p.getSpecificItems().iterator();
+      while (sIter.hasNext()) {
+        SpecificItem s = sIter.next();
+        if (s.getItem().equals(item)) {
+          sIter.remove();
+          p = purchaseRepository.save(p);
+          specificItemRepository.delete(s);
+          break;
+        }
+      }
+    }
+    itemRepository.delete(item);
   }
 
   @Transactional
