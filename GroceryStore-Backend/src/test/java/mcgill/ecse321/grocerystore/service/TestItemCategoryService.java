@@ -51,6 +51,7 @@ public class TestItemCategoryService {
     lenient().when(itemCategoryDao.findByName(anyString()))
         .thenAnswer((InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(ITEMCATEGORY_KEY)) {
+            // generate ItemCategory and all fields
             ItemCategory itemCategory = new ItemCategory();
             itemCategory.setName(ITEMCATEGORY_KEY);
             ITEM_ONE.setName(ITEM_ONE_NAME);
@@ -68,7 +69,7 @@ public class TestItemCategoryService {
             return null;
           }
         });
-
+    // imitate ordered list of ItemCategory objects
     lenient().when(itemCategoryDao.findAllByOrderByName())
         .thenAnswer((InvocationOnMock invocation) -> {
           List<ItemCategory> list = new ArrayList<ItemCategory>();
@@ -81,7 +82,6 @@ public class TestItemCategoryService {
           list.add(itemCategory);
           return list;
         });
-
     lenient().when(itemDao.findByName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
       if (invocation.getArgument(0).equals(ITEM_THREE)) {
         Item item = new Item();
