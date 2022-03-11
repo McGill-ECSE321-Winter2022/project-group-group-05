@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import mcgill.ecse321.grocerystore.dto.EmployeeDto;
 import mcgill.ecse321.grocerystore.dto.EmployeeScheduleDto;
@@ -41,7 +39,6 @@ public class EmployeeController {
   }
 
   @DeleteMapping(value = {"/employee/{username}", "/employee/{username}/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public void deleteEmployee(@PathVariable("username") String username)
       throws IllegalArgumentException {
     service.deleteEmployee(username);
@@ -50,7 +47,6 @@ public class EmployeeController {
   // Patch Mappings
 
   @PatchMapping(value = {"/employee/{username}", "/employee/{username}/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public EmployeeDto updateEmployee(@PathVariable("username") String username,
       @RequestParam(required = false) String newEmail,
       @RequestParam(required = false) String newPassword) throws IllegalArgumentException {
@@ -62,7 +58,6 @@ public class EmployeeController {
   }
 
   @PatchMapping(value = {"/employee/{username}/addSchedule", "/employee/{username}/addSchedule/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public EmployeeDto addSchedule(@PathVariable("username") String username,
       @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
     return convertToDto(service.addSchedule(username, date, shift));
@@ -70,7 +65,6 @@ public class EmployeeController {
 
   @PatchMapping(
       value = {"/employee/{username}/removeSchedule", "/employee/{username}/removeSchedule/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public EmployeeDto removeSchedule(@PathVariable("username") String username,
       @RequestParam("date") Date date, @RequestParam String shift) throws IllegalArgumentException {
     return convertToDto(service.removeSchedule(username, date, shift));
@@ -78,7 +72,6 @@ public class EmployeeController {
 
   @PatchMapping(value = {"/employee/{username}/removeAllSchedules",
       "/employee/{username}/removeAllSchedules/"})
-  @ResponseStatus(value = HttpStatus.OK)
   public EmployeeDto removeAllSchedules(@PathVariable("username") String username)
       throws IllegalArgumentException {
     return convertToDto(service.removeAllSchedules(username));
