@@ -2,6 +2,7 @@ package mcgill.ecse321.grocerystore.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -60,28 +61,25 @@ public class CustomerController {
     service.deleteCustomer(username);
   }
 
-  @PatchMapping(value = {"/customer/{username}/setEmail", "/customer/{username}/setEmail/"})
-  public CustomerDto setCustomerEmail(@PathVariable("username") String username,
-      @RequestParam String email) throws IllegalArgumentException {
-    return convertToDto(service.setCustomerEmail(username, email));
-  }
-
-  @PatchMapping(value = {"/customer/{username}/setPassword", "/customer/{username}/setPassword/"})
-  public CustomerDto setCustomerPassword(@PathVariable("username") String username,
-      @RequestParam String password) throws IllegalArgumentException {
-    return convertToDto(service.setCustomerPassword(username, password));
-  }
-
-  @PatchMapping(value = {"/customer/{username}/setAddress", "/customer/{username}/setAddress/"})
-  public CustomerDto setCustomerAddress(@PathVariable("username") String username,
-      @RequestParam String address) throws IllegalArgumentException {
-    return convertToDto(service.setCustomerAddress(username, address));
-  }
-
-  @PatchMapping(value = {"/customer/{username}/setIsLocal", "/customer/{username}/setIsLocal/"})
-  public CustomerDto setCustomerIsLocal(@PathVariable("username") String username,
-      @RequestParam boolean isLocal) throws IllegalArgumentException {
-    return convertToDto(service.setCustomerIsLocal(username, isLocal));
+  @PatchMapping(value = {"/customer/{username}", "/customer/{username}/"})
+  public CustomerDto updateCustomer(@PathVariable("username") String username,
+      @RequestParam Optional<String> email, @RequestParam Optional<String> password,
+      @RequestParam Optional<String> address, @RequestParam Optional<Boolean> isLocal)
+      throws IllegalArgumentException {
+    Customer customer = service.getCustomer(username);
+    if (email.isPresent()) {
+      customer = service.setCustomerEmail(username, email.get());
+    }
+    if (password.isPresent()) {
+      customer = service.setCustomerPassword(username, password.get());
+    }
+    if (address.isPresent()) {
+      customer = service.setCustomerAddress(username, address.get());
+    }
+    if (isLocal.isPresent()) {
+      customer = service.setCustomerIsLocal(username, isLocal.get());
+    }
+    return convertToDto(customer);
   }
 
   private List<PurchaseDto> createPurchaseDtosForCustomer(Customer c) {
