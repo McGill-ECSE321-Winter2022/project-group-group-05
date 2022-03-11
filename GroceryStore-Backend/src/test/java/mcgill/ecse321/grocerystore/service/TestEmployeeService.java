@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,6 +17,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -401,9 +403,9 @@ public class TestEmployeeService {
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(employeeScheduleDao, times(1)).delete(mockScheduleOne);
-    verify(employeeScheduleDao, times(1)).delete(mockScheduleTwo);
-    verify(employeeDao, times(1)).delete(any(Employee.class));
+    InOrder deleteOrder = inOrder(employeeScheduleDao, employeeDao);
+    deleteOrder.verify(employeeScheduleDao, times(3)).delete(any());
+    deleteOrder.verify(employeeDao, times(1)).delete(any(Employee.class));
   }
 
   // Tests for setEmployeeEmail(String, String)
@@ -605,8 +607,9 @@ public class TestEmployeeService {
       fail();
     }
     assertNotNull(testEmployee);
-    verify(employeeScheduleDao, times(1)).delete(any());
-    verify(mockEmployeeOne, times(1)).removeEmployeeSchedule(any());
+    InOrder removeOrder = inOrder(mockEmployeeOne, employeeScheduleDao);
+    removeOrder.verify(mockEmployeeOne, times(1)).removeEmployeeSchedule(any());
+    removeOrder.verify(employeeScheduleDao, times(1)).delete(any());
   }
 
   @Test
@@ -623,7 +626,7 @@ public class TestEmployeeService {
   }
 
   @Test
-  public void testRemoveSchedulesNonExistent() {
+  public void testRemoveScheduleNonExistent() {
     String error = "";
     try {
       service.removeSchedule(EMPLOYEE_KEY, Date.valueOf("2040-01-03"), FAKE_SHIFT_KEY);
@@ -632,6 +635,19 @@ public class TestEmployeeService {
     }
     verify(employeeScheduleDao, times(0)).delete(any());
     verify(mockEmployeeOne, times(0)).removeEmployeeSchedule(any());
+    assertEquals("No EmployeeSchedule object found with the provided date and Shift", error);
+  }
+  
+  @Test
+  public void testRemoveScheduleNoSchedules() {
+    String error = "";
+    try {
+      service.removeSchedule(EMPLOYEE2_KEY, Date.valueOf("2040-01-03"), SHIFT_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(employeeScheduleDao, times(0)).delete(any());
+    verify(mockEmployeeTwo, times(0)).removeEmployeeSchedule(any());
     assertEquals("No EmployeeSchedule object found with the provided date and Shift", error);
   }
 
@@ -649,8 +665,22 @@ public class TestEmployeeService {
       fail();
     }
     assertNotNull(testEmployee);
-    verify(employeeScheduleDao, times(3)).delete(any());
-    verify(mockEmployeeOne, times(3)).removeEmployeeSchedule(any());
+    // Verify that the loop on lines 251-254 of EmployeeService properly executes
+    // There must be a call to .removeEmployeeSchedule then a call to .delete for each
+    // EmployeeSchedule object in mockEmployeeOne
+    InOrder removeOrder = inOrder(mockEmployeeOne, employeeScheduleDao);
+    // first one is deleted
+    removeOrder.verify(mockEmployeeOne, times(1))
+        .removeEmployeeSchedule(any(EmployeeSchedule.class));
+    removeOrder.verify(employeeScheduleDao, times(1)).delete(any(EmployeeSchedule.class));
+    // second one is deleted
+    removeOrder.verify(mockEmployeeOne, times(1))
+        .removeEmployeeSchedule(any(EmployeeSchedule.class));
+    removeOrder.verify(employeeScheduleDao, times(1)).delete(any(EmployeeSchedule.class));
+    // third one is deleted
+    removeOrder.verify(mockEmployeeOne, times(1))
+        .removeEmployeeSchedule(any(EmployeeSchedule.class));
+    removeOrder.verify(employeeScheduleDao, times(1)).delete(any(EmployeeSchedule.class));
   }
 
   @Test
