@@ -203,7 +203,7 @@ public class TestOpeningHoursService {
 
 
   @Test
-  public void testGetExistingOpeningHours() {
+  public void testGetOpeningHours() {
     OpeningHours openingH = null;
     try {
       openingH = service.getOpeningHours(OPENINGHOURS_KEY);
@@ -226,7 +226,7 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testGetNonExistingOpeningHoursNullDaysOfWeek() {
+  public void testGetOpeningHoursNullDaysOfWeek() {
     String error = null;
     try {
       service.getOpeningHours(null);
@@ -237,7 +237,7 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testGetNonExistingOpeningHoursEmptyDaysOfWeek() {
+  public void testGetOpeningHoursEmptyDaysOfWeek() {
     String error = null;
     try {
       service.getOpeningHours("");
@@ -248,7 +248,7 @@ public class TestOpeningHoursService {
   }
 
   @Test
-  public void testGetNonExistingOpeningHoursSpacesDaysOfWeek() {
+  public void testGetOpeningHoursSpacesDaysOfWeek() {
     String error = null;
     try {
       service.getOpeningHours("  ");

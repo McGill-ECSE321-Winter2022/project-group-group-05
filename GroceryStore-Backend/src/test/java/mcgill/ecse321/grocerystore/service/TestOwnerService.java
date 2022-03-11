@@ -367,7 +367,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testGetNonExistentOwnerNullUsername() {
+  public void testGetOwnerNullUsername() {
     String error = null;
     try {
       service.getOwner(null);
@@ -378,7 +378,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testGetNonExistentOwnerEmptyUsername() {
+  public void testGetOwnerEmptyUsername() {
     String error = null;
     try {
       service.getOwner("");
@@ -389,7 +389,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testGetNonExistentOwnerSpacesUsername() {
+  public void testGetOwnerSpacesUsername() {
     String error = null;
     try {
       service.getOwner("  ");
