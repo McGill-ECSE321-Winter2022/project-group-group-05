@@ -85,7 +85,7 @@ public class OpeningHoursService {
   }
 
   @Transactional
-  public List<OpeningHours> getAllOpeningHours() {
+  public List<OpeningHours> getAll() {
     ArrayList<OpeningHours> openingHoursList = openingHoursRepository.findAllByOrderByDaysOfWeek();
     return openingHoursList;
   }
