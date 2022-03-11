@@ -44,3 +44,17 @@ Started on Feb 8, 2022
 * **Jimmy**: Set up Github repository, CI Actions, template class files, and Heroku backend database, Reviewed pull requests, Revised Domain Model, Revised Use Case Diagram
 JPA + CRUD and tests for Purchase, SpecificItem classes, Fixed JPA and tests for Item, ItemCategory classes, One detailed use case, 3 System Requirements
 * **Harrison**: Set up project Google Drive and project Timesheet, Revised Domain Model, Revised Use Case Diagram, Helped review pull requests, Helped review detailed use cases, JPA + CRUD and tests for Employee, EmployeeSchedule, and Shift classes, One detailed use case, 3 System Requirements, Outlined Project Wiki and wrote Class Diagram Rationale, Domain Model Constraints, and Sprint 1 Project Report
+
+## [Sprint 2](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-2-Project-Report)
+
+### Objectives to complete:
+Started on Feb 28, 2022
+* 
+
+### Tasks completed by each member:
+* **Peini**: 
+* **Sibo**:
+* **Annie**: 
+* **Yida**: 
+* **Jimmy**: 
+* **Harrison**: 
