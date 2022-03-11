@@ -291,9 +291,9 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
-    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
-    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
+
+    verify(scheduleDao, times(0)).delete(mockSchedule);
+    verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift name cannot be empty.", error);
   }
 
@@ -306,9 +306,9 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
-    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
-    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
+
+    verify(scheduleDao, times(0)).delete(mockSchedule);
+    verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift name cannot be empty.", error);
   }
 
@@ -320,9 +320,8 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
-    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
-    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
+    verify(scheduleDao, times(0)).delete(mockSchedule);
+    verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift name cannot be empty.", error);
   }
 
@@ -334,9 +333,8 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
-    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
-    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
+    verify(scheduleDao, times(0)).delete(mockSchedule);
+    verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
   }
 

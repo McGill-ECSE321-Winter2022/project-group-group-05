@@ -49,14 +49,7 @@ public class EmployeeSchedule {
 
   // Setter Methods
   // --------------
-  /**
-   * For mockito testing only. The id should never be set manually otherwise.
-   * 
-   * @param id
-   */
-  public void setId(long id) {
-    this.id = id;
-  }
+
 
   public void setDate(long date) {
     this.date = new Date(date);
