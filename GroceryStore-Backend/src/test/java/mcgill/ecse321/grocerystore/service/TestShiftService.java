@@ -8,22 +8,27 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
 import mcgill.ecse321.grocerystore.dao.ShiftRepository;
+import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 
@@ -36,26 +41,30 @@ public class TestShiftService {
   private ShiftRepository shiftDao;
   @Mock
   private EmployeeScheduleRepository scheduleDao;
+
+  @Mock
+  private EmployeeRepository employeeDao;
   @Mock
   private Shift mockShift;
-
-
+  @Mock
+  private Shift deletedShift;
+  @Mock
+  private Employee mockEmployee;
+  @Mock
+  private EmployeeSchedule mockSchedule;
 
   @InjectMocks
   private ShiftService shiftService;
-
-  private static final String TEST_NAME = "Test";
-  private static final String TEST_MOCK_NAME = "Mock";
-  private static final String TEST_NAME1 = "Testname";
-  private static final String TEST_NAME2 = "Someone";
-  private static final String FAKE_NAME = "Fakename";
-
-
 
   private static final Time TEST_START_TIME = Time.valueOf("11:00:00");
   private static final Time TEST_END_TIME = Time.valueOf("12:00:00");
   private static final Time TEST_START_TIME1 = Time.valueOf("13:00:00");
   private static final Time TEST_END_TIME1 = Time.valueOf("14:00:00");;
+  private static final String TEST_NAME = "Test";
+  private static final String TEST_NAME1 = "Testname";
+  private static final String TEST_NAME2 = "Someone";
+  private static final String FAKE_NAME = "Fakename";
+  private static final String TEST_DELETED_SHIFT = "MockShift";
 
 
   @BeforeEach
@@ -69,8 +78,9 @@ public class TestShiftService {
         shift.setStartTime(TEST_START_TIME);
         shift.setEndTime(TEST_END_TIME);
         return shift;
-      } else if (invocation.getArgument(0).equals(TEST_MOCK_NAME)) {
-        return mockShift;
+      } else if (invocation.getArgument(0).equals(TEST_DELETED_SHIFT)) {
+
+        return deletedShift;
       } else {
         return null;
       }
@@ -90,23 +100,36 @@ public class TestShiftService {
       shiftList.add(shiftTwo);
       return shiftList;
     });
-    lenient().when(scheduleDao.findAllByOrderByDate()).thenAnswer((InvocationOnMock invocation) -> {
-      List<EmployeeSchedule> scheduleList = new ArrayList<EmployeeSchedule>();
-      EmployeeSchedule schedule1 = new EmployeeSchedule();
-      EmployeeSchedule schedule2 = new EmployeeSchedule();
 
-      schedule1.setShift(mockShift);
-      schedule2.setShift(mockShift);
-      scheduleList.add(schedule1);
-      scheduleList.add(schedule2);
-      return scheduleList;
-    });
     // Whenever anything is saved, just return the parameter object
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
 
     lenient().when(shiftDao.save(any(Shift.class))).thenAnswer(returnParameterAsAnswer);
+    setMockForDelete();
+  }
+
+  private void setMockForDelete() {
+    // mock for testDelete
+    lenient().when(employeeDao.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+
+      ArrayList<Employee> employeeList = new ArrayList<>();
+      employeeList.add(mockEmployee);
+      return employeeList;
+    });
+    lenient().when(mockEmployee.getEmployeeSchedules())
+        .thenAnswer((InvocationOnMock invocation) -> {
+          HashSet<EmployeeSchedule> scheduleSet = new HashSet<>();
+          scheduleSet.add(mockSchedule);
+          return scheduleSet;
+        });
+    lenient().when(mockSchedule.getShift()).thenAnswer((InvocationOnMock invocation) -> {
+      return deletedShift;
+    });
+    lenient().when(deletedShift.getName()).thenAnswer((InvocationOnMock invocation) -> {
+      return TEST_DELETED_SHIFT;
+    });
   }
 
   @Test
@@ -251,24 +274,29 @@ public class TestShiftService {
   @Test
   public void testDeleteShift() {
     try {
-      shiftService.deleteShiftByName(TEST_MOCK_NAME);
+      shiftService.deleteShiftByName(TEST_DELETED_SHIFT);
     } catch (IllegalArgumentException e) {
       fail();
     }
-    verify(shiftDao, times(1)).deleteById(any());
+    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
+    deleteOrder.verify(scheduleDao, times(1)).delete(mockSchedule);
+    deleteOrder.verify(shiftDao, times(1)).delete(deletedShift);
   }
 
   @Test
   public void testDeleteShiftNull() {
     String error = "";
     try {
-      this.shiftService.deleteShiftByName(null);
+      shiftService.deleteShiftByName(null);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(any());
+    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
+    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
+    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift name cannot be empty.", error);
   }
+
 
   @Test
   public void testDeleteShiftEmpty() {
@@ -278,7 +306,9 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(any());
+    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
+    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
+    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift name cannot be empty.", error);
   }
 
@@ -290,7 +320,9 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(any());
+    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
+    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
+    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift name cannot be empty.", error);
   }
 
@@ -302,7 +334,9 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    verify(shiftDao, times(0)).deleteById(anyString());
+    InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
+    deleteOrder.verify(scheduleDao, times(0)).delete(mockSchedule);
+    deleteOrder.verify(shiftDao, times(0)).delete(deletedShift);
     assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
   }
 
@@ -382,8 +416,6 @@ public class TestShiftService {
     assertEquals(TEST_NAME, shift.getName());
     assertEquals(TEST_START_TIME1, shift.getStartTime());
     assertEquals(TEST_END_TIME1, shift.getEndTime());
-
-
   }
 
   @Test

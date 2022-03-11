@@ -7,8 +7,10 @@ import java.sql.Time;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
 import mcgill.ecse321.grocerystore.dao.ShiftRepository;
+import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 
@@ -17,6 +19,8 @@ public class ShiftService {
   ShiftRepository shiftRepo;
   @Autowired
   EmployeeScheduleRepository scheduleRepo;
+  @Autowired
+  EmployeeRepository employeeRepo;
 
 
   @Transactional
@@ -68,21 +72,29 @@ public class ShiftService {
     return shiftRepo.findAllByOrderByName();
   }
 
-  @Transactional
-  public void deleteShiftByName(String name) {
-    Shift shift = this.getShift(name);
-    for (EmployeeSchedule schedule : this.scheduleRepo.findAllByOrderByDate()) {
-      if (schedule.getShift() == shift) {
-        schedule.setShift(null);
-      }
 
+  @Transactional
+  public void deleteShiftByName(String shiftName) {
+    Shift shift = this.getShift(shiftName);
+    EmployeeSchedule schedule = null;
+    for (Employee employee : this.employeeRepo.findAll()) {
+      // each shcedule instance should be in only one employee instance
+      for (EmployeeSchedule deletedschedule : employee.getEmployeeSchedules()) {
+        if (deletedschedule.getShift().equals(shift)) {
+          schedule = deletedschedule;
+          break;
+        }
+      }
+      employee.removeEmployeeSchedule(schedule);
+      this.employeeRepo.save(employee);
+      this.scheduleRepo.delete(schedule);
     }
-    this.shiftRepo.deleteById(shift.getName());
+    this.shiftRepo.delete(shift);
   }
+
 
   @Transactional
   public Shift updateShift(String name, Time startTime, Time endTime) {
-
     if (startTime == null) {
       throw new IllegalArgumentException("Shift start time cannot be null.");
     }
