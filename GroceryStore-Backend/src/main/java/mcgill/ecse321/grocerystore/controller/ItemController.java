@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,11 @@ public class ItemController {
       @RequestParam int inventory, @RequestParam boolean canDeliver,
       @RequestParam boolean canPickUp) throws IllegalArgumentException {
     return convertToDto(service.createItem(name, price, inventory, canDeliver, canPickUp));
+  }
+
+  @DeleteMapping(value = {"/item/{name}", "/item/{name}/"})
+  public void delete(@PathVariable("name") String name) {
+    service.delete(name);
   }
 
   @GetMapping(value = {"/item/{name}", "/item/{name}/"})
