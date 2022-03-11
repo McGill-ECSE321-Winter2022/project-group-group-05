@@ -49,15 +49,15 @@ public class ItemCategoryController {
   }
 
   @PatchMapping(value = {"/itemCategory/{name}/addItem", "/itemCategory/{name}/addItem/"})
-  public void addItemToItemCategory(@PathVariable("name") String name,
+  public ItemCategoryDto addItemToItemCategory(@PathVariable("name") String name,
       @RequestParam String itemName) throws IllegalArgumentException {
-    service.addItemToItemCategory(itemName, name);
+    return convertToDto(service.addItemToItemCategory(itemName, name));
   }
 
   @PatchMapping(value = {"/itemCategory/{name}/removeItem", "/itemCategory/{name}/removeItem/"})
-  public void removeItemFromItemCategory(@PathVariable("name") String name,
+  public ItemCategoryDto removeItemFromItemCategory(@PathVariable("name") String name,
       @RequestParam String itemName) throws IllegalArgumentException {
-    service.removeItemFromItemCategory(itemName, name);
+    return convertToDto(service.removeItemFromItemCategory(itemName, name));
   }
 
   private List<ItemDto> createItemDtosForItemCategory(ItemCategory i) {

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -121,22 +120,6 @@ public class TestOwnerService {
 
   @Test
   public void testCreateOwnerEmptyUsername() {
-    String username = "";
-    String password = "mars";
-    String email = "brunomars@gmail.com";
-    Owner owner = null;
-    String error = null;
-    try {
-      owner = service.createOwner(username, password, email);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateOwnerSpacesUsername() {
     String username = "  ";
     String password = "mars";
     String email = "brunomars@gmail.com";
@@ -216,7 +199,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testCreateOwnerSpacesPassword() {
+  public void testCreateOwnerEmptyPassword() {
     String username = "bruno";
     String password = "  ";
     String email = "brunomars@gmail.com";
@@ -249,22 +232,6 @@ public class TestOwnerService {
 
   @Test
   public void testCreateOwnerEmptyEmail() {
-    String username = "bruno";
-    String password = "mars";
-    String email = "";
-    Owner owner = null;
-    String error = null;
-    try {
-      owner = service.createOwner(username, password, email);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Email cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateOwnerSpacesEmail() {
     String username = "bruno";
     String password = "mars";
     String email = "  ";
@@ -344,7 +311,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testGetExistingPerson() {
+  public void testGetOwner() {
     Owner owner = null;
     try {
       owner = service.getOwner(OWNER_KEY);
@@ -356,7 +323,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testGetNonExistingPerson() {
+  public void testGetNonExistentOwner() {
     String error = null;
     try {
       service.getOwner(NONEXISTING_KEY);
@@ -367,7 +334,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testGetNonExistingPersonNullUsername() {
+  public void testGetOwnerNullUsername() {
     String error = null;
     try {
       service.getOwner(null);
@@ -378,18 +345,7 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testGetNonExistingPersonEmptyUsername() {
-    String error = null;
-    try {
-      service.getOwner("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetNonExistingPersonSpacesUsername() {
+  public void testGetOwnerEmptyUsername() {
     String error = null;
     try {
       service.getOwner("  ");
@@ -412,45 +368,6 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testUpdateOwnerNullUsername() {
-    Owner owner = null;
-    String error = "";
-    try {
-      owner = service.updateOwner(null, PASSWORD_KEY, EMAIL_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testUpdateOwnerEmptyUsername() {
-    Owner owner = null;
-    String error = "";
-    try {
-      owner = service.updateOwner("", PASSWORD_KEY, EMAIL_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testUpdateOwnerSpacesUsername() {
-    Owner owner = null;
-    String error = "";
-    try {
-      owner = service.updateOwner("  ", PASSWORD_KEY, EMAIL_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
   public void testUpdateOwnerNullPassword() {
     Owner owner = null;
     String error = "";
@@ -465,19 +382,6 @@ public class TestOwnerService {
 
   @Test
   public void testUpdateOwnerEmptyPassword() {
-    Owner owner = null;
-    String error = "";
-    try {
-      owner = service.updateOwner(OWNER_KEY, "", EMAIL_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Password cannot be empty!", error);
-  }
-
-  @Test
-  public void testUpdateOwnerSpacesPassword() {
     Owner owner = null;
     String error = "";
     try {
@@ -504,19 +408,6 @@ public class TestOwnerService {
 
   @Test
   public void testUpdateOwnerEmptyEmail() {
-    Owner owner = null;
-    String error = "";
-    try {
-      owner = service.updateOwner(OWNER_KEY, PASSWORD_KEY, "");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Email cannot be empty!", error);
-  }
-
-  @Test
-  public void testUpdateOwnerSpacesEmail() {
     Owner owner = null;
     String error = "";
     try {
@@ -581,19 +472,6 @@ public class TestOwnerService {
   }
 
   @Test
-  public void testUpdateNonExistingOwner() {
-    Owner owner = null;
-    String error = "";
-    try {
-      owner = service.updateOwner(NONEXISTING_KEY, PASSWORD_KEY, EMAIL_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(owner);
-    assertEquals("Owner does not exist!", error);
-  }
-
-  @Test
   public void testDeleteOwner() {
     try {
       service.deleteOwner(OWNER_KEY);
@@ -601,54 +479,6 @@ public class TestOwnerService {
       fail();
     }
     verify(ownerDao).delete(any());
-  }
-
-  @Test
-  public void testDeleteNullOwner() {
-    String error = null;
-    try {
-      service.deleteOwner(null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(ownerDao, times(0)).delete(any());
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteEmptyOwner() {
-    String error = null;
-    try {
-      service.deleteOwner("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(ownerDao, times(0)).delete(any());
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteSpacesOwner() {
-    String error = null;
-    try {
-      service.deleteOwner("   ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(ownerDao, times(0)).delete(any());
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteNonExistingOwner() {
-    String error = null;
-    try {
-      service.deleteOwner(NONEXISTING_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(ownerDao, times(0)).delete(any());
-    assertEquals("Owner does not exist!", error);
   }
 
 }

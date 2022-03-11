@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
 import mcgill.ecse321.grocerystore.dao.CustomerRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
@@ -104,6 +102,9 @@ public class TestCustomerService {
     lenient().when(customerDao.save(any(Customer.class))).thenAnswer(returnParameterAsAnswer);
   }
 
+  // Tests for createCustomer
+  // createCustomer uses setPassword, setEmail, setAddress, and setIsLocal. Tests for invalid
+  // passwords, emails, and addresses are covered by tests for those methods instead.
   @Test
   public void testCreateCustomer() {
     String username = "test";
@@ -145,24 +146,6 @@ public class TestCustomerService {
 
   @Test
   public void testCreateCustomerEmptyUsername() {
-    String username = "";
-    String password = "password";
-    String email = "123@gmail.com";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerSpacesUsername() {
     String username = "   ";
     String password = "password";
     String email = "123@gmail.com";
@@ -234,244 +217,6 @@ public class TestCustomerService {
   }
 
   @Test
-  public void testCreateCustomerNullPassword() {
-    String username = "test";
-    String password = null;
-    String email = "123@gmail.com";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Password cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerEmptyPassword() {
-    String username = "test";
-    String password = "";
-    String email = "123@gmail.com";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Password cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerSpacesPassword() {
-    String username = "test";
-    String password = "   ";
-    String email = "123@gmail.com";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Password cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerNullEmail() {
-    String username = "test";
-    String password = "password";
-    String email = null;
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerEmptyEmail() {
-    String username = "test";
-    String password = "password";
-    String email = "";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerSpacesEmail() {
-    String username = "test";
-    String password = "password";
-    String email = "   ";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email cannot be empty!", error);
-  }
-
-  // check if the email address contains "."
-  @Test
-  public void testCreateCustomerMissingPeriodEmail() {
-    String username = "test";
-    String password = "password";
-    String email = "123@gmailcom";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email is invalid!", error);
-  }
-
-  // check if the email address contains "@"
-  @Test
-  public void testCreateCustomerMissingAtEmail() {
-    String username = "test";
-    String password = "password";
-    String email = "123gmail.com";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email is invalid!", error);
-  }
-
-  // check if the email address contains "@"
-  @Test
-  public void createCustomerInvalidEmailDomain() {
-    String username = "test";
-    String password = "password";
-    String email = "123@.com";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email is invalid!", error);
-  }
-
-  // check if the last character isn't "."
-  @Test
-  public void testCreateCustomerInvalidEmailTopLevelDomain() {
-    String username = "test";
-    String password = "password";
-    String email = "123@gmail.";
-    String address = "McGill";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Email is invalid!", error);
-  }
-
-  @Test
-  public void testCreateCustomerNullAddress() {
-    String username = "test";
-    String password = "password";
-    String email = "123@gmail.com";
-    String address = null;
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Address cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerEmptyAddress() {
-    String username = "test";
-    String password = "password";
-    String email = "123@gmail.com";
-    String address = "";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Address cannot be empty!", error);
-  }
-
-  @Test
-  public void testCreateCustomerSpacesAddress() {
-    String username = "test";
-    String password = "password";
-    String email = "123@gmail.com";
-    String address = "   ";
-    Boolean isLocal = true;
-    Customer customer = null;
-    String error = null;
-    try {
-      customer = service.createCustomer(username, password, email, address, isLocal);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(customer);
-    assertEquals("Address cannot be empty!", error);
-  }
-
-  @Test
   public void testSetCustomerPassword() {
     String password = "password";
     try {
@@ -495,17 +240,6 @@ public class TestCustomerService {
 
   @Test
   public void testSetCustomerEmptyPassword() {
-    String error = null;
-    try {
-      service.setCustomerPassword(TEST, "");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Password cannot be empty!", error);
-  }
-
-  @Test
-  public void testSetCustomerSpacesPassword() {
     String error = null;
     try {
       service.setCustomerPassword(TEST, "   ");
@@ -539,17 +273,6 @@ public class TestCustomerService {
 
   @Test
   public void testSetCustomerEmptyEmail() {
-    String error = null;
-    try {
-      service.setCustomerEmail(TEST, "");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Email cannot be empty!", error);
-  }
-
-  @Test
-  public void testSetCustomerSpacesEmail() {
     String error = null;
     try {
       service.setCustomerEmail(TEST, "   ");
@@ -637,17 +360,6 @@ public class TestCustomerService {
   public void testSetCustomerEmptyAddress() {
     String error = null;
     try {
-      service.setCustomerAddress(TEST, "");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Address cannot be empty!", error);
-  }
-
-  @Test
-  public void testSetCustomerSpacesAddress() {
-    String error = null;
-    try {
       service.setCustomerAddress(TEST, "   ");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -666,14 +378,13 @@ public class TestCustomerService {
     assertEquals(isLocal, CUSTOMER_TEST.getIsLocal());
   }
 
-
   @Test
-  public void testGetExistingPerson() {
+  public void testGetCustomer() {
     assertEquals(CUSTOMER_KEY, service.getCustomer(CUSTOMER_KEY).getUsername());
   }
 
   @Test
-  public void testGetNonExistingPerson() {
+  public void testGetNonExistingCustomer() {
     String error = null;
     try {
       service.getCustomer(NONEXISTING_KEY);
@@ -684,7 +395,7 @@ public class TestCustomerService {
   }
 
   @Test
-  public void testGetNonExistingPersonNullUserame() {
+  public void testGetCustomerNullUserame() {
     String error = null;
     try {
       service.getCustomer(null);
@@ -695,18 +406,7 @@ public class TestCustomerService {
   }
 
   @Test
-  public void testGetNonExistingPersonEmptyUserame() {
-    String error = null;
-    try {
-      service.getCustomer("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetNonExistingPersonSpacesUserame() {
+  public void testGetCustomerEmptyUserame() {
     String error = null;
     try {
       service.getCustomer("   ");
@@ -728,50 +428,6 @@ public class TestCustomerService {
   }
 
   @Test
-  public void testGetPurchasesByNullUsername() {
-    String error = null;
-    try {
-      service.getPurchasesByUsername(null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetPurchasesByEmptyUsername() {
-    String error = null;
-    try {
-      service.getPurchasesByUsername("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetPurchasesBySpacesUsername() {
-    String error = null;
-    try {
-      service.getPurchasesByUsername("   ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testGetPurchasesByNonExistingUsername() {
-    String error = null;
-    try {
-      service.getPurchasesByUsername(NONEXISTING_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("User does not exist!", error);
-  }
-
-  @Test
   public void testDeleteCustomer() {
     try {
       service.deleteCustomer(CUSTOMER_KEY);
@@ -781,51 +437,4 @@ public class TestCustomerService {
     verify(customerDao).delete(any());
   }
 
-  @Test
-  public void testDeleteNullCustomer() {
-    String error = null;
-    try {
-      service.deleteCustomer(null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(customerDao, times(0)).delete(any());
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteEmptyCustomer() {
-    String error = null;
-    try {
-      service.deleteCustomer("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(customerDao, times(0)).delete(any());
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteSpacesCustomer() {
-    String error = null;
-    try {
-      service.deleteCustomer("   ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(customerDao, times(0)).delete(any());
-    assertEquals("Username cannot be empty!", error);
-  }
-
-  @Test
-  public void testDeleteNonExistingCustomer() {
-    String error = null;
-    try {
-      service.deleteCustomer(NONEXISTING_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(customerDao, times(0)).delete(any());
-    assertEquals("User does not exist!", error);
-  }
 }

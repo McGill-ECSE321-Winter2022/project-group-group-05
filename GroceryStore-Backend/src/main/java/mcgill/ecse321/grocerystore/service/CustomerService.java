@@ -95,9 +95,6 @@ public class CustomerService {
    */
   @Transactional
   public List<Purchase> getPurchasesByUsername(String username) throws IllegalArgumentException {
-    if (username == null || username.trim().length() == 0) {
-      throw new IllegalArgumentException("Username cannot be empty!");
-    }
     Customer customer = getCustomer(username);
     List<Purchase> purchaseList = new ArrayList<Purchase>();
     for (Purchase purchase : customer.getPurchases()) {
@@ -115,9 +112,6 @@ public class CustomerService {
 
   @Transactional
   public void deleteCustomer(String username) throws IllegalArgumentException {
-    if (username == null || username.trim().length() == 0) {
-      throw new IllegalArgumentException("Username cannot be empty!");
-    }
     Customer customer = getCustomer(username);
     customerRepository.delete(customer);
   }

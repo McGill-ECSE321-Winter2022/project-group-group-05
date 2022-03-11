@@ -45,44 +45,37 @@ public class ItemCategoryService {
   }
 
   @Transactional
-  public boolean addItemToItemCategory(String itemName, String categoryName)
+  public ItemCategory addItemToItemCategory(String itemName, String categoryName)
       throws IllegalArgumentException {
     if (itemName == null || itemName.trim().length() == 0) {
       throw new IllegalArgumentException("Item name cannot be empty!");
-    }
-    if (categoryName == null || categoryName.trim().length() == 0) {
-      throw new IllegalArgumentException("Category name cannot be empty!");
     }
     Item item = itemRepository.findByName(itemName);
     if (item == null) {
       throw new IllegalArgumentException("This item does not exist!");
     }
     ItemCategory itemCategory = getItemCategory(categoryName);
-    for (ItemCategory ic : getAllItemCategories()) {
-      for (Item i : ic.getItems()) {
-        if (i.equals(item)) {
-          throw new IllegalArgumentException("This item already belongs to a category!");
-        }
-      }
+    if (itemCategory.addItem(item)) {
+      return itemCategoryRepository.save(itemCategory);
     }
-    return itemCategory.addItem(item);
+    throw new IllegalArgumentException("This item is already in this category!");
   }
 
   @Transactional
-  public boolean removeItemFromItemCategory(String itemName, String categoryName)
+  public ItemCategory removeItemFromItemCategory(String itemName, String categoryName)
       throws IllegalArgumentException {
     if (itemName == null || itemName.trim().length() == 0) {
       throw new IllegalArgumentException("Item name cannot be empty!");
-    }
-    if (categoryName == null || categoryName.trim().length() == 0) {
-      throw new IllegalArgumentException("Category name cannot be empty!");
     }
     Item item = itemRepository.findByName(itemName);
     if (item == null) {
       throw new IllegalArgumentException("This item does not exist!");
     }
     ItemCategory itemCategory = getItemCategory(categoryName);
-    return itemCategory.removeItem(item);
+    if (itemCategory.removeItem(item)) {
+      return itemCategoryRepository.save(itemCategory);
+    }
+    throw new IllegalArgumentException("This item isn't in this category!");
   }
 
   /**
@@ -94,9 +87,6 @@ public class ItemCategoryService {
    */
   @Transactional
   public List<Item> getItemsByItemCategory(String name) throws IllegalArgumentException {
-    if (name == null || name.trim().length() == 0) {
-      throw new IllegalArgumentException("Category name cannot be empty!");
-    }
     ItemCategory itemCategory = getItemCategory(name);
     List<Item> itemList = new ArrayList<Item>();
     for (Item item : itemCategory.getItems()) {
@@ -115,4 +105,5 @@ public class ItemCategoryService {
   public List<ItemCategory> getAllItemCategories() {
     return itemCategoryRepository.findAllByOrderByName();
   }
+  
 }

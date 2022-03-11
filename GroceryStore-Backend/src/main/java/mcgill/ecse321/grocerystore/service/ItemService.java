@@ -11,6 +11,7 @@ import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.dao.PurchaseRepository;
 import mcgill.ecse321.grocerystore.dao.SpecificItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
+import mcgill.ecse321.grocerystore.model.ItemCategory;
 import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.SpecificItem;
 
@@ -28,7 +29,7 @@ public class ItemService {
   @Autowired
   SpecificItemRepository specificItemRepository;
   @Autowired
-  ItemCategoryRepository itemCatagoryRepository;
+  ItemCategoryRepository itemCategoryRepository;
 
   @Transactional
   public Item createItem(String name, double price, int inventory, boolean canDeliver,
@@ -72,6 +73,7 @@ public class ItemService {
     // remove associations
     Iterator<Purchase> pIter =
         purchaseRepository.findAllByOrderByTimeOfPurchaseMillisDesc().iterator();
+    // delete all SpecificItems referencing this item
     while (pIter.hasNext()) {
       Purchase p = pIter.next();
       Iterator<SpecificItem> sIter = p.getSpecificItems().iterator();
@@ -82,6 +84,19 @@ public class ItemService {
           p = purchaseRepository.save(p);
           specificItemRepository.delete(s);
           break;
+        }
+      }
+    }
+    Iterator<ItemCategory> icIter = itemCategoryRepository.findAllByOrderByName().iterator();
+    // remove this item from all ItemCategories
+    while (icIter.hasNext()) {
+      ItemCategory ic = icIter.next();
+      Iterator<Item> iIter = ic.getItems().iterator();
+      while (iIter.hasNext()) {
+        Item i = iIter.next();
+        if (i.equals(item)) {
+          ic.removeItem(item);
+          ic = itemCategoryRepository.save(ic);
         }
       }
     }

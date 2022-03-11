@@ -77,9 +77,7 @@ public class OwnerService {
     if (email == null || email.trim().length() == 0) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
-    if (email.contains(" ") || !email.contains(".") || email.indexOf("@") < 1
-        || email.indexOf(".") <= email.indexOf("@") + 1
-        || email.lastIndexOf(".") >= email.length() - 1) {
+    if (!verifyEmail(email)) {
       throw new IllegalArgumentException("Email is invalid!");
     }
     Owner owner = getOwner(username);
