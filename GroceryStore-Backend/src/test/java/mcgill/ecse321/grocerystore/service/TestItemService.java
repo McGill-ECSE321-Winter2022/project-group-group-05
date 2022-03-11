@@ -9,14 +9,17 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -106,6 +109,28 @@ public class TestItemService {
       return ITEM_KEY;
     });
 
+    this.setMockForDelete();
+  }
+
+  private void setMockForDelete() {
+    // mock for testDelete
+    lenient().when(purchaseDao.findAllByOrderByTimeOfPurchaseMillisDesc())
+        .thenAnswer((InvocationOnMock invocation) -> {
+          ArrayList<Purchase> purchases = new ArrayList<>();
+          purchases.add(mockPurchase);
+          return purchases;
+        });
+    lenient().when(mockPurchase.getSpecificItems()).thenAnswer((InvocationOnMock invocation) -> {
+      HashSet<SpecificItem> spItems = new HashSet<>();
+      spItems.add(mockSpecificItem);
+      return spItems;
+    });
+    lenient().when(mockSpecificItem.getItem()).thenAnswer((InvocationOnMock invocation) -> {
+      return mockItem;
+    });
+    lenient().when(mockItem.getName()).thenAnswer((InvocationOnMock invocation) -> {
+      return ITEM_KEY;
+    });
   }
 
   // Test for class createItem
@@ -208,6 +233,18 @@ public class TestItemService {
     }
     assertNull(item);
     assertEquals("Item inventory cannot be negative!", error);
+  }
+
+  @Test
+  public void testDeleteItem() {
+    try {
+      service.delete(ITEM_KEY);
+    } catch (IllegalArgumentException e) {
+      fail(e.getMessage());
+    }
+    InOrder deleteOrder = inOrder(specificItemDao, itemDao);
+    deleteOrder.verify(specificItemDao, times(1)).delete(mockSpecificItem);
+    deleteOrder.verify(itemDao, times(1)).delete(mockItem);
   }
 
   // Test for class getItem
