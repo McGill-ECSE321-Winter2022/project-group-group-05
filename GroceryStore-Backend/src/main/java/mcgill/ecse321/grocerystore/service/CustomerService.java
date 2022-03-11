@@ -60,28 +60,30 @@ public class CustomerService {
   }
 
   @Transactional
-  public void setCustomerPassword(String username, String password)
+  public Customer setCustomerPassword(String username, String password)
       throws IllegalArgumentException {
     Customer customer = getCustomer(username);
-    setPassword(customer, password);
+    return setPassword(customer, password);
   }
 
   @Transactional
-  public void setCustomerEmail(String username, String email) throws IllegalArgumentException {
+  public Customer setCustomerEmail(String username, String email) throws IllegalArgumentException {
     Customer customer = getCustomer(username);
-    setEmail(customer, email);
+    return setEmail(customer, email);
   }
 
   @Transactional
-  public void setCustomerAddress(String username, String address) throws IllegalArgumentException {
+  public Customer setCustomerAddress(String username, String address)
+      throws IllegalArgumentException {
     Customer customer = getCustomer(username);
-    setAddress(customer, address);
+    return setAddress(customer, address);
   }
 
   @Transactional
-  public void setCustomerIsLocal(String username, boolean isLocal) throws IllegalArgumentException {
+  public Customer setCustomerIsLocal(String username, boolean isLocal)
+      throws IllegalArgumentException {
     Customer customer = getCustomer(username);
-    setIsLocal(customer, isLocal);
+    return setIsLocal(customer, isLocal);
   }
 
   /**
@@ -126,14 +128,15 @@ public class CustomerService {
     return customerList;
   }
 
-  private void setPassword(Customer customer, String password) throws IllegalArgumentException {
+  private Customer setPassword(Customer customer, String password) throws IllegalArgumentException {
     if (password == null || password.trim().length() == 0) {
       throw new IllegalArgumentException("Password cannot be empty!");
     }
     customer.setPassword(password);
+    return customerRepository.save(customer);
   }
 
-  private void setEmail(Customer customer, String email) throws IllegalArgumentException {
+  private Customer setEmail(Customer customer, String email) throws IllegalArgumentException {
     if (email == null || email.trim().length() == 0) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
@@ -141,17 +144,20 @@ public class CustomerService {
       throw new IllegalArgumentException("Email is invalid!");
     }
     customer.setEmail(email);
+    return customerRepository.save(customer);
   }
 
-  private void setAddress(Customer customer, String address) throws IllegalArgumentException {
+  private Customer setAddress(Customer customer, String address) throws IllegalArgumentException {
     if (address == null || address.trim().length() == 0) {
       throw new IllegalArgumentException("Address cannot be empty!");
     }
     customer.setAddress(address);
+    return customerRepository.save(customer);
   }
 
-  private void setIsLocal(Customer customer, boolean isLocal) {
+  private Customer setIsLocal(Customer customer, boolean isLocal) {
     customer.setIsLocal(isLocal);
+    return customerRepository.save(customer);
   }
 
   /**

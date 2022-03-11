@@ -61,27 +61,27 @@ public class CustomerController {
   }
 
   @PatchMapping(value = {"/customer/{username}/setEmail", "/customer/{username}/setEmail/"})
-  public void setCustomerEmail(@PathVariable("username") String username,
+  public CustomerDto setCustomerEmail(@PathVariable("username") String username,
       @RequestParam String email) throws IllegalArgumentException {
-    service.setCustomerEmail(username, email);
+    return convertToDto(service.setCustomerEmail(username, email));
   }
 
   @PatchMapping(value = {"/customer/{username}/setPassword", "/customer/{username}/setPassword/"})
-  public void setCustomerPassword(@PathVariable("username") String username,
+  public CustomerDto setCustomerPassword(@PathVariable("username") String username,
       @RequestParam String password) throws IllegalArgumentException {
-    service.setCustomerPassword(username, password);
+    return convertToDto(service.setCustomerPassword(username, password));
   }
 
   @PatchMapping(value = {"/customer/{username}/setAddress", "/customer/{username}/setAddress/"})
-  public void setCustomerAddress(@PathVariable("username") String username,
+  public CustomerDto setCustomerAddress(@PathVariable("username") String username,
       @RequestParam String address) throws IllegalArgumentException {
-    service.setCustomerAddress(username, address);
+    return convertToDto(service.setCustomerAddress(username, address));
   }
 
   @PatchMapping(value = {"/customer/{username}/setIsLocal", "/customer/{username}/setIsLocal/"})
-  public void setCustomerIsLocal(@PathVariable("username") String username,
+  public CustomerDto setCustomerIsLocal(@PathVariable("username") String username,
       @RequestParam boolean isLocal) throws IllegalArgumentException {
-    service.setCustomerIsLocal(username, isLocal);
+    return convertToDto(service.setCustomerIsLocal(username, isLocal));
   }
 
   private List<PurchaseDto> createPurchaseDtosForCustomer(Customer c) {
