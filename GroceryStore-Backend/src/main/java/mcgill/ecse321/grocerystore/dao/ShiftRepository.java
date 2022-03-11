@@ -9,12 +9,19 @@ public interface ShiftRepository extends CrudRepository<Shift, String> {
 
   Shift findByName(String name);
 
-  List<Shift> findByNameContainingOrderByName(String nameFragment);
 
-  List<Shift> findByNameContainingOrderByNameDesc(String nameFragment);
+  List<Shift> findByNameIgnoreCaseContainingOrderByName(String nameFragment);
+
+  List<Shift> findByNameIgnoreCaseContainingOrderByNameDesc(String nameFragment);
+
 
   List<Shift> findByStartTimeAfter(Time time);
 
   List<Shift> findByEndTimeBefore(Time time);
+
+
+  List<Shift> findAllByOrderByName();
+
+
 
 }

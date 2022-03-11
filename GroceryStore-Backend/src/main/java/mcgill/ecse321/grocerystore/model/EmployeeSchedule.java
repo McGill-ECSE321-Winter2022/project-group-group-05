@@ -49,6 +49,8 @@ public class EmployeeSchedule {
 
   // Setter Methods
   // --------------
+
+
   public void setDate(long date) {
     this.date = new Date(date);
   }

@@ -69,4 +69,35 @@ public class Shift {
     this.endTime = endTime;
   }
 
+  /**
+   * At creation, Shift will have default Object.hashCode(). <br>
+   * Once name is set, the hashcode will be name.hashCode().
+   */
+  @Override
+  public int hashCode() {
+    if (this.getName() == null)
+      return super.hashCode();
+    return this.getName().hashCode();
+  }
+
+  /**
+   * Two Shifts are not equal if they both have name == null because they haven't been saved to the
+   * database yet, unless they're equal by == as defined in Object. <br>
+   * Otherwise, they're equal if they have the same name.
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (o == null)
+      return false;
+    if (o == this)
+      return true;
+    if (o.getClass() == this.getClass()) {
+      Shift obj = (Shift) o;
+      if (obj.getName() == null)
+        return false;
+      return obj.getName().equals(this.getName());
+    }
+    return false;
+  }
+
 }
