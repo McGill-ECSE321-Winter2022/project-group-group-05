@@ -11,7 +11,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,8 +44,6 @@ public class TestShiftService {
   @Mock
   private EmployeeRepository employeeDao;
   @Mock
-  private Shift mockShift;
-  @Mock
   private Shift deletedShift;
   @Mock
   private Employee mockEmployee;
@@ -68,7 +65,6 @@ public class TestShiftService {
 
   @BeforeEach
   public void setMockOutput() {
-    mockShift.setName(TEST_NAME);
     lenient().when(shiftDao.findByName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
       if (invocation.getArgument(0).equals(TEST_NAME)) {
         Shift shift = new Shift();
@@ -86,7 +82,6 @@ public class TestShiftService {
       List<Shift> shiftList = new ArrayList<Shift>();
       var shiftOne = new Shift();
       shiftOne.setName(TEST_NAME1);
-      this.mockShift.setName(FAKE_NAME);
       shiftOne.setStartTime(TEST_START_TIME);
       shiftOne.setEndTime(TEST_END_TIME);
       var shiftTwo = new Shift();
@@ -161,7 +156,7 @@ public class TestShiftService {
 
   @Test
   public void testCreateShiftEmpty() {
-    String name = "";
+    String name = "  ";
     Time startTime = Time.valueOf("14:00:00");
     Time endTime = Time.valueOf("15:00:00");
     String error = null;
@@ -171,23 +166,6 @@ public class TestShiftService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(shift);
-    assertEquals("Shift name cannot be empty.", error);
-  }
-
-  @Test
-  public void testCreateShiftSpaces() {
-    String name = " ";
-    Time startTime = Time.valueOf("14:00:00");
-    Time endTime = Time.valueOf("15:00:00");
-    String error = null;
-    Shift shift = null;
-    try {
-      shift = shiftService.createShift(name, startTime, endTime);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-
     assertNull(shift);
     assertEquals("Shift name cannot be empty.", error);
   }
@@ -197,7 +175,6 @@ public class TestShiftService {
     String name = TEST_NAME;
     Time startTime = Time.valueOf("14:00:00");
     Time endTime = Time.valueOf("15:00:00");
-
     Shift shift = null;
     String error = "";
     try {
@@ -265,59 +242,6 @@ public class TestShiftService {
     InOrder deleteOrder = inOrder(scheduleDao, shiftDao);
     deleteOrder.verify(scheduleDao, times(1)).delete(mockSchedule);
     deleteOrder.verify(shiftDao, times(1)).delete(deletedShift);
-  }
-
-  @Test
-  public void testDeleteShiftNull() {
-    String error = "";
-    try {
-      shiftService.deleteShiftByName(null);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(scheduleDao, times(0)).delete(mockSchedule);
-    verify(shiftDao, times(0)).delete(deletedShift);
-    assertEquals("Shift name cannot be empty.", error);
-  }
-
-
-  @Test
-  public void testDeleteShiftEmpty() {
-    String error = "";
-    try {
-      shiftService.deleteShiftByName("");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(scheduleDao, times(0)).delete(mockSchedule);
-    verify(shiftDao, times(0)).delete(deletedShift);
-    assertEquals("Shift name cannot be empty.", error);
-  }
-
-  @Test
-  public void testDeleteShiftSpaces() {
-    String error = "";
-    try {
-      shiftService.deleteShiftByName(" ");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(scheduleDao, times(0)).delete(mockSchedule);
-    verify(shiftDao, times(0)).delete(deletedShift);
-    assertEquals("Shift name cannot be empty.", error);
-  }
-
-  @Test
-  public void testDeleteShiftNonExistent() {
-    String error = "";
-    try {
-      shiftService.deleteShiftByName(FAKE_NAME);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    verify(scheduleDao, times(0)).delete(mockSchedule);
-    verify(shiftDao, times(0)).delete(deletedShift);
-    assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
   }
 
   @Test
@@ -396,58 +320,6 @@ public class TestShiftService {
   }
 
   @Test
-  public void testUpdateShiftNull() {
-    Shift shift = null;
-    String error = "";
-    try {
-      shift = this.shiftService.updateShift(null, TEST_START_TIME1, TEST_END_TIME1);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(shift);
-    assertEquals("Shift name cannot be empty.", error);
-  }
-
-  @Test
-  public void testUpdateShiftEmpty() {
-    Shift shift = null;
-    String error = "";
-    try {
-      shift = this.shiftService.updateShift("", TEST_START_TIME1, TEST_END_TIME1);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(shift);
-    assertEquals("Shift name cannot be empty.", error);
-  }
-
-  @Test
-  public void testUpdateShiftSpaces() {
-    Shift shift = null;
-    String error = "";
-    try {
-      shift = this.shiftService.updateShift(" ", TEST_START_TIME1, TEST_END_TIME1);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(shift);
-    assertEquals("Shift name cannot be empty.", error);
-  }
-
-  @Test
-  public void testUpdateShiftNonExistent() {
-    Shift shift = null;
-    String error = "";
-    try {
-      shift = this.shiftService.updateShift(FAKE_NAME, TEST_START_TIME1, TEST_END_TIME1);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(shift);
-    assertEquals("Shift with name '" + FAKE_NAME + "' does not exist.", error);
-  }
-
-  @Test
   public void testUpdateShiftTimeConflict() {
     Shift shift = null;
     String error = "";
@@ -485,6 +357,7 @@ public class TestShiftService {
     assertNull(shift);
     assertEquals("Shift end time cannot be null.", error);
   }
+  
 }
 
 
