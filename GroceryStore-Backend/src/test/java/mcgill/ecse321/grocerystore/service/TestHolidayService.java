@@ -167,7 +167,7 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testGetNonExistingHolidayNullName() {
+  public void testGetHolidayNullName() {
     String error = null;
     try {
       service.getHoliday(null);
@@ -178,7 +178,7 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testGetNonExistingHolidayEmptyName() {
+  public void testGetHolidayEmptyName() {
     String error = null;
     try {
       service.getHoliday("");
@@ -189,7 +189,7 @@ public class TestHolidayService {
   }
 
   @Test
-  public void testGetNonExistingHolidaySpacesName() {
+  public void testGetHolidaySpacesName() {
     String error = null;
     try {
       service.getHoliday("  ");
