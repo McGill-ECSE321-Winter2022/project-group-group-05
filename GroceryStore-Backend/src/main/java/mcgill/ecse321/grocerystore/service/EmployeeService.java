@@ -208,6 +208,7 @@ public class EmployeeService {
     }
     EmployeeSchedule scheduleToBeRemoved = null;
     if (employee.getEmployeeSchedules() != null) {
+      // Find the correct EmployeeSchedule; there should only be one that matches.
       for (var existingSchedule : employee.getEmployeeSchedules()) {
         if (existingSchedule.getDate().equals(date)
             && existingSchedule.getShift().getName().equals(shift)) {
