@@ -73,6 +73,7 @@ public class PurchaseService {
     Purchase purchase = this.getPurchase(purchaseId);
     this.verifyPaidState(purchase);
     purchase.setState(PurchaseState.Cancelled);
+    this.restoreInventory(purchase);
     return purchaseRepo.save(purchase);
   }
 
@@ -277,6 +278,7 @@ public class PurchaseService {
       throw new IllegalArgumentException("This is a POS purchase.");
     }
     this.verifyCartState(purchase);
+    this.verifyCartNotEmpty(purchase);
     this.verifyCheckoutInventory(purchase);
     this.verifyDeliveryPickup(purchase);
     // proceed with checkout
@@ -343,6 +345,7 @@ public class PurchaseService {
       throw new IllegalArgumentException("Not a POS purchase.");
     }
     this.verifyCartState(purchase);
+    this.verifyCartNotEmpty(purchase);
     this.verifyCheckoutInventory(purchase);
     // proceed with checkout
     for (SpecificItem spItem : purchase.getSpecificItems()) {
@@ -504,6 +507,20 @@ public class PurchaseService {
       throw new IllegalArgumentException("POS account 'kiosk' not found.");
     }
     return pos;
+  }
+
+  @Transactional
+  private void restoreInventory(Purchase purchase) {
+    for (SpecificItem spItem : purchase.getSpecificItems()) {
+      spItem.getItem().addInventory(spItem.getPurchaseQuantity());
+      itemRepo.save(spItem.getItem());
+    }
+  }
+
+  private void verifyCartNotEmpty(Purchase purchase) throws IllegalArgumentException {
+    if (purchase.getSpecificItems().isEmpty()) {
+      throw new IllegalArgumentException("Purchase is empty.");
+    }
   }
 
   private void verifyCartState(Purchase purchase) throws IllegalArgumentException {

@@ -170,10 +170,19 @@ public class TestPurchaseService {
 
   @Test
   public void cancel() {
+    // set up
+    Purchase cart = purchaseRepo.findById(PURCHASE_ID_1);
+    SpecificItem s1 = new SpecificItem(itemRepo.findByName(ITEM_NAME_1), 5);
+    SpecificItem s2 = new SpecificItem(itemRepo.findByName(ITEM_NAME_2), 8);
+    s1 = specificItemRepo.save(s1);
+    s2 = specificItemRepo.save(s2);
+    cart.addSpecificItem(s1);
+    cart.addSpecificItem(s2);
+    cart = purchaseRepo.save(cart);
+    cart.setState(PurchaseState.Paid);
+    cart = purchaseRepo.save(cart);
+    // test cancel
     try {
-      Purchase p = purchaseRepo.findById(PURCHASE_ID_1);
-      p.setState(PurchaseState.Paid);
-      p = purchaseRepo.save(p);
       service.cancel(PURCHASE_ID_1);
       assertEquals(PurchaseState.Cancelled, purchaseRepo.findById(PURCHASE_ID_1).getState());
     } catch (IllegalArgumentException e) {
@@ -425,6 +434,15 @@ public class TestPurchaseService {
     } catch (IllegalArgumentException e) {
       fail(e.getMessage());
     }
+  }
+
+  @Test
+  public void payEmptyCart() {
+    // test pay
+    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+      service.pay(PURCHASE_ID_1);
+    });
+    assertTrue(thrown.getMessage().contains("Purchase is empty."));
   }
 
   @Test
