@@ -1,5 +1,6 @@
 package mcgill.ecse321.grocerystore.controller;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -33,10 +34,13 @@ public class ShiftController {
 
 
   @PostMapping(value = {"/shift/{name}", "/shift/{name}/"})
-  public ShiftDto createShift(@PathVariable("name") String name, @RequestParam Time startTime,
-      @RequestParam Time endTime) throws IllegalArgumentException {
-    Shift shift = service.createShift(name, startTime, endTime);
-    return convertToDto(shift);
+  public ShiftDto createShift(@PathVariable("name") String name,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,
+          pattern = "HH:mm") LocalTime startTime,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,
+          pattern = "HH:mm") LocalTime endTime)
+      throws IllegalArgumentException {
+    return convertToDto(service.createShift(name, Time.valueOf(startTime), Time.valueOf(endTime)));
   }
 
   @DeleteMapping(value = {"/shift/{name}", "/shift/{name}/"})
