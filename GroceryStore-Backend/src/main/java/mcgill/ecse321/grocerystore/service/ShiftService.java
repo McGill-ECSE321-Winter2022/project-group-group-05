@@ -6,6 +6,7 @@ import java.sql.Time;
 import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.EmployeeScheduleRepository;
@@ -13,7 +14,7 @@ import mcgill.ecse321.grocerystore.dao.ShiftRepository;
 import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
-
+@Service
 public class ShiftService {
   
   @Autowired
