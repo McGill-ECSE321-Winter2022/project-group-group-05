@@ -31,6 +31,7 @@ public class ShiftController {
   @Autowired
   private ShiftService service;
 
+
   @PostMapping(value = {"/shift/{name}", "/shift/{name}/"})
   public ShiftDto createShift(@PathVariable("name") String name, @RequestParam Time startTime,
       @RequestParam Time endTime) throws IllegalArgumentException {
@@ -57,8 +58,7 @@ public class ShiftController {
     if (endTime == null) {
       endTime = shift.getEndTime().toLocalTime();
     }
-    service.updateShift(name, Time.valueOf(startTime), Time.valueOf(endTime));
-    return convertToDto(service.getShift(name));
+    return convertToDto(service.updateShift(name, Time.valueOf(startTime), Time.valueOf(endTime)));
   }
 
   @GetMapping(value = {"/shift/{name}", "/shift/{name}/"})
