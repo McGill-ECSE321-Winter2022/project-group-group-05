@@ -8,8 +8,8 @@ The goal of this project is to create a website and an app to facilitate the gro
 
 Have a look at our [wiki](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki) for more info!
 
-Heroku Backend Link: https://grocery-backend-g05-mcgill.herokuapp.com/  
-Click [here](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/RESTful-Service-Documentation) for the documentation of our REST API.
+Heroku Backend URL: https://grocery-backend-g05-mcgill.herokuapp.com/  
+Click [here](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/RESTful-Service-Documentation) for the documentation of our REST API. All endpoints are appended after the Heroku Backend URL above.
 
 ## Team Members
 
