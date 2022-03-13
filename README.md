@@ -63,5 +63,5 @@ Started on Feb 28, 2022
 * **Sibo**: RESTful services, controller, unit testing, and documentation for Owner, OpeningHours, and Holiday.
 * **Annie**: RESTful services, controller, unit testing, and documentation for Item. Recorded meeting minutes.
 * **Yida**: RESTful services, controller, unit testing, and documentation for Shift.
-* **Jimmy**: RESTful services, controller, unit testing, and documentation for Purchase. Set up Github packages and dependencies. Service documentation formatting. Fixing typos and code review.
+* **Jimmy**: RESTful services, controller, unit testing, and documentation for Purchase. Set up Github packages and dependencies. Setup CI for deploying to heroku. Service documentation formatting. Fixing typos and code review.
 * **Harrison**: RESTful services, controller, unit testing, and documentation for Employee. Set up skeleton for Project Wiki. Code review. Wrote software quality assurance plan. Sprint 2 section of README.md.
