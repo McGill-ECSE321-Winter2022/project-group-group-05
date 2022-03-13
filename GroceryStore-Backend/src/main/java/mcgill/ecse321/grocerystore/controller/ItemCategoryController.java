@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,11 @@ public class ItemCategoryController {
       throws IllegalArgumentException {
     ItemCategory itemCategory = service.createItemCategory(name);
     return convertToDto(itemCategory);
+  }
+
+  @DeleteMapping(value = {"/itemCategory/{name}", "/itemCategory/{name}/"})
+  public void delete(@PathVariable("name") String name) throws IllegalArgumentException {
+    service.delete(name);
   }
 
   @GetMapping(value = {"/itemCategory/{name}", "/itemCategory/{name}/"})

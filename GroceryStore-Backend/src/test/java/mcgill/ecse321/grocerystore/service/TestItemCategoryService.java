@@ -163,7 +163,7 @@ public class TestItemCategoryService {
     }
     assertNotNull(itemCategory);
   }
-  
+
   @Test
   public void testAddExistingItemToItemCategory() {
     ItemCategory itemCategory = null;
@@ -324,6 +324,15 @@ public class TestItemCategoryService {
     items.add(ITEM_TWO);
     List<Item> itemSet = service.getItemsByItemCategory(ITEMCATEGORY_KEY);
     assertEquals(items, itemSet);
+  }
+
+  @Test
+  public void testDelete() {
+    try {
+      service.delete(ITEMCATEGORY_KEY);
+    } catch (IllegalArgumentException e) {
+      fail(e.getMessage());
+    }
   }
 
 }
