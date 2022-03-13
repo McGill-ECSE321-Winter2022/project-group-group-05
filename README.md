@@ -8,8 +8,16 @@ The goal of this project is to create a website and an app to facilitate the gro
 
 Have a look at our [wiki](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki) for more info!
 
+### Backend
 Heroku Backend URL: https://grocery-backend-g05-mcgill.herokuapp.com/  
 Click [here](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/RESTful-Service-Documentation) for the documentation of our REST API. All endpoints are appended after the Heroku Backend URL above.
+
+To run the backend locally, make sure that port 8080 is available. Navigate to project root, then issue the command `./gradlew bootRun` to run the project as a Spring Boot application. The backend will be available at the URL `localhost:8080`
+
+Additionally, integration tests of the REST API can be run with the command `./gradlew integrationTest`
+
+### Frontend
+_coming soon_
 
 ## Team Members
 
