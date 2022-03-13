@@ -51,7 +51,7 @@ abstract class integrationTest extends DefaultTask {
         testEmployee();
         testItem();
         testItemCategory();
-		testPurchase();
+        testPurchase();
         cleanup();
     }
 
