@@ -81,11 +81,11 @@ public class ItemService {
         SpecificItem s = sIter.next();
         if (s.getItem().equals(item)) {
           sIter.remove();
-          p = purchaseRepository.save(p);
           specificItemRepository.delete(s);
           break;
         }
       }
+      purchaseRepository.save(p);
     }
     Iterator<ItemCategory> icIter = itemCategoryRepository.findAllByOrderByName().iterator();
     // remove this item from all ItemCategories
@@ -96,9 +96,9 @@ public class ItemService {
         Item i = iIter.next();
         if (i.equals(item)) {
           ic.removeItem(item);
-          ic = itemCategoryRepository.save(ic);
         }
       }
+      itemCategoryRepository.save(ic);
     }
     itemRepository.delete(item);
   }
