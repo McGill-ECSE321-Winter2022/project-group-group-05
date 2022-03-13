@@ -32,6 +32,11 @@ public class ItemCategoryService {
     return itemCategoryRepository.save(itemCategory);
   }
 
+  public void delete(String name) throws IllegalArgumentException {
+    ItemCategory ic = this.getItemCategory(name);
+    itemCategoryRepository.delete(ic);
+  }
+
   @Transactional
   public ItemCategory getItemCategory(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
@@ -105,5 +110,5 @@ public class ItemCategoryService {
   public List<ItemCategory> getAllItemCategories() {
     return itemCategoryRepository.findAllByOrderByName();
   }
-  
+
 }
