@@ -14,7 +14,7 @@ Click [here](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05
 
 To run the backend locally, make sure that port 8080 is available. Navigate to project root, then issue the command `./gradlew bootRun` to run the project as a Spring Boot application. The backend will be available at the URL `localhost:8080`. To stop the gradle daemon, issue the command `./gradle --stop`.
 
-Additionally, integration tests of the REST API can be run with the command `./gradlew integrationTest`
+Additionally, integration tests of the REST API can be run with the command `./gradlew integrationTest`. Note that the Heroku database is easily overwhelmed when multiple people are working on the project and may cause all tests to fail.
 
 ### Frontend
 _coming soon_
