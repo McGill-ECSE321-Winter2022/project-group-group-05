@@ -81,10 +81,10 @@ public class ShiftService {
         EmployeeSchedule schedule = scheduleIter.next();
         if (schedule.getShift().equals(shift)) {
           scheduleIter.remove();
-          employee = employeeRepo.save(employee);
           scheduleRepo.delete(schedule);
         }
       }
+      employeeRepo.save(employee);
     }
     shiftRepo.delete(shift);
   }
