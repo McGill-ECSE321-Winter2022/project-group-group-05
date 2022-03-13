@@ -49,35 +49,53 @@ abstract class integrationTest extends DefaultTask {
     }
 
     def createEntities() {
+        println CYAN_BOLD + "CREATE CUSTOMER ACCOUNT" + RESET;
+        exec("POST", "customer/integ-customer", "?password=imacustomer&email=customer@myemail.com&address=321%20McTavish%20St.&isLocal=false", null);
+        String[] hideKioskError = [" -e password "];
+        exec("POST", "customer/kiosk", "?password=grocerystore&email=grocerystore@mail.mcgill.ca&address=514%20King%20St.&isLocal=true", hideKioskError);
         println CYAN_BOLD + "CREATE OWNER ACCOUNT" + RESET;
-        exec("POST", "owner/integ-owner", "?password=mcgill12345&email=integration.owner@mail.mcgill.ca");
+        exec("POST", "owner/integ-owner", "?password=mcgill12345&email=integration.owner@mail.mcgill.ca", null);
         println CYAN_BOLD + "CREATE EMPLOYEE ACCOUNT" + RESET;
-        exec("POST", "employee/integ-employee", "?password=iEmployee**&email=integration.employee@totallylegit.io");
+        exec("POST", "employee/integ-employee", "?password=iEmployee**&email=integration.employee@totallylegit.io", null);
         println CYAN_BOLD + "CREATE 2 ITEMS" + RESET;
-        exec("POST", "item/integ%20apple", "?price=4.99&inventory=100&canDeliver=true&canPickUp=true");
-        exec("POST", "item/integ%20ground%20beef", "?price=7.49&inventory=100&canDeliver=false&canPickUp=true");
+        exec("POST", "item/integ%20apple", "?price=4.99&inventory=100&canDeliver=true&canPickUp=true", null);
+        exec("POST", "item/integ%20ground%20beef", "?price=7.49&inventory=100&canDeliver=false&canPickUp=true", null);
     }
 
     def testItem() {
         println CYAN_BOLD + "GET ALL ITEMS" + RESET;
-        exec("GET", "item/getAll", "");
+        exec("GET", "item/getAll", "", null);
         println CYAN_BOLD + "SEARCH FOR BEEF" + RESET;
-        exec("GET", "item/searchAscending", "?searchQuery=beef");
+        String[] beefMatch = [" -o 'integ ground beef' "];
+        exec("GET", "item/searchAscending", "?searchQuery=beef", beefMatch);
     }
 
     def cleanup() {
         println PURPLE_BOLD + "DELETE THE CREATED ITEMS" + RESET;
-        exec("DELETE", "item/integ%20apple", "");
-        exec("DELETE", "item/integ%20ground%20beef", "");
+        exec("DELETE", "item/integ%20apple", "", null);
+        exec("DELETE", "item/integ%20ground%20beef", "", null);
         println PURPLE_BOLD + "DELETE THE CREATED EMPLOYEE" + RESET;
-        exec("DELETE", "employee/integ-employee", "");
+        exec("DELETE", "employee/integ-employee", "", null);
         println PURPLE_BOLD + "DELETE THE CREATED OWNER" + RESET;
-        exec("DELETE", "owner/integ-owner", "");
+        exec("DELETE", "owner/integ-owner", "", null);
+        println PURPLE_BOLD + "DELETE THE CUSTOMER ACCOUNT" + RESET;
+        exec("DELETE", "customer/integ-customer", "", null);
     }
 
-    def exec(String operation, String endpoint, String params) {
-        String command = "curl -s -X " + operation + " " + URL + endpoint + params;
-        String response = command.execute().text;
+    def exec(String operation, String endpoint, String params, String[] grepArgs) {
+        String commandCurl = "curl -s -X " + operation + " " + URL + endpoint + params;
+        String response = "";
+        if (grepArgs != null) {
+            String commandGrep = "grep";
+            for (String arg : grepArgs) {
+                commandGrep += arg;
+            }
+            Process process = commandCurl.execute() | commandGrep.execute();
+            response = process.text;
+        }
+        else {
+            response = commandCurl.execute().text;
+        }
         if (!response.equals("")) {
             println response;
         }
