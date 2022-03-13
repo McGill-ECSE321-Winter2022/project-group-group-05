@@ -71,6 +71,19 @@ public class ItemController {
         .collect(Collectors.toList());
   }
 
+  @GetMapping(value = {"/item/searchAscending", "/item/searchAscending/"})
+  public List<ItemDto> searchItemsAscending(@RequestParam String searchQuery) {
+    return service.searchItemsAscending(searchQuery).stream().map(p -> convertToDto(p))
+        .collect(Collectors.toList());
+
+  }
+
+  @GetMapping(value = {"/item/seachDescending", "/item/searchDescending/"})
+  public List<ItemDto> searchItemsDescending(@RequestParam String searchQuery) {
+    return service.searchItemsDescending(searchQuery).stream().map(p -> convertToDto(p))
+        .collect(Collectors.toList());
+  }
+
   @PatchMapping(value = {"/item/{name}/setPrice", "/item/{name}/setPrice/"})
   public ItemDto setPrice(@PathVariable("name") String name, @RequestParam double price)
       throws IllegalArgumentException {

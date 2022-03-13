@@ -804,7 +804,7 @@ public class TestEmployeeService {
     List<Employee> employeeList = null;
     String error = "";
     try {
-      service.searchEmployeesAscending(null);
+      employeeList = service.searchEmployeesAscending(null);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -817,7 +817,7 @@ public class TestEmployeeService {
     List<Employee> employeeList = null;
     String error = "";
     try {
-      service.searchEmployeesAscending("  ");
+      employeeList = service.searchEmployeesAscending("  ");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -848,7 +848,7 @@ public class TestEmployeeService {
     List<Employee> employeeList = null;
     String error = "";
     try {
-      service.searchEmployeesDescending(null);
+      employeeList = service.searchEmployeesDescending(null);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -861,7 +861,7 @@ public class TestEmployeeService {
     List<Employee> employeeList = null;
     String error = "";
     try {
-      service.searchEmployeesDescending("  ");
+      employeeList = service.searchEmployeesDescending("  ");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }

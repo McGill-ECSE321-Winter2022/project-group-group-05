@@ -97,6 +97,36 @@ public class TestItemService {
       itemList.add(itemTwo);
       return itemList;
     });
+    // imitate searching for items
+    lenient().when(itemDao.findByNameIgnoreCaseContainingOrderByName(anyString())).thenAnswer(i -> {
+      List<Item> itemList = new ArrayList<Item>();
+      if (ITEM2_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
+        var item = new Item();
+        item.setName(ITEM2_KEY);
+        itemList.add(item);
+      }
+      if (ITEM_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
+        var item = new Item();
+        item.setName(ITEM_KEY);
+        itemList.add(item);
+      }
+      return itemList;
+    });
+    lenient().when(itemDao.findByNameIgnoreCaseContainingOrderByNameDesc(anyString()))
+        .thenAnswer(i -> {
+          List<Item> itemList = new ArrayList<Item>();
+          if (ITEM_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
+            var item = new Item();
+            item.setName(ITEM_KEY);
+            itemList.add(item);
+          }
+          if (ITEM2_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
+            var item = new Item();
+            item.setName(ITEM2_KEY);
+            itemList.add(item);
+          }
+          return itemList;
+        });
     // whenever anything is saved, just return the parameter object
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
@@ -128,11 +158,12 @@ public class TestItemService {
       return ITEM_KEY;
     });
     // mock for testDelete itemCategory
-    lenient().when(itemCategoryDao.findAllByOrderByName()).thenAnswer((InvocationOnMock invocation) -> {
-      ArrayList<ItemCategory> itemCategories = new ArrayList<>();
-      itemCategories.add(mockItemCategory);
-      return itemCategories;
-    });
+    lenient().when(itemCategoryDao.findAllByOrderByName())
+        .thenAnswer((InvocationOnMock invocation) -> {
+          ArrayList<ItemCategory> itemCategories = new ArrayList<>();
+          itemCategories.add(mockItemCategory);
+          return itemCategories;
+        });
     lenient().when(mockItemCategory.getItems()).thenAnswer((InvocationOnMock invocation) -> {
       HashSet<Item> items = new HashSet<>();
       items.add(mockItem);
@@ -346,6 +377,88 @@ public class TestItemService {
     List<Item> itemList = service.getAllIsDiscontinued();
     assertEquals(1, itemList.size());
     assertEquals(ITEM2_KEY, itemList.get(0).getName());
+  }
+
+  @Test
+  public void testSearchItemsAscending() {
+    // Both Mock Items should appear in the list, in the order: two, one (Apple, Tomato)
+    List<Item> itemList = null;
+    try {
+      itemList = service.searchItemsAscending("a");
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertNotNull(itemList);
+    assertEquals(2, itemList.size());
+    assertEquals(ITEM2_KEY, itemList.get(0).getName());
+    assertEquals(ITEM_KEY, itemList.get(1).getName());
+  }
+
+  @Test
+  public void testSearchItemsAscendingNull() {
+    List<Item> itemList = null;
+    String error = "";
+    try {
+      itemList = service.searchItemsAscending(null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(itemList);
+    assertEquals("Search Query must not be empty!", error);
+  }
+
+  @Test
+  public void testSearchItemsAscendingEmpty() {
+    List<Item> itemList = null;
+    String error = "";
+    try {
+      itemList = service.searchItemsAscending("  ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(itemList);
+    assertEquals("Search Query must not be empty!", error);
+  }
+
+  @Test
+  public void testSearchItemsDescending() {
+    // Both Mock Items should appear in the list, in the order: one, two (Tomato, Apple)
+    List<Item> itemList = null;
+    try {
+      itemList = service.searchItemsDescending("a");
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertNotNull(itemList);
+    assertEquals(2, itemList.size());
+    assertEquals(ITEM_KEY, itemList.get(0).getName());
+    assertEquals(ITEM2_KEY, itemList.get(1).getName());
+  }
+
+  @Test
+  public void testSearchItemsDescendingNull() {
+    List<Item> itemList = null;
+    String error = "";
+    try {
+      itemList = service.searchItemsDescending(null);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(itemList);
+    assertEquals("Search Query must not be empty!", error);
+  }
+
+  @Test
+  public void testSearchItemsDescendingEmpty() {
+    List<Item> itemList = null;
+    String error = "";
+    try {
+      itemList = service.searchItemsDescending("  ");
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(itemList);
+    assertEquals("Search Query must not be empty!", error);
   }
 
   @Test

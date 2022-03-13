@@ -8,8 +8,12 @@ import mcgill.ecse321.grocerystore.model.Item;
 
 public interface ItemRepository extends CrudRepository<Item, String> {
 
-	Item findByName(String name);
+  Item findByName(String name);
 
-	List<Item> findAllByOrderByName();
+  List<Item> findAllByOrderByName();
+
+  List<Item> findByNameIgnoreCaseContainingOrderByName(String nameFragment);
+
+  List<Item> findByNameIgnoreCaseContainingOrderByNameDesc(String nameFragment);
 
 }

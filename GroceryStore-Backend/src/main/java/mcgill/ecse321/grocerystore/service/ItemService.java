@@ -165,6 +165,22 @@ public class ItemService {
   }
 
   @Transactional
+  public List<Item> searchItemsAscending(String searchQuery) throws IllegalArgumentException {
+    if (searchQuery == null || searchQuery.trim().length() == 0) {
+      throw new IllegalArgumentException("Search Query must not be empty!");
+    }
+    return itemRepository.findByNameIgnoreCaseContainingOrderByName(searchQuery);
+  }
+
+  @Transactional
+  public List<Item> searchItemsDescending(String searchQuery) throws IllegalArgumentException {
+    if (searchQuery == null || searchQuery.trim().length() == 0) {
+      throw new IllegalArgumentException("Search Query must not be empty!");
+    }
+    return itemRepository.findByNameIgnoreCaseContainingOrderByNameDesc(searchQuery);
+  }
+
+  @Transactional
   public Item setPrice(String itemName, double price) {
     Item item = getItem(itemName);
     if (price < 0.0) {
