@@ -1,6 +1,8 @@
 # ECSE 321 Grocery Store Project - Winter 2022 - Group 05
 
-Welcome to the Group 05 Grocery Store Project Repository!
+![heroku-deploy-status](https://img.shields.io/badge/Deploy%20to%20Heroku-enabled-blueviolet?style=for-the-badge&logo=heroku)  
+
+Welcome to the Group 05 Grocery Store Project Repository!  
 
 ## Project Overview 
 
