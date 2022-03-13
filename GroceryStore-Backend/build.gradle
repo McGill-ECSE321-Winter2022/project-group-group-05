@@ -35,54 +35,129 @@ tasks.named('test') {
 
 tasks.register("integrationTest", integrationTest)
 
+import groovy.json.JsonSlurper
 abstract class integrationTest extends DefaultTask {
     public final String URL = "https://grocery-backend-g05-mcgill.herokuapp.com/";
     public final String RESET = "\033[0m";
     public final String CYAN_BOLD = "\033[1;96m";
     public final String PURPLE_BOLD = "\033[1;95m";
+    public final String RED = "\033[0;91m";
 
     @TaskAction
-    def doTest() {
+    public void doTest() {
         createEntities();
+        testEmployee();
         testItem();
+        testItemCategory();
         cleanup();
     }
 
-    def createEntities() {
-        println CYAN_BOLD + "CREATE CUSTOMER ACCOUNT" + RESET;
-        exec("POST", "customer/integ-customer", "?password=imacustomer&email=customer@myemail.com&address=321%20McTavish%20St.&isLocal=false", null);
+    private void createEntities() {
+        say("CREATE CUSTOMER ACCOUNT");
+        exec("POST", "customer/integ-customer", "?password=imacustomer&email=customer@myemail.com&address=321%20McTavish%20St.&isLocal=false");
         String[] hideKioskError = [" -e password "];
         exec("POST", "customer/kiosk", "?password=grocerystore&email=grocerystore@mail.mcgill.ca&address=514%20King%20St.&isLocal=true", hideKioskError);
-        println CYAN_BOLD + "CREATE OWNER ACCOUNT" + RESET;
-        exec("POST", "owner/integ-owner", "?password=mcgill12345&email=integration.owner@mail.mcgill.ca", null);
-        println CYAN_BOLD + "CREATE EMPLOYEE ACCOUNT" + RESET;
-        exec("POST", "employee/integ-employee", "?password=iEmployee**&email=integration.employee@totallylegit.io", null);
-        println CYAN_BOLD + "CREATE 2 ITEMS" + RESET;
-        exec("POST", "item/integ%20apple", "?price=4.99&inventory=100&canDeliver=true&canPickUp=true", null);
-        exec("POST", "item/integ%20ground%20beef", "?price=7.49&inventory=100&canDeliver=false&canPickUp=true", null);
+        say("CREATE 1 HOLIDAY");
+        exec("POST", "holiday/integ-christmas", "?date=2022-12-25");
+        say("CREATE OWNER ACCOUNT");
+        exec("POST", "owner/integ-owner", "?password=mcgill12345&email=integration.owner@mail.mcgill.ca");
+        say("CREATE EMPLOYEE ACCOUNT");
+        exec("POST", "employee/integ-employee", "?password=iEmployee**&email=integration.employee@totallylegit.io");
+        say("CREATE 2 ITEMS");
+        exec("POST", "item/integ%20apple", "?price=4.99&inventory=100&canDeliver=true&canPickUp=true");
+        exec("POST", "item/integ%20ground%20beef", "?price=7.49&inventory=100&canDeliver=false&canPickUp=true");
+        say("CREATE 1 ITEM CATEGORY");
+        exec("POST", "itemCategory/integ-meat");
+        say("CREATE 2 SHIFTS");
+        exec("POST", "shift/integ-morning", "?startTime=09:00&endTime=13:00");
+        exec("POST", "shift/integ-afternoon", "?startTime=13:00&endTime=19:00");
     }
 
-    def testItem() {
-        println CYAN_BOLD + "GET ALL ITEMS" + RESET;
-        exec("GET", "item/getAll", "", null);
-        println CYAN_BOLD + "SEARCH FOR BEEF" + RESET;
-        String[] beefMatch = [" -o 'integ ground beef' "];
-        exec("GET", "item/searchAscending", "?searchQuery=beef", beefMatch);
+    private void testEmployee() {
+        say("ADD SCHEDULES TO EMPLOYEE");
+        exec("PATCH", "employee/integ-employee/addSchedule", "?date=2012-12-12&shift=integ-morning");
+        exec("PATCH", "employee/integ-employee/addSchedule", "?date=2012-12-13&shift=integ-morning");
+        exec("PATCH", "employee/integ-employee/addSchedule", "?date=2012-12-13&shift=integ-afternoon");
     }
 
-    def cleanup() {
-        println PURPLE_BOLD + "DELETE THE CREATED ITEMS" + RESET;
-        exec("DELETE", "item/integ%20apple", "", null);
-        exec("DELETE", "item/integ%20ground%20beef", "", null);
-        println PURPLE_BOLD + "DELETE THE CREATED EMPLOYEE" + RESET;
-        exec("DELETE", "employee/integ-employee", "", null);
-        println PURPLE_BOLD + "DELETE THE CREATED OWNER" + RESET;
-        exec("DELETE", "owner/integ-owner", "", null);
-        println PURPLE_BOLD + "DELETE THE CUSTOMER ACCOUNT" + RESET;
-        exec("DELETE", "customer/integ-customer", "", null);
+    private void testItem() {
+        say("GET ALL ITEMS");
+        def allJson = execJson("GET", "item/getAll");
+        allJson.each {
+            println it.name;
+        }
+        // two styles of filtering the response
+        // using JSON
+        say("SEARCH ITEM 'ple'");
+        def appleJson = execJson("GET", "item/searchAscending", "?searchQuery=ple");
+        if (appleJson[0] != null) {
+            println appleJson[0].name;
+        }
+        // using grep
+        say("SEARCH ITEM 'beef'");
+        String[] filterBeef = [" -o 'integ ground beef' "];
+        exec("GET", "item/searchAscending", "?searchQuery=beef", filterBeef);
     }
 
-    def exec(String operation, String endpoint, String params, String[] grepArgs) {
+    private void testItemCategory() {
+        say("ADD TO ITEM CATEGORY");
+        exec("PATCH", "itemCategory/integ-meat/addItem", "?itemName=integ%20ground%20beef");
+        say("SHOW CATEGORY: MEAT");
+        String[] meatMatch = [" -o 'integ ground beef' "];
+        exec("GET", "itemCategory/integ-meat", meatMatch);
+    }
+
+    private void cleanup() {
+        say2("DELETE SHIFTS");
+        exec("DELETE", "shift/integ-morning");
+        exec("DELETE", "shift/integ-afternoon");
+        say2("DELETE ITEM CATEGORY");
+        exec("DELETE", "itemCategory/integ-meat");
+        say2("DELETE ITEMS");
+        exec("DELETE", "item/integ%20apple");
+        exec("DELETE", "item/integ%20ground%20beef");
+        say2("DELETE EMPLOYEE");
+        exec("DELETE", "employee/integ-employee");
+        say2("DELETE OWNER");
+        exec("DELETE", "owner/integ-owner");
+        say2("DELETE HOLIDAY");
+        exec("DELETE", "holiday/integ-christmas");
+        say2("DELETE CUSTOMER ACCOUNT");
+        exec("DELETE", "customer/integ-customer");
+    }
+
+    private Object execJson(String operation, String endpoint) {
+        return execJson(operation, endpoint, "");
+    }
+
+    // execJson does not accept grep command pipe but will return the response as a JSON object
+    // validation is needed on the returned Object
+    private Object execJson(String operation, String endpoint, String params) {
+        String commandCurl = "curl -s -X " + operation + " " + URL + endpoint + params;
+        String response = commandCurl.execute().text;
+        if (response.equals("")) {
+            return null;
+        }
+        def jsonSlurper = new JsonSlurper();
+        def responseJson = jsonSlurper.parseText(response);
+        sleep(200);
+        return responseJson;
+    }
+    
+    private String exec(String operation, String endpoint) {
+        return exec(operation, endpoint, "", null);
+    }
+
+    private String exec(String operation, String endpoint, String params) {
+        return exec(operation, endpoint, params, null);
+    }
+
+    private String exec(String operation, String endpoint, String[] grepArgs) {
+        return exec(operation, endpoint, "", grepArgs);
+    }
+
+    // exec can take optional grep command pipe but can only return a string
+    private String exec(String operation, String endpoint, String params, String[] grepArgs) {
         String commandCurl = "curl -s -X " + operation + " " + URL + endpoint + params;
         String response = "";
         if (grepArgs != null) {
@@ -99,5 +174,20 @@ abstract class integrationTest extends DefaultTask {
         if (!response.equals("")) {
             println response;
         }
+        sleep(200);
+        return response;
     }
+
+    private void say(String content) {
+        println CYAN_BOLD + content + RESET;
+    }
+
+    private void say2(String content) {
+        println PURPLE_BOLD + content + RESET;
+    }
+
+    public void sayErr(String content) {
+        println RED + content + RESET;
+    }
+
 }
