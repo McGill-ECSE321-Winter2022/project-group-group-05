@@ -17,12 +17,12 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
-| Peini Cheng  | Software Architect | 14 | &mdash; | &mdash; | &mdash; |
-| Sibo Huang | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
-| Annie Kang | Business Analyst | 12 | &mdash; | &mdash; | &mdash; |
-| Yida Pan | Software Developer | 12 | &mdash; | &mdash; | &mdash; |
-| Jimmy Sheng | Team Lead | 24 | &mdash; | &mdash; | &mdash; |
-| Harrison Wang | Documentation Lead | 21.5 | &mdash; | &mdash; | &mdash; |
+| Peini Cheng  | Software Architect | 14 | 13.75 | &mdash; | &mdash; |
+| Sibo Huang | Software Developer | 12 | 16.75 | &mdash; | &mdash; |
+| Annie Kang | Business Analyst | 12 | 15.75 | &mdash; | &mdash; |
+| Yida Pan | Software Developer | 12 | 17.75 | &mdash; | &mdash; |
+| Jimmy Sheng | Team Lead | 24 | 23.75 | &mdash; | &mdash; |
+| Harrison Wang | Documentation Lead | 21.5 | 22.75 | &mdash; | &mdash; |
 
 ## [Sprint 1](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-1-Project-Report)
 
@@ -49,13 +49,19 @@ JPA + CRUD and tests for Purchase, SpecificItem classes, Fixed JPA and tests for
 ## [Sprint 2](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-2-Project-Report)
 
 ### Objectives to complete:
-Started on Feb 28, 2022
-* 
+Started on Feb 28, 2022  
+* Set up Github CI for deploying to Heroku
+* RESTful service methods for Use-cases
+* Unit testing of RESTful service methods using Mockito
+* REST API Controllers
+* Integration Testing of REST API Controllers
+* Software Quality Assurance
+* Project Report
 
 ### Tasks completed by each member:
-* **Peini**: 
-* **Sibo**:
-* **Annie**: 
-* **Yida**: 
-* **Jimmy**: 
-* **Harrison**: 
+* **Peini**: RESTful services, controller, unit testing, and documentation for Customer and ItemCategory.
+* **Sibo**: RESTful services, controller, unit testing, and documentation for Owner, OpeningHours, and Holiday.
+* **Annie**: RESTful services, controller, unit testing, and documentation for Item. Recorded meeting minutes.
+* **Yida**: RESTful services, controller, unit testing, and documentation for Shift.
+* **Jimmy**: RESTful services, controller, unit testing, and documentation for Purchase. Set up Github packages and dependencies. Service documentation formatting. Fixing typos and code review.
+* **Harrison**: RESTful services, controller, unit testing, and documentation for Employee. Set up skeleton for Project Wiki. Code review. Wrote software quality assurance plan. Sprint 2 section of README.md.
