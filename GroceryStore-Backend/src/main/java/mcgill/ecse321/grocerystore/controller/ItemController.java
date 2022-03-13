@@ -78,7 +78,7 @@ public class ItemController {
 
   }
 
-  @GetMapping(value = {"/item/seachDescending", "/item/searchDescending/"})
+  @GetMapping(value = {"/item/searchDescending", "/item/searchDescending/"})
   public List<ItemDto> searchItemsDescending(@RequestParam String searchQuery) {
     return service.searchItemsDescending(searchQuery).stream().map(p -> convertToDto(p))
         .collect(Collectors.toList());
