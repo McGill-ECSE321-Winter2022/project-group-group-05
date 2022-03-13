@@ -1,3 +1,39 @@
 task stage () {
     dependsOn ':GroceryStore-Backend:assemble'
 }
+
+tasks.register("integrationTest", integrationTest)
+
+abstract class integrationTest extends DefaultTask {
+    public final String URL = "https://grocery-backend-g05-mcgill.herokuapp.com/";
+    public final String RESET = "\033[0m";
+    public final String CYAN_BOLD = "\033[1;96m";
+    public final String PURPLE_BOLD = "\033[1;95m";
+
+    @TaskAction
+    def doTest() {
+        testItem();
+        cleanup();
+    }
+
+    def testItem() {
+        println CYAN_BOLD + "CREATE 2 ITEMS" + RESET;
+        exec("POST", "item/apple", "?price=4.99&inventory=100&canDeliver=true&canPickUp=true");
+        exec("POST", "item/ground%20beef", "?price=7.49&inventory=50&canDeliver=false&canPickUp=true");
+        println CYAN_BOLD + "GET ALL ITEMS" + RESET;
+        exec("GET", "item/getAll", "");
+        
+    }
+
+    def cleanup() {
+        println PURPLE_BOLD + "DELETE THE CREATED ITEMS" + RESET;
+        exec("DELETE", "item/apple", "");
+        exec("DELETE", "item/ground%20beef", "");
+    }
+
+    def exec(String operation, String endpoint, String params) {
+        String command = "curl -s -X " + operation + " " + URL + endpoint + params;
+        String response = command.execute().text;
+        println response;
+    }
+}
