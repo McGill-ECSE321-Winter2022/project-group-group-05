@@ -31,7 +31,7 @@ Below can be found the time spent in hours by each team member on each sprint. P
 | Sibo Huang | Software Developer | 12 | 16.75 | &mdash; | &mdash; |
 | Annie Kang | Business Analyst | 12 | 15.75 | &mdash; | &mdash; |
 | Yida Pan | Software Developer | 12 | 17.75 | &mdash; | &mdash; |
-| Jimmy Sheng | Team Lead | 24 | 23.75 | &mdash; | &mdash; |
+| Jimmy Sheng | Team Lead | 24 | 27.75 | &mdash; | &mdash; |
 | Harrison Wang | Documentation Lead | 21.5 | 22.75 | &mdash; | &mdash; |
 
 ## [Sprint 1](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-1-Project-Report)
@@ -73,5 +73,5 @@ Started on Feb 28, 2022
 * **Sibo**: RESTful services, controller, unit testing, and documentation for Owner, OpeningHours, and Holiday.
 * **Annie**: RESTful services, controller, unit testing, and documentation for Item. Recorded meeting minutes.
 * **Yida**: RESTful services, controller, unit testing, and documentation for Shift.
-* **Jimmy**: RESTful services, controller, unit testing, and documentation for Purchase. Set up Github packages and dependencies. Setup CI for deploying to heroku. Service documentation formatting. Fixing typos and code review.
+* **Jimmy**: RESTful services, controller, unit testing, and documentation for Purchase. Set up Github packages and dependencies. Setup CI for deploying to heroku. Service documentation formatting. Fixing typos and code review. Write the integrationTest Gradle Task.
 * **Harrison**: RESTful services, controller, unit testing, and documentation for Employee. Set up skeleton for Project Wiki. Code review. Wrote software quality assurance plan. Sprint 2 section of README.md.
