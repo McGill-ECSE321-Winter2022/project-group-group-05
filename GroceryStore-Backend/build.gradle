@@ -32,3 +32,167 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register("integrationTest", integrationTest)
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+abstract class integrationTest extends DefaultTask {
+    public final String URL = "https://grocery-backend-g05-mcgill.herokuapp.com/";
+    // public final String URL = "http://localhost:8080/";
+    public final String RESET = "\033[0m";
+    public final String CYAN_BOLD = "\033[1;96m";
+    public final String PURPLE_BOLD = "\033[1;95m";
+    public final String RED = "\033[0;91m";
+
+    @TaskAction
+    public void doTest() {
+        createEntities();
+        testEmployee();
+        testItem();
+        testItemCategory();
+        testPurchase();
+        cleanup();
+    }
+
+    private void createEntities() {
+        say("CREATE CUSTOMER ACCOUNT");
+        println exec("POST", "customer/integ-customer", "?password=imacustomer&email=customer@myemail.com&address=321%20McTavish%20St.&isLocal=false");
+        say("VERIFY 'kiosk' ACCOUNT IS IN THE SYSTEM")
+        println exec("POST", "customer/kiosk", "?password=grocerystore&email=grocerystore@mail.mcgill.ca&address=514%20King%20St.&isLocal=true");
+        say("CREATE 1 HOLIDAY");
+        println exec("POST", "holiday/integ-christmas", "?date=2022-12-25");
+        say("CREATE OWNER ACCOUNT");
+        println exec("POST", "owner/integ-owner", "?password=mcgill12345&email=integration.owner@mail.mcgill.ca");
+        say("CREATE EMPLOYEE ACCOUNT");
+        println exec("POST", "employee/integ-employee", "?password=iEmployee**&email=integration.employee@totallylegit.io");
+        say("CREATE 2 ITEMS");
+        println exec("POST", "item/integ%20apple", "?price=4.99&inventory=100&canDeliver=true&canPickUp=true");
+        println exec("POST", "item/integ%20ground%20beef", "?price=7.49&inventory=100&canDeliver=false&canPickUp=true");
+        say("CREATE 1 ITEM CATEGORY");
+        println exec("POST", "itemCategory/integ-meat");
+        say("CREATE 2 SHIFTS");
+        println exec("POST", "shift/integ-morning", "?startTime=09:00&endTime=13:00");
+        println exec("POST", "shift/integ-afternoon", "?startTime=13:00&endTime=19:00");
+    }
+
+    private void testEmployee() {
+        say("ADD SCHEDULES TO EMPLOYEE");
+        println exec("PATCH", "employee/integ-employee/addSchedule", "?date=2012-12-12&shift=integ-morning");
+        println exec("PATCH", "employee/integ-employee/addSchedule", "?date=2012-12-13&shift=integ-morning");
+        println exec("PATCH", "employee/integ-employee/addSchedule", "?date=2012-12-13&shift=integ-afternoon");
+    }
+
+    private void testItem() {
+        say("GET ALL ITEMS");
+        def allJson = exec("GET", "item/getAll");
+        allJson.each {
+            println it.name;
+        }
+        say("SEARCH ITEM 'ple'");
+        def appleJson = exec("GET", "item/searchAscending", "?searchQuery=ple");
+        if (appleJson[0] != null) {
+            println appleJson[0].name;
+        }
+        say("SEARCH ITEM 'beef'");
+        def beefJson = exec("GET", "item/searchAscending", "?searchQuery=beef");
+        if (beefJson[0] != null) {
+            println beefJson[0].name;
+        }
+    }
+
+    private void testItemCategory() {
+        say("ADD TO ITEM CATEGORY");
+        println exec("PATCH", "itemCategory/integ-meat/addItem", "?itemName=integ%20ground%20beef");
+        say("SHOW CATEGORY: MEAT");
+        def meatJson = exec("GET", "itemCategory/integ-meat");
+        meatJson.items.each {
+            println it.name;
+        }
+    }
+
+    private void testPurchase() {
+        say("GET CART FOR CUSTOMER");
+        def cart1_1 = exec("POST", "purchase/cart", "?username=integ-customer");
+        println cart1_1.id;
+        say("ADD ITEM TO CART");
+        println exec("POST", "purchase/addItem/" + cart1_1.id, "?itemName=integ%20apple&quantity=7");
+        say("PAY CART");
+        println exec("POST", "purchase/pay/" + cart1_1.id);
+        say("GET CART 2 FOR CUSTOMER");
+        def cart2_1 = exec("POST", "purchase/cart", "?username=integ-customer");
+        println cart2_1.id;
+        say("ADD ITEM TO CART 2");
+        println exec("POST", "purchase/addItem/" + cart2_1.id, "?itemName=integ%20ground%20beef&quantity=3");
+        say("PAY CART 2");
+        println exec("POST", "purchase/pay/" + cart2_1.id);
+        say("GET CART FOR POS 1");
+        def cart3_1 = exec("POST", "purchase/pos/cart");
+        println cart3_1.id;
+        say("ADD ITEM TO POS CART 1");
+        println exec("POST", "purchase/addItem/" + cart3_1.id, "?itemName=integ%20ground%20beef&quantity=12");
+        say("GET CART FOR POS 2");
+        def cart4_1 = exec("POST", "purchase/pos/cart");
+        println cart4_1.id;
+        say("ADD ITEM TO POS CART 2");
+        println exec("POST", "purchase/addItem/" + cart4_1.id, "?itemName=integ%20ground%20beef&quantity=12");
+        say("POS CART STRESS TEST (this might take a few seconds)");
+        for (int i = 0; i < 20; i++) {
+            exec("POST", "purchase/pos/cart");
+        }
+        def allPurchases = exec("GET", "purchase/allDesc");
+        allPurchases.each {
+            println it.id;
+        }
+    }
+
+    private void cleanup() {
+        say2("DELETE ALL PURCHASES");
+        println exec("DELETE", "purchase/deleteAll");
+        say2("DELETE SHIFTS");
+        println exec("DELETE", "shift/integ-morning");
+        println exec("DELETE", "shift/integ-afternoon");
+        say2("DELETE ITEM CATEGORY");
+        println exec("DELETE", "itemCategory/integ-meat");
+        say2("DELETE ITEMS");
+        println exec("DELETE", "item/integ%20apple");
+        println exec("DELETE", "item/integ%20ground%20beef");
+        say2("DELETE EMPLOYEE");
+        println exec("DELETE", "employee/integ-employee");
+        say2("DELETE OWNER");
+        println exec("DELETE", "owner/integ-owner");
+        say2("DELETE HOLIDAY");
+        println exec("DELETE", "holiday/integ-christmas");
+        say2("DELETE CUSTOMER ACCOUNT");
+        println exec("DELETE", "customer/integ-customer");
+    }
+
+    private Object exec(String operation, String endpoint) {
+        return exec(operation, endpoint, "");
+    }
+
+    // validation is needed on the returned JSON object
+    private Object exec(String operation, String endpoint, String params) {
+        String commandCurl = "curl -s -X " + operation + " " + URL + endpoint + params;
+        String response = commandCurl.execute().text;
+        if (response.equals("")) {
+            return JsonOutput.toJson([]);
+        }
+        def jsonSlurper = new JsonSlurper();
+        def responseJson = jsonSlurper.parseText(response);
+        return responseJson;
+    }
+
+    private void say(String content) {
+        println CYAN_BOLD + content + RESET;
+    }
+
+    private void say2(String content) {
+        println PURPLE_BOLD + content + RESET;
+    }
+
+    public void sayErr(String content) {
+        println RED + content + RESET;
+    }
+
+}
