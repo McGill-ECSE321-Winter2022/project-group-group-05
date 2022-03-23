@@ -32,13 +32,16 @@ public class ItemService {
   ItemCategoryRepository itemCategoryRepository;
 
   @Transactional
-  public Item createItem(String name, double price, int inventory, boolean canDeliver,
+  public Item createItem(String name, String image, double price, int inventory, boolean canDeliver,
       boolean canPickUp) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Item name cannot be empty!");
     }
     if (itemRepository.findByName(name) != null) {
       throw new IllegalArgumentException("Item name is already taken!");
+    }
+    if (image == null) {
+      throw new IllegalArgumentException("Item image cannot be null!");
     }
     if (price < 0.0) {
       throw new IllegalArgumentException("Item price cannot be negative!");
@@ -49,6 +52,7 @@ public class ItemService {
 
     Item item = new Item();
     item.setName(name);
+    item.setImage(image);
     item.setPrice(price);
     item.setInventory(inventory);
     item.setCanDeliver(canDeliver);
@@ -178,6 +182,16 @@ public class ItemService {
       throw new IllegalArgumentException("Search Query must not be empty!");
     }
     return itemRepository.findByNameIgnoreCaseContainingOrderByNameDesc(searchQuery);
+  }
+  
+  @Transactional
+  public Item setImage(String itemName, String image) {
+    Item item = getItem(itemName);
+    if (image == null) {
+      throw new IllegalArgumentException("Item image cannot be null!");
+    }
+    item.setImage(image);
+    return itemRepository.save(item);
   }
 
   @Transactional
