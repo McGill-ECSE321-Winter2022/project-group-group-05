@@ -174,19 +174,20 @@ public class TestItemService {
   // Test for class createItem
   @Test
   public void testCreateItem() {
-    String itemname = "Banana";
+    String itemName = "Banana";
+    String itemImage = "fakeImage.com"; 
     double price = 2.5;
     int inventory = 10;
     Boolean canDeliver = true;
     Boolean canPickUp = true;
     Item item = null;
     try {
-      item = service.createItem(itemname, price, inventory, canDeliver, canPickUp);
+      item = service.createItem(itemName, itemImage, price, inventory, canDeliver, canPickUp);
     } catch (IllegalArgumentException e) {
       fail();
     }
     assertNotNull(item);
-    assertEquals(itemname, item.getName());
+    assertEquals(itemName, item.getName());
     assertEquals(price, item.getPrice(), 0.0);
     assertEquals(inventory, item.getInventory());
     assertEquals(canDeliver, item.getCanDeliver());
@@ -198,7 +199,7 @@ public class TestItemService {
     Item item = null;
     String error = "";
     try {
-      item = service.createItem(null, 0.0, 0, false, false);
+      item = service.createItem(null, "", 0.0, 0, false, false);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -211,7 +212,7 @@ public class TestItemService {
     Item item = null;
     String error = "";
     try {
-      item = service.createItem("  ", 0.0, 0, false, false);
+      item = service.createItem("  ", "", 0.0, 0, false, false);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -221,7 +222,7 @@ public class TestItemService {
 
   @Test
   public void testCreateItemExisting() {
-    String itemname = ITEM_KEY;
+    String itemName = ITEM_KEY;
     double price = 2.5;
     int inventory = 10;
     Boolean canDeliver = true;
@@ -229,17 +230,17 @@ public class TestItemService {
     Item item = null;
     String error = "";
     try {
-      item = service.createItem(itemname, price, inventory, canDeliver, canPickUp);
+      item = service.createItem(itemName, "", price, inventory, canDeliver, canPickUp);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(item);
     assertEquals("Item name is already taken!", error);
   }
-
+  
   @Test
-  public void testCreateItemNegativePrice() {
-    String itemname = "negative price";
+  public void testCreateItemNullImage() {
+    String itemName = "negative price";
     double price = -10;
     int inventory = 10;
     Boolean canDeliver = true;
@@ -247,7 +248,25 @@ public class TestItemService {
     Item item = null;
     String error = "";
     try {
-      item = service.createItem(itemname, price, inventory, canDeliver, canPickUp);
+      item = service.createItem(itemName, null, price, inventory, canDeliver, canPickUp);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(item);
+    assertEquals("Item image cannot be null!", error);
+  }
+
+  @Test
+  public void testCreateItemNegativePrice() {
+    String itemName = "negative price";
+    double price = -10;
+    int inventory = 10;
+    Boolean canDeliver = true;
+    Boolean canPickUp = true;
+    Item item = null;
+    String error = "";
+    try {
+      item = service.createItem(itemName, "", price, inventory, canDeliver, canPickUp);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -257,7 +276,7 @@ public class TestItemService {
 
   @Test
   public void testCreateItemNegativeInventory() {
-    String itemname = "negative inventory";
+    String itemName = "negative inventory";
     double price = 2.5;
     int inventory = -10;
     Boolean canDeliver = true;
@@ -265,7 +284,7 @@ public class TestItemService {
     Item item = null;
     String error = "";
     try {
-      item = service.createItem(itemname, price, inventory, canDeliver, canPickUp);
+      item = service.createItem(itemName, "", price, inventory, canDeliver, canPickUp);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -460,6 +479,35 @@ public class TestItemService {
     assertNull(itemList);
     assertEquals("Search Query must not be empty!", error);
   }
+  
+  @Test
+  public void testSetImage() {
+    Item item = null;
+    String newImage = "lessfakeImage.com";
+    try {
+      item = service.setImage(ITEM_KEY, newImage);
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertNotNull(item);
+    verify(mockItem, times(1)).setImage(anyString());
+
+  }
+
+  @Test
+  public void testSetImageNull() {
+    Item item = null;
+    String newImage = null;
+    String error = "";
+    try {
+      item = service.setImage(ITEM_KEY, newImage);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(item);
+    verify(mockItem, times(0)).setImage(anyString());
+    assertEquals("Item image cannot be null!", error);
+  }
 
   @Test
   public void testSetPrice() {
@@ -472,7 +520,6 @@ public class TestItemService {
     }
     assertNotNull(item);
     verify(mockItem, times(1)).setPrice(anyDouble());
-
   }
 
   @Test
