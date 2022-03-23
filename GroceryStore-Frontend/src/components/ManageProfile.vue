@@ -1,3 +1,5 @@
+<!--Visibility: customer-->
+<!--Modify customer's own account infos-->
 <template></template>
 
 <script>

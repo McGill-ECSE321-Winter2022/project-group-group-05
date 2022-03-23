@@ -1,3 +1,5 @@
+<!--Visibility: notLoggedIn-->
+<!--Customer creates their own account-->
 <template></template>
 
 <script>

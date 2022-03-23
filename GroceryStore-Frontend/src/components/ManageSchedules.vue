@@ -1,3 +1,5 @@
+<!--Visibility: owner-->
+<!--Assign/Remove schedules to employees-->
 <template></template>
 
 <script>

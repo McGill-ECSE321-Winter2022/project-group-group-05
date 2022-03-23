@@ -1,3 +1,5 @@
+<!--Visibility: kiosk-->
+<!--A in-store POS check out interface-->
 <template></template>
 
 <script>

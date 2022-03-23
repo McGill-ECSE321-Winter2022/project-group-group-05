@@ -1,3 +1,5 @@
+<!--Visibility: notLoggedIn-->
+<!--Unified login form for everyone-->
 <template></template>
 
 <script>

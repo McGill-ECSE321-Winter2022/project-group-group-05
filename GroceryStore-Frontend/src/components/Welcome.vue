@@ -1,3 +1,4 @@
+<!--Landing page of the application-->
 <template>
   <div>
     <h1>{{ msg }}</h1>

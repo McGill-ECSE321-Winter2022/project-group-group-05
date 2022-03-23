@@ -1,3 +1,5 @@
+<!--Visibility: owner (edit), employee (view)-->
+<!--List of all items, create/change/delete items-->
 <template></template>
 
 <script>

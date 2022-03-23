@@ -1,3 +1,5 @@
+<!--Visibility: owner, employee-->
+<!--Show all completed orders-->
 <template></template>
 
 <script>

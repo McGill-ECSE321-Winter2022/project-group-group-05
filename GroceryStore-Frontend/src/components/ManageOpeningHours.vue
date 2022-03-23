@@ -1,3 +1,5 @@
+<!--Visibility: owner-->
+<!--Edit opening hours-->
 <template></template>
 
 <script>

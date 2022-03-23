@@ -1,3 +1,5 @@
+<!--Visibility: employee-->
+<!--View the employee's schedules-->
 <template></template>
 
 <script>
