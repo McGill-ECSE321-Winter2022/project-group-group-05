@@ -97,7 +97,6 @@
 import { LOGIN_STATE } from "../common/StateScript";
 import { AXIOS } from "../common/AxiosScript";
 const username = LOGIN_STATE.state.username;
-document.getElementById("True").checked = true;
 export default {
   name: "ManageProfile",
   data() {
@@ -113,7 +112,6 @@ export default {
           this.errorCustomer = errorMsg;
         }),
       username: username,
-      customers: [],
       errorCustomer: "",
       response: [],
     };
@@ -135,7 +133,6 @@ export default {
       )
         .then(response => {
           // JSON responses are automatically parsed.
-          this.customers.push(response.data);
           this.errorCustomer = "";
           AXIOS.get("/customer/".concat(username))
             .then(response => {
