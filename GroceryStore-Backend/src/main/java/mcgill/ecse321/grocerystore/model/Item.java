@@ -9,6 +9,7 @@ public class Item {
   @Id
   private String name;
   // Item Attributes
+  private String image;
   private double price;
   private int inventory;
   private boolean canDeliver;
@@ -29,7 +30,7 @@ public class Item {
    * @param name
    */
   public Item(String name) {
-    this(name, 0.0, 0, false, false);
+    this(name, "", 0.0, 0, false, false);
   }
 
   /**
@@ -40,7 +41,7 @@ public class Item {
    * @param price
    */
   public Item(String name, double price) {
-    this(name, price, 0, false, false);
+    this(name, "", price, 0, false, false);
   }
 
   /**
@@ -52,7 +53,7 @@ public class Item {
    * @param inventory
    */
   public Item(String name, double price, int inventory) {
-    this(name, price, inventory, false, false);
+    this(name, "", price, inventory, false, false);
   }
 
   /**
@@ -60,13 +61,15 @@ public class Item {
    * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
    * 
    * @param name
+   * @param image
    * @param price
    * @param inventory
    * @param canDeliver
    * @param canPickUp
    */
-  public Item(String name, double price, int inventory, boolean canDeliver, boolean canPickUp) {
+  public Item(String name, String image, double price, int inventory, boolean canDeliver, boolean canPickUp) {
     this.setName(name);
+    this.setImage(image);
     this.setPrice(price);
     this.setInventory(inventory);
     this.setCanDeliver(canDeliver);
@@ -81,6 +84,10 @@ public class Item {
    */
   public String getName() {
     return this.name;
+  }
+  
+  public String getImage() {
+    return this.image;
   }
 
   public double getPrice() {
@@ -112,6 +119,10 @@ public class Item {
    */
   public void setName(String name) {
     this.name = name;
+  }
+  
+  public void setImage(String image) {
+    this.image = image;
   }
 
   public void setPrice(double price) {

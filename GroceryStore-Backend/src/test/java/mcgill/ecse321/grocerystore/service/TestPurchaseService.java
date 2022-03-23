@@ -773,9 +773,9 @@ public class TestPurchaseService {
     pur.setId(PURCHASE_ID_2);
     pur.setTimeOfPurchaseMillis(PURCHASE_TIME_2);
     purchaseData.add(pur);
-    Item item = new Item(ITEM_NAME_1, 50, 1000, true, true);
+    Item item = new Item(ITEM_NAME_1, "", 50, 1000, true, true);
     itemData.add(item);
-    item = new Item(ITEM_NAME_2, 60, 2000, true, true);
+    item = new Item(ITEM_NAME_2, "", 60, 2000, true, true);
     itemData.add(item);
     Customer cus = new Customer();
     cus.setUsername(CUSTOMER_USERNAME_POS);

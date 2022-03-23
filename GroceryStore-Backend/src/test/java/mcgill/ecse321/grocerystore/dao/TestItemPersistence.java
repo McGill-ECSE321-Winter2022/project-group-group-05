@@ -28,12 +28,14 @@ public class TestItemPersistence {
     // Creating item instance
     Item item = new Item();
     String itemname = "Coke";
+    String itemImage = "";
     Double price = 3.99;
     int inventory = 3;
     boolean canDeliver = true;
     boolean canPickUp = true;
     boolean isDiscontinued = true;
     item.setName(itemname);
+    item.setImage(itemImage);
     item.setPrice(price);
     item.setInventory(inventory);
     item.setCanDeliver(canDeliver);
@@ -48,6 +50,7 @@ public class TestItemPersistence {
     // asserts
     assertNotNull(item);
     assertEquals(itemname, item.getName());
+    assertEquals(itemImage, item.getImage());
     assertEquals(price, item.getPrice());
     assertEquals(inventory, item.getInventory());
     assertEquals(canDeliver, item.getCanDeliver());
@@ -61,6 +64,7 @@ public class TestItemPersistence {
     Item item = new Item();
     String name = "Coke";
     item.setName(name);
+    item.setImage("");
     item.setPrice(10);
     item.setCanDeliver(false);
     item.setCanPickUp(false);
@@ -88,6 +92,7 @@ public class TestItemPersistence {
     // asserts
     assertNotNull(item);
     assertEquals(name, item.getName());
+    assertEquals("", item.getImage());
     assertEquals(3, item.getInventory());
     assertEquals(4, item.getPrice());
     assertEquals(true, item.getCanDeliver());

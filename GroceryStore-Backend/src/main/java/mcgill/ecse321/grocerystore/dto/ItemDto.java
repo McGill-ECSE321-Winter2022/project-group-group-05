@@ -3,15 +3,17 @@ package mcgill.ecse321.grocerystore.dto;
 public class ItemDto {
 
   private String name;
+  private String image;
   private double price;
   private int inventory;
   private boolean canDeliver;
   private boolean canPickUp;
   private boolean discontinued;
 
-  public ItemDto(String name, double price, int inventory, boolean canDeliver, boolean canPickUp,
+  public ItemDto(String name, String image, double price, int inventory, boolean canDeliver, boolean canPickUp,
       boolean discontinued) {
     this.name = name;
+    this.image = image;
     this.price = price;
     this.inventory = inventory;
     this.canDeliver = canDeliver;
@@ -24,6 +26,13 @@ public class ItemDto {
    */
   public String getName() {
     return name;
+  }
+  
+  /**
+   * @return the image
+   */
+  public String getImage() {
+    return image;
   }
 
   /**

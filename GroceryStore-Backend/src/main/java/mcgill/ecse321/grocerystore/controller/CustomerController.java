@@ -124,7 +124,7 @@ public class CustomerController {
     if (i == null) {
       throw new IllegalArgumentException("Invalid item.");
     }
-    return new ItemDto(i.getName(), i.getPrice(), i.getInventory(), i.getCanDeliver(),
+    return new ItemDto(i.getName(), i.getImage(), i.getPrice(), i.getInventory(), i.getCanDeliver(),
         i.getCanPickUp(), i.getIsDiscontinued());
   }
 }
