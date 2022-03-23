@@ -27,10 +27,10 @@ public class ItemController {
   private ItemService service;
 
   @PostMapping(value = {"/item/{name}", "/item/{name}/"})
-  public ItemDto createItem(@PathVariable("name") String name, @RequestParam double price,
+  public ItemDto createItem(@PathVariable("name") String name, @RequestParam String image, @RequestParam double price,
       @RequestParam int inventory, @RequestParam boolean canDeliver,
       @RequestParam boolean canPickUp) throws IllegalArgumentException {
-    return convertToDto(service.createItem(name, price, inventory, canDeliver, canPickUp));
+    return convertToDto(service.createItem(name, image, price, inventory, canDeliver, canPickUp));
   }
 
   @DeleteMapping(value = {"/item/{name}", "/item/{name}/"})
@@ -83,6 +83,12 @@ public class ItemController {
     return service.searchItemsDescending(searchQuery).stream().map(p -> convertToDto(p))
         .collect(Collectors.toList());
   }
+  
+  @PatchMapping(value = {"/item/{name}/setImage", "/item/{name}/setPrice/"})
+  public ItemDto setImage(@PathVariable("name") String name, @RequestParam String image)
+      throws IllegalArgumentException {
+    return convertToDto(service.setImage(name, image));
+  }
 
   @PatchMapping(value = {"/item/{name}/setPrice", "/item/{name}/setPrice/"})
   public ItemDto setPrice(@PathVariable("name") String name, @RequestParam double price)
@@ -115,7 +121,7 @@ public class ItemController {
   }
 
   private ItemDto convertToDto(Item i) throws IllegalArgumentException {
-    return new ItemDto(i.getName(), i.getPrice(), i.getInventory(), i.getCanDeliver(),
+    return new ItemDto(i.getName(), i.getImage(), i.getPrice(), i.getInventory(), i.getCanDeliver(),
         i.getCanPickUp(), i.getIsDiscontinued());
   }
 
