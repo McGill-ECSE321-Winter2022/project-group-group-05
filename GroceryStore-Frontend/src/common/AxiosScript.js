@@ -6,7 +6,9 @@ const BACKEND_URL = function () {
   switch (process.env.NODE_ENV) {
     case "development":
       // use https if developing using hosted backend, else use http
-      if (CONFIG.dev.backendHost === "grocery-backend-g05-mcgill.herokuapp.com") {
+      if (
+        CONFIG.dev.backendHost === "grocery-backend-g05-mcgill.herokuapp.com"
+      ) {
         return (
           "https://" + CONFIG.dev.backendHost + ":" + CONFIG.dev.backendPort
         );
