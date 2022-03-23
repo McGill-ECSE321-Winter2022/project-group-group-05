@@ -102,7 +102,16 @@ export default {
   name: "ManageProfile",
   data() {
     return {
-      customer: "",
+      customer: AXIOS.get("/customer/".concat(username))
+        .then(response => {
+          //JSON responses are automatically parsed
+          this.customer = response.data;
+        })
+        .catch(e => {
+          var errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.errorCustomer = errorMsg;
+        }),
       username: username,
       customers: [],
       errorCustomer: "",
