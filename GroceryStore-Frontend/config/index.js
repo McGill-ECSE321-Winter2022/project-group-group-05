@@ -4,6 +4,12 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
+    // set up host and port
+    host: "grocery-frontend-g05-mcgill.herokuapp.com",
+    port: 443,
+    backendHost: "grocery-backend-g05-mcgill.herokuapp.com",
+    backendPort: 443,
+    // end set up
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
@@ -23,7 +29,12 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    // set up host and port
+    host: "127.0.0.1",
+    port: 8087,
+    backendHost: "grocery-backend-g05-mcgill.herokuapp.com",
+    backendPort: 443,
+    // end set up
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
