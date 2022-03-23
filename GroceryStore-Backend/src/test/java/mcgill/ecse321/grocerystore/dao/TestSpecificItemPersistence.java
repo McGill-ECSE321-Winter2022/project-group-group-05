@@ -44,7 +44,7 @@ public class TestSpecificItemPersistence {
 
   @Test
   public void modifySpecificItem() {
-    Item mt = new Item("Brown Sugar Milk Tea", 5.0, 132, true, true);
+    Item mt = new Item("Brown Sugar Milk Tea", "", 5.0, 132, true, true);
     mt = itemRepo.save(mt);
     SpecificItem mtInCart = new SpecificItem(mt, 3);
     mtInCart = specificItemRepo.save(mtInCart);
