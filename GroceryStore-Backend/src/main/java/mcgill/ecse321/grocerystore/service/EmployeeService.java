@@ -169,13 +169,21 @@ public class EmployeeService {
     var shiftToBeAdded = verifyShiftName(shift);
     if (employee.getEmployeeSchedules() != null) {
       // If the employee is already assigned schedules, we need to check them to make sure we aren't
-      // assigning the same shift again.
+      // assigning the same shift again nor are we assigning a shift that conflicts with another
+      // shift.
       for (var existingSchedule : employee.getEmployeeSchedules()) {
         if (existingSchedule.getDate().equals(date)
             && existingSchedule.getShift().getName().equals(shift)) {
           throw new IllegalArgumentException(
               "That schedule is already assigned to Employee with username \""
                   + employee.getUsername() + "\"!");
+        } else if (existingSchedule.getDate().equals(date) && !(existingSchedule.getShift()
+            .getStartTime().after(shiftToBeAdded.getEndTime())
+            || existingSchedule.getShift().getEndTime().before(shiftToBeAdded.getStartTime()))) {
+          // if the new schedule assignment is on the same day, and overlaps with an existing shift,
+          // throw error
+          throw new IllegalArgumentException(
+              "That schedule conflicts with an already existing schedule!");
         }
       }
     }
