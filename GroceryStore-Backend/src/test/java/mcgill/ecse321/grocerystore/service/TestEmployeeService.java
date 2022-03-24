@@ -100,6 +100,8 @@ public class TestEmployeeService {
       if (i.getArgument(0).equals(SHIFT_KEY)) {
         var shift = new Shift();
         shift.setName(SHIFT_KEY);
+        shift.setStartTime("08:00:00");
+        shift.setEndTime("19:00:00");
         return shift;
       }
       return null;
@@ -195,20 +197,23 @@ public class TestEmployeeService {
       Shift mockShift = new Shift();
       mockShift.setName(SHIFT_KEY);
       mockShift.setStartTime("08:00:00");
+      mockShift.setEndTime("19:00:00");
       return mockShift;
     });
     lenient().when(mockScheduleTwo.getDate()).thenReturn(Date.valueOf("2040-01-04"));
     lenient().when(mockScheduleTwo.getShift()).thenAnswer(i -> {
       Shift mockShift = new Shift();
       mockShift.setName("mockShift2");
-      mockShift.setStartTime("09:00:00");
+      mockShift.setStartTime("15:00:00");
+      mockShift.setEndTime("16:00:00");
       return mockShift;
     });
-    lenient().when(mockScheduleThree.getDate()).thenReturn(Date.valueOf("2040-01-04"));
+    lenient().when(mockScheduleThree.getDate()).thenReturn(Date.valueOf("2040-01-05"));
     lenient().when(mockScheduleThree.getShift()).thenAnswer(i -> {
       Shift mockShift = new Shift();
       mockShift.setName("mockShift3");
-      mockShift.setStartTime("10:00:00");
+      mockShift.setStartTime("17:00:00");
+      mockShift.setEndTime("20:00:00");
       return mockShift;
     });
   }
@@ -593,6 +598,30 @@ public class TestEmployeeService {
         error);
   }
 
+  @Test
+  public void testAddScheduleConflictingBefore() {
+    String error = "";
+    try {
+      service.addSchedule(EMPLOYEE_KEY, Date.valueOf("2040-01-04"), SHIFT_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(mockEmployeeOne, times(0)).addEmployeeSchedule(any());
+    assertEquals("That schedule conflicts with an already existing schedule!", error);
+  }
+  
+  @Test
+  public void testAddScheduleConflictingAfter() {
+    String error = "";
+    try {
+      service.addSchedule(EMPLOYEE_KEY, Date.valueOf("2040-01-05"), SHIFT_KEY);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    verify(mockEmployeeOne, times(0)).addEmployeeSchedule(any());
+    assertEquals("That schedule conflicts with an already existing schedule!", error);
+  }
+
   // Tests for removeSchedule(String, Date, String)
   // ---------------------------------------
   // Note: tests for invalid usernames are not included because this method uses getEmployee(String)
@@ -608,7 +637,8 @@ public class TestEmployeeService {
     }
     assertNotNull(testEmployee);
     InOrder removeOrder = inOrder(mockEmployeeOne, employeeScheduleDao);
-    removeOrder.verify(mockEmployeeOne, times(1)).removeEmployeeSchedule(any(EmployeeSchedule.class));
+    removeOrder.verify(mockEmployeeOne, times(1))
+        .removeEmployeeSchedule(any(EmployeeSchedule.class));
     removeOrder.verify(employeeScheduleDao, times(1)).delete(any(EmployeeSchedule.class));
   }
 
@@ -637,7 +667,7 @@ public class TestEmployeeService {
     verify(mockEmployeeOne, times(0)).removeEmployeeSchedule(any());
     assertEquals("No EmployeeSchedule object found with the provided date and Shift", error);
   }
-  
+
   @Test
   public void testRemoveScheduleNoSchedules() {
     String error = "";
