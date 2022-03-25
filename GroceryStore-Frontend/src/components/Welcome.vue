@@ -44,7 +44,7 @@
       <template #overlay>
         <div class="text-center">
           <b-spinner></b-spinner>
-          <p class="h2">Loading...</p>
+          <p class="h2">Waiting for database...</p>
         </div>
       </template>
     </b-overlay>
