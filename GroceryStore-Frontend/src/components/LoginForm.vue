@@ -3,7 +3,7 @@
 <template>
   <div class="login-form" v-if="!LOGIN_STATE.state.isLoggedIn">
     <b-overlay :show="isLoading" rounded="sm">
-      <div :aria-hidden="isLoading ? 'true' : null" class="form-area">
+      <div :aria-hidden="isLoading ? 'true' : null" id="login-form-inner">
         <p class="h2 text-center mb-5">Sign In to Your Account</p>
         <b-form @submit="onsubmit">
           <b-form-group
@@ -68,7 +68,7 @@
   margin-right: auto;
   text-align: left;
 }
-.form-area {
+#login-form-inner {
   padding: 100px;
 }
 </style>
