@@ -39,7 +39,7 @@
           :key="specificItem.id"
         >
           <td>{{ specificItem.item.name }}</td>
-          <td>${{ specificItem.purchasePrice.toFixed(1) }}</td>
+          <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
           <td>
             {{ specificItem.purchaseQuantity }}
             {{
@@ -53,7 +53,7 @@
       <hr />
       <tr id="totalPrice">
         Total: ${{
-          totalPrice.toFixed(1)
+          totalPrice | formatCurrency
         }}
         {{
           clearSum()
