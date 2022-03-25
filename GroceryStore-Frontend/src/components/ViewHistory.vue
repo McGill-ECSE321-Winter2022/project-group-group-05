@@ -67,13 +67,12 @@
 <script>
 import { LOGIN_STATE } from "../common/StateScript";
 import { AXIOS } from "../common/AxiosScript";
-const username = LOGIN_STATE.state.username;
 export default {
   name: "ViewHistory",
   data() {
     return {
       purchases: AXIOS.get(
-        "/customer/".concat(username).concat("/getPurchases"),
+        "/customer/".concat(LOGIN_STATE.state.username).concat("/getPurchases"),
         {},
         {}
       )

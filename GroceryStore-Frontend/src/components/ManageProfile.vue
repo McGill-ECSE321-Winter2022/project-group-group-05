@@ -104,12 +104,11 @@
 <script>
 import { LOGIN_STATE } from "../common/StateScript";
 import { AXIOS } from "../common/AxiosScript";
-const username = LOGIN_STATE.state.username;
 export default {
   name: "ManageProfile",
   data() {
     return {
-      customer: AXIOS.get("/customer/".concat(username))
+      customer: AXIOS.get("/customer/".concat(LOGIN_STATE.state.username))
         .then(response => {
           this.customer = response.data;
         })
@@ -118,7 +117,7 @@ export default {
           console.log(errorMsg);
           this.errorCustomer = errorMsg;
         }),
-      username: username,
+      username: LOGIN_STATE.state.username,
       errorCustomer: "",
       response: [],
     };
@@ -126,7 +125,7 @@ export default {
   methods: {
     updateCustomer: function (email, password, address, isLocal) {
       AXIOS.patch(
-        "/customer/".concat(username),
+        "/customer/".concat(LOGIN_STATE.state.username),
         {},
         {
           params: {
