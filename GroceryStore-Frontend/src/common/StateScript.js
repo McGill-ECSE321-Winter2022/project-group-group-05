@@ -30,4 +30,9 @@ export const LOGIN_STATE = new Vuex.Store({
       state.username = "";
     },
   },
+  actions: {
+    loginAsync(context, { userType, username }) {
+      context.commit("login", { userType, username });
+    },
+  },
 });
