@@ -12,46 +12,48 @@ export default {
         LOGIN_STATE.state.userType === "Owner",
       isCustomer: LOGIN_STATE.state.userType === "Customer",
       isLoading: false,
+      openingHours: [],
     };
   },
   created: function () {
-    // upon creation, verify if stored logged in user is still in the system
-    let userType = LOGIN_STATE.state.userType;
-    let username = LOGIN_STATE.state.username;
-    if (LOGIN_STATE.state.isLoggedIn) {
-      this.isLoading = true;
-      if (userType === "Owner") {
-        AXIOS.get("/owner/".concat(username), {})
-          .then(response => {
-            this.isLoading = false;
-          })
-          .catch(e => {
-            this.isLoading = false;
+    // upon creation, fetch opening hours
+    this.isLoading = true;
+    AXIOS.get("/openingH/getAll", {})
+      .then(response => {
+        this.openingHours = response.data;
+      })
+      .catch(e => {
+        console.log(e);
+      })
+      .finally(() => {
+        // upon creation, verify if stored logged in user is still in the system
+        let userType = LOGIN_STATE.state.userType;
+        let username = LOGIN_STATE.state.username;
+        if (LOGIN_STATE.state.isLoggedIn) {
+          if (userType === "Owner") {
+            AXIOS.get("/owner/".concat(username), {})
+              .then(response => {})
+              .catch(e => {
+                this.logout();
+              });
+          } else if (userType === "Employee") {
+            AXIOS.get("/employee/".concat(username), {})
+              .then(response => {})
+              .catch(e => {
+                this.logout();
+              });
+          } else if (userType === "Customer") {
+            AXIOS.get("/customer/".concat(username), {})
+              .then(response => {})
+              .catch(e => {
+                this.logout();
+              });
+          } else {
             this.logout();
-          });
-      } else if (userType === "Employee") {
-        AXIOS.get("/employee/".concat(username), {})
-          .then(response => {
-            this.isLoading = false;
-          })
-          .catch(e => {
-            this.isLoading = false;
-            this.logout();
-          });
-      } else if (userType === "Customer") {
-        AXIOS.get("/customer/".concat(username), {})
-          .then(response => {
-            this.isLoading = false;
-          })
-          .catch(e => {
-            this.isLoading = false;
-            this.logout();
-          });
-      } else {
+          }
+        }
         this.isLoading = false;
-        this.logout();
-      }
-    }
+      });
   },
   methods: {
     logout: function () {

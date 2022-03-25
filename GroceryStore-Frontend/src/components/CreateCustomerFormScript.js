@@ -42,7 +42,7 @@ export default {
       )
         .then(response => {
           LOGIN_STATE.commit("login", { userType, username });
-          this.isLoading=false;
+          this.isLoading = false;
           this.$router.push("/");
         })
         .catch(e => {
