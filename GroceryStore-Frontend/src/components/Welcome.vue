@@ -7,7 +7,7 @@
         <h1>{{ msg }}</h1>
         <router-link to="/LoginForm">
           <b-button variant="success" v-if="!LOGIN_STATE.state.isLoggedIn"
-          >Sign in</b-button
+            >Sign in</b-button
           >
         </router-link>
         <b-button
@@ -19,7 +19,7 @@
         >
         <router-link to="/CreateCustomerForm">
           <b-button variant="primary" v-if="!LOGIN_STATE.state.isLoggedIn"
-          >Create account</b-button
+            >Create account</b-button
           >
         </router-link>
         <hr />
@@ -27,11 +27,13 @@
           <b-button pill variant="info" v-if="isCustomer">My profile</b-button>
         </router-link>
         <router-link to="/ManageStaffProfile">
-          <b-button pill variant="info" v-if="isStaff">My staff profile</b-button>
+          <b-button pill variant="info" v-if="isStaff"
+            >My staff profile</b-button
+          >
         </router-link>
         <router-link to="/ViewHistory">
           <b-button pill variant="info" v-if="isCustomer"
-          >My purchase history</b-button
+            >My purchase history</b-button
           >
         </router-link>
         <router-link to="/ManageCart">
@@ -40,9 +42,9 @@
       </div>
 
       <template #overlay>
-        <div class="text-center h2">
-          <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
-          <p id="wait-message">Please wait...</p>
+        <div class="text-center">
+          <b-spinner></b-spinner>
+          <p class="h2">Loading...</p>
         </div>
       </template>
     </b-overlay>

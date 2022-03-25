@@ -55,7 +55,11 @@ export default {
                     let userType = "Customer";
                     LOGIN_STATE.commit("login", { userType, username });
                     this.isLoading = false;
-                    this.$router.push("/");
+                    if (username === "kiosk") {
+                      this.$router.push("/PointOfSale");
+                    } else {
+                      this.$router.push("/");
+                    }
                   } else {
                     this.formError = "Wrong password";
                     this.isLoading = false;
