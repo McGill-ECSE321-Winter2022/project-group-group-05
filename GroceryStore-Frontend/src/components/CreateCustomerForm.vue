@@ -102,7 +102,6 @@
 <style scoped>
 #customer-form-outer {
   width: 650px;
-  margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
   text-align: left;

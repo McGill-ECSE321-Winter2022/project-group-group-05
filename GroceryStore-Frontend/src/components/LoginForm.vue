@@ -63,7 +63,6 @@
 .login-form {
   /*border: 1px solid black;*/
   width: 600px;
-  margin-top: 100px;
   margin-left: auto;
   margin-right: auto;
   text-align: left;
