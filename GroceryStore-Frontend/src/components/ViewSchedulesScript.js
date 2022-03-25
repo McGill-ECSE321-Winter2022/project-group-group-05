@@ -5,10 +5,10 @@ import moment from "moment";
 
 function generateWeekObject(date) {
   var weekSchedule = [];
-  for (let i = 1; i <= 7; i++) {
+  for (var i = 0; i < 7; i++) {
     const weekDaySchedule = {
-      dayOfWeek: moment(date).isoWeekday(i),
-      scheduledShifts: []
+      dayOfWeek: moment(date).weekday(i),
+      scheduledShifts: [],
     };
     weekSchedule.push(weekDaySchedule);
   }
@@ -21,6 +21,11 @@ export default {
     StaffDashboard,
   },
   created: function () {
+    LOGIN_STATE.commit("logout");
+    LOGIN_STATE.commit("login", {
+      userType: "testEmployee",
+      username: "testEmployee",
+    });
     AXIOS.get(
       "/employee/".concat(LOGIN_STATE.state.username).concat("/getSchedules")
     ).then(response => {
@@ -32,42 +37,44 @@ export default {
        * To take advantage of javascript's pop() function, we first reverse the array so we
        * pop the first element rather than the last.
        */
-      var fetchedEmployeeSchedules = response.data.reverse();
-      if (fetchedEmployeeSchedules.length > 0) {
+      if (response.data.length > 0) {
         this.scheduledShiftsByWeek = [];
         this.currentWeek = 0;
         this.latestWeek = 0;
-        var week = moment().isAfter(fetchedEmployeeSchedules.at(-1).date, "week")
-        ? moment(schedule.date)
-        : moment();
+        var firstSchedule = response.data[0];
+        var week = moment().isAfter(firstSchedule.date, "week")
+          ? moment(firstSchedule.date)
+          : moment();
+        var responseNumber = 0;
         while (
-          fetchedEmployeeSchedules.length > 0 &&
-          !moment().isAfter(week, "week")
+          responseNumber < response.data.length ||
+          moment().isSameOrAfter(week, "week")
         ) {
           var weekSchedule = generateWeekObject(week);
           var weekHasSchedules = false;
-          for (let i = 0; i < weekSchedule.length; i++) {
-            while (fetchedEmployeeSchedules.length > 0) {
-              schedule = fetchedEmployeeSchedules.pop();
+          for (var i = 0; i < weekSchedule.length; i++) {
+            while (responseNumber < response.data.length) {
+              var schedule = response.data[responseNumber];
               var scheduleMoment = moment(schedule.date);
-              if (scheduleMoment.isSame(week[i].dayOfWeek, "day")) {
+              if (scheduleMoment.isSame(weekSchedule[i].dayOfWeek, "day")) {
                 weekHasSchedules = true;
-                week[i].scheduledShifts.push(schedule);
+                weekSchedule[i].scheduledShifts.push(schedule);
+                responseNumber++;
               } else {
                 break;
               }
             }
           }
-          if (!moment().isSameOrAfter(week[0].dayOfWeek, "week")) {
-            currentWeek++;
-            latestWeek++;
+          if (moment().isAfter(week, "week")) {
+            this.currentWeek++;
+            this.latestWeek++;
           }
           const scheduledShiftsForWeek = {
             hasSchedules: weekHasSchedules,
-            schedulesOfWeek: week,
+            schedulesOfWeek: weekSchedule,
           };
           this.scheduledShiftsByWeek.push(scheduledShiftsForWeek);
-          week.add(1, "week")
+          week.add(1, "week");
         }
       } else {
         this.scheduledShiftsByWeek = [
@@ -90,7 +97,7 @@ export default {
         },
       ],
       currentWeek: 0,
-      latestWeek: 0
+      latestWeek: 0,
     };
   },
   methods: {
@@ -98,10 +105,13 @@ export default {
       this.currentWeek = 0;
     },
     selectLastWeek: function () {
-      this.currentWeek = scheduledShiftsByWeek.length - 1;
+      this.currentWeek = this.scheduledShiftsByWeek.length - 1;
     },
     stepForwardWeek: function () {
-      this.currentWeek = Math.min(this.currentWeek + 1, scheduledShiftsByWeek.length - 1);
+      this.currentWeek = Math.min(
+        this.currentWeek + 1,
+        this.scheduledShiftsByWeek.length - 1
+      );
     },
     stepBackWeek: function () {
       this.currentWeek = Math.max(this.currentWeek - 1, 0);
