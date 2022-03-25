@@ -1,7 +1,7 @@
 <!--Visibility: notLoggedIn-->
 <!--Customer creates their own account-->
 <template>
-  <div id="customer-form-outer" v-show="!LOGIN_STATE.state.isLoggedIn">
+  <div id="customer-form-outer" v-if="!LOGIN_STATE.state.isLoggedIn">
     <b-overlay :show="isLoading" rounded="sm">
       <div :aria-hidden="isLoading ? 'true' : null" id="customer-form-inner">
         <p class="h2 text-center mb-5">Create a New Customer Account</p>
