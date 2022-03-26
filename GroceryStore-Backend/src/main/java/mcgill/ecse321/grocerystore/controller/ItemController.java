@@ -84,7 +84,7 @@ public class ItemController {
         .collect(Collectors.toList());
   }
   
-  @PatchMapping(value = {"/item/{name}/setImage", "/item/{name}/setPrice/"})
+  @PatchMapping(value = {"/item/{name}/setImage", "/item/{name}/setImage/"})
   public ItemDto setImage(@PathVariable("name") String name, @RequestParam String image)
       throws IllegalArgumentException {
     return convertToDto(service.setImage(name, image));
