@@ -16,35 +16,35 @@
         <div>
           <b-button-group>
             <b-button
-              class="font_size_large button_style"
+              class="button_style"
               variant="outline-dark"
               v-bind:disabled="currentWeek === 0"
               @click="selectFirstWeek()"
               >&laquo;</b-button
             >
             <b-button
-              class="font_size_large button_style"
+              class="button_style"
               variant="outline-dark"
               v-bind:disabled="currentWeek === 0"
               @click="stepBackWeek()"
               >&lsaquo;</b-button
             >
             <b-button
-              class="font_size_medium button_style"
+              class="button_style"
               variant="outline-dark"
               v-bind:disabled="currentWeek === latestWeek"
               @click="returnToLatestWeek()"
               >Return to Latest Assigned Shifts</b-button
             >
             <b-button
-              class="font_size_large button_style"
+              class="button_style"
               variant="outline-dark"
               v-bind:disabled="currentWeek === scheduledShiftsByWeek.length - 1"
               @click="stepForwardWeek()"
               >&rsaquo;</b-button
             >
             <b-button
-              class="font_size_large button_style"
+              class="button_style"
               variant="outline-dark"
               v-bind:disabled="currentWeek === scheduledShiftsByWeek.length - 1"
               @click="selectLastWeek()"
@@ -53,7 +53,7 @@
           </b-button-group>
         </div>
         <b-alert
-          class="no_schedule_style font_size_large"
+          class="no_schedule_style"
           show
           dismissible
           v-if="
