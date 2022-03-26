@@ -11,17 +11,15 @@
 
         <table class="tablestyle" align="center">
             <tr class="trstyle">
-                <th class="head_thstyle"> id </th>
-                <th class="head_thstyle"> items </th>
-                <th class="head_thstyle"> state </th>
-                <th class="head_thstyle"> date of purchase </th>
-                <th class="head_thstyle"> time of purchase</th>
-                <th class="head_thstyle"> delivery </th>
+                <th class="head_thstyle"> Id </th>
+                <th class="head_thstyle"> Items </th>
+                <th class="head_thstyle"> Purchase Date </th>
+                <th class="head_thstyle"> Purchase Time</th>
+                <th class="head_thstyle"> Delivery </th>
             </tr>
             <tr class="trstyle" v-for="purchase in pruchases" :key="purchase.id">
                 <td class="tdstyle">{{purchase.id}}</td>
                 <td class="tdstyle">{{purchase.items}}</td>
-                <td class="tdstyle">{{purchase.state}}</td>
                 <td class="tdstyle">{{purchase.date_of_purchase}}</td>
                 <td class="tdstyle">{{purchase.time_of_purchase}}</td>
                 <td class="tdstyle">{{purchase.delivery}}</td>

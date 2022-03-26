@@ -7,7 +7,6 @@ export default {
         purchase: {
             id:'',
             items:'',
-            state:'',
             date_of_purchase:'',
             time_of_purchase:'',
             delivery:'',
