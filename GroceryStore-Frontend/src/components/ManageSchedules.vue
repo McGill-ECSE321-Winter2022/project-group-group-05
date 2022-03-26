@@ -78,7 +78,9 @@
                             name: 'weekdays.shiftListener',
                             put: 'shifts',
                           }"
-                          @change="addScheduleAssignment(weekday.dayOfWeek, row.index)"
+                          @change="
+                            addScheduleAssignment(weekday.dayOfWeek, row.index)
+                          "
                         >
                           <div class="font_size_large">
                             {{ weekday.dayOfWeek.format("dddd") }}
@@ -120,7 +122,11 @@
             <b-col cols="3">
               <h2 class="shift_header_style bg-light">Available Shifts</h2>
               <div class="shift_container_style">
-                <div class="shift_card_style" v-for="shift in shifts" :key="shift.name">
+                <div
+                  class="shift_card_style"
+                  v-for="shift in shifts"
+                  :key="shift.name"
+                >
                   <draggable
                     :list="shifts"
                     ghost-class="ghost-card"
