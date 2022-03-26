@@ -22,6 +22,7 @@
             >Create account</b-button
           >
         </router-link>
+
         <hr />
         <router-link to="/ManageProfile">
           <b-button pill variant="info" v-if="isCustomer">My profile</b-button>
@@ -39,12 +40,23 @@
         <router-link to="/ManageCart">
           <b-button pill variant="info" v-if="isCustomer">My cart</b-button>
         </router-link>
+
+        <hr />
+        <b-button
+          id="populate-database-button"
+          variant="warning"
+          v-on:click="genData()"
+          >Populate Database</b-button
+        >
+        <b-tooltip target="populate-database-button" triggers="hover">
+          <b>Development option:</b> populate database with some data
+        </b-tooltip>
       </div>
 
       <template #overlay>
         <div class="text-center">
           <b-spinner></b-spinner>
-          <p class="h2">Waiting for database...</p>
+          <p class="h2">{{ loadingMsg }}</p>
         </div>
       </template>
     </b-overlay>
