@@ -55,22 +55,35 @@
         <b-alert
           class="no_schedule_style font_size_large"
           show
-          v-if="!scheduledShiftsByWeek[currentWeek].hasSchedules"
+          dismissible
+          v-if="
+            !scheduledShiftsByWeek[currentWeek].hasSchedules && !errorMessage
+          "
           >No scheduled shifts!</b-alert
         >
         <b-aspect class="schedule_style" aspect="2.25:1">
-          <b-container style="height: 100%" fluid overflow-auto>
+          <b-alert show variant="danger" v-if="errorMessage"
+            ><h4 class="alert-heading">Error:</h4>
+            {{ errorMessage }}
+          </b-alert>
+          <b-container
+            style="height: 100%"
+            fluid
+            overflow-auto
+            v-if="!errorMessage"
+          >
             <b-form-row class="schedule_row_style">
-              <b-col class="schedule_column_style" v-for="weekday in scheduledShiftsByWeek[currentWeek].schedulesOfWeek" :key="weekday.dayOfWeek">
+              <b-col
+                class="schedule_column_style"
+                v-for="weekday in scheduledShiftsByWeek[currentWeek]
+                  .schedulesOfWeek"
+                :key="weekday.dayOfWeek.toString()"
+              >
                 <h4>
-                  {{
-                    weekday.dayOfWeek.format("dddd")
-                  }}
+                  {{ weekday.dayOfWeek.format("dddd") }}
                 </h4>
                 <div>
-                  {{
-                    weekday.dayOfWeek.format("MMM. Do, YYYY")
-                  }}
+                  {{ weekday.dayOfWeek.format("MMM. Do, YYYY") }}
                 </div>
                 <b-card
                   class="my-2 text-center"
@@ -136,12 +149,12 @@
   background-color: #ddffbc;
 }
 .no_schedule_style {
-  width: 78%;
+  width: 79%;
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
-  padding: 2px 0px 2px 0px;
+  padding: 10px 0px 10px 0px;
 }
 /* Styling for Shift Cards */
 .shift_style {

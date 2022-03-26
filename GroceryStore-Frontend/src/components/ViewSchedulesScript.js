@@ -31,12 +31,11 @@ export default {
     AXIOS.get(
       "/employee/".concat(LOGIN_STATE.state.username).concat("/getSchedules")
     ).then(response => {
-      // Because the StaffDashboard page is only accessible once the user logs in as an employee,
-      // we can safely assume that the username used here corresponds to an Employee username.
       if (response.data.length > 0) {
         this.scheduledShiftsByWeek = [];
         this.currentWeek = 0;
         this.latestWeek = 0;
+        this.errorMessage = "";
         var firstSchedule = response.data[0];
         var week = moment().isAfter(firstSchedule.date, "week")
           ? moment(firstSchedule.date)
@@ -95,7 +94,11 @@ export default {
         ];
         this.currentWeek = 0;
         this.latestWeek = 0;
+        this.errorMessage = "";
       }
+    }).catch(error => {
+      console.log(error.response.data.message);
+      this.errorMessage = error.response.data.message;
     });
   },
   data() {
@@ -120,6 +123,7 @@ export default {
       // latestWeek tracks the element in scheduledShiftsByWeek that corresponds to today's week. 
       // Once set in created(), this value does not change
       latestWeek: 0,
+      errorMessage: ""
     };
   },
   methods: {
