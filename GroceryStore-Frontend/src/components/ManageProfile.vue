@@ -2,7 +2,7 @@
 <!--Modify customer's own account infos-->
 <template>
   <div>
-    <div id="manageprofile">
+    <div id="manageprofile" v-if="userType === 'Customer'">
       <h1>Manage Your Profile</h1>
       <br />
       <table>
@@ -118,6 +118,7 @@ export default {
           this.errorCustomer = errorMsg;
         }),
       username: LOGIN_STATE.state.username,
+      userType: LOGIN_STATE.state.userType,
       errorCustomer: "",
       response: [],
     };

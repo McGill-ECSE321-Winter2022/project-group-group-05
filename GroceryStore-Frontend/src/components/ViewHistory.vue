@@ -2,7 +2,7 @@
 <!--View list of all purchases (state [cancelled, completed], timeofpurchase, total price, etc.)-->
 <!--Cancel button for purchases in paid state-->
 <template>
-  <div id="viewhistory">
+  <div id="viewhistory" v-if="userType === 'Customer'">
     <h1>Purchase History</h1>
     <br />
     <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
@@ -86,6 +86,7 @@ export default {
           this.errorPurchase = errorMsg;
         }),
       totalPrice: 0,
+      userType: LOGIN_STATE.state.userType,
     };
   },
   methods: {
