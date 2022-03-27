@@ -139,7 +139,7 @@ public class EmployeeController {
   private EmployeeDto convertToDto(Employee employee) {
     ArrayList<EmployeeScheduleDto> scheduleList = new ArrayList<EmployeeScheduleDto>();
     if (employee.getEmployeeSchedules() != null) {
-      for (var schedule : employee.getEmployeeSchedules()) {
+      for (var schedule : service.getEmployeeScheduleSorted(employee.getUsername())) {
         Shift scheduleShift = schedule.getShift();
         ShiftDto shiftDto = new ShiftDto(scheduleShift.getName(), scheduleShift.getStartTime(),
             scheduleShift.getEndTime());
