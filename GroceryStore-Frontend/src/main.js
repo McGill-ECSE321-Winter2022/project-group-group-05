@@ -7,11 +7,13 @@ import router from "./router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import moment from "moment";
+import MarqueeText from "vue-marquee-text-component";
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 Vue.use(IconsPlugin);
 Vue.config.productionTip = false;
+Vue.component("marquee-text", MarqueeText);
 
 /* eslint-disable no-new */
 new Vue({
