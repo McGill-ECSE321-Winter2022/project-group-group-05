@@ -64,7 +64,9 @@ export default {
       shifts: [],
       ownerLoggedIn: false,
       selectedShift: "",
-      errorMessage: "",
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      errorMessage: "Test",
     };
   },
   computed: {
@@ -91,6 +93,9 @@ export default {
   methods: {
     selectShift: function (shiftName) {
       this.selectedShift = shiftName;
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     },
     stepForwardWeek: function (rowIndex) {
       var nextWeek = this.weekMarkers[rowIndex];
@@ -152,6 +157,7 @@ export default {
         })
         .catch(error => {
           console.log(error.response.data.message);
+          this.dismissCountDown = this.dismissSecs;
           this.errorMessage = error.response.data.message;
         });
     },

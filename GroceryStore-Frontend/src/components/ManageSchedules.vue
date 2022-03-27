@@ -9,6 +9,15 @@
           ><h4 class="alert-heading">Error:</h4>
           You must be logged in as an owner to access this page.
         </b-alert>
+        <b-alert
+          :show="dismissCountDown"
+          dismissible
+          variant="warning"
+          @dismissed="dismissCountDown = 0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>Warning: {{ errorMessage }}</p>
+        </b-alert>
         <b-container fluid v-if="ownerLoggedIn"
           ><b-row align-v="stretch"
             ><b-col cols="9">
@@ -120,7 +129,9 @@
               </b-table>
             </b-col>
             <b-col cols="3">
-              <h2 class="shift_header_style bg-light">Available Shifts</h2>
+              <div class="shift_header_style bg-light">
+                <h2>Available Shifts</h2>
+              </div>
               <div class="shift_container_style">
                 <div
                   class="shift_card_style"
@@ -171,7 +182,6 @@
 }
 .shift_header_style {
   padding-top: 5px;
-  padding-bottom: 5px;
   border-radius: 3px;
 
   min-width: 200px;
