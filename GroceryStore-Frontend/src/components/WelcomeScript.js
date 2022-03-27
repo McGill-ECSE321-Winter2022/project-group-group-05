@@ -12,18 +12,60 @@ export default {
         LOGIN_STATE.state.userType === "Owner",
       isCustomer: LOGIN_STATE.state.userType === "Customer",
       isLoading: false,
+      isItemLoading: false,
       loadingMsg: "Waiting for database...",
       marqueePause: false,
       openingHours: [],
       holidays: [],
       nextHolidayDate: "",
       nextholidayName: "",
+      inStockItems: [],
+      cart: "",
     };
   },
-  created: function () {
+  created: async function () {
     this.isLoading = true;
+    // upon creation, verify if stored logged in user is still in the system
+    let userType = LOGIN_STATE.state.userType;
+    let username = LOGIN_STATE.state.username;
+    if (LOGIN_STATE.state.isLoggedIn) {
+      if (userType === "Owner") {
+        await AXIOS.get("/owner/".concat(username), {}).catch(() => {
+          this.logout();
+        });
+      } else if (userType === "Employee") {
+        await AXIOS.get("/employee/".concat(username), {}).catch(() => {
+          this.logout();
+        });
+      } else if (userType === "Customer") {
+        await AXIOS.get("/customer/".concat(username), {}).catch(() => {
+          this.logout();
+        });
+      } else {
+        this.logout();
+      }
+    }
+    // upon creation, fetch cart if customer is logged in and is not POS
+    if (this.isCustomer && username !== "kiosk") {
+      await AXIOS.post(
+        "/purchase/cart",
+        {},
+        {
+          params: {
+            username: username,
+          },
+        }
+      )
+        .then(response => {
+          this.cart = response.data;
+          console.log("Successfully retrieved cart #" + this.cart["id"]);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
     // upon creation, fetch holidays
-    AXIOS.get("holiday/getAll", {})
+    await AXIOS.get("holiday/getAll", {})
       .then(response => {
         this.holidays = response.data;
         if (this.holidays.length > 0) {
@@ -33,51 +75,32 @@ export default {
       })
       .catch(e => {
         console.log(e);
-      })
-      .finally(() => {
-        // upon creation, fetch opening hours
-        AXIOS.get("/openingH/getAll", {})
-          .then(response => {
-            this.openingHours = response.data.sort((a, b) => {
-              return (
-                daysOfWeekSorter[a["daysOfWeek"].toLowerCase()] -
-                daysOfWeekSorter[b["daysOfWeek"].toLowerCase()]
-              );
-            });
-          })
-          .catch(e => {
-            console.log(e);
-          })
-          .finally(() => {
-            // upon creation, verify if stored logged in user is still in the system
-            let userType = LOGIN_STATE.state.userType;
-            let username = LOGIN_STATE.state.username;
-            if (LOGIN_STATE.state.isLoggedIn) {
-              if (userType === "Owner") {
-                AXIOS.get("/owner/".concat(username), {})
-                  .then(() => {})
-                  .catch(() => {
-                    this.logout();
-                  });
-              } else if (userType === "Employee") {
-                AXIOS.get("/employee/".concat(username), {})
-                  .then(() => {})
-                  .catch(() => {
-                    this.logout();
-                  });
-              } else if (userType === "Customer") {
-                AXIOS.get("/customer/".concat(username), {})
-                  .then(() => {})
-                  .catch(() => {
-                    this.logout();
-                  });
-              } else {
-                this.logout();
-              }
-            }
-            this.isLoading = false;
-          });
       });
+    // upon creation, fetch opening hours
+    await AXIOS.get("/openingH/getAll", {})
+      .then(response => {
+        this.openingHours = response.data.sort((a, b) => {
+          return (
+            daysOfWeekSorter[a["daysOfWeek"].toLowerCase()] -
+            daysOfWeekSorter[b["daysOfWeek"].toLowerCase()]
+          );
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    this.isLoading = false;
+    // items
+    this.isItemLoading = true;
+    // upon creation, fetch in-stock items
+    await AXIOS.get("/item/allInStock", {})
+      .then(response => {
+        this.inStockItems = response.data;
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    this.isItemLoading = false;
   },
   methods: {
     logout: function () {
@@ -88,6 +111,7 @@ export default {
       this.isLoading = true;
       await createOwner();
       await createKiosk();
+      await createCustomer();
       await createEmployee();
       await createHoliday();
       await createItem1();
@@ -178,6 +202,42 @@ function createKiosk() {
         })
         .catch(() => {
           console.log("Failed to set up customer 'kiosk' account");
+        });
+    });
+}
+
+function createCustomer() {
+  console.log("Attempting to create customer 'loyalcustomer'...");
+  return AXIOS.post(
+    "/customer/loyalcustomer",
+    {},
+    {
+      params: {
+        password: "123456",
+        email: "loyalcustomer@gmail.com",
+        address: "12630 Younge St. Toronto, ON",
+        isLocal: false,
+      },
+    }
+  )
+    .then(() => {
+      console.log("Created customer 'loyalcustomer' with password '123456'");
+    })
+    .catch(() => {
+      return AXIOS.patch(
+        "/customer/loyalcustomer",
+        {},
+        {
+          params: {
+            password: "123456",
+          },
+        }
+      )
+        .then(() => {
+          console.log("Reset customer 'loyalcustomer' password to '123456'");
+        })
+        .catch(() => {
+          console.log("Failed to set up customer 'loyalcustomer' account");
         });
     });
 }

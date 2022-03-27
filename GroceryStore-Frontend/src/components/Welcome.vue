@@ -7,12 +7,13 @@
         <h1>{{ msg }}</h1>
 
         <div id="holiday-marquee" v-if="nextHolidayDate">
-          <marquee-text :duration="8" :repeat="10" :paused="marqueePause">
+          <marquee-text :duration="10" :repeat="10" :paused="marqueePause">
             <div
               @mouseenter="marqueePause = !marqueePause"
               @mouseleave="marqueePause = false"
             >
-              The store will be <b>closed</b> on <b>{{ nextHolidayDate | formatDate }}</b> for
+              The store will be <b>closed</b> on
+              <b>{{ nextHolidayDate | formatDate }}</b> for
               <b>{{ nextholidayName }}</b
               >.
               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -83,12 +84,43 @@
             </b-table>
           </div>
         </b-modal>
+
+        <b-button v-b-modal.list-holidays>See all holidays</b-button>
+        <b-modal id="list-holidays" title="Holidays" ok-only scrollable>
+          <div id="list-holidays-outer">
+            <b-table striped borderless :items="holidays">
+              <template #cell(date)="data">
+                {{ data.value | formatDate }}
+              </template>
+            </b-table>
+          </div>
+        </b-modal>
+
+        <hr>
+      </div>
+      <template #overlay>
+        <div class="text-center">
+          <b-spinner></b-spinner>
+          <p class="h2">{{ loadingMsg }}</p>
+        </div>
+      </template>
+    </b-overlay>
+
+    <b-overlay :show="isItemLoading" rounded="sm">
+      <div :aria-hidden="isLoading ? 'true' : null" id="items-inner">
+        <div id="in-stock-items">
+          <b-table striped borderless :items="inStockItems">
+            <template #cell(image)="data">
+              <b-img :src="data.value"></b-img>
+            </template>
+          </b-table>
+        </div>
       </div>
 
       <template #overlay>
         <div class="text-center">
           <b-spinner></b-spinner>
-          <p class="h2">{{ loadingMsg }}</p>
+          <p class="h2">Loading...</p>
         </div>
       </template>
     </b-overlay>
@@ -99,7 +131,14 @@
 
 <style scoped>
 #welcome-inner {
-  padding: 100px;
+  padding-top: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+#items-inner {
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
 }
 #holiday-marquee {
   background: lightblue;
