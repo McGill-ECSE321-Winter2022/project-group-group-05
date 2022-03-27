@@ -13,12 +13,16 @@ export default {
       isCustomer: LOGIN_STATE.state.userType === "Customer",
       isLoading: false,
       loadingMsg: "Waiting for database...",
+      marqueePause: false,
       openingHours: [],
+      
     };
   },
   created: function () {
-    // upon creation, fetch opening hours
     this.isLoading = true;
+    // upon creation, fetch holidays
+
+    // upon creation, fetch opening hours
     AXIOS.get("/openingH/getAll", {})
       .then(response => {
         this.openingHours = response.data.sort((a, b) => {

@@ -5,6 +5,22 @@
       <div :aria-hidden="isLoading ? 'true' : null" id="welcome-inner">
         <!--Temporary skeleton to provide functionalities but not looks-->
         <h1>{{ msg }}</h1>
+
+        <div id="holiday-marquee" style="background: lightblue">
+          <marquee-text :duration="8" :repeat="10" :paused="marqueePause">
+            <div
+              @mouseenter="marqueePause = !marqueePause"
+              @mouseleave="marqueePause = false"
+            >
+              The store will be closed on <b>2022-12-25</b> for
+              <b>Christmas</b>.
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            </div>
+          </marquee-text>
+        </div>
+        <br />
+
         <router-link to="/LoginForm">
           <b-button variant="success" v-if="!LOGIN_STATE.state.isLoggedIn"
             >Sign in</b-button
@@ -82,5 +98,7 @@
 <style scoped>
 #welcome-inner {
   padding: 100px;
+}
+#holiday-marquee {
 }
 </style>
