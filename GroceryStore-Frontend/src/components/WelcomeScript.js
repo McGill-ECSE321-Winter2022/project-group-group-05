@@ -24,6 +24,10 @@ export default {
       // item browsing
       perPage: 10,
       currentPage: 1,
+      clickedItem: "",
+      addQuantity: 1,
+      addItemError: "",
+      addItemSuccess: "",
     };
   },
   computed: {
@@ -132,6 +136,43 @@ export default {
       this.isItemLoading = false;
       // comment this out if need to examine console output
       window.location.reload();
+    },
+    addItemDialog: function(item) {
+      this.clickedItem = "";
+      this.addQuantity = 1;
+      this.addItemError = "";
+      this.addItemSuccess = "";
+      if (!LOGIN_STATE.state.isLoggedIn) {
+        this.$router.push("/LoginForm");
+      } else if (!this.isCustomer || LOGIN_STATE.state.username === "kiosk") {
+        this.$bvModal.show("add-item-denied");
+      } else {
+        this.clickedItem = item;
+        this.$bvModal.show("add-item-dialog");
+      }
+    },
+    addItemToCart: async function() {
+      // this should never be called outside of the add-item-dialog
+      this.isLoading = true;
+      this.isItemLoading = true;
+      await AXIOS.post("/purchase/addItem/".concat(this.cart["id"]), {}, {
+        params: {
+          itemName: this.clickedItem["name"],
+          quantity: this.addQuantity,
+        },
+      }).then(response => {
+        let msg = "Successfully added " + this.addQuantity + " " + this.clickedItem["name"] + " to cart";
+        console.log(msg);
+        this.addItemSuccess = msg;
+        this.$bvModal.show("add-item-success");
+      }).catch(e => {
+        let errorMsg = e.response.data.message;
+        console.log(errorMsg);
+        this.addItemError = errorMsg;
+        this.$bvModal.show("add-item-error");
+      });
+      this.isLoading = false;
+      this.isItemLoading = false;
     },
   },
 };

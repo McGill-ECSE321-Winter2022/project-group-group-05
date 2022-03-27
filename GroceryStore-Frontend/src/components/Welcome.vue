@@ -118,13 +118,12 @@
           ></b-pagination>
           <b-table
             id="in-stock-items-table"
-            select-mode="single"
-            selectable
             borderless
             hover
             :per-page="perPage"
             :current-page="currentPage"
             :items="inStockItems"
+            @row-clicked="addItemDialog"
           >
             <template #cell(name)="data">
               <b>{{ data.value }}</b>
@@ -143,6 +142,31 @@
               {{ data.value }} in stock
             </template>
           </b-table>
+
+          <b-modal id="add-item-dialog" title="Add Item to Cart" centered @ok="addItemToCart">
+            <div id="add-item-dialog-outer">
+              <p class="mb-3">Select quantity of <b>{{ clickedItem["name"] }}</b> to add to cart:</p>
+              <div style="width: 200px; margin: auto; padding-bottom: 10px">
+                <b-form-spinbutton id="quantity-spin" v-model="addQuantity" wrap min="1" :max="clickedItem['inventory']"
+                                   size="lg"></b-form-spinbutton>
+              </div>
+            </div>
+          </b-modal>
+
+          <b-modal id="add-item-denied" title="Add Item to Cart" centered ok-only>
+            <div id="add-item-denied-outer">
+              <p class="mt-2 mb-2">Sorry, but you cannot add items to your cart because you're not logged in as a customer.</p>
+            </div>
+          </b-modal>
+
+          <b-modal id="add-item-success" title="Success" centered ok-only>
+            <p class="mt-2 mb-2" style="color: green">{{ addItemSuccess }}</p>
+          </b-modal>
+
+          <b-modal id="add-item-error" title="Error" centered ok-only>
+            <p class="mt-2 mb-2" style="color: red">{{ addItemError }}</p>
+          </b-modal>
+
         </div>
       </div>
 
