@@ -46,11 +46,25 @@
           id="populate-database-button"
           variant="warning"
           v-on:click="genData()"
-          >Populate Database</b-button
+          >Populate database</b-button
         >
         <b-tooltip target="populate-database-button" triggers="hover">
           <b>Development option:</b> populate database with some data
         </b-tooltip>
+
+        <b-button v-b-modal.opening-hours>See our opening hours</b-button>
+        <b-modal id="opening-hours" title="Opening Hours" ok-only scrollable>
+          <div id="op-hours-outer">
+            <b-table borderless hover :items="openingHours">
+              <template #cell(startTime)="data">
+                {{ data.value | formatTime }}
+              </template>
+              <template #cell(endTime)="data">
+                {{ data.value | formatTime }}
+              </template>
+            </b-table>
+          </div>
+        </b-modal>
       </div>
 
       <template #overlay>

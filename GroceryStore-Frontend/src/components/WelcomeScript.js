@@ -21,7 +21,12 @@ export default {
     this.isLoading = true;
     AXIOS.get("/openingH/getAll", {})
       .then(response => {
-        this.openingHours = response.data;
+        this.openingHours = response.data.sort((a, b) => {
+          return (
+            daysOfWeekSorter[a["daysOfWeek"].toLowerCase()] -
+            daysOfWeekSorter[b["daysOfWeek"].toLowerCase()]
+          );
+        });
       })
       .catch(e => {
         console.log(e);
@@ -77,6 +82,16 @@ export default {
       window.location.reload();
     },
   },
+};
+
+const daysOfWeekSorter = {
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+  sunday: 7,
 };
 
 function createOwner() {
@@ -226,28 +241,41 @@ function createItemCategory() {
 
 function createOpeningHours() {
   console.log("Attempting to create opening hours for 'Friday'");
-  return AXIOS.post("/openingH/Friday", {}, {
-    params: {
-      startH: "09:30",
-      endH: "18:00",
-    },
-  }).then(() => {
-    console.log("Sucess");
-  }).catch(() => {
-    console.log("'Friday' already exists");
-  }).finally(() => {
-    console.log("Attempting to create opening hours for 'Tuesday'");
-    return AXIOS.post("/openingH/Tuesday", {}, {
+  return AXIOS.post(
+    "/openingH/Friday",
+    {},
+    {
       params: {
-        startH: "11:00",
-        endH: "17:00",
+        startH: "09:30",
+        endH: "18:00",
       },
-    }).then(() => {
+    }
+  )
+    .then(() => {
       console.log("Sucess");
-    }).catch(() => {
-      console.log("'Tuesday' already exists");
+    })
+    .catch(() => {
+      console.log("'Friday' already exists");
+    })
+    .finally(() => {
+      console.log("Attempting to create opening hours for 'Tuesday'");
+      return AXIOS.post(
+        "/openingH/Tuesday",
+        {},
+        {
+          params: {
+            startH: "11:00",
+            endH: "17:00",
+          },
+        }
+      )
+        .then(() => {
+          console.log("Sucess");
+        })
+        .catch(() => {
+          console.log("'Tuesday' already exists");
+        });
     });
-  });
 }
 
 function sleep(ms) {
