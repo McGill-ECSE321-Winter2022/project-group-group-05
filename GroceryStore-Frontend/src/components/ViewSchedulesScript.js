@@ -27,8 +27,8 @@ export default {
   components: {
     StaffDashboard,
   },
-  created: function () {
-    AXIOS.get(
+  created: async function () {
+    await AXIOS.get(
       "/employee/".concat(LOGIN_STATE.state.username).concat("/getSchedules")
     )
       .then(response => {
