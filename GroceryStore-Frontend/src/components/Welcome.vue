@@ -108,10 +108,20 @@
 
     <b-overlay :show="isItemLoading" rounded="sm">
       <div :aria-hidden="isLoading ? 'true' : null" id="items-inner">
+        <h2>Browse our in stock items</h2>
         <div id="in-stock-items">
-          <b-table striped borderless :items="inStockItems">
+          <b-table select-mode="single" selectable borderless hover :items="inStockItems">
+            <template #cell(name)="data">
+              <b>{{ data.value }}</b>
+            </template>
             <template #cell(image)="data">
-              <b-img :src="data.value"></b-img>
+              <b-img-lazy thumbnail style="max-width: 150px;" :src="data.value ? data.value : '/static/no-image.jpg'"></b-img-lazy>
+            </template>
+            <template #cell(price)="data">
+              <h5>${{ data.value | formatCurrency }}</h5>
+            </template>
+            <template #cell(inventory)="data">
+              {{ data.value }} in stock
             </template>
           </b-table>
         </div>

@@ -109,6 +109,7 @@ export default {
     },
     genData: async function () {
       this.isLoading = true;
+      this.isItemLoading = true;
       await createOwner();
       await createKiosk();
       await createCustomer();
@@ -120,6 +121,7 @@ export default {
       await createOpeningHours();
       await sleep(200);
       this.isLoading = false;
+      this.isItemLoading = false;
       // comment this out if need to examine console output
       window.location.reload();
     },
