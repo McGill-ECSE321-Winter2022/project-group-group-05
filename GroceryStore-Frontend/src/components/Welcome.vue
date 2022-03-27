@@ -14,7 +14,7 @@
             >
               The store will be <b>closed</b> on
               <b>{{ nextHolidayDate | formatDate }}</b> for
-              <b>{{ nextholidayName }}</b
+              <b>{{ nextHolidayName }}</b
               >.
               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp

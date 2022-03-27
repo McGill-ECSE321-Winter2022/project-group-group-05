@@ -18,7 +18,7 @@ export default {
       openingHours: [],
       holidays: [],
       nextHolidayDate: "",
-      nextholidayName: "",
+      nextHolidayName: "",
       inStockItems: [],
       cart: "",
       // item browsing
@@ -82,7 +82,7 @@ export default {
         this.holidays = response.data;
         if (this.holidays.length > 0) {
           this.nextHolidayDate = this.holidays[0]["date"];
-          this.nextholidayName = this.holidays[0]["name"];
+          this.nextHolidayName = this.holidays[0]["name"];
         }
       })
       .catch(e => {
