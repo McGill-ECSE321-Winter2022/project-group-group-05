@@ -15,54 +15,68 @@ export default {
       loadingMsg: "Waiting for database...",
       marqueePause: false,
       openingHours: [],
-      
+      holidays: [],
+      nextHolidayDate: "",
+      nextholidayName: "",
     };
   },
   created: function () {
     this.isLoading = true;
     // upon creation, fetch holidays
-
-    // upon creation, fetch opening hours
-    AXIOS.get("/openingH/getAll", {})
+    AXIOS.get("holiday/getAll", {})
       .then(response => {
-        this.openingHours = response.data.sort((a, b) => {
-          return (
-            daysOfWeekSorter[a["daysOfWeek"].toLowerCase()] -
-            daysOfWeekSorter[b["daysOfWeek"].toLowerCase()]
-          );
-        });
+        this.holidays = response.data;
+        if (this.holidays.length > 0) {
+          this.nextHolidayDate = this.holidays[0]["date"];
+          this.nextholidayName = this.holidays[0]["name"];
+        }
       })
       .catch(e => {
         console.log(e);
       })
       .finally(() => {
-        // upon creation, verify if stored logged in user is still in the system
-        let userType = LOGIN_STATE.state.userType;
-        let username = LOGIN_STATE.state.username;
-        if (LOGIN_STATE.state.isLoggedIn) {
-          if (userType === "Owner") {
-            AXIOS.get("/owner/".concat(username), {})
-              .then(() => {})
-              .catch(() => {
+        // upon creation, fetch opening hours
+        AXIOS.get("/openingH/getAll", {})
+          .then(response => {
+            this.openingHours = response.data.sort((a, b) => {
+              return (
+                daysOfWeekSorter[a["daysOfWeek"].toLowerCase()] -
+                daysOfWeekSorter[b["daysOfWeek"].toLowerCase()]
+              );
+            });
+          })
+          .catch(e => {
+            console.log(e);
+          })
+          .finally(() => {
+            // upon creation, verify if stored logged in user is still in the system
+            let userType = LOGIN_STATE.state.userType;
+            let username = LOGIN_STATE.state.username;
+            if (LOGIN_STATE.state.isLoggedIn) {
+              if (userType === "Owner") {
+                AXIOS.get("/owner/".concat(username), {})
+                  .then(() => {})
+                  .catch(() => {
+                    this.logout();
+                  });
+              } else if (userType === "Employee") {
+                AXIOS.get("/employee/".concat(username), {})
+                  .then(() => {})
+                  .catch(() => {
+                    this.logout();
+                  });
+              } else if (userType === "Customer") {
+                AXIOS.get("/customer/".concat(username), {})
+                  .then(() => {})
+                  .catch(() => {
+                    this.logout();
+                  });
+              } else {
                 this.logout();
-              });
-          } else if (userType === "Employee") {
-            AXIOS.get("/employee/".concat(username), {})
-              .then(() => {})
-              .catch(() => {
-                this.logout();
-              });
-          } else if (userType === "Customer") {
-            AXIOS.get("/customer/".concat(username), {})
-              .then(() => {})
-              .catch(() => {
-                this.logout();
-              });
-          } else {
-            this.logout();
-          }
-        }
-        this.isLoading = false;
+              }
+            }
+            this.isLoading = false;
+          });
       });
   },
   methods: {

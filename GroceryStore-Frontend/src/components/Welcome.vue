@@ -6,14 +6,16 @@
         <!--Temporary skeleton to provide functionalities but not looks-->
         <h1>{{ msg }}</h1>
 
-        <div id="holiday-marquee" style="background: lightblue">
+        <div id="holiday-marquee" v-if="nextHolidayDate">
           <marquee-text :duration="8" :repeat="10" :paused="marqueePause">
             <div
               @mouseenter="marqueePause = !marqueePause"
               @mouseleave="marqueePause = false"
             >
-              The store will be closed on <b>2022-12-25</b> for
-              <b>Christmas</b>.
+              The store will be <b>closed</b> on <b>{{ nextHolidayDate | formatDate }}</b> for
+              <b>{{ nextholidayName }}</b
+              >.
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
             </div>
@@ -100,5 +102,6 @@
   padding: 100px;
 }
 #holiday-marquee {
+  background: lightblue;
 }
 </style>
