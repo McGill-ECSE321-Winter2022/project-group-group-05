@@ -48,7 +48,7 @@
                         >&rsaquo;</b-button
                       >
                     </b-button-group>
-                    <!-- <b-button
+                    <b-button
                       class="button_style"
                       variant="outline-success"
                       v-bind:disabled="isWeekPresent[row.index]"
@@ -60,7 +60,7 @@
                       variant="outline-danger"
                       @click="clearWeekSchedule(row.index)"
                       >Clear Week Schedule</b-button
-                    > -->
+                    >
                   </div>
                   <b-container class="schedule_style" fluid>
                     <b-form-row class="schedule_row_style">
@@ -200,7 +200,7 @@
 .schedule_column_style {
   height: 100%;
   min-height: 300px;
-  min-width: 155px;
+  min-width: 150px;
   margin-left: 2px;
   margin-right: 2px;
   padding-top: 10px;
@@ -244,11 +244,14 @@
 }
 .shift_card_style {
   padding: 0px;
-  max-width: 150px;
+  width: 90%;
   margin: auto;
 }
 .shift_style {
-  font-size: 20px;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .font_size_large {
   font-size: 18px;
@@ -262,6 +265,13 @@
   border: 1px solid #4299e1;
 }
 .gone-card {
+  opacity: 1;
+  max-width: 150px;
+  max-height: 50px;
+  margin: auto;
+  padding: 0px;
+}
+.gone-card .card-text {
   visibility: hidden;
 }
 .drag-card {

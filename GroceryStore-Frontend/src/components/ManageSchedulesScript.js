@@ -30,11 +30,11 @@ export default {
     StaffDashboard,
     draggable,
   },
-  created: function () {
+  created: async function () {
     this.ownerLoggedIn = true; // LOGIN_STATE.state.isLoggedIn && LOGIN_STATE.state.userType === "owner";
     this.selectedShift = "";
     this.errorMessage = "";
-    AXIOS.get("/employee/getAll")
+    await AXIOS.get("/employee/getAll")
       .then(response => {
         this.items = response.data;
         var weekMarkers = [];
@@ -47,7 +47,7 @@ export default {
         // This should never happen in normal execution
         console.log(error.response.data.message);
       });
-    AXIOS.get("/shift/getAll")
+    await AXIOS.get("/shift/getAll")
       .then(response => {
         this.shifts = response.data;
       })
@@ -105,8 +105,8 @@ export default {
     returnToLatestWeek: function (rowIndex) {
       Vue.set(this.weekMarkers, rowIndex, moment());
     },
-    deleteScheduleAssignment(schedule, rowIndex) {
-      AXIOS.patch(
+    async deleteScheduleAssignment(schedule, rowIndex) {
+      await AXIOS.patch(
         "/employee/"
           .concat(this.items[rowIndex].username)
           .concat("/removeSchedule"),
@@ -131,8 +131,8 @@ export default {
           console.log(error.response);
         });
     },
-    addScheduleAssignment(date, rowIndex) {
-      AXIOS.patch(
+    async addScheduleAssignment(date, rowIndex) {
+      await AXIOS.patch(
         "/employee/"
           .concat(this.items[rowIndex].username)
           .concat("/addSchedule"),
@@ -155,74 +155,74 @@ export default {
           this.errorMessage = error.response.data.message;
         });
     },
-    // clearWeekSchedule(rowIndex) {
-    //   var schedulesToBeCleared = [];
-    //   this.schedulesOfWeek[rowIndex].forEach(weekday => {
-    //     weekday.scheduledShifts.forEach(schedule =>
-    //       schedulesToBeCleared.push(schedule)
-    //     );
-    //   });
-    //   schedulesToBeCleared.forEach(schedule => {
-    //     AXIOS.patch(
-    //       "/employee/"
-    //         .concat(this.items[rowIndex].username)
-    //         .concat("/removeSchedule"),
-    //       {},
-    //       {
-    //         params: {
-    //           date: schedule.date,
-    //           shift: schedule.shift.name,
-    //         },
-    //       }
-    //     )
-    //       .then(response => {
-    //         var updatedEmployee = Object.assign(response.data, {
-    //           _showDetails: true,
-    //         });
-    //         Vue.set(this.items, rowIndex, updatedEmployee);
-    //       })
-    //       .catch(error => {
-    //         // TODO: not sure what to do here. If it reaches an error, either:
-    //         // A) the shift is no longer valid, or B) the employee is no longer valid
-    //         // Figure out behavior in these cases
-    //         console.log(error.response);
-    //       });
-    //   });
-    // },
-    // assignCurrentSchedule(rowIndex) {
-    //   this.clearWeekSchedule(rowIndex);
-    //   var schedulesToBeAdded = [];
-    //   for (const schedule of this.items[rowIndex].employeeSchedules) {
-    //     if (moment(schedule.date).isSame(moment(), "week")) {
-    //       schedulesToBeAdded.push(schedule);
-    //     }
-    //   }
-    //   schedulesToBeAdded.forEach(schedule => {
-    //     AXIOS.patch(
-    //       "/employee/"
-    //         .concat(this.items[rowIndex].username)
-    //         .concat("/addSchedule"),
-    //       {},
-    //       {
-    //         params: {
-    //           date: moment(schedule.date).add(1, "week").format("YYYY-MM-DD"),
-    //           shift: schedule.shift.name,
-    //         },
-    //       }
-    //     )
-    //       .then(response => {
-    //         var updatedEmployee = Object.assign(response.data, {
-    //           _showDetails: true,
-    //         });
-    //         Vue.set(this.items, rowIndex, updatedEmployee);
-    //       })
-    //       .catch(error => {
-    //         // TODO: not sure what to do here. If it reaches an error, either:
-    //         // A) the shift is no longer valid, or B) the employee is no longer valid
-    //         // Figure out behavior in these cases
-    //         console.log(error.response);
-    //       });
-    //   });
-    // },
+    async clearWeekSchedule(rowIndex) {
+      var schedulesToBeCleared = [];
+      this.schedulesOfWeek[rowIndex].forEach(weekday => {
+        weekday.scheduledShifts.forEach(schedule =>
+          schedulesToBeCleared.push(schedule)
+        );
+      });
+      for (const schedule of schedulesToBeCleared) {
+        await AXIOS.patch(
+          "/employee/"
+            .concat(this.items[rowIndex].username)
+            .concat("/removeSchedule"),
+          {},
+          {
+            params: {
+              date: schedule.date,
+              shift: schedule.shift.name,
+            },
+          }
+        )
+          .then(response => {
+            var updatedEmployee = Object.assign(response.data, {
+              _showDetails: true,
+            });
+            Vue.set(this.items, rowIndex, updatedEmployee);
+          })
+          .catch(error => {
+            // TODO: not sure what to do here. If it reaches an error, either:
+            // A) the shift is no longer valid, or B) the employee is no longer valid
+            // Figure out behavior in these cases
+            console.log(error.response);
+          });
+      }
+    },
+    async assignCurrentSchedule(rowIndex) {
+      this.clearWeekSchedule(rowIndex);
+      var schedulesToBeAdded = [];
+      for (const schedule of this.items[rowIndex].employeeSchedules) {
+        if (moment(schedule.date).isSame(moment(), "week")) {
+          schedulesToBeAdded.push(schedule);
+        }
+      }
+      for (const schedule of schedulesToBeAdded) {
+        await AXIOS.patch(
+          "/employee/"
+            .concat(this.items[rowIndex].username)
+            .concat("/addSchedule"),
+          {},
+          {
+            params: {
+              date: moment(schedule.date).add(1, "week").format("YYYY-MM-DD"),
+              shift: schedule.shift.name,
+            },
+          }
+        )
+          .then(response => {
+            var updatedEmployee = Object.assign(response.data, {
+              _showDetails: true,
+            });
+            Vue.set(this.items, rowIndex, updatedEmployee);
+          })
+          .catch(error => {
+            // TODO: not sure what to do here. If it reaches an error, either:
+            // A) the shift is no longer valid, or B) the employee is no longer valid
+            // Figure out behavior in these cases
+            console.log(error.response);
+          });
+      }
+    },
   },
 };
