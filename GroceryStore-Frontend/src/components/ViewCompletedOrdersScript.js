@@ -1,31 +1,38 @@
+import { LOGIN_STATE } from "../common/StateScript";
 import { AXIOS } from "../common/AxiosScript";
-
 export default {
-    name: 'completedOrderList',
-    data () {
-      return {
-        purchase: {
-            id:'',
-            items:'',
-            date_of_purchase:'',
-            time_of_purchase:'',
-            delivery:'',
-        },
-
-        purchases: [],
-        errorCompletedpurchases: '',
-        response: []
-      }
-    },
-
-    created: function () {
-        AXIOS.get('/purchase/allCompleted')
+  name: "ViewHistory",
+  data() {
+    return {
+      purchases: AXIOS.get("/purchase/allCompleted",
+        {},
+        {}
+      )
         .then(response => {
-            this.purchases = response.data;
+          this.errorPurchase = "";
+          this.purchases = response.data;
         })
         .catch(e => {
-        this.errorCompletedpurchases = e;
-        })
-      },
-    
- }
+          var errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.errorPurchase = errorMsg;
+        }),
+      totalPrice: 0,
+    };
+  },
+  methods: {
+    orderType(purchase) {
+      if (purchase.delivery) {
+        return "delivery";
+      } else {
+        return "pick up";
+      }
+    },
+    addToTotal(price) {
+      this.totalPrice += price;
+    },
+    clearSum() {
+      this.totalPrice = 0;
+    },
+  },
+};

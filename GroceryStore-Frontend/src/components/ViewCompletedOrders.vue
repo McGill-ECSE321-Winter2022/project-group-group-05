@@ -1,39 +1,57 @@
 <!--Visibility: employee, owner-->
 <!--View all completed order-->
 <template>
-    <div id="completedOrderList">
-
-        <div class="back-to-previous-style">
+  <div id="view-completed-orders">
+    <div class="back-to-previous-style">
             <a href="javascript:history.back()">Previous Page</a>
-        </div>
-
-        <h1 class="header_style">Completed Orders</h1><br>
-
-        <table class="tablestyle" align="center">
-            <tr class="trstyle">
-                <th class="head_thstyle"> Id </th>
-                <th class="head_thstyle"> Items </th>
-                <th class="head_thstyle"> Purchase Date </th>
-                <th class="head_thstyle"> Purchase Time</th>
-                <th class="head_thstyle"> Delivery </th>
-            </tr>
-            <tr class="trstyle" v-for="purchase in pruchases" :key="purchase.id">
-                <td class="tdstyle">{{purchase.id}}</td>
-                <td class="tdstyle">{{purchase.items}}</td>
-                <td class="tdstyle">{{purchase.date_of_purchase}}</td>
-                <td class="tdstyle">{{purchase.time_of_purchase}}</td>
-                <td class="tdstyle">{{purchase.delivery}}</td>
-            </tr>
-        </table>
-
-        <br>
-
     </div>
+
+    <h1 class="header_style">Completed Orders</h1><br>
+    
+    <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
+      <div id="header">
+        <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
+        <td class="tdstyle">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
+        <td class="tdstyle">Order# {{ purchase.id }} &nbsp;</td>
+        <td class="tdstyle">Order type: {{ orderType(purchase) }} &nbsp;</td>
+      </div>
+      <table id="itemTable">
+        <tr>
+          <th>item</th>
+          <th>price</th>
+          <th>quantity</th>
+        </tr>
+        <tr
+          v-for="specificItem in purchase.specificItems"
+          :key="specificItem.id"
+        >
+          <td>{{ specificItem.item.name }}</td>
+          <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
+          <td>
+            {{ specificItem.purchaseQuantity }}
+            {{
+              addToTotal(
+                specificItem.purchaseQuantity * specificItem.purchasePrice
+              )
+            }}
+          </td>
+        </tr>
+      </table>
+      <hr />
+      <tr id="totalPrice">
+        Total: ${{
+          totalPrice | formatCurrency
+        }}
+        {{
+          clearSum()
+        }}
+      </tr>
+      <br />
+    </table>
+  </div>
 </template>
 
-
-<script src="./ViewCompletedOrdersScript.js">
-</script>
+<script src="./ViewCompletedOrdersScript.js"></script>
 
 <style scoped>
 /* Styling for Page Title */
@@ -46,33 +64,48 @@
   text-align: center;
   margin-bottom: 30px;
 }
-.completedOrderList{
-    padding-bottom: 10px;
-    margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: auto;
-    max-width: 80%;
-    }
-.tablestyle {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 70%;
-}
-.head_thstyle{
-  text-align: center;
-  font-size: 19px;
-  border: 1px solid #245522;
-  text-align: center;
-  padding: 8px;
-}
-.tdstyle, .thstyle {
+.tdstyle{
   border: 1px solid #dddddd;
   text-align: center;
   padding: 8px;
 }
-.trstyle:nth-child(even) {
-  background-color: #5c5c64;
+#cancel {
+  position: absolute;
+  right: 0px;
+}
+#confirm {
+  position: absolute;
+  right: 0px;
+}
+#header {
+  border-radius: 5px;
+  position: relative;
+  background-color: rgb(231, 234, 240);
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  text-align: bottom;
+}
+#view-completed-orders {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  transform: translate(-50%, -50%);
+  height: 750px;
+}
+#purchaseTable {
+  position: relative;
+  width: 100%;
+}
+#itemTable {
+  width: 80%;
+  text-align: left;
+}
+#totalPrice {
+  position: absolute;
+  right: 200px;
+  bottom: 10px;
 }
 .back-to-previous-style {
   padding: 20px 1px;
