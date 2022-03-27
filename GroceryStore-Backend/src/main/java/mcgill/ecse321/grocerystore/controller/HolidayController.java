@@ -68,7 +68,7 @@ public class HolidayController {
   @GetMapping(value = {"/holiday/getAll", "/holiday/getAll/"})
   public List<HolidayDto> getAllHolidays() {
     ArrayList<HolidayDto> holidays = new ArrayList<HolidayDto>();
-    for (var holiday : service.getAll()) {
+    for (var holiday : service.getAllByDate()) {
       holidays.add(convertToDto(holiday));
     }
     return holidays;
