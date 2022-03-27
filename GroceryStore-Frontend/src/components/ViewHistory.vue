@@ -3,64 +3,76 @@
 <!--Cancel button for purchases in paid state-->
 <template>
   <div id="viewhistory" v-if="userType === 'Customer'">
-    <h1>Purchase History</h1>
-    <br />
-    <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
-      <div id="header">
-        <td id="state">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
-        <td id="date">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
-        <td id="orderID">Order# {{ purchase.id }} &nbsp;</td>
-        <td id="orderType">Order type: {{ orderType(purchase) }} &nbsp;</td>
-        <td v-if="purchase.state == 'Paid'">
-          <b-button
-            variant="danger"
-            id="cancel"
-            v-on:click="cancel(purchase.id)"
-            >Cancel Order</b-button
-          >
-        </td>
-        <td v-else-if="purchase.state == 'Prepared'">
-          <b-button
-            variant="success"
-            id="confirm"
-            v-on:click="confirm(purchase.id)"
-            >Confirm Order Received</b-button
-          >
-        </td>
-      </div>
-      <table id="itemTable">
-        <tr>
-          <th>item</th>
-          <th>price</th>
-          <th>quantity</th>
-        </tr>
-        <tr
-          v-for="specificItem in purchase.specificItems"
-          :key="specificItem.id"
-        >
-          <td>{{ specificItem.item.name }}</td>
-          <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
-          <td>
-            {{ specificItem.purchaseQuantity }}
-            {{
-              addToTotal(
-                specificItem.purchaseQuantity * specificItem.purchasePrice
-              )
-            }}
-          </td>
-        </tr>
-      </table>
-      <hr />
-      <tr id="totalPrice">
-        Total: ${{
-          totalPrice | formatCurrency
-        }}
-        {{
-          clearSum()
-        }}
-      </tr>
+    <b-overlay
+      id="overlay"
+      :show="isLoading"
+      :variant="variant"
+      :opacity="0.85"
+      rounded="sm"
+    >
+      <h1>Purchase History</h1>
       <br />
-    </table>
+      <table
+        id="purchaseTable"
+        v-for="purchase in purchases"
+        :key="purchase.id"
+      >
+        <div id="header">
+          <td id="state">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
+          <td id="date">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
+          <td id="orderID">Order# {{ purchase.id }} &nbsp;</td>
+          <td id="orderType">Order type: {{ orderType(purchase) }} &nbsp;</td>
+          <td v-if="purchase.state == 'Paid'">
+            <b-button
+              variant="danger"
+              id="cancel"
+              v-on:click="cancel(purchase.id)"
+              >Cancel Order</b-button
+            >
+          </td>
+          <td v-else-if="purchase.state == 'Prepared'">
+            <b-button
+              variant="success"
+              id="confirm"
+              v-on:click="confirm(purchase.id)"
+              >Confirm Order Received</b-button
+            >
+          </td>
+        </div>
+        <table id="itemTable">
+          <tr>
+            <th>item</th>
+            <th>price</th>
+            <th>quantity</th>
+          </tr>
+          <tr
+            v-for="specificItem in purchase.specificItems"
+            :key="specificItem.id"
+          >
+            <td>{{ specificItem.item.name }}</td>
+            <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
+            <td>
+              {{ specificItem.purchaseQuantity }}
+              {{
+                addToTotal(
+                  specificItem.purchaseQuantity * specificItem.purchasePrice
+                )
+              }}
+            </td>
+          </tr>
+        </table>
+        <hr />
+        <tr id="totalPrice">
+          Total: ${{
+            totalPrice | formatCurrency
+          }}
+          {{
+            clearSum
+          }}
+        </tr>
+        <br />
+      </table>
+    </b-overlay>
   </div>
 </template>
 
@@ -71,23 +83,33 @@ export default {
   name: "ViewHistory",
   data() {
     return {
-      purchases: AXIOS.get(
-        "/customer/".concat(LOGIN_STATE.state.username).concat("/getPurchases"),
-        {},
-        {}
-      )
-        .then(response => {
-          this.errorPurchase = "";
-          this.purchases = response.data;
-        })
-        .catch(e => {
-          var errorMsg = e.response.data.message;
-          console.log(errorMsg);
-          this.errorPurchase = errorMsg;
-        }),
+      purchases: [],
       totalPrice: 0,
       userType: LOGIN_STATE.state.userType,
+      isLoading: false,
+      variant: "light",
     };
+  },
+  created: function () {
+    this.isLoading = true;
+    AXIOS.get(
+      "/customer/".concat(LOGIN_STATE.state.username).concat("/getPurchases"),
+      {},
+      {}
+    )
+      .then(response => {
+        this.errorPurchase = "";
+        this.purchases = response.data;
+      })
+      .catch(e => {
+        var errorMsg = e.response.data.message;
+        console.log(errorMsg);
+        console.log(isLoading);
+        this.errorPurchase = errorMsg;
+      })
+      .then(response => {
+        this.isLoading = false;
+      });
   },
   methods: {
     orderType(purchase) {
@@ -112,8 +134,10 @@ export default {
           var errorMsg = e.response.data.message;
           console.log(errorMsg);
           this.errorPurchase = errorMsg;
+        })
+        .then(response => {
+          window.location.reload();
         });
-      window.location.reload();
     },
     confirm: function (id) {
       AXIOS.post("/purchase/complete/".concat(id), {}, {})
@@ -124,8 +148,10 @@ export default {
           var errorMsg = e.response.data.message;
           console.log(errorMsg);
           this.errorPurchase = errorMsg;
+        })
+        .then(response => {
+          window.location.reload();
         });
-      window.location.reload();
     },
   },
 };
