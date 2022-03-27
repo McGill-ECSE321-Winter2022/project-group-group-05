@@ -53,21 +53,13 @@
             <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
             <td>
               {{ specificItem.purchaseQuantity }}
-              {{
-                addToTotal(
-                  specificItem.purchaseQuantity * specificItem.purchasePrice
-                )
-              }}
             </td>
           </tr>
         </table>
         <hr />
         <tr id="totalPrice">
           Total: ${{
-            totalPrice | formatCurrency
-          }}
-          {{
-            clearSum
+            purchase.total | formatCurrency
           }}
         </tr>
         <br />
@@ -84,7 +76,6 @@ export default {
   data() {
     return {
       purchases: [],
-      totalPrice: 0,
       userType: LOGIN_STATE.state.userType,
       isLoading: false,
       variant: "light",
@@ -104,8 +95,17 @@ export default {
       .catch(e => {
         var errorMsg = e.response.data.message;
         console.log(errorMsg);
-        console.log(isLoading);
         this.errorPurchase = errorMsg;
+      })
+      .then(response => {
+        this.purchases.forEach(function (purchase) {
+          var total = 0;
+          purchase.specificItems.forEach(function (specificItem) {
+            total += specificItem.purchaseQuantity * specificItem.purchasePrice;
+            console.log(total);
+          });
+          purchase.total = total;
+        });
       })
       .then(response => {
         this.isLoading = false;
@@ -118,12 +118,6 @@ export default {
       } else {
         return "pick up";
       }
-    },
-    addToTotal(price) {
-      this.totalPrice += price;
-    },
-    clearSum() {
-      this.totalPrice = 0;
     },
     cancel: function (id) {
       AXIOS.post("/purchase/cancel/".concat(id), {}, {})
@@ -158,6 +152,10 @@ export default {
 </script>
 
 <style scoped>
+#overlay {
+  position: fixed;
+  height: 50%;
+}
 #cancel {
   position: absolute;
   right: 0px;
