@@ -96,7 +96,7 @@
           </div>
         </b-modal>
 
-        <hr>
+        <hr />
       </div>
       <template #overlay>
         <div class="text-center">
@@ -107,15 +107,34 @@
     </b-overlay>
 
     <b-overlay :show="isItemLoading" rounded="sm">
-      <div :aria-hidden="isLoading ? 'true' : null" id="items-inner">
+      <div :aria-hidden="isItemLoading ? 'true' : null" id="items-inner">
         <h2>Browse our in stock items</h2>
-        <div id="in-stock-items">
-          <b-table select-mode="single" selectable borderless hover :items="inStockItems">
+        <div id="in-stock-items-outer">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="numRows"
+            :per-page="perPage"
+            aria-controls="in-stock-items-table"
+          ></b-pagination>
+          <b-table
+            id="in-stock-items-table"
+            select-mode="single"
+            selectable
+            borderless
+            hover
+            :per-page="perPage"
+            :current-page="currentPage"
+            :items="inStockItems"
+          >
             <template #cell(name)="data">
               <b>{{ data.value }}</b>
             </template>
             <template #cell(image)="data">
-              <b-img-lazy thumbnail style="max-width: 150px;" :src="data.value ? data.value : '/static/no-image.jpg'"></b-img-lazy>
+              <b-img-lazy
+                thumbnail
+                style="max-width: 150px"
+                :src="data.value ? data.value : '/static/no-image.jpg'"
+              ></b-img-lazy>
             </template>
             <template #cell(price)="data">
               <h5>${{ data.value | formatCurrency }}</h5>

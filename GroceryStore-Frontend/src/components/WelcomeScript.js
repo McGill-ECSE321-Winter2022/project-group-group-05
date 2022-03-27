@@ -21,7 +21,15 @@ export default {
       nextholidayName: "",
       inStockItems: [],
       cart: "",
+      // item browsing
+      perPage: 10,
+      currentPage: 1,
     };
+  },
+  computed: {
+    numRows() {
+      return this.inStockItems.length;
+    },
   },
   created: async function () {
     this.isLoading = true;
