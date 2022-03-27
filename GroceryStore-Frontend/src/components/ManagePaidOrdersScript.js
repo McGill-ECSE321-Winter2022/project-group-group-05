@@ -4,10 +4,7 @@ export default {
   name: "ViewPaidOrder",
   data() {
     return {
-      purchases: AXIOS.get("/purchase/allPaid",
-        {},
-        {}
-      )
+      purchases: AXIOS.get("/purchase/allPaid", {}, {})
         .then(response => {
           this.errorPurchase = "";
           this.purchases = response.data;
@@ -18,6 +15,8 @@ export default {
           this.errorPurchase = errorMsg;
         }),
       totalPrice: 0,
+      isOwner: LOGIN_STATE.state.userType === "Owner",
+      isEmployee: LOGIN_STATE.state.userType === "Employee",
     };
   },
   methods: {

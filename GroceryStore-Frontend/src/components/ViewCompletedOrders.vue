@@ -1,13 +1,14 @@
 <!--Visibility: employee, owner-->
 <!--View all completed order-->
 <template>
-  <div id="view-completed-orders">
+  <div id="view-completed-orders" v-if="isEmployee || isOwner">
     <div class="back-to-previous-style">
-            <a href="javascript:history.back()">Previous Page</a>
+      <a href="javascript:history.back()">Previous Page</a>
     </div>
 
-    <h1 class="header_style">Completed Orders</h1><br>
-    
+    <h1 class="header_style">Completed Orders</h1>
+    <br />
+
     <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
       <div id="header">
         <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
@@ -64,7 +65,7 @@
   text-align: center;
   margin-bottom: 30px;
 }
-.tdstyle{
+.tdstyle {
   border: 1px solid #dddddd;
   text-align: center;
   padding: 8px;

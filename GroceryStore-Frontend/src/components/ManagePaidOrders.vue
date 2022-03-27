@@ -1,13 +1,14 @@
 <!--Visibility: owner, employee-->
 <!--Show all paid orders and be able to change them to prepared-->
 <template>
-  <div id="manage-paid-orders">
+  <div id="manage-paid-orders" v-if="isEmployee || isOwner">
     <div class="back-to-previous-style">
-            <a href="javascript:history.back()">Previous Page</a>
+      <a href="javascript:history.back()">Previous Page</a>
     </div>
 
-    <h1 class="header_style">Manage Paid Orders</h1><br>
-    
+    <h1 class="header_style">Manage Paid Orders</h1>
+    <br />
+
     <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
       <div id="header">
         <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
@@ -16,7 +17,8 @@
         <td class="tdstyle">Order type: {{ orderType(purchase) }} &nbsp;</td>
         <td>
           <b-button
-            pill variant="info"
+            pill
+            variant="info"
             id="Prepare"
             v-on:click="prepare(purchase.id)"
             >Prepare Order</b-button
@@ -72,7 +74,7 @@
   text-align: center;
   margin-bottom: 30px;
 }
-.tdstyle{
+.tdstyle {
   border: 1px solid #dddddd;
   text-align: center;
   padding: 8px;
