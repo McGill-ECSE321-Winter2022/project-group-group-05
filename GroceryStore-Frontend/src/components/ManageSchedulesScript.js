@@ -67,7 +67,11 @@ export default {
       selectedShift: "",
       dismissSecs: 5,
       dismissCountDown: 0,
-      errorMessage: "Test",
+      errorMessage: "",
+
+      create_shiftName: "",
+      create_shiftStartTime: "",
+      create_shiftEndTime: "",
     };
   },
   computed: {
@@ -89,6 +93,22 @@ export default {
         allIsWeekPresent.push(this.weekMarkers[i].isSame(moment(), "week"));
       }
       return allIsWeekPresent;
+    },
+    isShiftNameValid: function () {
+      return this.create_shiftEndTime === "" &&
+        this.create_shiftStartTime === "" &&
+        this.create_shiftName === ""
+        ? null
+        : this.create_shiftName !== "";
+    },
+    isTimeValid: function () {
+      return this.create_shiftEndTime === "" &&
+        this.create_shiftStartTime === "" &&
+        this.create_shiftName === ""
+        ? null
+        : moment(this.create_shiftEndTime, "HH:mm").isAfter(
+            moment(this.create_shiftStartTime, "HH:mm")
+          );
     },
   },
   methods: {
@@ -204,7 +224,7 @@ export default {
       this.clearWeekSchedule(rowIndex);
       this.busy = true;
       var schedulesToBeAdded = [];
-      var weekOffset = this.weekMarkers[rowIndex].week() - moment().week()
+      var weekOffset = this.weekMarkers[rowIndex].week() - moment().week();
       for (const schedule of this.items[rowIndex].employeeSchedules) {
         if (moment(schedule.date).isSame(moment(), "week")) {
           schedulesToBeAdded.push(schedule);
@@ -218,7 +238,9 @@ export default {
           {},
           {
             params: {
-              date: moment(schedule.date).add(weekOffset, "week").format("YYYY-MM-DD"),
+              date: moment(schedule.date)
+                .add(weekOffset, "week")
+                .format("YYYY-MM-DD"),
               shift: schedule.shift.name,
             },
           }
@@ -237,6 +259,43 @@ export default {
           });
       }
       this.busy = false;
+    },
+    resetShiftForm: function () {
+      this.create_shiftName = "";
+      this.create_shiftStartTime = "";
+      this.create_shiftEndTime = "";
+    },
+    handleOk: function (okEvent) {
+      okEvent.preventDefault();
+      this.createNewShift();
+    },
+    createNewShift: function () {
+      if (this.isShiftNameValid && this.isTimeValid) {
+        AXIOS.post(
+          "/shift/".concat(this.create_shiftName),
+          {},
+          {
+            params: {
+              startTime: this.create_shiftStartTime,
+              endTime: this.create_shiftEndTime,
+            },
+          }
+        )
+          .then(response => {
+            this.shifts.push(response.data);
+          })
+          .catch(error => {
+            console.log(error.response.data.message);
+            this.dismissCountDown = this.dismissSecs;
+            this.errorMessage = error.response.data.message;
+          });
+        this.$nextTick(() => {
+          this.$bvModal.hide("createShift");
+        });
+        return;
+      }
+      this.isShiftNameValid = false;
+      this.isTimeValid = false;
     },
   },
 };

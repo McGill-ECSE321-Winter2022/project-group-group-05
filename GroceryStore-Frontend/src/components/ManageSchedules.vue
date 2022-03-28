@@ -111,7 +111,7 @@
                                 class="scheduled_shift_style"
                               >
                                 <div
-                                  class="button_label_style bg-light"
+                                  class="button_div_style bg-light"
                                   variant="light"
                                 >
                                   {{ schedule.shift.name }}
@@ -140,7 +140,56 @@
             <b-col cols="3">
               <div class="shift_header_style bg-light">
                 <h2>Available Shifts</h2>
-                <b-button style="margin-bottom: 10px">New Shift</b-button>
+                <b-button style="margin-bottom: 10px" v-b-modal.createShift
+                  >Create a New Shift</b-button
+                >
+                <b-modal
+                  id="createShift"
+                  ref="modal"
+                  title="Create a New Shift"
+                  ok-title="Create Shift"
+                  @show="resetShiftForm"
+                  @hidden="resetShiftForm"
+                  @ok="handleOk"
+                >
+                  <template>
+                    <form ref="form" @submit.stop.prevent="createNewShift">
+                      <b-form-group
+                        label="Name"
+                        label-for="name-input"
+                        invalid-feedback="Name is required"
+                        :state="isShiftNameValid"
+                      >
+                        <b-form-input
+                          id="name-input"
+                          v-model="create_shiftName"
+                          :state="isShiftNameValid"
+                          required
+                        ></b-form-input>
+                      </b-form-group>
+                      <b-form-group
+                      label="Shift Hours"
+                      label-for="start-time-input"
+                      invalid-feedback="Start time must come before end time"
+                      :state="isTimeValid"
+                        ><b-form-input
+                          id="start-time-input"
+                          v-model="create_shiftStartTime"
+                          :state="isTimeValid"
+                          :type="'time'"
+                          required
+                        ></b-form-input><p></p>
+                        <b-form-input
+                          id="end-time-input"
+                          v-model="create_shiftEndTime"
+                          :state="isTimeValid"
+                          :type="'time'"
+                          required
+                        ></b-form-input
+                      ></b-form-group>
+                    </form>
+                  </template>
+                </b-modal>
               </div>
               <div class="shift_container_style">
                 <div
@@ -232,7 +281,7 @@
   width: 90%;
   margin-top: 4px;
 }
-.button_label_style {
+.button_div_style {
   font-size: 75%;
   padding-top: 6px;
   width: 85%;
@@ -269,6 +318,7 @@
 }
 .shift_style {
   font-size: 16px;
+  margin: 0px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
