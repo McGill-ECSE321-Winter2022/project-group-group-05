@@ -87,15 +87,16 @@
                 </div>
                 <b-card
                   class="my-2 text-center"
+                  no-body
                   v-bind:header="schedule.shift.name"
                   v-for="schedule in weekday.scheduledShifts"
                   :key="schedule.shift.name"
                 >
-                  <b-card-text class="shift_style"
+                  <b-card-text class="shift_style" style="padding-top: 15px"
                     >Start Time:
                     {{ schedule.shift.startTime | formatTime }}</b-card-text
                   >
-                  <b-card-text class="shift_style"
+                  <b-card-text class="shift_style" style="padding-bottom: 15px"
                     >End Time:
                     {{ schedule.shift.endTime | formatTime }}</b-card-text
                   >
@@ -159,6 +160,6 @@
 /* Styling for Shift Cards */
 .shift_style {
   margin: 0px;
-  font-size: 11px;
+  font-size: 16px;
 }
 </style>
