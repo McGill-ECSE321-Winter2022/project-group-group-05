@@ -9,6 +9,15 @@
           ><h4 class="alert-heading">Error:</h4>
           You must be logged in as an owner to access this page.
         </b-alert>
+        <b-alert
+          :show="dismissCountDown"
+          dismissible
+          variant="warning"
+          @dismissed="dismissCountDown = 0"
+          @dismiss-count-down="countDownChanged"
+        >
+          Warning: {{ errorMessage }}
+        </b-alert>
         <b-container fluid v-if="ownerLoggedIn"
           ><b-row align-v="stretch"
             ><b-col cols="9">
@@ -48,79 +57,141 @@
                         >&rsaquo;</b-button
                       >
                     </b-button-group>
-                    <!-- <b-button
+                    <b-button
                       class="button_style"
                       variant="outline-success"
-                      v-bind:disabled="isWeekPresent[row.index]"
+                      v-bind:disabled="isWeekPresent[row.index] || busy"
                       @click="assignCurrentSchedule(row.index)"
                       >Auto-fill Current Schedule</b-button
                     >
                     <b-button
                       class="button_style"
                       variant="outline-danger"
+                      v-bind:disabled="busy"
                       @click="clearWeekSchedule(row.index)"
                       >Clear Week Schedule</b-button
-                    > -->
+                    >
                   </div>
-                  <b-container class="schedule_style" fluid>
-                    <b-form-row class="schedule_row_style">
-                      <b-col
-                        class="schedule_column_style"
-                        v-for="weekday in schedulesOfWeek[row.index]"
-                        v-bind:key="weekday.dayOfWeek.format()"
-                      >
-                        <draggable
-                          style="min-height: 300px"
-                          draggable=".draggable"
-                          v-model="weekday.shiftListener"
-                          ghost-class="gone-card"
-                          :group="{
-                            name: 'weekdays.shiftListener',
-                            put: 'shifts',
-                          }"
-                          @change="
-                            addScheduleAssignment(weekday.dayOfWeek, row.index)
-                          "
+                  <b-overlay :show="busy"
+                    ><b-container class="schedule_style" fluid>
+                      <b-form-row class="schedule_row_style">
+                        <b-col
+                          class="schedule_column_style"
+                          v-for="weekday in schedulesOfWeek[row.index]"
+                          v-bind:key="weekday.dayOfWeek.format()"
                         >
-                          <div class="font_size_large">
-                            {{ weekday.dayOfWeek.format("dddd") }}
-                          </div>
-                          <div class="font_size_med">
-                            {{ weekday.dayOfWeek.format("MMM. Do, YYYY") }}
-                          </div>
-                          <div
-                            v-for="schedule in weekday.scheduledShifts"
-                            :key="schedule.id"
+                          <draggable
+                            style="min-height: 300px"
+                            draggable=".draggable"
+                            v-model="weekday.shiftListener"
+                            ghost-class="gone-card"
+                            :group="{
+                              name: 'weekdays.shiftListener',
+                              put: 'shifts',
+                            }"
+                            @change="
+                              addScheduleAssignment(
+                                weekday.dayOfWeek,
+                                row.index
+                              )
+                            "
                           >
-                            <b-button-group
-                              size="sm"
-                              class="scheduled_shift_style"
+                            <div class="font_size_large">
+                              {{ weekday.dayOfWeek.format("dddd") }}
+                            </div>
+                            <div class="font_size_med">
+                              {{ weekday.dayOfWeek.format("MMM. Do, YYYY") }}
+                            </div>
+                            <div
+                              v-for="schedule in weekday.scheduledShifts"
+                              :key="schedule.id"
                             >
-                              <div
-                                class="button_label_style bg-light"
-                                variant="light"
+                              <b-button-group
+                                size="sm"
+                                class="scheduled_shift_style"
                               >
-                                {{ schedule.shift.name }}
-                              </div>
-                              <b-button
-                                class="button_remove_style"
-                                variant="light"
-                                @click="
-                                  deleteScheduleAssignment(schedule, row.index)
-                                "
-                                >&#10005;</b-button
-                              >
-                            </b-button-group>
-                          </div>
-                        </draggable>
-                      </b-col>
-                    </b-form-row>
-                  </b-container>
+                                <div
+                                  class="button_div_style bg-light"
+                                  variant="light"
+                                >
+                                  {{ schedule.shift.name }}
+                                </div>
+                                <b-button
+                                  class="button_remove_style"
+                                  variant="light"
+                                  @click="
+                                    deleteScheduleAssignment(
+                                      schedule,
+                                      row.index
+                                    )
+                                  "
+                                  >&#10005;</b-button
+                                >
+                              </b-button-group>
+                            </div>
+                          </draggable>
+                        </b-col>
+                      </b-form-row>
+                    </b-container></b-overlay
+                  >
                 </template>
               </b-table>
             </b-col>
             <b-col cols="3">
-              <h2 class="shift_header_style bg-light">Available Shifts</h2>
+              <div class="shift_header_style bg-light">
+                <h2>Available Shifts</h2>
+                <b-button style="margin-bottom: 10px" v-b-modal.createShift
+                  >Create a New Shift</b-button
+                >
+                <b-modal
+                  id="createShift"
+                  ref="modal"
+                  title="Create a New Shift"
+                  ok-title="Create Shift"
+                  @show="resetShiftForm"
+                  @hidden="resetShiftForm"
+                  @ok="handleOk"
+                >
+                  <template>
+                    <form ref="form" @submit.stop.prevent="createNewShift">
+                      <b-form-group
+                        label="Name"
+                        label-for="name-input"
+                        invalid-feedback="Name is required"
+                        :state="isShiftNameValid"
+                      >
+                        <b-form-input
+                          id="name-input"
+                          v-model="create_shiftName"
+                          :state="isShiftNameValid"
+                          required
+                        ></b-form-input>
+                      </b-form-group>
+                      <b-form-group
+                        label="Shift Hours"
+                        label-for="start-time-input"
+                        invalid-feedback="Start time must come before end time"
+                        :state="isTimeValid"
+                        ><b-form-input
+                          id="start-time-input"
+                          v-model="create_shiftStartTime"
+                          :state="isTimeValid"
+                          :type="'time'"
+                          required
+                        ></b-form-input>
+                        <p></p>
+                        <b-form-input
+                          id="end-time-input"
+                          v-model="create_shiftEndTime"
+                          :state="isTimeValid"
+                          :type="'time'"
+                          required
+                        ></b-form-input
+                      ></b-form-group>
+                    </form>
+                  </template>
+                </b-modal>
+              </div>
               <div class="shift_container_style">
                 <div
                   class="shift_card_style"
@@ -146,6 +217,12 @@
                       <b-card-text class="shift_style"
                         >End Time: {{ shift.endTime | formatTime }}</b-card-text
                       >
+                      <b-button
+                        size="sm"
+                        style="margin-top: 10px"
+                        @click="deleteShift(shift.name)"
+                        >Delete Shift</b-button
+                      >
                     </b-card>
                   </draggable>
                 </div>
@@ -163,7 +240,7 @@
 .header_style {
   padding-top: 15px;
   padding-left: 100px;
-  border-color: #91c788;
+  border-color: #0d6efd;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
   text-align: left;
@@ -171,7 +248,6 @@
 }
 .shift_header_style {
   padding-top: 5px;
-  padding-bottom: 5px;
   border-radius: 3px;
 
   min-width: 200px;
@@ -200,19 +276,19 @@
 .schedule_column_style {
   height: 100%;
   min-height: 300px;
-  min-width: 155px;
+  min-width: 150px;
   margin-left: 2px;
   margin-right: 2px;
   padding-top: 10px;
-  background-color: #ddffbc;
-  border: 1px solid #91c788;
+  background-color: #dbf4fa;
+  border: 1px solid #9ac2fe;
   flex-wrap: wrap;
 }
 .scheduled_shift_style {
   width: 90%;
   margin-top: 4px;
 }
-.button_label_style {
+.button_div_style {
   font-size: 75%;
   padding-top: 6px;
   width: 85%;
@@ -237,18 +313,22 @@
   outline-style: solid;
   outline-color: #cccccc;
   outline-width: 1px;
-  height: 80vh;
+  height: 74vh;
   min-width: 200px;
   overflow: auto;
   text-align: center;
 }
 .shift_card_style {
   padding: 0px;
-  max-width: 150px;
+  width: 90%;
   margin: auto;
 }
 .shift_style {
-  font-size: 20px;
+  font-size: 16px;
+  margin: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .font_size_large {
   font-size: 18px;
@@ -262,6 +342,16 @@
   border: 1px solid #4299e1;
 }
 .gone-card {
+  opacity: 1;
+  max-width: 150px;
+  max-height: 50px;
+  margin: auto;
+  padding: 0px;
+}
+.gone-card .card-text {
+  visibility: hidden;
+}
+.gone-card .card-body {
   visibility: hidden;
 }
 .drag-card {

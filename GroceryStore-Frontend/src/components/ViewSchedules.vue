@@ -14,6 +14,7 @@
           }}
         </h2>
         <div>
+          <!-- Schedule Navbar -->
           <b-button-group>
             <b-button
               class="button_style"
@@ -61,6 +62,7 @@
           "
           >No scheduled shifts!</b-alert
         >
+        <!-- Schedule Component -->
         <b-aspect class="schedule_style" aspect="2.25:1">
           <b-alert show variant="danger" v-if="errorMessage"
             ><h4 class="alert-heading">Error:</h4>
@@ -85,17 +87,19 @@
                 <div>
                   {{ weekday.dayOfWeek.format("MMM. Do, YYYY") }}
                 </div>
+                <!-- Schedule Assignment Cards -->
                 <b-card
                   class="my-2 text-center"
+                  no-body
                   v-bind:header="schedule.shift.name"
                   v-for="schedule in weekday.scheduledShifts"
                   :key="schedule.shift.name"
                 >
-                  <b-card-text class="shift_style"
+                  <b-card-text class="shift_style" style="padding-top: 15px"
                     >Start Time:
                     {{ schedule.shift.startTime | formatTime }}</b-card-text
                   >
-                  <b-card-text class="shift_style"
+                  <b-card-text class="shift_style" style="padding-bottom: 15px"
                     >End Time:
                     {{ schedule.shift.endTime | formatTime }}</b-card-text
                   >
@@ -114,7 +118,7 @@
 .header_style {
   padding-top: 15px;
   padding-left: 100px;
-  border-color: #91c788;
+  border-color: #0d6efd;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
   text-align: left;
@@ -146,7 +150,8 @@
   margin-left: 2px;
   margin-right: 2px;
   padding-top: 10px;
-  background-color: #ddffbc;
+  background-color: #dbf4fa;
+  border: 1px solid #9ac2fe;
 }
 .no_schedule_style {
   width: 79%;
@@ -159,6 +164,6 @@
 /* Styling for Shift Cards */
 .shift_style {
   margin: 0px;
-  font-size: 11px;
+  font-size: 16px;
 }
 </style>
