@@ -333,7 +333,7 @@ function createEmployee() {
         {},
         {
           params: {
-            newPassword: "kiosk",
+            newPassword: "worker1",
           },
         }
       )
