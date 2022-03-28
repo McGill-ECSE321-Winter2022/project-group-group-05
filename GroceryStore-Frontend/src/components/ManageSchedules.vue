@@ -351,6 +351,9 @@
 .gone-card .card-text {
   visibility: hidden;
 }
+.gone-card .card-body {
+  visibility: hidden;
+}
 .drag-card {
   opacity: 1;
   background: #f7fafc;
