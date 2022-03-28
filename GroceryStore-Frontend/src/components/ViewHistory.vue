@@ -102,12 +102,11 @@ export default {
           var total = 0;
           purchase.specificItems.forEach(function (specificItem) {
             total += specificItem.purchaseQuantity * specificItem.purchasePrice;
-            console.log(total);
           });
           purchase.total = total;
         });
       })
-      .then(response => {
+      .finally(() => {
         this.isLoading = false;
       });
   },
@@ -120,6 +119,7 @@ export default {
       }
     },
     cancel: function (id) {
+      this.isLoading = true;
       AXIOS.post("/purchase/cancel/".concat(id), {}, {})
         .then(response => {
           this.errorPurchase = "";
@@ -129,11 +129,12 @@ export default {
           console.log(errorMsg);
           this.errorPurchase = errorMsg;
         })
-        .then(response => {
+        .finally(() => {
           window.location.reload();
         });
     },
     confirm: function (id) {
+      this.isLoading = true;
       AXIOS.post("/purchase/complete/".concat(id), {}, {})
         .then(response => {
           this.errorPurchase = "";
@@ -143,7 +144,7 @@ export default {
           console.log(errorMsg);
           this.errorPurchase = errorMsg;
         })
-        .then(response => {
+        .finally(() => {
           window.location.reload();
         });
     },

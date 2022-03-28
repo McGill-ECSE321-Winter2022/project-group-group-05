@@ -136,12 +136,13 @@ export default {
         console.log(errorMsg);
         this.errorCustomer = errorMsg;
       })
-      .then(response => {
+      .finally(() => {
         this.isLoading = false;
       });
   },
   methods: {
     updateCustomer: function (email, password, address, isLocal) {
+      this.isLoading = true;
       AXIOS.patch(
         "/customer/".concat(LOGIN_STATE.state.username),
         {},
@@ -162,10 +163,11 @@ export default {
           console.log(errorMsg);
           this.errorCustomer = errorMsg;
         })
-        .then(response => {
+        .finally(() => {
           if (this.errorCustomer === "") {
             window.location.reload();
           }
+          this.isLoading = false;
         });
     },
   },
