@@ -6,10 +6,6 @@
       <div :aria-hidden="isLoading ? 'true' : null" id="pos-interface-inner">
         <p class="h2 text-center mb-5">In-Store Checkout System</p>
 
-        <div class="text-center" v-show="posError">
-          <p style="color: red">{{ posError }}</p>
-        </div>
-
         <div id="pos-start-button" v-if="!inProgress">
           <b-button
             block
@@ -36,7 +32,12 @@
               Cancel Order #{{ cart.id }}
             </p>
           </b-button>
+          <hr />
         </div>
+      </div>
+
+      <div class="text-center" v-show="posError">
+        <p style="color: red">{{ posError }}</p>
       </div>
 
       <template #overlay>
@@ -53,7 +54,7 @@
 
 <style scoped>
 #pos-interface-outer {
-  width: 900px;
+  width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }

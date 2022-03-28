@@ -9,4 +9,6 @@ public interface HolidayRepository extends CrudRepository<Holiday, String> {
   Holiday findByName(String name);
 
   ArrayList<Holiday> findAllByOrderByName();
+  
+  ArrayList<Holiday> findAllByOrderByDateAsc();
 }
