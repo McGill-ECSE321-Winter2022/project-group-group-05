@@ -19,9 +19,39 @@ export default {
       holidays: [],
       nextHolidayDate: "",
       nextHolidayName: "",
-      itemList: [],
       cart: "",
       // item browsing
+      itemListFields: [
+        {
+          key: "name",
+          sortable: true,
+        },
+        {
+          key: "image",
+          label: "",
+          sortable: false,
+        },
+        {
+          key: "price",
+          sortable: true,
+        },
+        {
+          key: "inventory",
+          label: "",
+          sortable: false,
+        },
+        {
+          key: "canDeliver",
+          label: "",
+          sortable: false,
+        },
+        {
+          key: "canPickUp",
+          label: "",
+          sortable: false,
+        },
+      ],
+      itemList: [],
       perPage: 3,
       currentPage: 1,
       clickedItem: "",
@@ -32,6 +62,9 @@ export default {
       itemSearchQuery: "",
       selectedCategory: "",
       mustCanDeliver: false,
+      mustCanPickUp: false,
+      mustAvailableOnline: false,
+      showOutOfStock: false,
     };
   },
   computed: {
@@ -40,12 +73,20 @@ export default {
     },
     filteredItemList() {
       return this.itemList.filter(item => {
-        if (
-          item["inventory"] > 0 &&
-          !item["discontinued"] &&
-          (item["canDeliver"] || item["canPickUp"])
-        ) {
+        if (!item["discontinued"]) {
+          if (!this.showOutOfStock && !(item["inventory"] > 0)) {
+            return false;
+          }
           if (this.mustCanDeliver && !item["canDeliver"]) {
+            return false;
+          }
+          if (this.mustCanPickUp && !item["canPickUp"]) {
+            return false;
+          }
+          if (
+            this.mustAvailableOnline &&
+            !(item["canDeliver"] || item["canPickUp"])
+          ) {
             return false;
           }
           return item["name"]
@@ -158,8 +199,14 @@ export default {
       } else if (!this.isCustomer || LOGIN_STATE.state.username === "kiosk") {
         this.$bvModal.show("add-item-denied");
       } else {
-        this.clickedItem = item;
-        this.$bvModal.show("add-item-dialog");
+        if (item["canDeliver"] || item["canPickUp"]) {
+          this.clickedItem = item;
+          this.$bvModal.show("add-item-dialog");
+        } else {
+          this.addItemError =
+            "Sorry, but this item is not available for purchase online. Please visit us in-store!";
+          this.$bvModal.show("add-item-error");
+        }
       }
     },
     addItemToCart: async function () {
