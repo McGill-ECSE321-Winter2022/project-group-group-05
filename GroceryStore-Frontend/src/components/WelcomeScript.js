@@ -19,7 +19,7 @@ export default {
       holidays: [],
       nextHolidayDate: "",
       nextHolidayName: "",
-      inStockItems: [],
+      itemList: [],
       cart: "",
       // item browsing
       perPage: 3,
@@ -28,7 +28,10 @@ export default {
       addQuantity: 1,
       addItemError: "",
       addItemSuccess: "",
+      // item filtering
       itemSearchQuery: "",
+      selectedCategory: "",
+      mustCanDeliver: false,
     };
   },
   computed: {
@@ -36,10 +39,20 @@ export default {
       return this.filteredItemList.length;
     },
     filteredItemList() {
-      return this.inStockItems.filter(item => {
-        return item["name"]
-          .toLowerCase()
-          .includes(this.itemSearchQuery.trim().toLowerCase());
+      return this.itemList.filter(item => {
+        if (
+          item["inventory"] > 0 &&
+          !item["discontinued"] &&
+          (item["canDeliver"] || item["canPickUp"])
+        ) {
+          if (this.mustCanDeliver && !item["canDeliver"]) {
+            return false;
+          }
+          return item["name"]
+            .toLowerCase()
+            .includes(this.itemSearchQuery.trim().toLowerCase());
+        }
+        return false;
       });
     },
   },
@@ -110,17 +123,7 @@ export default {
         console.log(e);
       });
     this.isLoading = false;
-    // items
-    this.isItemLoading = true;
-    // upon creation, fetch in-stock items
-    await AXIOS.get("/item/allInStock", {})
-      .then(response => {
-        this.inStockItems = response.data;
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    this.isItemLoading = false;
+    await this.fetchItems();
   },
   methods: {
     logout: function () {
@@ -173,7 +176,7 @@ export default {
           },
         }
       )
-        .then(response => {
+        .then(() => {
           let msg =
             "Successfully added " +
             this.addQuantity +
@@ -191,6 +194,31 @@ export default {
           this.$bvModal.show("add-item-error");
         });
       this.isLoading = false;
+      this.isItemLoading = false;
+    },
+    fetchItems: async function () {
+      this.isItemLoading = true;
+      if (this.selectedCategory === "") {
+        // fetch all items if no category is selected
+        await AXIOS.get("/item/getAll", {})
+          .then(response => {
+            this.itemList = response.data;
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      } else {
+        await AXIOS.get(
+          "/itemCategory/".concat(this.selectedCategory).concat("/getItems"),
+          {}
+        )
+          .then(response => {
+            this.itemList = response.data;
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
       this.isItemLoading = false;
     },
   },
