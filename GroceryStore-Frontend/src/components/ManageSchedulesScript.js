@@ -309,6 +309,19 @@ export default {
           this.dismissCountDown = this.dismissSecs;
           this.errorMessage = error.response.data.message;
         });
+      await AXIOS.get("/employee/getAll")
+        .then(response => {
+          this.items = response.data;
+          var weekMarkers = [];
+          for (var i = 0; i < response.data.length; i++) {
+            weekMarkers.push(moment());
+          }
+          this.weekMarkers = weekMarkers;
+        })
+        .catch(error => {
+          // This should never happen in normal execution
+          console.log(error.response.data.message);
+        });
     },
   },
 };
