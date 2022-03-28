@@ -110,6 +110,11 @@
       <div :aria-hidden="isItemLoading ? 'true' : null" id="items-inner">
         <h2>Browse our in stock items</h2>
         <div id="in-stock-items-outer">
+          <b-input
+            type="text"
+            v-model="itemSearchQuery"
+            placeholder="Search item"
+          ></b-input>
           <b-pagination
             v-model="currentPage"
             :total-rows="numRows"
@@ -122,7 +127,7 @@
             hover
             :per-page="perPage"
             :current-page="currentPage"
-            :items="inStockItems"
+            :items="filteredItemList"
             @row-clicked="addItemDialog"
           >
             <template #cell(name)="data">

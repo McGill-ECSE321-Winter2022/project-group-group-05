@@ -22,17 +22,25 @@ export default {
       inStockItems: [],
       cart: "",
       // item browsing
-      perPage: 10,
+      perPage: 3,
       currentPage: 1,
       clickedItem: "",
       addQuantity: 1,
       addItemError: "",
       addItemSuccess: "",
+      itemSearchQuery: "",
     };
   },
   computed: {
     numRows() {
-      return this.inStockItems.length;
+      return this.filteredItemList.length;
+    },
+    filteredItemList() {
+      return this.inStockItems.filter(item => {
+        return item["name"]
+          .toLowerCase()
+          .includes(this.itemSearchQuery.trim().toLowerCase());
+      });
     },
   },
   created: async function () {
