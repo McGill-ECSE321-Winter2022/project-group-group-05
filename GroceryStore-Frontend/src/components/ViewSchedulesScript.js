@@ -99,6 +99,8 @@ export default {
         }
       })
       .catch(error => {
+        // This error should never be relevant. The request will fail only if the logged in user is not an employee,
+        // and the page is disabled if that is the case.
         console.log(error.response.data.message);
         this.errorMessage = error.response.data.message;
       });

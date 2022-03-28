@@ -14,6 +14,7 @@
           }}
         </h2>
         <div>
+          <!-- Schedule Navbar -->
           <b-button-group>
             <b-button
               class="button_style"
@@ -61,6 +62,7 @@
           "
           >No scheduled shifts!</b-alert
         >
+        <!-- Schedule Component -->
         <b-aspect class="schedule_style" aspect="2.25:1">
           <b-alert show variant="danger" v-if="errorMessage"
             ><h4 class="alert-heading">Error:</h4>
@@ -85,6 +87,7 @@
                 <div>
                   {{ weekday.dayOfWeek.format("MMM. Do, YYYY") }}
                 </div>
+                <!-- Schedule Assignment Cards -->
                 <b-card
                   class="my-2 text-center"
                   no-body
@@ -147,8 +150,8 @@
   margin-left: 2px;
   margin-right: 2px;
   padding-top: 10px;
-  background-color: #DBF4FA;
-  border: 1px solid #9AC2FE;
+  background-color: #dbf4fa;
+  border: 1px solid #9ac2fe;
 }
 .no_schedule_style {
   width: 79%;

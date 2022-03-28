@@ -280,8 +280,8 @@
   margin-left: 2px;
   margin-right: 2px;
   padding-top: 10px;
-  background-color: #DBF4FA;
-  border: 1px solid #9AC2FE;
+  background-color: #dbf4fa;
+  border: 1px solid #9ac2fe;
   flex-wrap: wrap;
 }
 .scheduled_shift_style {
