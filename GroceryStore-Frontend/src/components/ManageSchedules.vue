@@ -240,7 +240,7 @@
 .header_style {
   padding-top: 15px;
   padding-left: 100px;
-  border-color: #91c788;
+  border-color: #0d6efd;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
   text-align: left;
@@ -280,8 +280,8 @@
   margin-left: 2px;
   margin-right: 2px;
   padding-top: 10px;
-  background-color: #ddffbc;
-  border: 1px solid #91c788;
+  background-color: #DBF4FA;
+  border: 1px solid #9AC2FE;
   flex-wrap: wrap;
 }
 .scheduled_shift_style {
