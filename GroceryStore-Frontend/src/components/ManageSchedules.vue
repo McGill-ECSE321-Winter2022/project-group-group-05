@@ -16,7 +16,7 @@
           @dismissed="dismissCountDown = 0"
           @dismiss-count-down="countDownChanged"
         >
-          <p>Warning: {{ errorMessage }}</p>
+          Warning: {{ errorMessage }}
         </b-alert>
         <b-container fluid v-if="ownerLoggedIn"
           ><b-row align-v="stretch"
@@ -60,77 +60,87 @@
                     <b-button
                       class="button_style"
                       variant="outline-success"
-                      v-bind:disabled="isWeekPresent[row.index]"
+                      v-bind:disabled="isWeekPresent[row.index] || busy"
                       @click="assignCurrentSchedule(row.index)"
                       >Auto-fill Current Schedule</b-button
                     >
                     <b-button
                       class="button_style"
                       variant="outline-danger"
+                      v-bind:disabled="busy"
                       @click="clearWeekSchedule(row.index)"
                       >Clear Week Schedule</b-button
                     >
                   </div>
-                  <b-container class="schedule_style" fluid>
-                    <b-form-row class="schedule_row_style">
-                      <b-col
-                        class="schedule_column_style"
-                        v-for="weekday in schedulesOfWeek[row.index]"
-                        v-bind:key="weekday.dayOfWeek.format()"
-                      >
-                        <draggable
-                          style="min-height: 300px"
-                          draggable=".draggable"
-                          v-model="weekday.shiftListener"
-                          ghost-class="gone-card"
-                          :group="{
-                            name: 'weekdays.shiftListener',
-                            put: 'shifts',
-                          }"
-                          @change="
-                            addScheduleAssignment(weekday.dayOfWeek, row.index)
-                          "
+                  <b-overlay :show="busy"
+                    ><b-container class="schedule_style" fluid>
+                      <b-form-row class="schedule_row_style">
+                        <b-col
+                          class="schedule_column_style"
+                          v-for="weekday in schedulesOfWeek[row.index]"
+                          v-bind:key="weekday.dayOfWeek.format()"
                         >
-                          <div class="font_size_large">
-                            {{ weekday.dayOfWeek.format("dddd") }}
-                          </div>
-                          <div class="font_size_med">
-                            {{ weekday.dayOfWeek.format("MMM. Do, YYYY") }}
-                          </div>
-                          <div
-                            v-for="schedule in weekday.scheduledShifts"
-                            :key="schedule.id"
+                          <draggable
+                            style="min-height: 300px"
+                            draggable=".draggable"
+                            v-model="weekday.shiftListener"
+                            ghost-class="gone-card"
+                            :group="{
+                              name: 'weekdays.shiftListener',
+                              put: 'shifts',
+                            }"
+                            @change="
+                              addScheduleAssignment(
+                                weekday.dayOfWeek,
+                                row.index
+                              )
+                            "
                           >
-                            <b-button-group
-                              size="sm"
-                              class="scheduled_shift_style"
+                            <div class="font_size_large">
+                              {{ weekday.dayOfWeek.format("dddd") }}
+                            </div>
+                            <div class="font_size_med">
+                              {{ weekday.dayOfWeek.format("MMM. Do, YYYY") }}
+                            </div>
+                            <div
+                              v-for="schedule in weekday.scheduledShifts"
+                              :key="schedule.id"
                             >
-                              <div
-                                class="button_label_style bg-light"
-                                variant="light"
+                              <b-button-group
+                                size="sm"
+                                class="scheduled_shift_style"
                               >
-                                {{ schedule.shift.name }}
-                              </div>
-                              <b-button
-                                class="button_remove_style"
-                                variant="light"
-                                @click="
-                                  deleteScheduleAssignment(schedule, row.index)
-                                "
-                                >&#10005;</b-button
-                              >
-                            </b-button-group>
-                          </div>
-                        </draggable>
-                      </b-col>
-                    </b-form-row>
-                  </b-container>
+                                <div
+                                  class="button_label_style bg-light"
+                                  variant="light"
+                                >
+                                  {{ schedule.shift.name }}
+                                </div>
+                                <b-button
+                                  class="button_remove_style"
+                                  variant="light"
+                                  @click="
+                                    deleteScheduleAssignment(
+                                      schedule,
+                                      row.index
+                                    )
+                                  "
+                                  >&#10005;</b-button
+                                >
+                              </b-button-group>
+                            </div>
+                          </draggable>
+                        </b-col>
+                      </b-form-row>
+                    </b-container></b-overlay
+                  >
                 </template>
               </b-table>
             </b-col>
             <b-col cols="3">
               <div class="shift_header_style bg-light">
                 <h2>Available Shifts</h2>
+                <b-button style="margin-bottom: 10px">New Shift</b-button>
               </div>
               <div class="shift_container_style">
                 <div
@@ -247,7 +257,7 @@
   outline-style: solid;
   outline-color: #cccccc;
   outline-width: 1px;
-  height: 80vh;
+  height: 74vh;
   min-width: 200px;
   overflow: auto;
   text-align: center;

@@ -63,6 +63,7 @@ export default {
       weekMarkers: [],
       shifts: [],
       ownerLoggedIn: false,
+      busy: false,
       selectedShift: "",
       dismissSecs: 5,
       dismissCountDown: 0,
@@ -100,11 +101,13 @@ export default {
     stepForwardWeek: function (rowIndex) {
       var nextWeek = this.weekMarkers[rowIndex];
       nextWeek.add(1, "week");
+      console.log(nextWeek.format());
       Vue.set(this.weekMarkers, rowIndex, nextWeek);
     },
     stepBackWeek: function (rowIndex) {
       var lastWeek = this.weekMarkers[rowIndex];
       lastWeek.subtract(1, "week");
+      console.log(lastWeek.format());
       Vue.set(this.weekMarkers, rowIndex, lastWeek);
     },
     returnToLatestWeek: function (rowIndex) {
@@ -162,6 +165,7 @@ export default {
         });
     },
     async clearWeekSchedule(rowIndex) {
+      this.busy = true;
       var schedulesToBeCleared = [];
       this.schedulesOfWeek[rowIndex].forEach(weekday => {
         weekday.scheduledShifts.forEach(schedule =>
@@ -194,10 +198,13 @@ export default {
             console.log(error.response);
           });
       }
+      this.busy = false;
     },
     async assignCurrentSchedule(rowIndex) {
       this.clearWeekSchedule(rowIndex);
+      this.busy = true;
       var schedulesToBeAdded = [];
+      var weekOffset = this.weekMarkers[rowIndex].week() - moment().week()
       for (const schedule of this.items[rowIndex].employeeSchedules) {
         if (moment(schedule.date).isSame(moment(), "week")) {
           schedulesToBeAdded.push(schedule);
@@ -211,7 +218,7 @@ export default {
           {},
           {
             params: {
-              date: moment(schedule.date).add(1, "week").format("YYYY-MM-DD"),
+              date: moment(schedule.date).add(weekOffset, "week").format("YYYY-MM-DD"),
               shift: schedule.shift.name,
             },
           }
@@ -229,6 +236,7 @@ export default {
             console.log(error.response);
           });
       }
+      this.busy = false;
     },
   },
 };
