@@ -153,10 +153,9 @@ export default {
           Vue.set(this.items, rowIndex, updatedEmployee);
         })
         .catch(error => {
-          // TODO: not sure what to do here. If it reaches an error, either:
-          // A) the shift is no longer valid, or B) the employee is no longer valid
-          // Figure out behavior in these cases
-          console.log(error.response);
+          console.log(error.response.data.message);
+          this.dismissCountDown = this.dismissSecs;
+          this.errorMessage = error.response.data.message;
         });
     },
     async addScheduleAssignment(date, rowIndex) {
@@ -212,10 +211,9 @@ export default {
             Vue.set(this.items, rowIndex, updatedEmployee);
           })
           .catch(error => {
-            // TODO: not sure what to do here. If it reaches an error, either:
-            // A) the shift is no longer valid, or B) the employee is no longer valid
-            // Figure out behavior in these cases
-            console.log(error.response);
+            console.log(error.response.data.message);
+            this.dismissCountDown = this.dismissSecs;
+            this.errorMessage = error.response.data.message;
           });
       }
       this.busy = false;
@@ -252,26 +250,25 @@ export default {
             Vue.set(this.items, rowIndex, updatedEmployee);
           })
           .catch(error => {
-            // TODO: not sure what to do here. If it reaches an error, either:
-            // A) the shift is no longer valid, or B) the employee is no longer valid
-            // Figure out behavior in these cases
-            console.log(error.response);
+            console.log(error.response.data.message);
+            this.dismissCountDown = this.dismissSecs;
+            this.errorMessage = error.response.data.message;
           });
       }
       this.busy = false;
     },
-    resetShiftForm: function () {
+    resetShiftForm() {
       this.create_shiftName = "";
       this.create_shiftStartTime = "";
       this.create_shiftEndTime = "";
     },
-    handleOk: function (okEvent) {
+    handleOk(okEvent) {
       okEvent.preventDefault();
       this.createNewShift();
     },
-    createNewShift: function () {
+    async createNewShift() {
       if (this.isShiftNameValid && this.isTimeValid) {
-        AXIOS.post(
+        await AXIOS.post(
           "/shift/".concat(this.create_shiftName),
           {},
           {
@@ -296,6 +293,22 @@ export default {
       }
       this.isShiftNameValid = false;
       this.isTimeValid = false;
+    },
+    async deleteShift(shiftName) {
+      await AXIOS.delete("/shift/".concat(shiftName))
+        .then(() => {
+          for (var i = 0; i < this.shifts.length; i++) {
+            if (this.shifts[i].name === shiftName) {
+              this.shifts.splice(i, 1);
+              break;
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error.response.data.message);
+          this.dismissCountDown = this.dismissSecs;
+          this.errorMessage = error.response.data.message;
+        });
     },
   },
 };

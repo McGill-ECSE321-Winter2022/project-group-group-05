@@ -168,17 +168,18 @@
                         ></b-form-input>
                       </b-form-group>
                       <b-form-group
-                      label="Shift Hours"
-                      label-for="start-time-input"
-                      invalid-feedback="Start time must come before end time"
-                      :state="isTimeValid"
+                        label="Shift Hours"
+                        label-for="start-time-input"
+                        invalid-feedback="Start time must come before end time"
+                        :state="isTimeValid"
                         ><b-form-input
                           id="start-time-input"
                           v-model="create_shiftStartTime"
                           :state="isTimeValid"
                           :type="'time'"
                           required
-                        ></b-form-input><p></p>
+                        ></b-form-input>
+                        <p></p>
                         <b-form-input
                           id="end-time-input"
                           v-model="create_shiftEndTime"
@@ -215,6 +216,12 @@
                       >
                       <b-card-text class="shift_style"
                         >End Time: {{ shift.endTime | formatTime }}</b-card-text
+                      >
+                      <b-button
+                        size="sm"
+                        style="margin-top: 10px"
+                        @click="deleteShift(shift.name)"
+                        >Delete Shift</b-button
                       >
                     </b-card>
                   </draggable>
