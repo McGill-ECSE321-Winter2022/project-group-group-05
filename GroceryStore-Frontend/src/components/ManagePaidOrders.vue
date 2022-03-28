@@ -2,13 +2,15 @@
 <!--Show all paid orders and be able to change them to prepared-->
 <template>
   <div id="manage-paid-orders" v-if="isEmployee || isOwner">
-    <div class="back-to-previous-style">
-      <a href="javascript:history.back()">Previous Page</a>
-    </div>
-
+    <b-overlay
+      id="overlay"
+      :show="isLoading"
+      :variant="variant"
+      :opacity="0.85"
+      rounded="sm"
+    >
+    <StaffDashboard></StaffDashboard>
     <h1 class="header_style">Manage Paid Orders</h1>
-    <br />
-
     <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
       <div id="header">
         <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
@@ -39,25 +41,18 @@
           <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
           <td>
             {{ specificItem.purchaseQuantity }}
-            {{
-              addToTotal(
-                specificItem.purchaseQuantity * specificItem.purchasePrice
-              )
-            }}
           </td>
         </tr>
       </table>
       <hr />
       <tr id="totalPrice">
         Total: ${{
-          totalPrice | formatCurrency
-        }}
-        {{
-          clearSum()
+          purchase.total | formatCurrency
         }}
       </tr>
       <br />
     </table>
+    </b-overlay>
   </div>
 </template>
 
@@ -117,16 +112,5 @@
   right: 200px;
   bottom: 10px;
 }
-.back-to-previous-style {
-  padding: 20px 1px;
-  font-size: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 180px;
-  text-align: center;
-}
-a {
-  color: #2410da;
-}
+
 </style>
