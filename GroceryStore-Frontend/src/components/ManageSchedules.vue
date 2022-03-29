@@ -12,11 +12,11 @@
         <b-alert
           :show="dismissCountDown"
           dismissible
-          variant="warning"
+          variant="danger"
           @dismissed="dismissCountDown = 0"
           @dismiss-count-down="countDownChanged"
         >
-          Warning: {{ errorMessage }}
+          Error: {{ errorMessage }}
         </b-alert>
         <b-container fluid v-if="ownerLoggedIn"
           ><b-row align-v="stretch"
