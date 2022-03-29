@@ -48,12 +48,12 @@ public class EmployeeController {
 
   @PatchMapping(value = {"/employee/{username}", "/employee/{username}/"})
   public EmployeeDto updateEmployee(@PathVariable("username") String username,
-      @RequestParam(required = false) String newEmail,
-      @RequestParam(required = false) String newPassword) throws IllegalArgumentException {
-    if (newEmail != null)
-      service.setEmployeeEmail(username, newEmail);
-    if (newPassword != null)
-      service.setEmployeePassword(username, newPassword);
+      @RequestParam(required = false) String email,
+      @RequestParam(required = false) String password) throws IllegalArgumentException {
+    if (email != null)
+      service.setEmployeeEmail(username, email);
+    if (password != null)
+      service.setEmployeePassword(username, password);
     return convertToDto(service.getEmployee(username));
   }
 
