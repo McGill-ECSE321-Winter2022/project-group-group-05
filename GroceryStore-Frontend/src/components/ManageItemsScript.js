@@ -28,11 +28,13 @@ export default {
       isOwnerLoggedIn: false,
       isEmployeeLoggedIn: false,
 
+      // used for item table
       searchQuery: "",
       perPage: 10,
       currentPage: 1,
       fetchedItems: [],
 
+      // used for error handling
       errorMessage: "",
       dismissCountDown: 0,
       dismissSecs: 5,
@@ -48,6 +50,7 @@ export default {
       // If true, the form will evaluate the validity of the inputs
       creationAttempt: false,
 
+      // holds the info for the item to be modified
       itemToBeModified: [],
     };
   },
@@ -178,6 +181,7 @@ export default {
     async deleteItem() {
       await AXIOS.delete("/item/".concat(this.itemToBeModified.name))
         .then(() => {
+          // update the frontend
           for (var i = 0; i < this.fetchedItems.length; i++) {
             if (this.fetchedItems[i].name === this.itemToBeModified.name) {
               this.fetchedItems.splice(i, 1);
@@ -205,6 +209,7 @@ export default {
         }
       )
         .then(response => {
+          // update the frontend
           for (var i = 0; i < this.fetchedItems.length; i++) {
             if (this.fetchedItems[i].name === response.data.name) {
               this.fetchedItems[i].discontinued = response.data.discontinued;
@@ -220,6 +225,7 @@ export default {
         });
     },
     async saveItemChanges() {
+      // modify price
       await AXIOS.patch(
         "/item/".concat(this.itemToBeModified.name).concat("/setPrice"),
         {},
@@ -233,6 +239,7 @@ export default {
         this.dismissCountDown = this.dismissSecs;
         this.errorMessage = error.response.data.message;
       });
+      // modify image
       await AXIOS.patch(
         "/item/".concat(this.itemToBeModified.name).concat("/setImage"),
         {},
@@ -246,6 +253,7 @@ export default {
         this.dismissCountDown = this.dismissSecs;
         this.errorMessage = error.response.data.message;
       });
+      // modify inventory
       await AXIOS.patch(
         "/item/".concat(this.itemToBeModified.name).concat("/setInventory"),
         {},
@@ -259,6 +267,7 @@ export default {
         this.dismissCountDown = this.dismissSecs;
         this.errorMessage = error.response.data.message;
       });
+      // modify deliverable
       await AXIOS.patch(
         "/item/".concat(this.itemToBeModified.name).concat("/setCanDeliver"),
         {},
@@ -272,6 +281,7 @@ export default {
         this.dismissCountDown = this.dismissSecs;
         this.errorMessage = error.response.data.message;
       });
+      // modify pickup-able
       await AXIOS.patch(
         "/item/".concat(this.itemToBeModified.name).concat("/setCanPickUp"),
         {},
@@ -282,6 +292,7 @@ export default {
         }
       )
         .then(response => {
+          // only update the frontend after all modifications have been made
           for (var i = 0; i < this.fetchedItems.length; i++) {
             if (this.fetchedItems[i].name === response.data.name) {
               Vue.set(this.fetchedItems, i, response.data);
