@@ -22,8 +22,9 @@
           Error: {{ errorMessage }}
         </b-alert>
         <b-container fluid v-if="isOwnerLoggedIn || isEmployeeLoggedIn">
-          <b-row
-            ><b-col :cols="isOwnerLoggedIn ? 7 : 12"
+          <b-row>
+            <!-- Items Table -->
+            <b-col :cols="isOwnerLoggedIn ? 7 : 12"
               ><b-button-toolbar
                 aria-label="Toolbar with button groups and input groups"
               >
@@ -35,6 +36,7 @@
                     v-b-modal.createItem
                     >Add new Item</b-button
                   >
+                  <!-- Create new item form -->
                   <b-modal
                     id="createItem"
                     ref="modal"
@@ -133,6 +135,7 @@
                     </template>
                   </b-modal>
                 </b-button-group>
+                <!-- Search bar -->
                 <b-form-group
                   ><b-form-input
                     v-model="searchQuery"
@@ -141,6 +144,7 @@
                   ></b-form-input
                 ></b-form-group>
               </b-button-toolbar>
+              <!-- Item table -->
               <b-table
                 id="item-table"
                 :items="items"
@@ -175,6 +179,7 @@
                 aria-controls="item-table"
               ></b-pagination>
             </b-col>
+            <!-- Edit Item Div -->
             <b-col cols="5" v-if="isOwnerLoggedIn">
               <div class="item_edit_style bg-light">
                 <h2>Item Edit Panel</h2>
@@ -302,6 +307,7 @@
   text-align: left;
   margin-bottom: 30px;
 }
+/* Styling for Edit Item Section */
 .item_edit_style {
   padding-top: 5px;
   border-radius: 3px;
@@ -310,9 +316,6 @@
   outline-style: solid;
   outline-color: #cccccc;
   outline-width: 1px;
-}
-.button_style {
-  margin-bottom: 15px;
 }
 .pagination_style {
   display: flex;
