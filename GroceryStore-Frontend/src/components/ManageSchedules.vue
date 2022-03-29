@@ -132,8 +132,8 @@
                           </draggable>
                         </b-col>
                       </b-form-row>
-                    </b-container></b-overlay
-                  >
+                    </b-container>
+                  </b-overlay>
                 </template>
               </b-table>
             </b-col>
