@@ -317,6 +317,9 @@
   outline-color: #cccccc;
   outline-width: 1px;
 }
+.button_style {
+  margin-bottom: 16px;
+}
 .pagination_style {
   display: flex;
   justify-content: center;
