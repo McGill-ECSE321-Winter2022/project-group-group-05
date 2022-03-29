@@ -167,8 +167,6 @@
                       <b-icon
                         icon="truck"
                         font-scale="1.5"
-                        v-b-tooltip
-                        title="Hello!"
                         variant="success"
                       ></b-icon>
                     </div>
