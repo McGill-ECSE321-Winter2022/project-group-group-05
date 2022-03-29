@@ -9,10 +9,10 @@ export default {
     StaffDashboard,
   },
   created: async function () {
-    this.isOwnerLoggedIn = true;
-    LOGIN_STATE.state.userType === "owner" && LOGIN_STATE.state.isLoggedIn;
-    this.isEmployeeLoggedIn = false;
-    LOGIN_STATE.state.userType === "employee" && LOGIN_STATE.state.isLoggedIn;
+    this.isOwnerLoggedIn =
+      LOGIN_STATE.state.userType === "owner" && LOGIN_STATE.state.isLoggedIn;
+    this.isEmployeeLoggedIn =
+      LOGIN_STATE.state.userType === "employee" && LOGIN_STATE.state.isLoggedIn;
     await AXIOS.get("/item/getAll")
       .then(response => {
         this.fetchedItems = response.data;

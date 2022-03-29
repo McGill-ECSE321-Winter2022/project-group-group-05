@@ -23,7 +23,7 @@
         </b-alert>
         <b-container fluid v-if="isOwnerLoggedIn || isEmployeeLoggedIn">
           <b-row
-            ><b-col cols="7"
+            ><b-col :cols="isOwnerLoggedIn ? 7 : 12"
               ><b-button-toolbar
                 aria-label="Toolbar with button groups and input groups"
               >
