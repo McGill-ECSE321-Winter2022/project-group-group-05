@@ -1,12 +1,154 @@
 <!--Visibility: owner, employee-->
 <!--Modify the staff's own account infos-->
 <!--Landing page of logging in as a staff-->
-<template></template>
+<template>
+  <div>
+    <div id="managestaffprofile" v-if="userType === 'Employee'">
+      <b-overlay
+        id="overlay"
+        :show="isLoading"
+        :variant="variant"
+        :opacity="0.85"
+        rounded="sm"
+      >
+        <h1>Manage Your Profile</h1>
+        <br />
+        <table>
+          <tr>
+            <td>Username:</td>
+            <td>{{ username }}</td>
+          </tr>
+          <br />
+          <tr>
+            <td>Email:</td>
+            <td>
+              <input type="text" v-model="employee.email" placeholder="Email" />
+            </td>
+            <td>
+              <b-button
+                variant="outline-primary"
+                v-bind:disabled="!employee.email"
+                @click="updateEmployee(employee.email, null)"
+              >
+                Save
+              </b-button>
+            </td>
+          </tr>
+          <br />
+          <tr>
+            <td>Password:</td>
+            <td>
+              <input
+                type="text"
+                v-model="employee.password"
+                placeholder="Password"
+              />
+            </td>
+            <td>
+              <b-button
+                variant="outline-primary"
+                v-bind:disabled="!employee.password"
+                @click="updateEmployee(null, employee.password)"
+              >
+                Save
+              </b-button>
+            </td>
+          </tr>
+        </table>
+
+      </b-overlay>
+    </div>
+    <div>
+      <span id="error" v-if="errorEmployee" style="color: red"
+        >Error: {{ errorEmployee }}
+      </span>
+    </div>
+  </div>
+</template>
 
 <script>
+import { LOGIN_STATE } from "../common/StateScript";
+import { AXIOS } from "../common/AxiosScript";
 export default {
   name: "ManageStaffProfile",
+  data() {
+    return {
+      employee: "",
+      username: LOGIN_STATE.state.username,
+      userType: LOGIN_STATE.state.userType,
+      isLoading: false,
+      errorEmployee: "",
+      variant: "light",
+      response: [],
+    };
+  },
+  created: function () {
+    this.isLoading = true;
+    AXIOS.get("/employee/".concat(LOGIN_STATE.state.username))
+      .then(response => {
+        this.employee = response.data;
+      })
+      .catch(e => {
+        var errorMsg = e.response.data.message;
+        console.log(errorMsg);
+        this.errorEmployee = errorMsg;
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  },
+  methods: {
+    updateEmployee: function (email, password) {
+      this.isLoading = true;
+      AXIOS.patch(
+        "/employee/".concat(LOGIN_STATE.state.username),
+        {},
+        {
+          params: {
+            email: email,
+            password: password,
+          },
+        }
+      )
+        .then(response => {
+          this.errorEmployee = "";
+        })
+        .catch(e => {
+          var errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.errorEmployee = errorMsg;
+        })
+        .finally(() => {
+          if (this.errorEmployee === "") {
+            window.location.reload();
+          }
+          this.isLoading = false;
+        });
+    },
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+div {
+  line-height: 40px;
+}
+input[type="text"] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #727272;
+}
+#error {
+  position: absolute;
+  top: 210px;
+  right: 500px;
+}
+#managestaffprofile {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 750px;
+}
+</style>

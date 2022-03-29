@@ -71,6 +71,15 @@
             >View Schedules</b-button
           >
         </router-link>
+
+        <router-link to="/PointOfSale">
+          <b-button 
+          block variant="danger btn" 
+          v-if="isOwner"
+          v-on:click="purgePOSCarts()"
+            >Purge All POS Carts</b-button
+          >
+        </router-link>
       </div>
 
       <template #overlay>
@@ -85,6 +94,7 @@
 
 <script>
 import { LOGIN_STATE } from "../common/StateScript";
+import { AXIOS } from "../common/AxiosScript";
 
 export default {
   name: "StaffDashboard",
@@ -95,8 +105,16 @@ export default {
         LOGIN_STATE.state.userType === "Employee",
       isOwner: 
         LOGIN_STATE.state.userType === "Owner",
+        isLoading: false,
     };
   },
+
+  methods: {
+    purgePOSCarts() {
+      this.isLoading = true;
+      AXIOS.delete("/purchase/pos/delete")
+    }
+  }
 };
 </script>
 
