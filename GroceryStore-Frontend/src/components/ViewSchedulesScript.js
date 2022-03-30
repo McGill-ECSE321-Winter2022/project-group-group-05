@@ -28,6 +28,8 @@ export default {
     StaffDashboard,
   },
   created: async function () {
+    this.isEmployeeLoggedIn =
+      LOGIN_STATE.state.isLoggedIn && LOGIN_STATE.state.userType === "Employee";
     await AXIOS.get(
       "/employee/".concat(LOGIN_STATE.state.username).concat("/getSchedules")
     )
@@ -107,6 +109,7 @@ export default {
   },
   data() {
     return {
+      isEmployeeLoggedIn: false,
       /**
        * List of EmployeeSchedules organized by week
        *    Each element in scheduledShiftsByWeek has two fields:
