@@ -34,10 +34,21 @@
           </b-button>
           <hr />
         </div>
-      </div>
 
-      <div class="text-center" v-show="posError">
-        <p style="color: red">{{ posError }}</p>
+        <div class="text-center" v-show="posError">
+          <p style="color: red">{{ posError }}</p>
+        </div>
+
+        <b-button @click="addItem('Bar of Chocolate 100g', 3)"
+          >Add item</b-button
+        >
+
+        <b-table
+          id="cart-items-table"
+          borderless
+          hovernpm
+          :items="cart['specificItems']"
+        ></b-table>
       </div>
 
       <template #overlay>

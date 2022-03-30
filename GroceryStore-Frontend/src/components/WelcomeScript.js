@@ -18,21 +18,83 @@ export default {
       openingHours: [],
       holidays: [],
       nextHolidayDate: "",
-      nextholidayName: "",
-      inStockItems: [],
+      nextHolidayName: "",
       cart: "",
       // item browsing
-      perPage: 10,
+      itemListFields: [
+        {
+          key: "name",
+          sortable: true,
+        },
+        {
+          key: "image",
+          label: "",
+          sortable: false,
+        },
+        {
+          key: "price",
+          sortable: true,
+        },
+        {
+          key: "inventory",
+          label: "",
+          sortable: false,
+        },
+        {
+          key: "canDeliver",
+          label: "",
+          sortable: false,
+        },
+        {
+          key: "canPickUp",
+          label: "",
+          sortable: false,
+        },
+      ],
+      itemList: [],
+      perPage: 3,
       currentPage: 1,
       clickedItem: "",
       addQuantity: 1,
       addItemError: "",
       addItemSuccess: "",
+      // item filtering
+      itemSearchQuery: "",
+      selectedCategory: "",
+      mustCanDeliver: false,
+      mustCanPickUp: false,
+      mustAvailableOnline: false,
+      showOutOfStock: false,
     };
   },
   computed: {
     numRows() {
-      return this.inStockItems.length;
+      return this.filteredItemList.length;
+    },
+    filteredItemList() {
+      return this.itemList.filter(item => {
+        if (!item["discontinued"]) {
+          if (!this.showOutOfStock && !(item["inventory"] > 0)) {
+            return false;
+          }
+          if (this.mustCanDeliver && !item["canDeliver"]) {
+            return false;
+          }
+          if (this.mustCanPickUp && !item["canPickUp"]) {
+            return false;
+          }
+          if (
+            this.mustAvailableOnline &&
+            !(item["canDeliver"] || item["canPickUp"])
+          ) {
+            return false;
+          }
+          return item["name"]
+            .toLowerCase()
+            .includes(this.itemSearchQuery.trim().toLowerCase());
+        }
+        return false;
+      });
     },
   },
   created: async function () {
@@ -82,7 +144,7 @@ export default {
         this.holidays = response.data;
         if (this.holidays.length > 0) {
           this.nextHolidayDate = this.holidays[0]["date"];
-          this.nextholidayName = this.holidays[0]["name"];
+          this.nextHolidayName = this.holidays[0]["name"];
         }
       })
       .catch(e => {
@@ -102,17 +164,7 @@ export default {
         console.log(e);
       });
     this.isLoading = false;
-    // items
-    this.isItemLoading = true;
-    // upon creation, fetch in-stock items
-    await AXIOS.get("/item/allInStock", {})
-      .then(response => {
-        this.inStockItems = response.data;
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    this.isItemLoading = false;
+    await this.fetchItems();
   },
   methods: {
     logout: function () {
@@ -147,8 +199,14 @@ export default {
       } else if (!this.isCustomer || LOGIN_STATE.state.username === "kiosk") {
         this.$bvModal.show("add-item-denied");
       } else {
-        this.clickedItem = item;
-        this.$bvModal.show("add-item-dialog");
+        if (item["canDeliver"] || item["canPickUp"]) {
+          this.clickedItem = item;
+          this.$bvModal.show("add-item-dialog");
+        } else {
+          this.addItemError =
+            "Sorry, but this item is not available for purchase online. Please visit us in-store!";
+          this.$bvModal.show("add-item-error");
+        }
       }
     },
     addItemToCart: async function () {
@@ -165,7 +223,7 @@ export default {
           },
         }
       )
-        .then(response => {
+        .then(() => {
           let msg =
             "Successfully added " +
             this.addQuantity +
@@ -183,6 +241,31 @@ export default {
           this.$bvModal.show("add-item-error");
         });
       this.isLoading = false;
+      this.isItemLoading = false;
+    },
+    fetchItems: async function () {
+      this.isItemLoading = true;
+      if (this.selectedCategory === "") {
+        // fetch all items if no category is selected
+        await AXIOS.get("/item/getAll", {})
+          .then(response => {
+            this.itemList = response.data;
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      } else {
+        await AXIOS.get(
+          "/itemCategory/".concat(this.selectedCategory).concat("/getItems"),
+          {}
+        )
+          .then(response => {
+            this.itemList = response.data;
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
       this.isItemLoading = false;
     },
   },
@@ -325,7 +408,7 @@ function createEmployee() {
         {},
         {
           params: {
-            newPassword: "kiosk",
+            password: "worker1",
           },
         }
       )
