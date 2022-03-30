@@ -14,8 +14,9 @@
 
             <b-col>
               <h1>Manage Your Profile</h1>
+              <br>
 
-              <div>
+              <div id="manage-col">
 
                 <div v-if="userType === 'Employee'">
                   <table>
@@ -228,14 +229,15 @@ input[type="text"] {
   border: none;
   border-bottom: 1px solid #727272;
 }
-
 #manage-outer {
   width: 1000px;
   margin-left: auto;
   margin-right: auto;
 }
-
 #manage-inner {
   padding: 100px;
+}
+#manage-col {
+  text-align: left;
 }
 </style>
