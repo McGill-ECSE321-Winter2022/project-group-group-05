@@ -11,6 +11,18 @@ export default {
       LOGIN_STATE.state.userType === "Customer" &&
       LOGIN_STATE.state.username !== "kiosk";
     if (this.isCustomerLoggedIn) {
+      // fetch customer to check if address is local
+      await AXIOS.get(
+        "/customer/".concat(LOGIN_STATE.state.username))
+        .then(response => {
+          this.isLocal = response.data.isLocal;
+        })
+        .catch(error => {
+          // An error will be thrown if the customer logged in does not exist
+          // Generally this error should not occur
+          console.log(error.response.data.message);
+          this.errorMessage = error.response.data.message;
+        });
       await AXIOS.post(
         "/purchase/cart",
         {},
@@ -73,6 +85,7 @@ export default {
       cartId: 0,
 
       isDelivery: false,
+      isLocal: false,
 
       // error checking
       errorMessage: "",
@@ -86,6 +99,11 @@ export default {
       this.items.forEach(item => {
         total += item.purchaseQuantity * item.purchasePrice;
       });
+      // If the customer is not local to the town and requests delivery, 
+      // add a flat 10 dollar shipping fee.
+      if (!this.isLocal && this.isDelivery) {
+        total += 10;
+      }
       return (Math.round(total * 100) / 100).toFixed(2);
     },
   },
