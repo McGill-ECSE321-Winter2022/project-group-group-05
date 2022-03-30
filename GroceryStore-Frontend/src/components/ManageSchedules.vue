@@ -30,7 +30,12 @@
                 sticky-header="85vh"
               >
                 <template #cell(modify_schedule)="row">
-                  <b-button size="sm" variant="outline-primary" @click="row.toggleDetails" class="mr-2">
+                  <b-button
+                    size="sm"
+                    variant="outline-primary"
+                    @click="row.toggleDetails"
+                    class="mr-2"
+                  >
                     {{ row.detailsShowing ? "Hide" : "Show" }} Assigned Shifts
                   </b-button>
                 </template>
@@ -140,7 +145,10 @@
             <b-col cols="3">
               <div class="shift_header_style bg-light">
                 <h2>Available Shifts</h2>
-                <b-button variant="outline-primary" style="margin-bottom: 10px" v-b-modal.createShift
+                <b-button
+                  variant="outline-primary"
+                  style="margin-bottom: 10px"
+                  v-b-modal.createShift
                   >Create a New Shift</b-button
                 >
                 <b-modal
