@@ -40,8 +40,8 @@ export default {
     draggable,
   },
   created: async function () {
-    this.ownerLoggedIn = true;
-    LOGIN_STATE.state.isLoggedIn && LOGIN_STATE.state.userType === "owner";
+    this.ownerLoggedIn =
+      LOGIN_STATE.state.isLoggedIn && LOGIN_STATE.state.userType === "Owner";
     this.selectedShift = "";
     this.errorMessage = "";
     await AXIOS.get("/employee/getAll")
@@ -85,6 +85,9 @@ export default {
       create_shiftName: "",
       create_shiftStartTime: "",
       create_shiftEndTime: "",
+      // Indicates whether the user tried to make an item
+      // If true, the form will evaluate the validity of the inputs
+      creationAttempt: false,
     };
   },
   computed: {
@@ -110,20 +113,28 @@ export default {
     },
     // Computed Data for determining the validity of the inputs to the Create Shift form.
     isShiftNameValid: function () {
-      return this.create_shiftEndTime === "" &&
-        this.create_shiftStartTime === "" &&
-        this.create_shiftName === ""
-        ? null
-        : this.create_shiftName !== "";
+      if (
+        this.create_shiftStartTime !== "" &&
+        this.create_shiftEndTime !== "" &&
+        this.create_shiftName !== ""
+      ) {
+        this.creationAttempt = true;
+      }
+      return this.creationAttempt ? this.create_shiftName !== "" : null;
     },
     isTimeValid: function () {
-      return this.create_shiftEndTime === "" &&
-        this.create_shiftStartTime === "" &&
-        this.create_shiftName === ""
-        ? null
-        : moment(this.create_shiftEndTime, "HH:mm").isAfter(
+      if (
+        this.create_shiftStartTime !== "" &&
+        this.create_shiftEndTime !== "" &&
+        this.create_shiftName !== ""
+      ) {
+        this.creationAttempt = true;
+      }
+      return this.creationAttempt
+        ? moment(this.create_shiftEndTime, "HH:mm").isAfter(
             moment(this.create_shiftStartTime, "HH:mm")
-          );
+          )
+        : null;
     },
   },
   methods: {
@@ -286,6 +297,7 @@ export default {
       this.create_shiftName = "";
       this.create_shiftStartTime = "";
       this.create_shiftEndTime = "";
+      this.creationAttempt = false;
     },
     handleOk(okEvent) {
       // Prevent the default function of the "ok" button in b-modal and replace with custom function
@@ -293,6 +305,7 @@ export default {
       this.createNewShift();
     },
     async createNewShift() {
+      this.creationAttempt = true;
       if (this.isShiftNameValid && this.isTimeValid) {
         await AXIOS.post(
           "/shift/".concat(this.create_shiftName),
@@ -316,7 +329,6 @@ export default {
         this.$nextTick(() => {
           this.$bvModal.hide("createShift");
         });
-        return;
       }
     },
     async deleteShift(shiftName) {
