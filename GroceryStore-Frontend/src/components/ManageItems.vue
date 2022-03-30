@@ -75,7 +75,7 @@
                                 ></b-form-input>
                               </b-form-group>
                               <b-form-group
-                                label="Image"
+                                label="Image URL"
                                 label-for="image-input"
                               >
                                 <b-form-input
@@ -201,7 +201,7 @@
                   ><b-col
                     ><form ref="form">
                       <b-form-group
-                        label="Image"
+                        label="Image URL"
                         label-for="image-modify-input"
                       >
                         <b-form-input
