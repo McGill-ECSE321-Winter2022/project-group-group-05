@@ -2,135 +2,117 @@
 <!--Modify the staff's own account infos-->
 <!--Landing page of logging in as a staff-->
 <template>
-  <div>
-    <div id="managestaffprofile" v-if="userType === 'Employee'">
-      <b-overlay
-        id="overlay"
-        :show="isLoading"
-        :variant="variant"
-        :opacity="0.85"
-        rounded="sm"
-      >
+  <div id="manage-outer">
+    <b-overlay :show="isLoading" rounded="sm">
+      <div :aria-hidden="isLoading ? 'true' : null" id="manage-inner">
         <h1>Manage Your Profile</h1>
-        <br />
-        <table>
-          <tr>
-            <td>Username:</td>
-            <td>{{ username }}</td>
-          </tr>
-          <br />
-          <tr>
-            <td>Email:</td>
-            <td>
-              <input type="text" v-model="employee.email" placeholder="Email" />
-            </td>
-            <td>
-              <b-button
-                variant="outline-primary"
-                v-bind:disabled="!employee.email"
-                @click="updateEmployee(employee.email, null)"
-              >
-                Save
-              </b-button>
-            </td>
-          </tr>
-          <br />
-          <tr>
-            <td>Password:</td>
-            <td>
-              <input
-                type="text"
-                v-model="employee.password"
-                placeholder="Password"
-              />
-            </td>
-            <td>
-              <b-button
-                variant="outline-primary"
-                v-bind:disabled="!employee.password"
-                @click="updateEmployee(null, employee.password)"
-              >
-                Save
-              </b-button>
-            </td>
-          </tr>
-        </table>
+        <br>
 
-      </b-overlay>
-    </div>
-    <div>
-      <span id="error" v-if="errorEmployee" style="color: red"
-        >Error: {{ errorEmployee }}
-      </span>
-    </div>
+        <div v-if="userType === 'Employee'">
+          <table>
+            <tr>
+              <td>Username:</td>
+              <td>{{ username }}</td>
+            </tr>
+            <br />
+            <tr>
+              <td>Email:</td>
+              <td>
+                <input type="text" v-model="employee.email" placeholder="Email" />
+              </td>
+              <td>
+                <b-button
+                  variant="outline-primary"
+                  v-bind:disabled="!employee.email"
+                  @click="updateEmployee(employee.email, null)"
+                >
+                  Save
+                </b-button>
+              </td>
+            </tr>
+            <br />
+            <tr>
+              <td>Password:</td>
+              <td>
+                <input
+                  type="text"
+                  v-model="employee.password"
+                  placeholder="Password"
+                />
+              </td>
+              <td>
+                <b-button
+                  variant="outline-primary"
+                  v-bind:disabled="!employee.password"
+                  @click="updateEmployee(null, employee.password)"
+                >
+                  Save
+                </b-button>
+              </td>
+            </tr>
+          </table>
+          <div class="text-center" v-show="errorEmployee">
+            <p style="color: red">{{ errorEmployee }}</p>
+          </div>
+        </div>
 
-    <div id="managestaffprofile" v-if="userType === 'Owner'">
-      <b-overlay
-        id="overlay"
-        :show="isLoading"
-        :variant="variant"
-        :opacity="0.85"
-        rounded="sm"
-      >
-        <h1>Manage Your Profile</h1>
-        <br />
-        <table>
-          <tr>
-            <td>Username:</td>
-            <td>{{ username }}</td>
-          </tr>
-          <br />
-          <tr>
-            <td>Email:</td>
-            <td>
-              <input type="text" v-model="owner.email" placeholder="Email" />
-            </td>
-            <td>
-              <b-button
-                variant="outline-primary"
-                v-bind:disabled="!owner.email"
-                @click="updateOwner(owner.email, null)"
-              >
-                Save
-              </b-button>
-            </td>
-          </tr>
-          <br />
-          <tr>
-            <td>Password:</td>
-            <td>
-              <input
-                type="text"
-                v-model="owner.password"
-                placeholder="Password"
-              />
-            </td>
-            <td>
-              <b-button
-                variant="outline-primary"
-                v-bind:disabled="!owner.password"
-                @click="updateOwner(null, owner.password)"
-              >
-                Save
-              </b-button>
-            </td>
-          </tr>
-        </table>
+        <div v-if="userType === 'Owner'">
+          <table>
+            <tr>
+              <td>Username:</td>
+              <td>{{ username }}</td>
+            </tr>
+            <br />
+            <tr>
+              <td>Email:</td>
+              <td>
+                <input type="text" v-model="owner.email" placeholder="Email" />
+              </td>
+              <td>
+                <b-button
+                  variant="outline-primary"
+                  v-bind:disabled="!owner.email"
+                  @click="updateOwner(owner.email, null)"
+                >
+                  Save
+                </b-button>
+              </td>
+            </tr>
+            <br />
+            <tr>
+              <td>Password:</td>
+              <td>
+                <input
+                  type="text"
+                  v-model="owner.password"
+                  placeholder="Password"
+                />
+              </td>
+              <td>
+                <b-button
+                  variant="outline-primary"
+                  v-bind:disabled="!owner.password"
+                  @click="updateOwner(null, owner.password)"
+                >
+                  Save
+                </b-button>
+              </td>
+            </tr>
+          </table>
+          <div class="text-center" v-show="errorOwner">
+            <p style="color: red">{{ errorOwner }}</p>
+          </div>
+        </div>
 
-      </b-overlay>
-    </div>
-    <div>
-      <span id="error" v-if="errorOwner" style="color: red"
-        >Error: {{ errorOwner }}
-      </span>
-    </div>
-
+      </div>
+    </b-overlay>
   </div>
 </template>
 
 <script>
 import { LOGIN_STATE } from "../common/StateScript";
 import { AXIOS } from "../common/AxiosScript";
+
 export default {
   name: "ManageStaffProfile",
   data() {
@@ -147,7 +129,7 @@ export default {
     };
   },
 
-  created: function () {
+  created: function() {
     this.isLoading = true;
     AXIOS.get("/employee/".concat(LOGIN_STATE.state.username))
       .then(response => {
@@ -156,11 +138,12 @@ export default {
       })
 
       .catch(e => {
-        AXIOS.get("/owner/".concat(LOGIN_STATE.state.username))
-        .then(response => {
-          this.owner = response.data;
-          this.isLoading = false;
-        })
+        AXIOS.get("/owner/".concat(LOGIN_STATE.state.username)).then(
+          response => {
+            this.owner = response.data;
+            this.isLoading = false;
+          },
+        );
       })
 
       .catch(e => {
@@ -173,11 +156,10 @@ export default {
         var errorMsg = e.response.data.message;
         console.log(errorMsg);
         this.errorOwner = errorMsg;
-      })
-
+      });
   },
   methods: {
-    updateEmployee: function (email, password) {
+    updateEmployee: function(email, password) {
       this.isLoading = true;
       AXIOS.patch(
         "/employee/".concat(LOGIN_STATE.state.username),
@@ -187,7 +169,7 @@ export default {
             email: email,
             password: password,
           },
-        }
+        },
       )
         .then(response => {
           this.errorEmployee = "";
@@ -204,7 +186,7 @@ export default {
           this.isLoading = false;
         });
     },
-    updateOwner: function (email, password) {
+    updateOwner: function(email, password) {
       this.isLoading = true;
       AXIOS.patch(
         "/owner/".concat(LOGIN_STATE.state.username),
@@ -214,7 +196,7 @@ export default {
             email: email,
             password: password,
           },
-        }
+        },
       )
         .then(response => {
           this.errorOwner = "";
@@ -236,25 +218,20 @@ export default {
 </script>
 
 <style scoped>
-div {
-  line-height: 40px;
-}
 input[type="text"] {
   background: transparent;
   border: none;
   border-bottom: 1px solid #727272;
 }
-#error {
-  position: absolute;
-  top: 210px;
-  right: 500px;
+
+#manage-outer {
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
 }
-#managestaffprofile {
-  text-align: center;
-  position: fixed;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 750px;
+
+#manage-inner {
+  padding: 100px;
 }
 </style>
