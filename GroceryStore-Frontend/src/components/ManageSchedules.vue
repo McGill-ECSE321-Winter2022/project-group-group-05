@@ -30,7 +30,7 @@
                 sticky-header="85vh"
               >
                 <template #cell(modify_schedule)="row">
-                  <b-button size="sm" @click="row.toggleDetails" class="mr-2">
+                  <b-button size="sm" variant="outline-primary" @click="row.toggleDetails" class="mr-2">
                     {{ row.detailsShowing ? "Hide" : "Show" }} Assigned Shifts
                   </b-button>
                 </template>
@@ -39,20 +39,20 @@
                     <b-button-group>
                       <b-button
                         class="button_style"
-                        variant="outline-dark"
+                        variant="outline-primary"
                         @click="stepBackWeek(row.index)"
                         >&lsaquo;</b-button
                       >
                       <b-button
                         class="button_style"
-                        variant="outline-dark"
+                        variant="outline-primary"
                         v-bind:disabled="isWeekPresent[row.index]"
                         @click="returnToLatestWeek(row.index)"
                         >Return to this Week</b-button
                       >
                       <b-button
                         class="button_style"
-                        variant="outline-dark"
+                        variant="outline-primary"
                         @click="stepForwardWeek(row.index)"
                         >&rsaquo;</b-button
                       >
@@ -140,7 +140,7 @@
             <b-col cols="3">
               <div class="shift_header_style bg-light">
                 <h2>Available Shifts</h2>
-                <b-button style="margin-bottom: 10px" v-b-modal.createShift
+                <b-button variant="outline-primary" style="margin-bottom: 10px" v-b-modal.createShift
                   >Create a New Shift</b-button
                 >
                 <b-modal
@@ -219,6 +219,7 @@
                       >
                       <b-button
                         size="sm"
+                        variant="outline-primary"
                         style="margin-top: 10px"
                         @click="deleteShift(shift.name)"
                         >Delete Shift</b-button
