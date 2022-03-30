@@ -10,9 +10,9 @@ export default {
   },
   created: async function () {
     this.isOwnerLoggedIn =
-      LOGIN_STATE.state.userType === "owner" && LOGIN_STATE.state.isLoggedIn;
+      LOGIN_STATE.state.userType === "Owner" && LOGIN_STATE.state.isLoggedIn;
     this.isEmployeeLoggedIn =
-      LOGIN_STATE.state.userType === "employee" && LOGIN_STATE.state.isLoggedIn;
+      LOGIN_STATE.state.userType === "Employee" && LOGIN_STATE.state.isLoggedIn;
     await AXIOS.get("/item/getAll")
       .then(response => {
         this.fetchedItems = response.data;
