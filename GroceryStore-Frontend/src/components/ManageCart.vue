@@ -108,6 +108,7 @@
                 readonly
                 class="text-right"
               ></b-form-input>
+              <div class="fee_label_style"><i>{{ !isLocal && isDelivery ? "+$10.00 Delivery Fee" : "" }}</i></div>
             </b-input-group>
             <b-input-group prepend="Order Type: "
               ><b-form
@@ -163,5 +164,12 @@
   width: 60%;
   margin: auto;
   margin-bottom: 20px;
+}
+.fee_label_style {
+  margin-left: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
 }
 </style>
