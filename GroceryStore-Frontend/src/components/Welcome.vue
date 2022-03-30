@@ -114,10 +114,18 @@
           <b-row>
             <b-col md="auto" style="text-align: left">
               <h5>Filters</h5>
-              <b-checkbox v-model="mustCanDeliver">available for delivery</b-checkbox>
-              <b-checkbox v-model="mustCanPickUp">available for pick-up</b-checkbox>
-              <b-checkbox v-model="mustAvailableOnline">available online</b-checkbox>
-              <b-checkbox v-model="showOutOfStock">show out-of-stock items</b-checkbox>
+              <b-checkbox v-model="mustCanDeliver"
+                >available for delivery</b-checkbox
+              >
+              <b-checkbox v-model="mustCanPickUp"
+                >available for pick-up</b-checkbox
+              >
+              <b-checkbox v-model="mustAvailableOnline"
+                >available online</b-checkbox
+              >
+              <b-checkbox v-model="showOutOfStock"
+                >show out-of-stock items</b-checkbox
+              >
             </b-col>
 
             <b-col>
