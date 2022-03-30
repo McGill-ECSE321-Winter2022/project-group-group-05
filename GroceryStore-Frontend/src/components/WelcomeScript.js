@@ -408,7 +408,7 @@ function createEmployee() {
         {},
         {
           params: {
-            newPassword: "worker1",
+            password: "worker1",
           },
         }
       )
