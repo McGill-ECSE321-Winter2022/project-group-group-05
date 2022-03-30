@@ -3,7 +3,8 @@
 <template>
   <b-container fluid>
     <b-row align-v="stretch">
-      <b-col>
+      <b-col><staff-dashboard></staff-dashboard></b-col>
+      <b-col cols="10">
         <h1 class="header_style">Manage Schedules</h1>
         <b-alert show variant="danger" v-if="!ownerLoggedIn"
           ><h4 class="alert-heading">Error:</h4>
