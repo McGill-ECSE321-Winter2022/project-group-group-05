@@ -9,49 +9,53 @@
       :opacity="0.85"
       rounded="sm"
     >
-    <StaffDashboard></StaffDashboard>
-    <h1 class="header_style">Manage Paid Orders</h1>
-    <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
-      <div id="header">
-        <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
-        <td class="tdstyle">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
-        <td class="tdstyle">Order# {{ purchase.id }} &nbsp;</td>
-        <td class="tdstyle">Order type: {{ orderType(purchase) }} &nbsp;</td>
-        <td>
-          <b-button
-            pill
-            variant="info"
-            id="Prepare"
-            v-on:click="prepare(purchase.id)"
-            >Prepare Order</b-button
-          >
-        </td>
-      </div>
-      <table id="itemTable">
-        <tr>
-          <th>item</th>
-          <th>price</th>
-          <th>quantity</th>
-        </tr>
-        <tr
-          v-for="specificItem in purchase.specificItems"
-          :key="specificItem.id"
-        >
-          <td>{{ specificItem.item.name }}</td>
-          <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
+      <StaffDashboard></StaffDashboard>
+      <h1 class="header_style">Manage Paid Orders</h1>
+      <table
+        id="purchaseTable"
+        v-for="purchase in purchases"
+        :key="purchase.id"
+      >
+        <div id="header">
+          <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
+          <td class="tdstyle">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
+          <td class="tdstyle">Order# {{ purchase.id }} &nbsp;</td>
+          <td class="tdstyle">Order type: {{ orderType(purchase) }} &nbsp;</td>
           <td>
-            {{ specificItem.purchaseQuantity }}
+            <b-button
+              pill
+              variant="info"
+              id="Prepare"
+              v-on:click="prepare(purchase.id)"
+              >Prepare Order</b-button
+            >
           </td>
+        </div>
+        <table id="itemTable">
+          <tr>
+            <th>item</th>
+            <th>price</th>
+            <th>quantity</th>
+          </tr>
+          <tr
+            v-for="specificItem in purchase.specificItems"
+            :key="specificItem.id"
+          >
+            <td>{{ specificItem.item.name }}</td>
+            <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
+            <td>
+              {{ specificItem.purchaseQuantity }}
+            </td>
+          </tr>
+        </table>
+        <hr />
+        <tr id="totalPrice">
+          Total: ${{
+            purchase.total | formatCurrency
+          }}
         </tr>
+        <br />
       </table>
-      <hr />
-      <tr id="totalPrice">
-        Total: ${{
-          purchase.total | formatCurrency
-        }}
-      </tr>
-      <br />
-    </table>
     </b-overlay>
   </div>
 </template>
@@ -112,5 +116,4 @@
   right: 200px;
   bottom: 10px;
 }
-
 </style>

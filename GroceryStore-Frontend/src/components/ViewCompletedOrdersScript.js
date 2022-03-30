@@ -18,27 +18,27 @@ export default {
   created: function () {
     this.isLoading = true;
     AXIOS.get("/purchase/allCompleted", {}, {})
-        .then(response => {
-          this.errorPurchase = "";
-          this.purchases = response.data;
-        })
-        .catch(e => {
-          var errorMsg = e.response.data.message;
-          console.log(errorMsg);
-          this.errorPurchase = errorMsg;
-        })
-        .then(response => {
-          this.purchases.forEach(function (purchase) {
-            var total = 0;
-            purchase.specificItems.forEach(function (specificItem) {
-              total += specificItem.purchaseQuantity * specificItem.purchasePrice;
-            });
-            purchase.total = total;
+      .then(response => {
+        this.errorPurchase = "";
+        this.purchases = response.data;
+      })
+      .catch(e => {
+        var errorMsg = e.response.data.message;
+        console.log(errorMsg);
+        this.errorPurchase = errorMsg;
+      })
+      .then(response => {
+        this.purchases.forEach(function (purchase) {
+          var total = 0;
+          purchase.specificItems.forEach(function (specificItem) {
+            total += specificItem.purchaseQuantity * specificItem.purchasePrice;
           });
-        })
-        .finally(() => {
-          this.isLoading = false;
+          purchase.total = total;
         });
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   },
   methods: {
     orderType(purchase) {

@@ -9,42 +9,45 @@
       :opacity="0.85"
       rounded="sm"
     >
-    <StaffDashboard></StaffDashboard>
-    <h1 class="header_style">Completed Orders</h1>
-    
-    <table id="purchaseTable" v-for="purchase in purchases" :key="purchase.id">
-      <div id="header">
-        <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
-        <td class="tdstyle">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
-        <td class="tdstyle">Order# {{ purchase.id }} &nbsp;</td>
-        <td class="tdstyle">Order type: {{ orderType(purchase) }} &nbsp;</td>
-      </div>
-      <table id="itemTable">
-        <tr>
-          <th>item</th>
-          <th>price</th>
-          <th>quantity</th>
+      <StaffDashboard></StaffDashboard>
+      <h1 class="header_style">Completed Orders</h1>
+
+      <table
+        id="purchaseTable"
+        v-for="purchase in purchases"
+        :key="purchase.id"
+      >
+        <div id="header">
+          <td class="tdstyle">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
+          <td class="tdstyle">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
+          <td class="tdstyle">Order# {{ purchase.id }} &nbsp;</td>
+          <td class="tdstyle">Order type: {{ orderType(purchase) }} &nbsp;</td>
+        </div>
+        <table id="itemTable">
+          <tr>
+            <th>item</th>
+            <th>price</th>
+            <th>quantity</th>
+          </tr>
+          <tr
+            v-for="specificItem in purchase.specificItems"
+            :key="specificItem.id"
+          >
+            <td>{{ specificItem.item.name }}</td>
+            <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
+            <td>
+              {{ specificItem.purchaseQuantity }}
+            </td>
+          </tr>
+        </table>
+        <hr />
+        <tr id="totalPrice">
+          Total: ${{
+            purchase.total | formatCurrency
+          }}
         </tr>
-        <tr
-          v-for="specificItem in purchase.specificItems"
-          :key="specificItem.id"
-        >
-          <td>{{ specificItem.item.name }}</td>
-          <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
-          <td>
-            {{ specificItem.purchaseQuantity }}
-          </td>
-        </tr>
+        <br />
       </table>
-      <hr />
-      <tr id="totalPrice">
-        Total: ${{
-          purchase.total | formatCurrency
-        }}
-        
-      </tr>
-      <br />
-    </table>
     </b-overlay>
   </div>
 </template>

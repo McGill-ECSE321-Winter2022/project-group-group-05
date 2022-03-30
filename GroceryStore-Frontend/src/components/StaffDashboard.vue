@@ -9,7 +9,6 @@
   <div id="dashboard-outer">
     <b-overlay :show="isLoading" rounded="sm">
       <div :aria-hidden="isLoading ? 'true' : null" id="dashboard-inner">
-
         <router-link to="/ManageCategories">
           <b-button squared block size="lg" variant="success btn" v-if="isOwner"
             >Manage Categories</b-button
@@ -17,7 +16,12 @@
         </router-link>
 
         <router-link to="/ManageCustomers">
-          <b-button squared block size="lg" variant="success btn" v-if="isEmployee || isOwner"
+          <b-button
+            squared
+            block
+            size="lg"
+            variant="success btn"
+            v-if="isEmployee || isOwner"
             >Manage Customers</b-button
           >
         </router-link>
@@ -29,7 +33,12 @@
         </router-link>
 
         <router-link to="/ManageItems">
-          <b-button squared block size="lg" variant="success btn" v-if="isEmployee || isOwner"
+          <b-button
+            squared
+            block
+            size="lg"
+            variant="success btn"
+            v-if="isEmployee || isOwner"
             >Manage Items</b-button
           >
         </router-link>
@@ -41,7 +50,12 @@
         </router-link>
 
         <router-link to="/ManagePaidOrders">
-          <b-button squared block size="lg" variant="success btn" v-if="isEmployee || isOwner"
+          <b-button
+            squared
+            block
+            size="lg"
+            variant="success btn"
+            v-if="isEmployee || isOwner"
             >Manage Paid Orders</b-button
           >
         </router-link>
@@ -53,24 +67,46 @@
         </router-link>
 
         <router-link to="/ManageStaffProfile">
-          <b-button squared block size="lg" variant="success btn" v-if="isEmployee || isOwner"
+          <b-button
+            squared
+            block
+            size="lg"
+            variant="success btn"
+            v-if="isEmployee || isOwner"
             >Manage Staff Profile</b-button
           >
         </router-link>
 
         <router-link to="/ViewCompletedOrders">
-          <b-button squared block size="lg" variant="success btn" v-if="isEmployee || isOwner"
+          <b-button
+            squared
+            block
+            size="lg"
+            variant="success btn"
+            v-if="isEmployee || isOwner"
             >View Completed Orders</b-button
           >
         </router-link>
 
         <router-link to="/ViewSchedules">
-          <b-button squared block size="lg" variant="success btn" v-if="isEmployee"
+          <b-button
+            squared
+            block
+            size="lg"
+            variant="success btn"
+            v-if="isEmployee"
             >View Schedules</b-button
           >
         </router-link>
 
-        <b-button squared block size="lg" variant="danger" v-if="isOwner" v-on:click="purgePOSCarts()">
+        <b-button
+          squared
+          block
+          size="lg"
+          variant="danger"
+          v-if="isOwner"
+          v-on:click="purgePOSCarts()"
+        >
           Purge All POS Carts
         </b-button>
       </div>
@@ -94,26 +130,23 @@ export default {
   data() {
     return {
       LOGIN_STATE,
-      isEmployee:
-        LOGIN_STATE.state.userType === "Employee",
-      isOwner:
-        LOGIN_STATE.state.userType === "Owner",
-        isLoading: false,
+      isEmployee: LOGIN_STATE.state.userType === "Employee",
+      isOwner: LOGIN_STATE.state.userType === "Owner",
+      isLoading: false,
     };
   },
 
   methods: {
-    purgePOSCarts: async function() {
+    purgePOSCarts: async function () {
       this.isLoading = true;
-      await AXIOS.delete("/purchase/pos/delete")
+      await AXIOS.delete("/purchase/pos/delete");
       this.isLoading = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 #dashboard-inner {
-
 }
 </style>

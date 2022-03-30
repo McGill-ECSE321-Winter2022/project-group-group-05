@@ -6,7 +6,6 @@
     <b-overlay :show="isLoading" rounded="sm">
       <div :aria-hidden="isLoading ? 'true' : null" id="manage-inner">
         <b-container fluid>
-
           <b-row>
             <b-col md="auto">
               <StaffDashboard></StaffDashboard>
@@ -14,10 +13,9 @@
 
             <b-col>
               <h1>Manage Your Profile</h1>
-              <br>
+              <br />
 
               <div id="manage-col">
-
                 <div v-if="userType === 'Employee'">
                   <table>
                     <tr>
@@ -28,7 +26,11 @@
                     <tr>
                       <td>Email:</td>
                       <td>
-                        <input type="text" v-model="employee.email" placeholder="Email" />
+                        <input
+                          type="text"
+                          v-model="employee.email"
+                          placeholder="Email"
+                        />
                       </td>
                       <td>
                         <b-button
@@ -76,7 +78,11 @@
                     <tr>
                       <td>Email:</td>
                       <td>
-                        <input type="text" v-model="owner.email" placeholder="Email" />
+                        <input
+                          type="text"
+                          v-model="owner.email"
+                          placeholder="Email"
+                        />
                       </td>
                       <td>
                         <b-button
@@ -113,11 +119,9 @@
                     <p style="color: red">{{ errorOwner }}</p>
                   </div>
                 </div>
-
               </div>
             </b-col>
           </b-row>
-
         </b-container>
       </div>
     </b-overlay>
@@ -146,26 +150,27 @@ export default {
     };
   },
 
-  created: function() {
+  created: function () {
     this.isLoading = true;
     AXIOS.get("/employee/".concat(LOGIN_STATE.state.username))
       .then(response => {
         this.employee = response.data;
       })
       .catch(() => {
-        AXIOS.get("/owner/".concat(LOGIN_STATE.state.username)).then(
-          response => {
+        AXIOS.get("/owner/".concat(LOGIN_STATE.state.username))
+          .then(response => {
             this.owner = response.data;
-          },
-        ).catch(e => {
-          console.log(e);
-        })
-      }).finally(() => {
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      })
+      .finally(() => {
         this.isLoading = false;
-    });
+      });
   },
   methods: {
-    updateEmployee: function(email, password) {
+    updateEmployee: function (email, password) {
       this.isLoading = true;
       AXIOS.patch(
         "/employee/".concat(LOGIN_STATE.state.username),
@@ -175,7 +180,7 @@ export default {
             email: email,
             password: password,
           },
-        },
+        }
       )
         .then(response => {
           this.errorEmployee = "";
@@ -192,7 +197,7 @@ export default {
           this.isLoading = false;
         });
     },
-    updateOwner: function(email, password) {
+    updateOwner: function (email, password) {
       this.isLoading = true;
       AXIOS.patch(
         "/owner/".concat(LOGIN_STATE.state.username),
@@ -202,7 +207,7 @@ export default {
             email: email,
             password: password,
           },
-        },
+        }
       )
         .then(response => {
           this.errorOwner = "";

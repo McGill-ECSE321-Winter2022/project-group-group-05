@@ -16,8 +16,7 @@ export default {
   },
   created: function () {
     this.isLoading = true;
-    AXIOS.get("/purchase/allPaid", {}, {}
-    )
+    AXIOS.get("/purchase/allPaid", {}, {})
       .then(response => {
         this.errorPurchase = "";
         this.purchases = response.data;
