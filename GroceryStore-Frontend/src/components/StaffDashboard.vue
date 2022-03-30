@@ -139,7 +139,7 @@ export default {
   methods: {
     purgePOSCarts: async function () {
       this.isLoading = true;
-      await AXIOS.delete("/purchase/pos/delete");
+      await AXIOS.delete("/purchase/pos/purge");
       this.isLoading = false;
     },
   },
