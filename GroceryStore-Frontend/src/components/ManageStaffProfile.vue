@@ -2,108 +2,122 @@
 <!--Modify the staff's own account infos-->
 <!--Landing page of logging in as a staff-->
 <template>
-  <div id="manage-outer">
+  <div id="manage-outer" v-if="userType === 'Owner' || userType === 'Employee'">
     <b-overlay :show="isLoading" rounded="sm">
       <div :aria-hidden="isLoading ? 'true' : null" id="manage-inner">
-        <h1>Manage Your Profile</h1>
-        <br>
+        <b-container fluid>
 
-        <div v-if="userType === 'Employee'">
-          <table>
-            <tr>
-              <td>Username:</td>
-              <td>{{ username }}</td>
-            </tr>
-            <br />
-            <tr>
-              <td>Email:</td>
-              <td>
-                <input type="text" v-model="employee.email" placeholder="Email" />
-              </td>
-              <td>
-                <b-button
-                  variant="outline-primary"
-                  v-bind:disabled="!employee.email"
-                  @click="updateEmployee(employee.email, null)"
-                >
-                  Save
-                </b-button>
-              </td>
-            </tr>
-            <br />
-            <tr>
-              <td>Password:</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="employee.password"
-                  placeholder="Password"
-                />
-              </td>
-              <td>
-                <b-button
-                  variant="outline-primary"
-                  v-bind:disabled="!employee.password"
-                  @click="updateEmployee(null, employee.password)"
-                >
-                  Save
-                </b-button>
-              </td>
-            </tr>
-          </table>
-          <div class="text-center" v-show="errorEmployee">
-            <p style="color: red">{{ errorEmployee }}</p>
-          </div>
-        </div>
+          <b-row>
+            <b-col md="auto">
+              <StaffDashboard></StaffDashboard>
+            </b-col>
 
-        <div v-if="userType === 'Owner'">
-          <table>
-            <tr>
-              <td>Username:</td>
-              <td>{{ username }}</td>
-            </tr>
-            <br />
-            <tr>
-              <td>Email:</td>
-              <td>
-                <input type="text" v-model="owner.email" placeholder="Email" />
-              </td>
-              <td>
-                <b-button
-                  variant="outline-primary"
-                  v-bind:disabled="!owner.email"
-                  @click="updateOwner(owner.email, null)"
-                >
-                  Save
-                </b-button>
-              </td>
-            </tr>
-            <br />
-            <tr>
-              <td>Password:</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="owner.password"
-                  placeholder="Password"
-                />
-              </td>
-              <td>
-                <b-button
-                  variant="outline-primary"
-                  v-bind:disabled="!owner.password"
-                  @click="updateOwner(null, owner.password)"
-                >
-                  Save
-                </b-button>
-              </td>
-            </tr>
-          </table>
-          <div class="text-center" v-show="errorOwner">
-            <p style="color: red">{{ errorOwner }}</p>
-          </div>
-        </div>
+            <b-col>
+              <h1>Manage Your Profile</h1>
 
+              <div>
+
+                <div v-if="userType === 'Employee'">
+                  <table>
+                    <tr>
+                      <td>Username:</td>
+                      <td>{{ username }}</td>
+                    </tr>
+                    <br />
+                    <tr>
+                      <td>Email:</td>
+                      <td>
+                        <input type="text" v-model="employee.email" placeholder="Email" />
+                      </td>
+                      <td>
+                        <b-button
+                          variant="outline-primary"
+                          v-bind:disabled="!employee.email"
+                          @click="updateEmployee(employee.email, null)"
+                        >
+                          Save
+                        </b-button>
+                      </td>
+                    </tr>
+                    <br />
+                    <tr>
+                      <td>Password:</td>
+                      <td>
+                        <input
+                          type="text"
+                          v-model="employee.password"
+                          placeholder="Password"
+                        />
+                      </td>
+                      <td>
+                        <b-button
+                          variant="outline-primary"
+                          v-bind:disabled="!employee.password"
+                          @click="updateEmployee(null, employee.password)"
+                        >
+                          Save
+                        </b-button>
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="text-center" v-show="errorEmployee">
+                    <p style="color: red">{{ errorEmployee }}</p>
+                  </div>
+                </div>
+
+                <div v-if="userType === 'Owner'">
+                  <table>
+                    <tr>
+                      <td>Username:</td>
+                      <td>{{ username }}</td>
+                    </tr>
+                    <br />
+                    <tr>
+                      <td>Email:</td>
+                      <td>
+                        <input type="text" v-model="owner.email" placeholder="Email" />
+                      </td>
+                      <td>
+                        <b-button
+                          variant="outline-primary"
+                          v-bind:disabled="!owner.email"
+                          @click="updateOwner(owner.email, null)"
+                        >
+                          Save
+                        </b-button>
+                      </td>
+                    </tr>
+                    <br />
+                    <tr>
+                      <td>Password:</td>
+                      <td>
+                        <input
+                          type="text"
+                          v-model="owner.password"
+                          placeholder="Password"
+                        />
+                      </td>
+                      <td>
+                        <b-button
+                          variant="outline-primary"
+                          v-bind:disabled="!owner.password"
+                          @click="updateOwner(null, owner.password)"
+                        >
+                          Save
+                        </b-button>
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="text-center" v-show="errorOwner">
+                    <p style="color: red">{{ errorOwner }}</p>
+                  </div>
+                </div>
+
+              </div>
+            </b-col>
+          </b-row>
+
+        </b-container>
       </div>
     </b-overlay>
   </div>
@@ -112,9 +126,11 @@
 <script>
 import { LOGIN_STATE } from "../common/StateScript";
 import { AXIOS } from "../common/AxiosScript";
+import StaffDashboard from "./StaffDashboard";
 
 export default {
   name: "ManageStaffProfile",
+  components: { StaffDashboard },
   data() {
     return {
       employee: "",
@@ -134,29 +150,18 @@ export default {
     AXIOS.get("/employee/".concat(LOGIN_STATE.state.username))
       .then(response => {
         this.employee = response.data;
-        this.isLoading = false;
       })
-
-      .catch(e => {
+      .catch(() => {
         AXIOS.get("/owner/".concat(LOGIN_STATE.state.username)).then(
           response => {
             this.owner = response.data;
-            this.isLoading = false;
           },
-        );
-      })
-
-      .catch(e => {
-        var errorMsg = e.response.data.message;
-        console.log(errorMsg);
-        this.errorEmployee = errorMsg;
-      })
-
-      .catch(e => {
-        var errorMsg = e.response.data.message;
-        console.log(errorMsg);
-        this.errorOwner = errorMsg;
-      });
+        ).catch(e => {
+          console.log(e);
+        })
+      }).finally(() => {
+        this.isLoading = false;
+    });
   },
   methods: {
     updateEmployee: function(email, password) {
@@ -225,10 +230,9 @@ input[type="text"] {
 }
 
 #manage-outer {
-  width: 600px;
+  width: 1000px;
   margin-left: auto;
   margin-right: auto;
-  text-align: left;
 }
 
 #manage-inner {
