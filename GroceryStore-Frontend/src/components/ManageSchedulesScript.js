@@ -40,8 +40,8 @@ export default {
     draggable,
   },
   created: async function () {
-    this.ownerLoggedIn;
-    LOGIN_STATE.state.isLoggedIn && LOGIN_STATE.state.userType === "Owner";
+    this.ownerLoggedIn =
+      LOGIN_STATE.state.isLoggedIn && LOGIN_STATE.state.userType === "Owner";
     this.selectedShift = "";
     this.errorMessage = "";
     await AXIOS.get("/employee/getAll")
