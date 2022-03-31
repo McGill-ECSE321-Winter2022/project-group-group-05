@@ -77,7 +77,6 @@
                 id="edit-password-input"
                 v-model="editForm.password"
                 required
-                readonly
               >
               </b-form-input>
             </b-form-group>
@@ -91,10 +90,10 @@
                 id="edit-email-input"
                 v-model="editForm.email"
                 required
-                readonly
               >
               </b-form-input>
             </b-form-group>
+            
             <div class="text-center" v-show="editForm.error">
               <p style="color: red">{{ editForm.error }}</p>  
             </div>  
