@@ -22,7 +22,7 @@
                         v-model="employeeSearchQuery"
                         placeholder="Search Employee by username"
                       >
-                      </b-input>  
+                      </b-input>
                     </b-col>
                     <b-col md="auto">
                       <b-button
@@ -93,10 +93,10 @@
               >
               </b-form-input>
             </b-form-group>
-            
+
             <div class="text-center" v-show="editForm.error">
-              <p style="color: red">{{ editForm.error }}</p>  
-            </div>  
+              <p style="color: red">{{ editForm.error }}</p>
+            </div>
             <div class="text-center mt-5">
               <b-button
                 type="submit"
@@ -166,7 +166,7 @@
             </b-form-group>
 
             <div class="text-center" v-show="createForm.error">
-              <p style="color: red">{{createForm.error }}</p>
+              <p style="color: red">{{ createForm.error }}</p>
             </div>
             <div class="test-center mt-5">
               <b-button
@@ -179,7 +179,6 @@
           </b-form>
         </b-modal>
       </div>
-
 
       <template #overlay>
         <div class="text-center">
@@ -241,8 +240,8 @@ export default {
     filteredEmployeeList() {
       return this.employeeList.filter(employee => {
         return employee["username"]
-        .toLowerCase()
-        .includes(this.employeeSearchQuery.trim().toLowerCase());
+          .toLowerCase()
+          .includes(this.employeeSearchQuery.trim().toLowerCase());
       });
     },
   },
@@ -257,7 +256,7 @@ export default {
         console.log(errorMsg);
         this.employeeError = errorMsg;
       });
-    this.isLoading=false;
+    this.isLoading = false;
   },
   methods: {
     editEmployeeDialog: function (item) {
@@ -276,8 +275,7 @@ export default {
       this.editForm.error = "";
       if (this.editForm.password === "") {
         this.editForm.error = "Please enter password";
-      }
-      else if (this.editForm.email === "") {
+      } else if (this.editForm.email === "") {
         this.editForm.error = "Please enter email";
       } else {
         this.isLoading = true;
@@ -298,7 +296,7 @@ export default {
               .then(response => {
                 this.employeeList = response.data;
               })
-              .catch(e=> {
+              .catch(e => {
                 let errorMsg = e.response.data.message;
                 console.log(errorMsg);
                 this.employeeError = errorMsg;
@@ -322,10 +320,9 @@ export default {
         .then(() => {
           this.$bvModal.hide("edit-employee-dialog");
           this.resetForms();
-          AXIOS.get("/employee/getAll", {})
-            .then(response => {
-              this.employeeList = response.data;
-            });
+          AXIOS.get("/employee/getAll", {}).then(response => {
+            this.employeeList = response.data;
+          });
         })
         .catch(e => {
           let errorMsg = e.response.data.message;
@@ -341,8 +338,7 @@ export default {
       this.createForm.error = "";
       if (this.createForm.password === "") {
         this.createForm.error = "Please enter password";
-      } 
-      else if (this.createForm.email === "") {
+      } else if (this.createForm.email === "") {
         this.createForm.error = "Please enter email";
       } else {
         this.isLoading = true;
@@ -356,27 +352,27 @@ export default {
             },
           }
         )
-        .then(() => {
-          this.$bvModal.hide("create-employee-dialog");
-          this.resetForms();
-          AXIOS.get("/employee/getAll", {})
-          .then(response => {
-            this.employeeList = response.data;
+          .then(() => {
+            this.$bvModal.hide("create-employee-dialog");
+            this.resetForms();
+            AXIOS.get("/employee/getAll", {})
+              .then(response => {
+                this.employeeList = response.data;
+              })
+              .catch(e => {
+                let errorMsg = e.response.data.message;
+                console.log(errorMsg);
+                this.employeeError = errorMsg;
+              });
           })
           .catch(e => {
             let errorMsg = e.response.data.message;
             console.log(errorMsg);
-            this.employeeError = errorMsg;
+            this.createForm.error = errorMsg;
+          })
+          .finally(() => {
+            this.isLoading = false;
           });
-        })
-        .catch(e => {
-          let errorMsg = e.response.data.message;
-          console.log(errorMsg);
-          this.createForm.error = errorMsg;
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
       }
     },
     resetForms: function () {
@@ -393,4 +389,4 @@ export default {
 };
 </script>
 
-<style scoped> </style>
+<style scoped></style>
