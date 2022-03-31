@@ -17,3 +17,16 @@ jobs:
           heroku_app_name: "grocery-backend-g05-mcgill"
           heroku_email: "hai.sheng@mail.mcgill.ca"
           dontuseforce: false
+  frontend:
+    needs: backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy Frontend to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: "94f22736-cfd2-43ca-8a59-977823571695"
+          heroku_app_name: "grocery-frontend-g05-mcgill"
+          heroku_email: "hai.sheng@mail.mcgill.ca"
+          dontuseforce: false
+
