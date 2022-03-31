@@ -108,7 +108,7 @@
 
     <b-overlay :show="isItemLoading" rounded="sm">
       <div :aria-hidden="isItemLoading ? 'true' : null" id="items-inner">
-        <h2>Browse our in stock items</h2>
+        <h2>Browse items</h2>
 
         <b-container fluid>
           <b-row>
