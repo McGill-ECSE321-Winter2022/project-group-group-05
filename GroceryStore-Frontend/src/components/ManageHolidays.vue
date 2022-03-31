@@ -41,6 +41,7 @@
                 <b-table
                   id="holidays-table"
                   hover
+                  fixed
                   :items="filteredHolidayList"
                   :fields="holidayListFields"
                   @row-clicked="editHolidayDialog"
@@ -50,6 +51,102 @@
             </b-col>
           </b-row>
         </b-container>
+
+        <b-modal id="edit-holiday-dialog" title="Edit Holiday" hide-footer>
+          <b-form @submit="submitEdit">
+            <b-form-group
+              id="edit-name-group"
+              label="Holiday name"
+              label-size="lg"
+            >
+              <b-form-input
+                id="edit-name-input"
+                v-model="editForm.name"
+                required
+                readonly
+              >
+              </b-form-input>
+            </b-form-group>
+            <b-form-group
+              id="edit-date-group"
+              label="Holiday date"
+              label-size="lg"
+            >
+              <b-form-datepicker
+                id="edit-date-input"
+                v-model="editForm.date"
+                required
+              >
+              </b-form-datepicker>
+            </b-form-group>
+            <div class="text-center" v-show="editForm.error">
+              <p style="color: red">{{ editForm.error }}</p>
+            </div>
+            <div class="text-center mt-5">
+              <b-button
+                type="submit"
+                variant="primary"
+                v-bind:disabled="isLoading"
+                class="mr-2"
+                >Save changes</b-button
+              >
+              <b-button
+                variant="danger"
+                v-bind:disabled="isLoading"
+                class="ml-2"
+                v-on:click="deleteHoliday"
+              >
+                Delete holiday
+              </b-button>
+            </div>
+          </b-form>
+        </b-modal>
+
+        <b-modal
+          id="create-holiday-dialog"
+          title="Create New Holiday"
+          hide-footer
+        >
+          <b-form @submit="submitCreate">
+            <b-form-group
+              id="new-name-group"
+              label="Holiday name"
+              label-size="lg"
+            >
+              <b-form-input
+                id="new-name-input"
+                v-model="createForm.name"
+                placeholder="Enter name"
+                required
+              >
+              </b-form-input>
+            </b-form-group>
+            <b-form-group
+              id="new-date-group"
+              label="Holiday date"
+              label-size="lg"
+            >
+              <b-form-datepicker
+                id="new-date-input"
+                v-model="createForm.date"
+                :min="minDate"
+                required
+              >
+              </b-form-datepicker>
+            </b-form-group>
+            <div class="text-center" v-show="createForm.error">
+              <p style="color: red">{{ createForm.error }}</p>
+            </div>
+            <div class="text-center mt-5">
+              <b-button
+                type="submit"
+                variant="primary"
+                v-bind:disabled="isLoading"
+                >Create</b-button
+              >
+            </div>
+          </b-form>
+        </b-modal>
       </div>
 
       <template #overlay>
