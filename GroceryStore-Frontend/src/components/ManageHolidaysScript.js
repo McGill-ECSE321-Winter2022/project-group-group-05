@@ -12,6 +12,16 @@ export default {
       isLoading: false,
       // browse holidays
       holidayList: [],
+      holidayListFields: [
+        {
+          key: "name",
+          sortable: true,
+        },
+        {
+          key: "date",
+          sortable: true,
+        },
+      ],
       clickedHoliday: "",
       holidaySearchQuery: "",
       // create holidays
@@ -40,22 +50,19 @@ export default {
   },
   created: async function () {
     this.isLoading = true;
-    await this.fetchHolidays();
+    await AXIOS.get("/holiday/getAll", {})
+      .then(response => {
+        this.holidayList = response.data;
+      })
+      .catch(e => {
+        let errorMsg = e.response.data.message;
+        console.log(errorMsg);
+        this.holidayError = errorMsg;
+      });
     this.isLoading = false;
   },
   methods: {
-    fetchHolidays: function () {
-      console.log("Fetching list of holidays");
-      return AXIOS.get("/holiday/getAll", {})
-        .then(response => {
-          this.holidayList = response;
-        })
-        .catch(e => {
-          let errorMsg = e.response.data.message;
-          console.log(errorMsg);
-          this.holidayError = errorMsg;
-        });
-    },
     editHolidayDialog: function () {},
+    createHolidayDialog: function () {},
   },
 };

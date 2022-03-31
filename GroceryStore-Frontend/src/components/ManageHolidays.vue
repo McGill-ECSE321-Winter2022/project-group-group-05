@@ -14,11 +14,35 @@
             <b-col>
               <h1>Manage Holidays</h1>
               <div id="holidays-col">
+                <b-container fluid>
+                  <b-row>
+                    <b-col>
+                      <b-input
+                        type="text"
+                        v-model="holidaySearchQuery"
+                        placeholder="Search holiday by name"
+                      >
+                      </b-input>
+                    </b-col>
+                    <b-col md="auto">
+                      <b-button
+                        variant="primary"
+                        v-bind:disabled="isLoading"
+                        v-on:click="createHolidayDialog"
+                      >
+                        Create New Holiday
+                      </b-button>
+                    </b-col>
+                  </b-row>
+                </b-container>
+
+                <br />
+
                 <b-table
                   id="holidays-table"
-                  borderless
                   hover
                   :items="filteredHolidayList"
+                  :fields="holidayListFields"
                   @row-clicked="editHolidayDialog"
                 >
                 </b-table>
@@ -27,6 +51,13 @@
           </b-row>
         </b-container>
       </div>
+
+      <template #overlay>
+        <div class="text-center">
+          <b-spinner></b-spinner>
+          <p class="h2">Loading...</p>
+        </div>
+      </template>
     </b-overlay>
   </div>
 </template>
