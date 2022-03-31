@@ -379,7 +379,7 @@ export default {
       this.createForm.username = "";
       this.createForm.password = "";
       this.createForm.email = "";
-      this.createForm.erro = "";
+      this.createForm.error = "";
       this.editForm.username = "";
       this.editForm.password = "";
       this.editForm.email = "";
