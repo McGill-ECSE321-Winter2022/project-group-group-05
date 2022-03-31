@@ -52,7 +52,7 @@
           </b-row>
         </b-container>
 
-        <b-model id="edit-employee-dialog" title="Edit Employee" hide-footer>
+        <b-modal id="edit-employee-dialog" title="Edit Employee" hide-footer>
           <b-form @submit="submitEdit">
             <b-form-group
               id="edit-username-group"
@@ -115,7 +115,7 @@
               </b-button>
             </div>
           </b-form>
-        </b-model>
+        </b-modal>
 
         <b-modal
           id="create-employee-dialog"
