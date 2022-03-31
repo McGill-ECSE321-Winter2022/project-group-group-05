@@ -18,6 +18,7 @@ import StaffDashboard from "../components/StaffDashboard";
 import ViewCompletedOrders from "../components/ViewCompletedOrders";
 import ViewHistory from "../components/ViewHistory";
 import ViewSchedules from "../components/ViewSchedules";
+import ManageHolidays from "../components/ManageHolidays";
 
 Vue.use(Router);
 
@@ -57,6 +58,11 @@ export default new Router({
       path: "/ManageEmployee",
       name: "ManageEmployee",
       component: ManageEmployee,
+    },
+    {
+      path: "/ManageHolidays",
+      name: "ManageHolidays",
+      component: ManageHolidays,
     },
     {
       path: "/ManageItems",

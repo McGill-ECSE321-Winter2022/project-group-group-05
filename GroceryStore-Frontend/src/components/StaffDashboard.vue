@@ -32,6 +32,12 @@
           >
         </router-link>
 
+        <router-link to="/ManageHolidays">
+          <b-button squared block size="lg" variant="success" v-if="isOwner">
+            Manage Holidays
+          </b-button>
+        </router-link>
+
         <router-link to="/ManageItems">
           <b-button
             squared
