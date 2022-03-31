@@ -12,8 +12,7 @@ export default {
       LOGIN_STATE.state.username !== "kiosk";
     if (this.isCustomerLoggedIn) {
       // fetch customer to check if address is local
-      await AXIOS.get(
-        "/customer/".concat(LOGIN_STATE.state.username))
+      await AXIOS.get("/customer/".concat(LOGIN_STATE.state.username))
         .then(response => {
           this.isLocal = response.data.isLocal;
         })
@@ -99,7 +98,7 @@ export default {
       this.items.forEach(item => {
         total += item.purchaseQuantity * item.purchasePrice;
       });
-      // If the customer is not local to the town and requests delivery, 
+      // If the customer is not local to the town and requests delivery,
       // add a flat 10 dollar shipping fee.
       if (!this.isLocal && this.isDelivery) {
         total += 10;
