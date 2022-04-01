@@ -5,7 +5,6 @@
     <b-overlay
       id="overlay"
       :show="isLoading"
-      :variant="variant"
       :opacity="0.85"
       rounded="sm"
     >
@@ -110,7 +109,6 @@
   display: flex;
   flex-direction: row;
   height: 40px;
-  text-align: bottom;
 }
 #manage-paid-orders {
   position: absolute;
