@@ -32,23 +32,40 @@
               Cancel Order #{{ cart.id }}
             </p>
           </b-button>
-          <hr>
+          <hr />
 
           <b-container fluid class="mb-4">
             <b-row>
               <b-col sm="8">
                 <b-input-group>
                   <b-input-group-prepend>
-                    <b-button variant="primary" @click="itemLookup"><b-icon icon="search" aria-hidden="true" class="mr-2"></b-icon>Item Lookup</b-button>
+                    <b-button variant="primary" @click="itemLookup"
+                      ><b-icon
+                        icon="search"
+                        aria-hidden="true"
+                        class="mr-2"
+                      ></b-icon
+                      >Item Lookup</b-button
+                    >
                   </b-input-group-prepend>
-                  <b-input placeholder="Enter item name" v-model="addItemName"></b-input>
+                  <b-input
+                    placeholder="Enter item name"
+                    v-model="addItemName"
+                  ></b-input>
                 </b-input-group>
               </b-col>
               <b-col sm="2">
-                <b-spinbutton v-model="addItemQty" min="1" max="100" wrap></b-spinbutton>
+                <b-spinbutton
+                  v-model="addItemQty"
+                  min="1"
+                  max="100"
+                  wrap
+                ></b-spinbutton>
               </b-col>
               <b-col sm="2">
-                <b-button block variant="outline-primary" @click="addItem">Add Item</b-button>
+                <b-button block variant="outline-primary" @click="addItem"
+                  >Add Item</b-button
+                >
               </b-col>
             </b-row>
           </b-container>
@@ -62,20 +79,29 @@
             @row-clicked="editCartDialog"
           >
             <template #cell(item)="data">
-              <div class="h5"><b>{{ data.value['name'] }}</b></div>
+              <div class="h5">
+                <b>{{ data.value["name"] }}</b>
+              </div>
               <b-img-lazy
                 thumbnail
                 style="max-width: 75px"
-                :src="data.value['image'] ? data.value['image'] : '/static/no-image.jpg'"></b-img-lazy>
+                :src="
+                  data.value['image']
+                    ? data.value['image']
+                    : '/static/no-image.jpg'
+                "
+              ></b-img-lazy>
             </template>
             <template #cell(purchasePrice)="data">
               <div class="h5">${{ data.value | formatCurrency }}</div>
             </template>
             <template #cell(purchaseQuantity)="data">
-              <div class="h5">{{data.value}}</div>
+              <div class="h5">{{ data.value }}</div>
             </template>
             <template #cell(cost)="data">
-              <div class="h5"><b>${{ data.value | formatCurrency }}</b></div>
+              <div class="h5">
+                <b>${{ data.value | formatCurrency }}</b>
+              </div>
             </template>
           </b-table>
 
@@ -86,51 +112,88 @@
                 <h2>Subtotal:</h2>
               </b-col>
               <b-col sm="2" style="text-align: left">
-                <h2><b>${{subtotal | formatCurrency }}</b></h2>
+                <h2>
+                  <b>${{ subtotal | formatCurrency }}</b>
+                </h2>
               </b-col>
             </b-row>
             <b-row>
               <b-col sm="8"></b-col>
               <b-col sm="4">
                 <b-button variant="primary" size="lg" @click="payNow">
-                  <b-icon icon="credit-card" aria-hidden="true" size="lg"></b-icon>
+                  <b-icon
+                    icon="credit-card"
+                    aria-hidden="true"
+                    size="lg"
+                  ></b-icon>
                   &nbsp&nbspPay now
                 </b-button>
               </b-col>
             </b-row>
           </b-container>
 
-          <b-modal id="item-lookup" title="List of available items" hide-footer scrollable>
-            <b-input v-model="itemSearchQuery" placeholder="Search item name" class="mb-2"></b-input>
+          <b-modal
+            id="item-lookup"
+            title="List of available items"
+            hide-footer
+            scrollable
+          >
+            <b-input
+              v-model="itemSearchQuery"
+              placeholder="Search item name"
+              class="mb-2"
+            ></b-input>
             <div class="text-center">
               <b-table
                 hover
                 fixed
                 :items="filteredItemList"
                 :fields="itemFields"
-                @row-clicked="itemLookupClicked">
+                @row-clicked="itemLookupClicked"
+              >
                 <template #cell(price)="data">
-                  ${{data.value | formatCurrency}}
+                  ${{ data.value | formatCurrency }}
                 </template>
               </b-table>
             </div>
           </b-modal>
 
-          <b-modal id="edit-cart-item" title="Edit cart item" hide-footer centered>
+          <b-modal
+            id="edit-cart-item"
+            title="Edit cart item"
+            hide-footer
+            centered
+          >
             <div class="text-center">
-              <h5>Set quantity of <b>{{ clickedSpItem["item"]["name"] }}</b></h5>
-              <div style="width: 200px; margin: auto;">
-                <b-spinbutton v-model="clickedSpItemQuantity" min="1" max="100" wrap></b-spinbutton>
+              <h5>
+                Set quantity of <b>{{ clickedSpItem["item"]["name"] }}</b>
+              </h5>
+              <div style="width: 200px; margin: auto">
+                <b-spinbutton
+                  v-model="clickedSpItemQuantity"
+                  min="1"
+                  max="100"
+                  wrap
+                ></b-spinbutton>
               </div>
               <div class="text-center mt-3">
-                <b-button class="mr-2" v-bind:disabled="isLoading"
-                variant="success" v-on:click="editCartSave">Save changes</b-button>
-                <b-button class="ml-2" v-bind:disabled="isLoading"
-                variant="danger" v-on:click="editCartRemove">Remove item</b-button>
+                <b-button
+                  class="mr-2"
+                  v-bind:disabled="isLoading"
+                  variant="success"
+                  v-on:click="editCartSave"
+                  >Save changes</b-button
+                >
+                <b-button
+                  class="ml-2"
+                  v-bind:disabled="isLoading"
+                  variant="danger"
+                  v-on:click="editCartRemove"
+                  >Remove item</b-button
+                >
               </div>
             </div>
           </b-modal>
-
         </div>
 
         <div class="text-center h5" v-show="posError">
@@ -142,7 +205,6 @@
             <b>{{ paySuccessMessage }}</b>
           </p>
         </b-modal>
-
       </div>
 
       <template #overlay>

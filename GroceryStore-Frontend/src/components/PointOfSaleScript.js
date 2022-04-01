@@ -32,13 +32,11 @@ export default {
         },
       ],
       subtotal: 0,
-      clickedSpItem:
-        {
-          item:
-            {
-              name: "",
-            },
+      clickedSpItem: {
+        item: {
+          name: "",
         },
+      },
       clickedSpItemQuantity: 1,
       // item input
       addItemName: "",
@@ -63,27 +61,28 @@ export default {
   computed: {
     filteredItemList() {
       return this.itemList.filter(item => {
-        return item["name"].toLowerCase().includes(this.itemSearchQuery.trim().toLowerCase());
+        return item["name"]
+          .toLowerCase()
+          .includes(this.itemSearchQuery.trim().toLowerCase());
       });
     },
   },
   methods: {
-    clear: function() {
+    clear: function () {
       this.posError = "";
       this.cart = "";
       this.subtotal = 0;
       this.clickedSpItem = {
-        item:
-          {
-            name: "",
-          },
+        item: {
+          name: "",
+        },
       };
       this.clickedSpItemQuantity = 1;
       this.addItemName = "";
       this.addItemQty = 1;
       this.itemSearchQuery = "";
     },
-    startNewOrder: async function() {
+    startNewOrder: async function () {
       this.clear();
       this.isLoading = true;
       await AXIOS.post("/purchase/pos/cart", {}, {})
@@ -98,11 +97,13 @@ export default {
           console.log(errorMsg);
           this.posError = errorMsg;
         });
-      await AXIOS.get("/item/allInStock", {}).then(response => {
-        this.itemList = response.data;
-      }).catch(e => {
-        console.log(e);
-      });
+      await AXIOS.get("/item/allInStock", {})
+        .then(response => {
+          this.itemList = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
       this.isLoading = false;
     },
     cancelNewOrder() {
@@ -122,7 +123,7 @@ export default {
           this.isLoading = false;
         });
     },
-    addItem: function(){
+    addItem: function () {
       let itemName = this.addItemName;
       let quantity = this.addItemQty;
       this.posError = "";
@@ -156,81 +157,95 @@ export default {
           );
         });
     },
-    payNow: async function() {
+    payNow: async function () {
       this.posError = "";
       this.isLoading = true;
-      await AXIOS.post("/purchase/pos/pay/".concat(this.cart["id"]), {}, {}).then(response => {
-        let message = "Successfully completed order #" + response.data["id"];
-        console.log(message);
-        this.paySuccessMessage = message;
-        this.$bvModal.show("pos-pay-success");
-        this.clear();
-        this.inProgress = false;
-      }).catch(e => {
-        let errorMsg = e.response.data.message;
-        console.log(errorMsg);
-        this.posError = errorMsg;
-      });
+      await AXIOS.post("/purchase/pos/pay/".concat(this.cart["id"]), {}, {})
+        .then(response => {
+          let message = "Successfully completed order #" + response.data["id"];
+          console.log(message);
+          this.paySuccessMessage = message;
+          this.$bvModal.show("pos-pay-success");
+          this.clear();
+          this.inProgress = false;
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.posError = errorMsg;
+        });
       this.isLoading = false;
     },
-    editCartDialog: function(item) {
+    editCartDialog: function (item) {
       this.clickedSpItem = item;
       this.clickedSpItemQuantity = item["purchaseQuantity"];
       this.$bvModal.show("edit-cart-item");
     },
-    editCartSave: async function() {
+    editCartSave: async function () {
       this.posError = "";
       this.isLoading = true;
-      await AXIOS.post("/purchase/setItem/".concat(this.cart["id"]), {}, {
-        params: {
-          itemName: this.clickedSpItem["item"]["name"],
-          quantity: this.clickedSpItemQuantity,
-        },
-      }).then(response => {
-        this.cart = response.data;
-        this.computeCartCosts();
-      }).catch(e => {
-        let errorMsg = e.response.data.message;
-        console.log(errorMsg);
-        this.posError = errorMsg;
-      });
+      await AXIOS.post(
+        "/purchase/setItem/".concat(this.cart["id"]),
+        {},
+        {
+          params: {
+            itemName: this.clickedSpItem["item"]["name"],
+            quantity: this.clickedSpItemQuantity,
+          },
+        }
+      )
+        .then(response => {
+          this.cart = response.data;
+          this.computeCartCosts();
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.posError = errorMsg;
+        });
       this.$bvModal.hide("edit-cart-item");
       console.log(
         "New subtotal is $" + Vue.filter("formatCurrency")(this.subtotal)
       );
       this.isLoading = false;
     },
-    editCartRemove: async function() {
+    editCartRemove: async function () {
       this.posError = "";
       this.isLoading = true;
-      await AXIOS.post("/purchase/setItem/".concat(this.cart["id"]), {}, {
-        params: {
-          itemName: this.clickedSpItem["item"]["name"],
-          quantity: -1,
-        },
-      }).then(response => {
-        this.cart = response.data;
-        this.computeCartCosts();
-      }).catch(e => {
-        let errorMsg = e.response.data.message;
-        console.log(errorMsg);
-        this.posError = errorMsg;
-      });
+      await AXIOS.post(
+        "/purchase/setItem/".concat(this.cart["id"]),
+        {},
+        {
+          params: {
+            itemName: this.clickedSpItem["item"]["name"],
+            quantity: -1,
+          },
+        }
+      )
+        .then(response => {
+          this.cart = response.data;
+          this.computeCartCosts();
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.posError = errorMsg;
+        });
       this.$bvModal.hide("edit-cart-item");
       console.log(
         "New subtotal is $" + Vue.filter("formatCurrency")(this.subtotal)
       );
       this.isLoading = false;
     },
-    itemLookup: function() {
+    itemLookup: function () {
       this.posError = "";
       this.$bvModal.show("item-lookup");
     },
-    itemLookupClicked: function(item) {
+    itemLookupClicked: function (item) {
       this.addItemName = item["name"];
       this.$bvModal.hide("item-lookup");
     },
-    computeCartCosts: function() {
+    computeCartCosts: function () {
       // compute individual total costs of each items in the cart
       this.cart["specificItems"].forEach(function (spItem) {
         let cost = spItem["purchaseQuantity"] * spItem["purchasePrice"];
