@@ -46,7 +46,7 @@
         <b-table
           id="cart-items-table"
           borderless
-          hovernpm
+          hover
           :items="cart['specificItems']"
         ></b-table>
       </div>
