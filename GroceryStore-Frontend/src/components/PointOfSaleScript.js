@@ -11,8 +11,30 @@ export default {
       isLoading: false,
       inProgress: false,
       posError: "",
+      // cart display
       cart: "",
+      spItemFields: [
+        {
+          key: "item",
+          label: "Item Name",
+        },
+        {
+          key: "purchasePrice",
+          label: "Unit Price",
+        },
+        {
+          key: "purchaseQuantity",
+          label: "Quantity",
+        },
+        {
+          key: "cost",
+          label: "Total Cost of Item",
+        },
+      ],
       subtotal: 0,
+      // item input
+      addItemName: "",
+      addItemQty: 1,
     };
   },
   methods: {
@@ -53,7 +75,9 @@ export default {
           this.isLoading = false;
         });
     },
-    addItem(itemName, quantity) {
+    addItem: function(){
+      let itemName = this.addItemName;
+      let quantity = this.addItemQty;
       this.posError = "";
       this.isLoading = true;
       AXIOS.post(
@@ -68,12 +92,15 @@ export default {
       )
         .then(response => {
           this.cart = response.data;
+          this.cart["specificItems"].forEach(function (spItem) {
+            let cost = spItem["purchaseQuantity"] * spItem["purchasePrice"];
+            spItem["cost"] = cost;
+          });
           let newTotal = 0;
-          for (const spItem of response.data["specificItems"]) {
-            newTotal += spItem["purchaseQuantity"] * spItem["purchasePrice"];
+          for (const spItem of this.cart["specificItems"]) {
+            newTotal += spItem["cost"];
           }
           this.subtotal = newTotal;
-          // TODO: what's the best way to update the displayed items in cart?
         })
         .catch(e => {
           let errorMsg = e.response.data.message;
@@ -86,6 +113,18 @@ export default {
             "New subtotal is $" + Vue.filter("formatCurrency")(this.subtotal)
           );
         });
+    },
+    payNow: async function() {
+      this.posError = "";
+      this.isLoading = true;
+      await AXIOS.post("/purchase/pos/pay/".concat(this.cart["id"]), {}, {}).then(response => {
+        console.log("Successfully completed order #" + response["id"]);
+      }).catch(e => {
+        let errorMsg = e.response.data.message;
+        console.log(errorMsg);
+        this.posError = errorMsg;
+      });
+      this.isLoading = false;
     },
   },
 };
