@@ -39,7 +39,7 @@
               <b-col sm="8">
                 <b-input-group>
                   <b-input-group-prepend>
-                    <b-button variant="primary"><b-icon icon="search" aria-hidden="true" class="mr-2"></b-icon>Item Lookup</b-button>
+                    <b-button variant="primary" @click="itemLookup"><b-icon icon="search" aria-hidden="true" class="mr-2"></b-icon>Item Lookup</b-button>
                   </b-input-group-prepend>
                   <b-input placeholder="Enter item name" v-model="addItemName"></b-input>
                 </b-input-group>
@@ -59,6 +59,7 @@
             fixed
             :items="cart['specificItems']"
             :fields="spItemFields"
+            @row-clicked="editCartDialog"
           >
             <template #cell(item)="data">
               <div class="h5"><b>{{ data.value['name'] }}</b></div>
@@ -91,7 +92,7 @@
             <b-row>
               <b-col sm="8"></b-col>
               <b-col sm="4">
-                <b-button variant="primary" size="lg">
+                <b-button variant="primary" size="lg" @click="payNow">
                   <b-icon icon="credit-card" aria-hidden="true" size="lg"></b-icon>
                   &nbsp&nbspPay now
                 </b-button>
@@ -99,15 +100,48 @@
             </b-row>
           </b-container>
 
+          <b-modal id="item-lookup" title="List of available items" hide-footer scrollable>
+            <b-input v-model="itemSearchQuery" placeholder="Search item name" class="mb-2"></b-input>
+            <div class="text-center">
+              <b-table
+                hover
+                fixed
+                :items="filteredItemList"
+                :fields="itemFields"
+                @row-clicked="itemLookupClicked">
+                <template #cell(price)="data">
+                  ${{data.value | formatCurrency}}
+                </template>
+              </b-table>
+            </div>
+          </b-modal>
+
+          <b-modal id="edit-cart-item" title="Edit cart item" hide-footer centered>
+            <div class="text-center">
+              <h5>Set quantity of <b>{{ clickedSpItem["item"]["name"] }}</b></h5>
+              <div style="width: 200px; margin: auto;">
+                <b-spinbutton v-model="clickedSpItemQuantity" min="1" max="100" wrap></b-spinbutton>
+              </div>
+              <div class="text-center mt-3">
+                <b-button class="mr-2" v-bind:disabled="isLoading"
+                variant="success" v-on:click="editCartSave">Save changes</b-button>
+                <b-button class="ml-2" v-bind:disabled="isLoading"
+                variant="danger" v-on:click="editCartRemove">Remove item</b-button>
+              </div>
+            </div>
+          </b-modal>
+
         </div>
-
-
-
-
 
         <div class="text-center h5" v-show="posError">
           <b style="color: red">{{ posError }}</b>
         </div>
+
+        <b-modal id="pos-pay-success" title="Success" centered ok-only>
+          <p class="mt-2 mb-2" style="color: green">
+            <b>{{ paySuccessMessage }}</b>
+          </p>
+        </b-modal>
 
       </div>
 
