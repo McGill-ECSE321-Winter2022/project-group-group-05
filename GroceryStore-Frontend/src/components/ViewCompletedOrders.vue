@@ -5,7 +5,6 @@
     <b-overlay
       id="overlay"
       :show="isLoading"
-      :variant="variant"
       :opacity="0.85"
       rounded="sm"
     >
@@ -102,7 +101,6 @@
   display: flex;
   flex-direction: row;
   height: 40px;
-  text-align: bottom;
 }
 #view-completed-orders {
   position: absolute;
