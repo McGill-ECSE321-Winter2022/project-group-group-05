@@ -41,5 +41,8 @@ Vue.filter("formatDate", function (value) {
 Vue.filter("formatCurrency", function (value) {
   if (value) {
     return (Math.round(value * 100) / 100).toFixed(2);
+  } else {
+    let result = 0;
+    return result.toFixed(2);
   }
 });
