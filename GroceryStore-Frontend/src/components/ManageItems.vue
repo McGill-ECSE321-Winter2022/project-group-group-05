@@ -5,7 +5,7 @@
     <b-row class="vh-100" align-v="stretch">
       <b-col><staff-dashboard></staff-dashboard></b-col>
       <b-col cols="10">
-        <h1 class="header_style">Manage Inventory</h1>
+        <h1 class="header_style">Manage Items</h1>
         <b-alert
           show
           variant="danger"
