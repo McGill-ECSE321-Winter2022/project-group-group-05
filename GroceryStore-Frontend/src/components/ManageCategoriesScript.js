@@ -11,6 +11,8 @@ export default {
       isOwner: LOGIN_STATE.state.userType === "Owner",
       isLoading: false,
       categoriesError: "",
+      // create new category
+      newCategoryName: "",
       // browse categories
       categoriesList: [],
       categoriesOptions: [],
@@ -54,6 +56,19 @@ export default {
     this.isLoading = false;
   },
   methods: {
+    createCategoryDialog: function() {
+      this.$bvModal.show("create-category-dialog");
+    },
+    submitNewCategory: async function() {
+      this.categoriesError = "";
+      this.isLoading = true;
+      await this.createCategory(this.newCategoryName);
+      await this.fetchCategories();
+      this.updateSelection();
+      this.$bvModal.hide("create-category-dialog");
+      this.newCategoryName = "";
+      this.isLoading = false;
+    },
     atSelction: async function(value) {
       this.categoriesError = "";
       this.isLoading = true;
@@ -108,6 +123,7 @@ export default {
       });
     },
     updateSelection: function() {
+      this.categoriesOptions = [];
       for (const category of this.categoriesList) {
         let name = category["name"];
         let option = { value: name, text: name};
@@ -135,7 +151,14 @@ export default {
         console.log(errorMsg);
         this.categoriesError = errorMsg;
       });
-    }
+    },
+    createCategory: function(categoryName) {
+      return AXIOS.post("/itemCategory/".concat(categoryName)).catch(e => {
+        let errorMsg = e.response.data.message;
+        console.log(errorMsg);
+        this.categoriesError = errorMsg;
+      });
+    },
   },
 };
 

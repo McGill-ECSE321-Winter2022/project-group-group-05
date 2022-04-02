@@ -32,7 +32,7 @@
                       </b-form-select>
                     </b-col>
                     <b-col sm="3">
-                      <b-button block>Create New</b-button>
+                      <b-button block v-on:click="createCategoryDialog">Create New</b-button>
                     </b-col>
                     <b-col sm="3">
                       <b-button block>Delete Category</b-button>
@@ -68,6 +68,31 @@
             </b-col>
           </b-row>
         </b-container>
+
+        <b-modal
+          id="create-category-dialog"
+          title="Create new category"
+          hide-footer>
+          <b-form @submit="submitNewCategory">
+            <b-form-group
+              label="Category name"
+              label-size="lg">
+              <b-form-input
+                v-model="newCategoryName"
+                placeholder="Enter name"
+                required>
+              </b-form-input>
+            </b-form-group>
+            <div class="text-center mt-5">
+              <b-button
+                type="submit"
+                variant="primary"
+                v-bind:disabled="isLoading"
+              >Create Category</b-button
+              >
+            </div>
+          </b-form>
+        </b-modal>
 
         <b-modal
           id="item-search"
