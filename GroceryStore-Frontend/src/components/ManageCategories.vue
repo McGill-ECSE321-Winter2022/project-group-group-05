@@ -68,6 +68,7 @@
                   id="category-item-table"
                   hover
                   fixed
+                  :busy="isLoading"
                   :items="itemsInSelectedCategory"
                   :fields="itemFields"
                   @row-clicked="removeDialog"
@@ -124,6 +125,7 @@
             <b-table
               hover
               fixed
+              :busy="isLoading"
               :items="filteredItemList"
               :fields="itemFields"
               @row-clicked="addConfirm"

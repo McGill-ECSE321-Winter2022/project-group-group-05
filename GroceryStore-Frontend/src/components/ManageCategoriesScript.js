@@ -187,9 +187,6 @@ export default {
       ).catch(e => {
         let errorMsg = e.response.data.message;
         console.log(errorMsg);
-        if (errorMsg.includes("ConstraintViolationException")) {
-          errorMsg = "Item already belongs to another category";
-        }
         this.categoriesError = errorMsg;
       });
     },
