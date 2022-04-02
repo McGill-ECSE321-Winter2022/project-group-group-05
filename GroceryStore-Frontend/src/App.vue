@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <!--    <img src="./assets/logo.png" />-->
+    <router-link to="/">
+          <b-button variant="outline-primary" v-if="$route.path != '/'"
+            >Back to the welcome page &#128722;</b-button
+          >
+        </router-link>
     <div id="app-inner">
       <router-view></router-view>
     </div>
