@@ -30,10 +30,10 @@
             @row-clicked="editOpeningHours"
           >
             <template #cell(startTime)="row">
-              {{ row.item.startTime | formatTime }}
+              {{ row.item.closed ? "Closed" : row.item.startTime | timeFormat }}
             </template>
             <template #cell(endTime)="row">
-              {{ row.item.endTime | formatTime }}
+              {{ row.item.closed ? "Closed" : row.item.endTime | timeFormat }}
             </template>
           </b-table>
           <!-- Popup editing menu -->
@@ -41,7 +41,6 @@
             id="editOpeningHours"
             ref="modal"
             :title="selectedWeekDay"
-            ok-title="Save"
             @hidden="resetWeekdayForm"
             @ok="handleOk"
           >
@@ -74,6 +73,14 @@
                   ></b-form-input>
                 </b-form-group>
               </form>
+            </template>
+            <template #modal-footer="{ ok, cancel }">
+              <!-- Emulate built in modal footer ok and cancel button actions -->
+              <b-button @click="cancel()"> Cancel </b-button>
+              <b-button variant="danger" @click="closeOnDay()">
+                Close Store</b-button
+              >
+              <b-button variant="primary" @click="ok()"> Save </b-button>
             </template>
           </b-modal>
         </div>

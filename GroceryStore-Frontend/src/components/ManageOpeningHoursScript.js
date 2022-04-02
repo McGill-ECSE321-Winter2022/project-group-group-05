@@ -5,7 +5,8 @@ import moment from "moment";
 
 /**
  * Asynchronously fetches OpeningHours instances from the database for the requested
- * weekday. If the instance does not exist, this function will create it.
+ * weekday. If the instance does not exist, this function will substitute a dummy object
+ * for use with the frontend.
  *
  * @param {String} dayOfWeek The weekday (i.e. Sunday, Monday, etc.)
  * @returns the fetched data for the requested weekday
@@ -13,28 +14,17 @@ import moment from "moment";
 async function fetchWeekday(dayOfWeek) {
   return AXIOS.get("openingH/".concat(dayOfWeek))
     .then(response => {
-      return response.data;
+      return Object.assign(response.data, { closed: false });
     })
     .catch(error => {
-      AXIOS.post(
-        "openingH/".concat(dayOfWeek),
-        {},
-        {
-          params: {
-            startH: "09:00",
-            endH: "17:00",
-          },
-        }
-      )
-        .then(response => {
-          return response.data;
-        })
-        .catch(error => {
-          // This error should never occur. POST Requests will only throw an error
-          // when the instance we are creating already exists. This is never the case
-          // here because this code will only run if the instance does not exist.
-          console.log(error.response.data.message);
-        });
+      // This will occur if the store is not open on the requested day
+      const dummyWeekday = {
+        daysOfWeek: dayOfWeek,
+        startTime: "09:00:00",
+        endTime: "17:00:00",
+        closed: true,
+      };
+      return dummyWeekday;
     });
 }
 
@@ -145,6 +135,52 @@ export default {
           this.items[this.selectedWeekDayIndex].startTime =
             response.data.startTime;
           this.items[this.selectedWeekDayIndex].endTime = response.data.endTime;
+          this.items[this.selectedWeekDayIndex].closed = false;
+        })
+        .catch(error => {
+          // an error here means the weekday instance did not exist
+          // (i.e. the store was previously closed on that day)
+          // Therefore, create a weekday instance and update the backend/frontend accordingly
+          AXIOS.post(
+            "/openingH/".concat(this.selectedWeekDay),
+            {},
+            {
+              params: {
+                startH: moment(this.selectedStartTime, "HH:mm:ss").format(
+                  "HH:mm"
+                ),
+                endH: moment(this.selectedEndTime, "HH:mm:ss").format("HH:mm"),
+              },
+            }
+          )
+            .then(response => {
+              // update frontend
+              this.items[this.selectedWeekDayIndex].startTime =
+                response.data.startTime;
+              this.items[this.selectedWeekDayIndex].endTime =
+                response.data.endTime;
+              this.items[this.selectedWeekDayIndex].closed = false;
+            })
+            .catch(error => {
+              // This error should not occur in regular operation. The post request only throws an
+              // error if it's trying to create an already existing weekday. This code is only reachable
+              // if the weekday does not exist.
+              console.log(error.response.data.message);
+              this.dismissCountDown = this.dismissSecs;
+              this.errorMessage = error.response.data.message;
+            });
+        });
+      this.$nextTick(() => {
+        this.$bvModal.hide("editOpeningHours");
+      });
+    },
+    async closeOnDay() {
+      await AXIOS.delete("/openingH/".concat(this.selectedWeekDay))
+        .then(response => {
+          // set frontend values to 9-to-5 as a default setting
+          this.items[this.selectedWeekDayIndex].startTime = "09:00:00";
+          this.items[this.selectedWeekDayIndex].endTime = "17:00:00";
+          this.items[this.selectedWeekDayIndex].closed = true;
         })
         .catch(error => {
           console.log(error.response.data.message);
@@ -154,6 +190,16 @@ export default {
       this.$nextTick(() => {
         this.$bvModal.hide("editOpeningHours");
       });
+    },
+  },
+  filters: {
+    // custom formatTime filter to handle the "Closed" case that arises
+    // as a consequence of the ternary operator in the template
+    timeFormat: function (timeString) {
+      if (timeString === "Closed") {
+        return "Closed";
+      }
+      return moment(timeString, "HH:mm:ss").format("hh:mm A");
     },
   },
 };
