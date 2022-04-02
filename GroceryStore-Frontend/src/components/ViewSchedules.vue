@@ -99,19 +99,17 @@
                   </div>
                   <!-- Schedule Assignment Cards -->
                   <b-card
-                    class="my-2 text-center"
+                    class="my-2 text-center shift_style"
                     no-body
                     v-bind:header="schedule.shift.name"
                     v-for="schedule in weekday.scheduledShifts"
                     :key="schedule.shift.name"
                   >
-                    <b-card-text class="shift_style" style="padding-top: 15px"
+                    <b-card-text style="padding-top: 15px"
                       >Start Time:
                       {{ schedule.shift.startTime | formatTime }}</b-card-text
                     >
-                    <b-card-text
-                      class="shift_style"
-                      style="padding-bottom: 15px"
+                    <b-card-text style="padding-bottom: 15px"
                       >End Time:
                       {{ schedule.shift.endTime | formatTime }}</b-card-text
                     >
@@ -148,7 +146,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
-  max-width: 80%;
+  max-width: 93%;
 }
 .schedule_row_style {
   flex-wrap: nowrap;
@@ -157,13 +155,14 @@
   height: 100%;
 }
 .schedule_column_style {
-  height: 100%;
+  height: 99%;
   min-width: 160px;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin: 2px;
   padding-top: 10px;
-  background-color: #dbf4fa;
-  border: 1px solid #9ac2fe;
+  border-radius: 3px;
+  outline-style: solid;
+  outline-color: #cccccc;
+  outline-width: 1px;
 }
 .no_schedule_style {
   width: 79%;
@@ -174,7 +173,10 @@
   padding: 10px 0px 10px 0px;
 }
 /* Styling for Shift Cards */
-.shift_style {
+.shift_style .card-header {
+  white-space: normal;
+}
+.shift_style .card-text {
   margin: 0px;
   font-size: 16px;
 }
