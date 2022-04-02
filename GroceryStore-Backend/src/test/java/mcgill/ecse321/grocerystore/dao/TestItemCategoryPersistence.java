@@ -64,7 +64,17 @@ public class TestItemCategoryPersistence {
     // save the itemcategory instance
     itemCategoryRepo.save(category);
 
-    // Delete instance ofItemCategory
+    // creating second ItemCategory instance
+    ItemCategory category2 = new ItemCategory();
+    category2.setName("drink");
+    // adding item into ItemCategory;
+    assertTrue(category2.addItem(sprite));
+    assertTrue(category2.addItem(coke));
+    // save the itemcategory instance
+    itemCategoryRepo.save(category2);
+
+
+    // Delete instance of ItemCategory
     category = null;
     // fetching the ItemCategory instance
     category = itemCategoryRepo.findByName("food");
@@ -72,8 +82,15 @@ public class TestItemCategoryPersistence {
     assertEquals(2, category.getItems().size());
     assertTrue(category.removeItem(coke));
     assertTrue(category.removeItem(sprite));
+
+    // Delete second instance of ItemCategory
+    category2 = null;
+    // fetch second instance of Item Category
+    category2 = itemCategoryRepo.findByName("drink");
+    assertNotNull(category2);
+    assertEquals(2, category2.getItems().size());
+    assertTrue(category2.removeItem(coke));
+    assertTrue(category2.removeItem(sprite));
   }
-
-
 
 }

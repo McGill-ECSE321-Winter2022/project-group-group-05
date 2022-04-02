@@ -39,7 +39,7 @@ export default {
     /**
      * We fetch each instance of OpeningHours and push it into the items list ordered by day of the week. If a day
      * does not exist in the database, we create a dummy object in javascript for use with the frontend.
-     * 
+     *
      * An additional attribute "closed" is assigned to each object. This tracks whether to use the startTime/endTime
      * recorded in that weekday or to display the opening and closing time as "Closed"
      */
