@@ -301,7 +301,6 @@ export default {
   },
   computed: {
     filteredCustomerList() {
-      console.log(this.customerList);
       return this.customerList.filter(customer => {
         return customer["username"]
           .toLowerCase()
@@ -350,55 +349,49 @@ export default {
     submitEdit: function (event) {
       event.preventDefault();
       this.editForm.error = "";
-      if (this.editForm.password === "") {
-        this.editForm.error = "Please enter password";
-      } else if (this.editForm.email === "") {
-        this.editForm.error = "Please enter email";
-      } else {
-        this.isLoading = true;
-        AXIOS.patch(
-          "/customer/".concat(this.editForm.username),
-          {},
-          {
-            params: {
-              password: this.editForm.password,
-              email: this.editForm.email,
-              address: this.editForm.address,
-              isLocal: this.editForm.local,
-            },
-          }
-        )
-          .then(() => {
-            this.$bvModal.hide("edit-customer-dialog");
-            this.resetForms();
-            AXIOS.get("/customer", {})
-              .then(response => {
-                this.customerList = response.data;
-              })
-              .catch(e => {
-                let errorMsg = e.response.data.message;
-                console.log(errorMsg);
-                this.customerError = errorMsg;
-              })
-              .then(response => {
-                this.customerList.forEach(function (customer) {
-                  if (customer.local) {
-                    customer.local = "yes";
-                  } else {
-                    customer.local = "no";
-                  }
-                });
+      this.isLoading = true;
+      AXIOS.patch(
+        "/customer/".concat(this.editForm.username),
+        {},
+        {
+          params: {
+            password: this.editForm.password,
+            email: this.editForm.email,
+            address: this.editForm.address,
+            isLocal: this.editForm.local,
+          },
+        }
+      )
+        .then(() => {
+          this.$bvModal.hide("edit-customer-dialog");
+          this.resetForms();
+          AXIOS.get("/customer", {})
+            .then(response => {
+              this.customerList = response.data;
+            })
+            .catch(e => {
+              let errorMsg = e.response.data.message;
+              console.log(errorMsg);
+              this.customerError = errorMsg;
+            })
+            .then(response => {
+              this.customerList.forEach(function (customer) {
+                if (customer.local) {
+                  customer.local = "yes";
+                } else {
+                  customer.local = "no";
+                }
               });
-          })
-          .catch(e => {
-            let errorMsg = e.response.data.message;
-            console.log(errorMsg);
-            this.editForm.error = errorMsg;
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      }
+            });
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.editForm.error = errorMsg;
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
 
     deleteCustomer: function () {
@@ -434,56 +427,49 @@ export default {
     submitCreate: function (event) {
       event.preventDefault();
       this.createForm.error = "";
-      if (this.createForm.password === "") {
-        this.createForm.error = "Please enter password";
-      } else if (this.createForm.email === "") {
-        this.createForm.error = "Please enter email";
-      } else {
-        this.isLoading = true;
-        console.log(this.createForm.local);
-        AXIOS.post(
-          "/customer/".concat(this.createForm.username),
-          {},
-          {
-            params: {
-              password: this.createForm.password,
-              email: this.createForm.email,
-              address: this.createForm.address,
-              isLocal: this.createForm.local,
-            },
-          }
-        )
-          .then(() => {
-            this.$bvModal.hide("create-customer-dialog");
-            this.resetForms();
-            AXIOS.get("/customer", {})
-              .then(response => {
-                this.customerList = response.data;
-              })
-              .catch(e => {
-                let errorMsg = e.response.data.message;
-                console.log(errorMsg);
-                this.customerError = errorMsg;
-              })
-              .then(response => {
-                this.customerList.forEach(function (customer) {
-                  if (customer.local) {
-                    customer.local = "yes";
-                  } else {
-                    customer.local = "no";
-                  }
-                });
+      this.isLoading = true;
+      AXIOS.post(
+        "/customer/".concat(this.createForm.username),
+        {},
+        {
+          params: {
+            password: this.createForm.password,
+            email: this.createForm.email,
+            address: this.createForm.address,
+            isLocal: this.createForm.local,
+          },
+        }
+      )
+        .then(() => {
+          this.$bvModal.hide("create-customer-dialog");
+          this.resetForms();
+          AXIOS.get("/customer", {})
+            .then(response => {
+              this.customerList = response.data;
+            })
+            .catch(e => {
+              let errorMsg = e.response.data.message;
+              console.log(errorMsg);
+              this.customerError = errorMsg;
+            })
+            .then(response => {
+              this.customerList.forEach(function (customer) {
+                if (customer.local) {
+                  customer.local = "yes";
+                } else {
+                  customer.local = "no";
+                }
               });
-          })
-          .catch(e => {
-            let errorMsg = e.response.data.message;
-            console.log(errorMsg);
-            this.createForm.error = errorMsg;
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      }
+            });
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.createForm.error = errorMsg;
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     resetForms: function () {
       this.createForm.username = "";
