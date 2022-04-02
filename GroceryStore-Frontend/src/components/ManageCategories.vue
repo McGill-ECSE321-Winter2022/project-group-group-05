@@ -13,17 +13,24 @@
 
             <b-col>
               <h1>Manage Item Categories</h1>
-              <div id="categories-control" class="mb-3">
+              <div id="categories-control" class="mt-4 mb-4">
                 <b-container fluid>
                   <b-row>
                     <b-col sm="2">
-                      <b-button block v-on:click="addDialog">Add Item</b-button>
+                      <b-button
+                        block
+                        v-on:click="addDialog"
+                        variant="outline-primary"
+                        >Add Item</b-button
+                      >
                     </b-col>
                     <b-col sm="4">
-                      <b-form-select v-model="selectedCategory"
-                                :options="categoriesOptions"
-                                v-bind:disabled="isLoading"
-                                @input="atSelction">
+                      <b-form-select
+                        v-model="selectedCategory"
+                        :options="categoriesOptions"
+                        v-bind:disabled="isLoading"
+                        @input="atSelction"
+                      >
                         <template #first>
                           <b-form-select-option :value="null" disabled>
                             --- please select a category ---
@@ -32,10 +39,20 @@
                       </b-form-select>
                     </b-col>
                     <b-col sm="3">
-                      <b-button block v-on:click="createCategoryDialog">Create New</b-button>
+                      <b-button
+                        block
+                        v-on:click="createCategoryDialog"
+                        variant="primary"
+                        >Create New</b-button
+                      >
                     </b-col>
                     <b-col sm="3">
-                      <b-button block>Delete Category</b-button>
+                      <b-button
+                        block
+                        v-on:click="deleteCategory"
+                        variant="danger"
+                        >Delete Category</b-button
+                      >
                     </b-col>
                   </b-row>
                 </b-container>
@@ -45,7 +62,7 @@
                 <b style="color: red">{{ categoriesError }}</b>
               </div>
 
-              <h3 class="mt-3">List of Items in Selected Category</h3>
+              <h3 class="mt-3">Items in this Category</h3>
               <div id="selected-category-info">
                 <b-table
                   id="category-item-table"
@@ -56,15 +73,13 @@
                   @row-clicked="removeDialog"
                 >
                   <template #cell(name)="data">
-                      <b>{{ data.value }}</b>
+                    <b>{{ data.value }}</b>
                   </template>
                   <template #cell(price)="data">
                     ${{ data.value | formatCurrency }}
                   </template>
                 </b-table>
-
               </div>
-
             </b-col>
           </b-row>
         </b-container>
@@ -72,15 +87,15 @@
         <b-modal
           id="create-category-dialog"
           title="Create new category"
-          hide-footer>
+          hide-footer
+        >
           <b-form @submit="submitNewCategory">
-            <b-form-group
-              label="Category name"
-              label-size="lg">
+            <b-form-group label="Category name" label-size="lg">
               <b-form-input
                 v-model="newCategoryName"
                 placeholder="Enter name"
-                required>
+                required
+              >
               </b-form-input>
             </b-form-group>
             <div class="text-center mt-5">
@@ -88,7 +103,7 @@
                 type="submit"
                 variant="primary"
                 v-bind:disabled="isLoading"
-              >Create Category</b-button
+                >Create Category</b-button
               >
             </div>
           </b-form>
@@ -124,15 +139,20 @@
           id="remove-item-dialog"
           title="Remove item"
           hide-footer
-          centered>
+          centered
+        >
           <p class="mt-2 mb-2">
-            Confirm remove <b>{{ removeItem["name"]}}</b> from this category?
+            Confirm remove <b>{{ removeItem["name"] }}</b> from this category?
           </p>
           <div class="text-center">
-            <b-button variant="danger" v-on:click="removeConfirm" v-bind:disabled="isLoading">Confirm Remove</b-button>
+            <b-button
+              variant="danger"
+              v-on:click="removeConfirm"
+              v-bind:disabled="isLoading"
+              >Confirm Remove</b-button
+            >
           </div>
         </b-modal>
-
       </div>
     </b-overlay>
   </div>

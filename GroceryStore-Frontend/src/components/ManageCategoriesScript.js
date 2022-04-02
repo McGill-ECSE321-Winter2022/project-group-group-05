@@ -48,7 +48,7 @@ export default {
       });
     },
   },
-  created: async function() {
+  created: async function () {
     this.isLoading = true;
     await this.fetchCategories();
     await this.fetchItems();
@@ -56,10 +56,24 @@ export default {
     this.isLoading = false;
   },
   methods: {
-    createCategoryDialog: function() {
+    deleteCategory: async function () {
+      if (this.selectedCategory !== null) {
+        this.categoriesError = "";
+        this.isLoading = true;
+        let deleteName = this.selectedCategory;
+        this.selectedCategory = null;
+        await AXIOS.delete("/itemCategory/".concat(deleteName));
+        await this.fetchCategories();
+        this.updateSelection();
+        this.isLoading = false;
+      } else {
+        this.categoriesError = "No selected category";
+      }
+    },
+    createCategoryDialog: function () {
       this.$bvModal.show("create-category-dialog");
     },
-    submitNewCategory: async function() {
+    submitNewCategory: async function () {
       this.categoriesError = "";
       this.isLoading = true;
       await this.createCategory(this.newCategoryName);
@@ -69,96 +83,124 @@ export default {
       this.newCategoryName = "";
       this.isLoading = false;
     },
-    atSelction: async function(value) {
-      this.categoriesError = "";
-      this.isLoading = true;
-      await this.fetchItemsInCategory(value);
-      this.isLoading = false;
+    atSelction: async function (value) {
+      if (value !== null) {
+        this.categoriesError = "";
+        this.isLoading = true;
+        await this.fetchItemsInCategory(value);
+        this.isLoading = false;
+      } else {
+        this.itemsInSelectedCategory = [];
+      }
     },
-    removeDialog: function(item) {
+    removeDialog: function (item) {
       this.removeItem = item;
       this.$bvModal.show("remove-item-dialog");
     },
-    removeConfirm: async function() {
+    removeConfirm: async function () {
       this.categoriesError = "";
       this.isLoading = true;
-      await this.removeItemFromCategory(this.selectedCategory, this.removeItem["name"]);
+      await this.removeItemFromCategory(
+        this.selectedCategory,
+        this.removeItem["name"]
+      );
       await this.fetchItemsInCategory(this.selectedCategory);
       this.$bvModal.hide("remove-item-dialog");
       this.isLoading = false;
     },
-    addDialog: function() {
+    addDialog: function () {
       this.$bvModal.show("item-search");
     },
-    addConfirm: async function(item) {
+    addConfirm: async function (item) {
       this.categoriesError = "";
       this.isLoading = true;
       await this.addItemToCategory(this.selectedCategory, item["name"]);
       await this.fetchItemsInCategory(this.selectedCategory);
       this.isLoading = false;
     },
-    fetchCategories: function() {
-      return AXIOS.get("/itemCategory", {}).then(response => {
-        this.categoriesList = response.data;
-      }).catch(e => {
-        let errorMsg = e.response.data.message;
-        console.log(errorMsg);
-      });
+    fetchCategories: function () {
+      return AXIOS.get("/itemCategory", {})
+        .then(response => {
+          this.categoriesList = response.data;
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+        });
     },
-    fetchItems: function() {
-      return AXIOS.get("/item/getAll", {}).then(response => {
-        this.itemList = response.data;
-      }).catch(e => {
-        let errorMsg = e.response.data.message;
-        console.log(errorMsg);
-      });
+    fetchItems: function () {
+      return AXIOS.get("/item/getAll", {})
+        .then(response => {
+          this.itemList = response.data;
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+        });
     },
-    fetchItemsInCategory: function(categoryName) {
-      return AXIOS.get("/itemCategory/".concat(categoryName).concat("/getItems"), {}).then(response => {
-        this.itemsInSelectedCategory = response.data;
-      }).catch(e => {
-        let errorMsg = e.response.data.message;
-        console.log(errorMsg);
-        this.categoriesError = errorMsg;
-      });
+    fetchItemsInCategory: function (categoryName) {
+      return AXIOS.get(
+        "/itemCategory/".concat(categoryName).concat("/getItems"),
+        {}
+      )
+        .then(response => {
+          this.itemsInSelectedCategory = response.data;
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.categoriesError = errorMsg;
+        });
     },
-    updateSelection: function() {
+    updateSelection: function () {
       this.categoriesOptions = [];
       for (const category of this.categoriesList) {
         let name = category["name"];
-        let option = { value: name, text: name};
+        let option = { value: name, text: name };
         this.categoriesOptions.push(option);
       }
     },
-    removeItemFromCategory:  function(categoryName, itemName) {
-      return AXIOS.patch("/itemCategory/".concat(categoryName).concat("/removeItem"), {}, {
-        params: {
-          itemName: itemName,
-        },
-      }).catch(e => {
+    removeItemFromCategory: function (categoryName, itemName) {
+      return AXIOS.patch(
+        "/itemCategory/".concat(categoryName).concat("/removeItem"),
+        {},
+        {
+          params: {
+            itemName: itemName,
+          },
+        }
+      ).catch(e => {
         let errorMsg = e.response.data.message;
         console.log(errorMsg);
         this.categoriesError = errorMsg;
       });
     },
-    addItemToCategory: function(categoryName, itemName) {
-      return AXIOS.patch("/itemCategory/".concat(categoryName).concat("/addItem"), {}, {
-        params: {
-          itemName: itemName,
-        },
-      }).catch(e => {
+    addItemToCategory: function (categoryName, itemName) {
+      return AXIOS.patch(
+        "/itemCategory/".concat(categoryName).concat("/addItem"),
+        {},
+        {
+          params: {
+            itemName: itemName,
+          },
+        }
+      ).catch(e => {
         let errorMsg = e.response.data.message;
         console.log(errorMsg);
+        if (errorMsg.includes("ConstraintViolationException")) {
+          errorMsg = "Item already belongs to another category";
+        }
         this.categoriesError = errorMsg;
       });
     },
-    createCategory: function(categoryName) {
-      return AXIOS.post("/itemCategory/".concat(categoryName)).catch(e => {
-        let errorMsg = e.response.data.message;
-        console.log(errorMsg);
-        this.categoriesError = errorMsg;
-      });
+    createCategory: function (categoryName) {
+      return AXIOS.post("/itemCategory/".concat(categoryName), {}, {})
+        .then(() => {})
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+          this.categoriesError = errorMsg;
+        });
     },
   },
 };
-
