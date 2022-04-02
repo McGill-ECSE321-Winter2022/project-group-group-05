@@ -2,12 +2,7 @@
 <!--Show all paid orders and be able to change them to prepared-->
 <template>
   <div id="manage-paid-orders" v-if="isEmployee || isOwner">
-    <b-overlay
-      id="overlay"
-      :show="isLoading"
-      :opacity="0.85"
-      rounded="sm"
-    >
+    <b-overlay id="overlay" :show="isLoading" :opacity="0.85" rounded="sm">
       <div :aria-hidden="isLoading ? 'true' : null" id="manage-inner">
         <b-container fluid>
           <b-row>
