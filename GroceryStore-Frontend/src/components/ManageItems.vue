@@ -3,8 +3,8 @@
 <template>
   <b-container fluid>
     <b-row class="vh-100" align-v="stretch">
-      <b-col><staff-dashboard></staff-dashboard></b-col>
-      <b-col cols="10">
+      <b-col md="auto"><staff-dashboard></staff-dashboard></b-col>
+      <b-col>
         <h1 class="header_style">Manage Items</h1>
         <b-alert
           show
@@ -301,11 +301,10 @@
 /* Styling for Page Title */
 .header_style {
   padding-top: 15px;
-  padding-left: 100px;
-  border-color: #0d6efd;
+  border-color: #91c788;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
-  text-align: left;
+  text-align: center;
   margin-bottom: 30px;
 }
 /* Styling for Edit Item Section */
