@@ -24,28 +24,28 @@
             <b-button-group>
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="currentWeek === 0"
                 @click="selectFirstWeek()"
                 >&laquo;</b-button
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="currentWeek === 0"
                 @click="stepBackWeek()"
                 >&lsaquo;</b-button
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="currentWeek === latestWeek"
                 @click="returnToLatestWeek()"
                 >Return to Latest Assigned Shifts</b-button
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="
                   currentWeek === scheduledShiftsByWeek.length - 1
                 "
@@ -54,7 +54,7 @@
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="
                   currentWeek === scheduledShiftsByWeek.length - 1
                 "

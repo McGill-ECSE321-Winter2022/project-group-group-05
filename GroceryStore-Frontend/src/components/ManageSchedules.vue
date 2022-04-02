@@ -33,7 +33,7 @@
                 <template #cell(modify_schedule)="row">
                   <b-button
                     size="sm"
-                    variant="outline-primary"
+                    variant="primary"
                     @click="row.toggleDetails"
                     class="mr-2"
                   >
@@ -45,34 +45,34 @@
                     <b-button-group>
                       <b-button
                         class="button_style"
-                        variant="outline-primary"
+                        variant="primary"
                         @click="stepBackWeek(row.index)"
                         >&lsaquo;</b-button
                       >
                       <b-button
                         class="button_style"
-                        variant="outline-primary"
+                        variant="primary"
                         v-bind:disabled="isWeekPresent[row.index]"
                         @click="returnToLatestWeek(row.index)"
                         >Return to this Week</b-button
                       >
                       <b-button
                         class="button_style"
-                        variant="outline-primary"
+                        variant="primary"
                         @click="stepForwardWeek(row.index)"
                         >&rsaquo;</b-button
                       >
                     </b-button-group>
                     <b-button
                       class="button_style"
-                      variant="outline-success"
+                      variant="success"
                       v-bind:disabled="isWeekPresent[row.index] || busy"
                       @click="assignCurrentSchedule(row.index)"
                       >Auto-fill Current Schedule</b-button
                     >
                     <b-button
                       class="button_style"
-                      variant="outline-danger"
+                      variant="danger"
                       v-bind:disabled="busy"
                       @click="clearWeekSchedule(row.index)"
                       >Clear Week Schedule</b-button
@@ -147,7 +147,7 @@
               <div class="shift_header_style bg-light">
                 <h2>Available Shifts</h2>
                 <b-button
-                  variant="outline-primary"
+                  variant="primary"
                   style="margin-bottom: 10px"
                   v-b-modal.createShift
                   >Create a New Shift</b-button
@@ -228,7 +228,7 @@
                       >
                       <b-button
                         size="sm"
-                        variant="outline-primary"
+                        variant="primary"
                         style="margin-top: 10px"
                         @click="deleteShift(shift.name)"
                         >Delete Shift</b-button

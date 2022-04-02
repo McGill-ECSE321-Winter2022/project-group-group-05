@@ -32,7 +32,7 @@
                 <b-button-group size="sm" class="mr-1">
                   <b-button
                     class="button_style"
-                    variant="outline-primary"
+                    variant="primary"
                     v-if="isOwnerLoggedIn"
                     v-b-modal.createItem
                     >Add new Item</b-button
@@ -270,7 +270,7 @@
                       <b-button
                         size="sm"
                         v-bind:disabled="this.itemToBeModified.length === 0"
-                        variant="outline-dark"
+                        variant="dark"
                         @click="discontinue()"
                         >{{
                           itemToBeModified.discontinued
@@ -281,7 +281,7 @@
                       <b-button
                         size="sm"
                         v-bind:disabled="this.itemToBeModified.length === 0"
-                        variant="outline-primary"
+                        variant="primary"
                         @click="saveItemChanges()"
                         >Save</b-button
                       >
