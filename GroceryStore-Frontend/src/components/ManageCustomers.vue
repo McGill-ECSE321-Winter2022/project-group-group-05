@@ -408,23 +408,24 @@ export default {
         .then(() => {
           this.$bvModal.hide("edit-customer-dialog");
           this.resetForms();
-          AXIOS.get("/customer", {}).then(response => {
-            this.customerList = response.data;
-          });
+          AXIOS.get("/customer", {})
+            .then(response => {
+              this.customerList = response.data;
+            })
+            .then(response => {
+              this.customerList.forEach(function (customer) {
+                if (customer.local) {
+                  customer.local = "yes";
+                } else {
+                  customer.local = "no";
+                }
+              });
+            });
         })
         .catch(e => {
           let errorMsg = e.response.data.message;
           console.log(errorMsg);
           this.editForm.error = errorMsg;
-        })
-        .then(response => {
-          this.customerList.forEach(function (customer) {
-            if (customer.local) {
-              customer.local = "yes";
-            } else {
-              customer.local = "no";
-            }
-          });
         })
         .finally(() => {
           this.isLoading = false;
