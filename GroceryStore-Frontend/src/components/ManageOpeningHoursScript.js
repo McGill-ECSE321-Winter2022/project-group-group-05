@@ -37,10 +37,11 @@ export default {
     this.isOwnerLoggedIn =
       LOGIN_STATE.state.isLoggedIn && LOGIN_STATE.state.userType === "Owner";
     /**
-     * There should always be once instance of OpeningHours in the database for every day of the week.
-     *
-     * We fetch each instance and load them into the items list ordered by day of the week. If a day
-     * does not exist in the database, we will create it.
+     * We fetch each instance of OpeningHours and push it into the items list ordered by day of the week. If a day
+     * does not exist in the database, we create a dummy object in javascript for use with the frontend.
+     * 
+     * An additional attribute "closed" is assigned to each object. This tracks whether to use the startTime/endTime
+     * recorded in that weekday or to display the opening and closing time as "Closed"
      */
     this.items.push(await fetchWeekday("Sunday"));
     this.items.push(await fetchWeekday("Monday"));
