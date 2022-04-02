@@ -12,11 +12,10 @@
             </b-col>
 
             <b-col>
-              <h1>Manage Your Profile</h1>
+              <h1 class="header_style">Manage Your Profile</h1>
               <br />
-
               <div id="manage-col">
-                <div v-if="userType === 'Employee'">
+                <div v-if="userType === 'Employee'" id="etable">
                   <table>
                     <tr>
                       <td>Username:</td>
@@ -67,8 +66,7 @@
                     <p style="color: red">{{ errorEmployee }}</p>
                   </div>
                 </div>
-
-                <div v-if="userType === 'Owner'">
+                <div v-if="userType === 'Owner'" id="otable">
                   <table>
                     <tr>
                       <td>Username:</td>
@@ -229,20 +227,29 @@ export default {
 </script>
 
 <style scoped>
+.header_style {
+  padding-top: 15px;
+  padding-left: 100px;
+  border-color: #91c788;
+  border-style: solid;
+  border-width: 0px 0px 6px 0px;
+  text-align: center;
+  margin-bottom: 30px;
+}
 input[type="text"] {
   background: transparent;
   border: none;
   border-bottom: 1px solid #727272;
 }
-#manage-outer {
-  width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-}
-#manage-inner {
-  padding: 100px;
-}
 #manage-col {
-  text-align: left;
+  text-align: center;
+}
+#etable {
+  position: relative;
+  left: 40%;
+}
+#otable {
+  position: relative;
+  left: 40%;
 }
 </style>

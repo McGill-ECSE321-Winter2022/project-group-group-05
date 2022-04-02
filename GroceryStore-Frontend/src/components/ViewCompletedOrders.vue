@@ -81,14 +81,6 @@
   text-align: center;
   padding: 8px;
 }
-#cancel {
-  position: absolute;
-  right: 0px;
-}
-#confirm {
-  position: absolute;
-  right: 0px;
-}
 #header {
   border-radius: 5px;
   position: relative;
@@ -96,14 +88,6 @@
   display: flex;
   flex-direction: row;
   height: 40px;
-}
-#view-completed-orders {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60%;
-  transform: translate(-50%, -50%);
-  height: 750px;
 }
 #purchaseTable {
   position: relative;
