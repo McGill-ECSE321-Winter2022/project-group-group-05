@@ -6,9 +6,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-
+import javax.persistence.ManyToMany;
 
 @Entity
 public class ItemCategory {
@@ -16,7 +14,7 @@ public class ItemCategory {
   @Id
   private String name;
   // ItemCategory Associations
-  @OneToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER)
   private Set<Item> items;
 
   public ItemCategory() {
