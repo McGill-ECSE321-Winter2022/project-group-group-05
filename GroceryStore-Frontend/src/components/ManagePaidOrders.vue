@@ -89,11 +89,7 @@
   text-align: center;
   padding: 8px;
 }
-#cancel {
-  position: absolute;
-  right: 0px;
-}
-#confirm {
+#Prepare {
   position: absolute;
   right: 0px;
 }
@@ -104,14 +100,6 @@
   display: flex;
   flex-direction: row;
   height: 40px;
-}
-#manage-paid-orders {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60%;
-  transform: translate(-50%, -50%);
-  height: 750px;
 }
 #purchaseTable {
   position: relative;
