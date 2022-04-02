@@ -33,6 +33,14 @@ export default {
       perPage: 10,
       currentPage: 1,
       fetchedItems: [],
+      fields: [
+        { key: "name", sortable: true },
+        { key: "price", sortable: true },
+        { key: "inventory", sortable: true },
+        "canDeliver",
+        "canPickUp",
+        "discontinued",
+      ],
 
       // used for error handling
       errorMessage: "",
@@ -55,26 +63,6 @@ export default {
     };
   },
   computed: {
-    fields: function () {
-      return this.isOwnerLoggedIn
-        ? [
-            { key: "name", sortable: true },
-            { key: "price", sortable: true },
-            { key: "inventory", sortable: true },
-            "canDeliver",
-            "canPickUp",
-            "discontinued",
-            "edit_item",
-          ]
-        : [
-            { key: "name", sortable: true },
-            { key: "price", sortable: true },
-            { key: "inventory", sortable: true },
-            "canDeliver",
-            "canPickUp",
-            "discontinued",
-          ];
-    },
     items: function () {
       return this.fetchedItems.filter(item =>
         item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
@@ -111,16 +99,12 @@ export default {
       return this.creationAttempt ? this.itemInventory > 0 : null;
     },
     isItemModifyPriceValid: function () {
-      return this.itemToBeModified.length === 0 ||
-        this.itemToBeModified.price > 0
-        ? null
-        : false;
+      // replace "true" with "null" to avoid showing green outline
+      return this.itemToBeModified.price > 0 ? null : false;
     },
     isItemModifyInventoryValid: function () {
-      return this.itemToBeModified.length === 0 ||
-        this.itemToBeModified.inventory > 0
-        ? null
-        : false;
+      // replace "true" with "null" to avoid showing green outline
+      return this.itemToBeModified.inventory > 0 ? null : false;
     },
   },
   methods: {
@@ -176,7 +160,14 @@ export default {
       }
     },
     modify(item) {
-      this.itemToBeModified = Object.assign({}, item);
+      // only allow modification if the owner is logged in
+      if (this.isOwnerLoggedIn) {
+        this.itemToBeModified = Object.assign({}, item);
+        this.$bvModal.show("editItem");
+      }
+    },
+    resetEditItemForm() {
+      this.itemToBeModified = [];
     },
     async deleteItem() {
       await AXIOS.delete("/item/".concat(this.itemToBeModified.name))
@@ -188,13 +179,15 @@ export default {
               break;
             }
           }
-          this.itemToBeModified = [];
         })
         .catch(error => {
           console.log(error.response.data.message);
           this.dismissCountDown = this.dismissSecs;
           this.errorMessage = error.response.data.message;
         });
+      this.$nextTick(() => {
+        this.$bvModal.hide("editItem");
+      });
     },
     async discontinue() {
       await AXIOS.patch(
@@ -213,7 +206,7 @@ export default {
           for (var i = 0; i < this.fetchedItems.length; i++) {
             if (this.fetchedItems[i].name === response.data.name) {
               this.fetchedItems[i].discontinued = response.data.discontinued;
-              this.itemToBeModified = response.data;
+              this.itemToBeModified.discontinued = response.data.discontinued;
               break;
             }
           }
@@ -225,6 +218,15 @@ export default {
         });
     },
     async saveItemChanges() {
+      // if item parameters are invalid, do not save changes
+      // Note: we check that the boolean values are equal to false for readability
+      // Javascript's boolean evaluation for null values is not immediately obvious
+      if (
+        this.isItemModifyInventoryValid === false ||
+        this.isItemModifyPriceValid === false
+      ) {
+        return;
+      }
       // modify price
       await AXIOS.patch(
         "/item/".concat(this.itemToBeModified.name).concat("/setPrice"),
@@ -290,6 +292,21 @@ export default {
             canPickUp: this.itemToBeModified.canPickUp,
           },
         }
+      ).catch(error => {
+        console.log(error.response.data.message);
+        this.dismissCountDown = this.dismissSecs;
+        this.errorMessage = error.response.data.message;
+      });
+      await AXIOS.patch(
+        "/item/"
+          .concat(this.itemToBeModified.name)
+          .concat("/setIsDiscontinued"),
+        {},
+        {
+          params: {
+            isDiscontinued: this.itemToBeModified.discontinued,
+          },
+        }
       )
         .then(response => {
           // only update the frontend after all modifications have been made
@@ -299,13 +316,15 @@ export default {
               break;
             }
           }
-          console.log("success");
         })
         .catch(error => {
           console.log(error.response.data.message);
           this.dismissCountDown = this.dismissSecs;
           this.errorMessage = error.response.data.message;
         });
+      this.$nextTick(() => {
+        this.$bvModal.hide("editItem");
+      });
     },
   },
 };

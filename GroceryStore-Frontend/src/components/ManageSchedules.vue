@@ -25,9 +25,7 @@
               <b-table
                 :items="items"
                 :fields="fields"
-                striped
-                outlined
-                head-variant="light"
+                fixed
                 sticky-header="85vh"
               >
                 <template #cell(modify_schedule)="row">
@@ -255,6 +253,7 @@
   text-align: center;
   margin-bottom: 30px;
 }
+/* Styling for Available Shifts label */
 .shift_header_style {
   padding-top: 5px;
   border-radius: 3px;
@@ -271,6 +270,9 @@
   margin-bottom: 5px;
 }
 /* Styling for Schedule Calendar */
+.schedule_style {
+  max-width: 100%;
+}
 .schedule_row_style {
   flex-wrap: nowrap;
   white-space: nowrap;
@@ -278,9 +280,6 @@
   height: 100%;
   display: flex;
   margin: auto;
-}
-.schedule_style {
-  max-width: 100%;
 }
 .schedule_column_style {
   height: 100%;
@@ -293,6 +292,7 @@
   border: 1px solid #9ac2fe;
   flex-wrap: wrap;
 }
+/* Styling for Assigned Shift elements */
 .scheduled_shift_style {
   width: 90%;
   margin-top: 4px;
@@ -306,6 +306,9 @@
   outline-style: solid;
   outline-color: #cccccc;
   outline-width: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .button_remove_style {
   font-size: 85%;
@@ -315,6 +318,7 @@
   outline-color: #cccccc;
   outline-width: 1px;
 }
+/* Styling for List of Available Shifts */
 .shift_container_style {
   padding-top: 5px;
   padding-bottom: 5px;
@@ -339,12 +343,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* Font sizes */
 .font_size_large {
   font-size: 18px;
 }
 .font_size_med {
   font-size: 15px;
 }
+/* Draggable Entity Styles */
 .ghost-card {
   opacity: 0.5;
   background: #f7fafc;
@@ -356,6 +362,13 @@
   max-height: 50px;
   margin: auto;
   padding: 0px;
+}
+.gone-card .card-header {
+  font-size: 15px;
+  min-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .gone-card .card-text {
   visibility: hidden;

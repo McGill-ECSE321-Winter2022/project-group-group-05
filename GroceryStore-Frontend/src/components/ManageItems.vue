@@ -25,7 +25,7 @@
         <b-container fluid v-if="isOwnerLoggedIn || isEmployeeLoggedIn">
           <b-row>
             <!-- Items Table -->
-            <b-col :cols="isOwnerLoggedIn ? 7 : 12"
+            <b-col
               ><b-button-toolbar
                 aria-label="Toolbar with button groups and input groups"
               >
@@ -33,6 +33,7 @@
                   <b-button
                     class="button_style"
                     variant="primary"
+                    style="height: 70%"
                     v-if="isOwnerLoggedIn"
                     v-b-modal.createItem
                     >Add new Item</b-button
@@ -152,24 +153,19 @@
                 :fields="fields"
                 :per-page="perPage"
                 :current-page="currentPage"
-                striped
-                outlined
+                hover
+                fixed
                 v-if="isOwnerLoggedIn || isEmployeeLoggedIn"
-                head-variant="light"
                 sticky-header="70vh"
                 :sort-compare-options="{
                   sensitivity: 'base',
                   ignorePunctuation: true,
                   numeric: true,
                 }"
+                @row-clicked="modify"
               >
                 <template #cell(price)="row">
-                  $ {{ row.item.price | formatCurrency }}
-                </template>
-                <template #cell(edit_item)="row">
-                  <b-button size="sm" @click="modify(row.item)" class="mr-2">
-                    Edit Item Details
-                  </b-button>
+                  ${{ row.item.price | formatCurrency }}
                 </template>
               </b-table>
               <b-pagination
@@ -180,116 +176,114 @@
                 aria-controls="item-table"
               ></b-pagination>
             </b-col>
-            <!-- Edit Item Div -->
-            <b-col cols="5" v-if="isOwnerLoggedIn">
-              <div class="item_edit_style bg-light">
-                <h2>Item Edit Panel</h2>
-              </div>
-              <b-container class="item_edit_style bg-light"
-                ><b-row
-                  ><b-col align-self="center"
-                    ><h5>Image Preview</h5>
-                    <b-img
-                      thumbnail
-                      fluid
-                      style="width: 400px"
-                      :src="
-                        itemToBeModified.image
-                          ? itemToBeModified.image
-                          : '/static/no-image.jpg'
-                      "
-                    ></b-img></b-col
-                  ><b-col
-                    ><form ref="form">
-                      <b-form-group
-                        label="Image URL"
-                        label-for="image-modify-input"
-                      >
-                        <b-form-input
-                          id="image-modify-input"
-                          v-model="itemToBeModified.image"
-                        ></b-form-input>
-                      </b-form-group>
-                      <b-form-group
-                        label="Item Price"
-                        label-for="item-price-modify-input"
-                        invalid-feedback="Item price must be greater than $ 0.00"
-                        :state="isItemModifyPriceValid"
-                        ><b-input-group prepend="$"
-                          ><b-form-input
-                            id="item-price-modify-input"
-                            v-model="itemToBeModified.price"
-                            :state="isItemModifyPriceValid"
-                            :type="'number'"
-                            step="0.01"
-                            required
-                          ></b-form-input
-                        ></b-input-group>
-                      </b-form-group>
-                      <b-form-group
-                        label="Item Inventory"
-                        label-for="item-inventory-modify-input"
-                        invalid-feedback="Item inventory must be greater than 0"
-                        :state="isItemModifyInventoryValid"
-                        ><b-form-input
-                          id="item-inventory-modify-input"
-                          v-model="itemToBeModified.inventory"
-                          :state="isItemModifyInventoryValid"
-                          :type="'number'"
-                          required
-                        ></b-form-input>
-                      </b-form-group>
-                      <b-form-group label="Online Ordering Options">
-                        <b-form-checkbox
-                          v-model="itemToBeModified.canDeliver"
-                          value="true"
-                          unchecked-value="false"
-                        >
-                          Item can be delivered
-                        </b-form-checkbox>
-                        <b-form-checkbox
-                          v-model="itemToBeModified.canPickUp"
-                          value="true"
-                          unchecked-value="false"
-                        >
-                          Item can be picked up
-                        </b-form-checkbox>
-                      </b-form-group>
-                    </form>
-                    <b-button-group style="margin-bottom: 10px">
-                      <b-button
-                        size="sm"
-                        v-b-popover.hover.top="
-                          'Warning: This action will permanently remove this item from the system. Any references to this item, including purchase history, will not be saved!'
+            <!-- Edit Item Modal -->
+            <b-modal
+              id="editItem"
+              ref="modal"
+              title="Edit Item"
+              size="lg"
+              @hidden="resetEditItemForm"
+            >
+              <template
+                ><b-container
+                  ><b-row
+                    ><b-col align-self="center"
+                      ><h5>Image Preview</h5>
+                      <b-img
+                        thumbnail
+                        fluid
+                        style="width: 400px"
+                        :src="
+                          itemToBeModified.image
+                            ? itemToBeModified.image
+                            : '/static/no-image.jpg'
                         "
-                        v-bind:disabled="this.itemToBeModified.length === 0"
-                        variant="danger"
-                        @click="deleteItem()"
-                        >Delete</b-button
-                      >
-                      <b-button
-                        size="sm"
-                        v-bind:disabled="this.itemToBeModified.length === 0"
-                        variant="dark"
-                        @click="discontinue()"
-                        >{{
-                          itemToBeModified.discontinued
-                            ? "Set As Available"
-                            : "Set as Discontinued"
-                        }}</b-button
-                      >
-                      <b-button
-                        size="sm"
-                        v-bind:disabled="this.itemToBeModified.length === 0"
-                        variant="primary"
-                        @click="saveItemChanges()"
-                        >Save</b-button
-                      >
-                    </b-button-group></b-col
-                  ></b-row
-                ></b-container
+                      ></b-img></b-col
+                    ><b-col
+                      ><form ref="form">
+                        <b-form-group
+                          label="Image URL"
+                          label-for="image-modify-input"
+                        >
+                          <b-form-input
+                            id="image-modify-input"
+                            v-model="itemToBeModified.image"
+                          ></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                          label="Item Price"
+                          label-for="item-price-modify-input"
+                          invalid-feedback="Item price must be greater than $0.00"
+                          :state="isItemModifyPriceValid"
+                          ><b-input-group prepend="$"
+                            ><b-form-input
+                              id="item-price-modify-input"
+                              v-model="itemToBeModified.price"
+                              :state="isItemModifyPriceValid"
+                              :type="'number'"
+                              step="0.01"
+                              required
+                            ></b-form-input
+                          ></b-input-group>
+                        </b-form-group>
+                        <b-form-group
+                          label="Item Inventory"
+                          label-for="item-inventory-modify-input"
+                          invalid-feedback="Item inventory must be greater than 0"
+                          :state="isItemModifyInventoryValid"
+                          ><b-form-input
+                            id="item-inventory-modify-input"
+                            v-model="itemToBeModified.inventory"
+                            :state="isItemModifyInventoryValid"
+                            :type="'number'"
+                            required
+                          ></b-form-input>
+                        </b-form-group>
+                        <b-form-group label="Online Ordering Options">
+                          <b-form-checkbox
+                            v-model="itemToBeModified.canDeliver"
+                            value="true"
+                            unchecked-value="false"
+                          >
+                            Item can be delivered
+                          </b-form-checkbox>
+                          <b-form-checkbox
+                            v-model="itemToBeModified.canPickUp"
+                            value="true"
+                            unchecked-value="false"
+                          >
+                            Item can be picked up
+                          </b-form-checkbox>
+                        </b-form-group>
+                        <b-form-group label="Set Item Availability">
+                          <b-form-checkbox
+                            v-model="itemToBeModified.discontinued"
+                            value="true"
+                            unchecked-value="false"
+                          >
+                            Discontinued
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </form>
+                    </b-col></b-row
+                  ></b-container
+                ></template
               >
-            </b-col>
+              <template #modal-footer="{ cancel }">
+                <b-button @click="cancel()"> Cancel </b-button>
+                <b-button
+                  v-b-popover.hover.top="
+                    'Warning: This action will permanently remove this item from the system. Any references to this item, including purchase history, will not be saved!'
+                  "
+                  variant="danger"
+                  @click="deleteItem()"
+                  >Delete</b-button
+                >
+                <b-button variant="primary" @click="saveItemChanges()"
+                  >Save</b-button
+                >
+              </template>
+            </b-modal>
           </b-row>
         </b-container>
       </b-col>
@@ -307,19 +301,7 @@
   text-align: center;
   margin-bottom: 30px;
 }
-/* Styling for Edit Item Section */
-.item_edit_style {
-  padding-top: 5px;
-  border-radius: 3px;
-
-  min-width: 200px;
-  outline-style: solid;
-  outline-color: #cccccc;
-  outline-width: 1px;
-}
-.button_style {
-  margin-bottom: 16px;
-}
+/* Center the Pagination */
 .pagination_style {
   display: flex;
   justify-content: center;
