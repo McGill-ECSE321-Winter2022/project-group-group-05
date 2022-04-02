@@ -3,6 +3,13 @@ import { AXIOS } from "../common/AxiosScript";
 import { LOGIN_STATE } from "../common/StateScript";
 import moment from "moment";
 
+/**
+ * Asynchronously fetches OpeningHours instances from the database for the requested
+ * weekday. If the instance does not exist, this function will create it.
+ *
+ * @param {String} dayOfWeek The weekday (i.e. Sunday, Monday, etc.)
+ * @returns the fetched data for the requested weekday
+ */
 async function fetchWeekday(dayOfWeek) {
   return AXIOS.get("openingH/".concat(dayOfWeek))
     .then(response => {
@@ -113,6 +120,7 @@ export default {
       this.updateOpeningHours();
     },
     editOpeningHours(dayOfWeek, rowIndex) {
+      // set the selection variables to match the attributes of our selection
       this.selectedWeekDayIndex = rowIndex;
       this.selectedWeekDay = dayOfWeek.daysOfWeek;
       this.selectedStartTime = dayOfWeek.startTime;
@@ -133,6 +141,7 @@ export default {
         }
       )
         .then(response => {
+          // update frontend
           this.items[this.selectedWeekDayIndex].startTime =
             response.data.startTime;
           this.items[this.selectedWeekDayIndex].endTime = response.data.endTime;

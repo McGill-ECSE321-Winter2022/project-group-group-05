@@ -20,6 +20,7 @@
           Error: {{ errorMessage }}
         </b-alert>
         <div v-if="isOwnerLoggedIn">
+          <!-- Table of Weekdays -->
           <b-table
             class="hours_table_style"
             hover
@@ -35,6 +36,7 @@
               {{ row.item.endTime | formatTime }}
             </template>
           </b-table>
+          <!-- Popup editing menu -->
           <b-modal
             id="editOpeningHours"
             ref="modal"
