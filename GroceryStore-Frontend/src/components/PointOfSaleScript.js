@@ -124,8 +124,6 @@ export default {
         });
     },
     addItem: function () {
-      let itemName = this.addItemName;
-      let quantity = this.addItemQty;
       this.posError = "";
       this.isLoading = true;
       AXIOS.post(
@@ -133,8 +131,8 @@ export default {
         {},
         {
           params: {
-            itemName: itemName,
-            quantity: quantity,
+            itemName: this.addItemName,
+            quantity: this.addItemQty,
           },
         }
       )
