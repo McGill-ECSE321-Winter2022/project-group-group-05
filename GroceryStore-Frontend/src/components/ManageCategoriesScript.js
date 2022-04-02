@@ -194,13 +194,13 @@ export default {
       });
     },
     createCategory: function (categoryName) {
-      return AXIOS.post("/itemCategory/".concat(categoryName), {}, {})
-        .then(() => {})
-        .catch(e => {
+      return AXIOS.post("/itemCategory/".concat(categoryName), {}, {}).catch(
+        e => {
           let errorMsg = e.response.data.message;
           console.log(errorMsg);
           this.categoriesError = errorMsg;
-        });
+        }
+      );
     },
   },
 };
