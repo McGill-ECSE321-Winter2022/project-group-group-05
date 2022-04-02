@@ -285,11 +285,12 @@
   height: 100%;
   min-height: 300px;
   min-width: 150px;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin: 2px;
   padding-top: 10px;
-  background-color: #dbf4fa;
-  border: 1px solid #9ac2fe;
+  border-radius: 3px;
+  outline-style: solid;
+  outline-color: #cccccc;
+  outline-width: 1px;
   flex-wrap: wrap;
 }
 /* Styling for Assigned Shift elements */
