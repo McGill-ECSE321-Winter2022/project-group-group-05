@@ -95,9 +95,7 @@
         <div v-if="isCustomerLoggedIn" class="table_style">
           <b-button-toolbar justify>
             <router-link to="/">
-              <b-button size="lg" variant="primary"
-                >Back to Store</b-button
-              >
+              <b-button size="lg" variant="primary">Back to Store</b-button>
             </router-link>
             <b-input-group prepend="Total">
               <b-form-input
@@ -124,10 +122,7 @@
                 </b-form-select></b-form
               ></b-input-group
             >
-            <b-button
-              size="lg"
-              variant="success"
-              @click="orderPurchase()"
+            <b-button size="lg" variant="success" @click="orderPurchase()"
               >Order</b-button
             >
           </b-button-toolbar>

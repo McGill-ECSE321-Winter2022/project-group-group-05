@@ -15,7 +15,7 @@
               <br />
               <div id="manage-col" class="mx-auto">
                 <div v-if="userType === 'Employee'" id="etable">
-                  <table class="mx-auto" >
+                  <table class="mx-auto">
                     <tr>
                       <td>Username:</td>
                       <td>{{ username }}</td>
