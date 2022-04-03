@@ -48,12 +48,5 @@ export default {
         return "pick up";
       }
     },
-    deliveryFee(purchase) {
-      if (purchase.delivery) {
-        return " + delivery fee $10";
-      } else {
-        return "";
-      }
-    },
   },
 };

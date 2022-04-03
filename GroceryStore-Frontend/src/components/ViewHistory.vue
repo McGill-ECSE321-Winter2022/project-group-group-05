@@ -61,8 +61,6 @@
           <tr id="totalPrice">
             Total: ${{
               purchase.total | formatCurrency
-            }}{{
-              deliveryFee(purchase)
             }}
           </tr>
           <br />
@@ -120,13 +118,6 @@ export default {
         return "delivery";
       } else {
         return "pick up";
-      }
-    },
-    deliveryFee(purchase) {
-      if (purchase.delivery) {
-        return " + delivery fee $10";
-      } else {
-        return "";
       }
     },
     cancel: function (id) {
