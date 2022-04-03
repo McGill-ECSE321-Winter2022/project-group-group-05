@@ -75,3 +75,21 @@ Started on Feb 28, 2022
 * **Yida**: RESTful services, controller, unit testing, and documentation for Shift.
 * **Jimmy**: RESTful services, controller, unit testing, and documentation for Purchase. Set up Github packages and dependencies. Setup CI for deploying to heroku. Service documentation formatting. Fixing typos and code review. Write the integrationTest Gradle Task.
 * **Harrison**: RESTful services, controller, unit testing, and documentation for Employee. Set up skeleton for Project Wiki. Code review. Wrote software quality assurance plan. Sprint 2 section of README.md.
+
+## [Sprint 3](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-3-Project-Report)
+
+### Objectives to complete:
+Started on Feb 28, 2022  
+* Set up Github CI for Frontend deployment
+* Block Diagram of Architecture Model
+* Functional Web-Frontend
+* Integration of Web-Frontend with Backend Services
+* Project Report
+
+### Tasks completed by each member:
+* **Peini**:
+* **Sibo**:
+* **Annie**:
+* **Yida**: 
+* **Jimmy**:
+* **Harrison**: 
