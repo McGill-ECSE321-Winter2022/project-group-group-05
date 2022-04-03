@@ -63,6 +63,25 @@
               <b-checkbox v-model="showOutOfStock"
                 >show out-of-stock items</b-checkbox
               >
+
+              <div class="mt-4">
+                <b-button block variant="danger" v-on:click="atClearFilters"
+                  >Clear filters</b-button
+                >
+              </div>
+
+              <h5 class="mt-4">Select a category</h5>
+              <b-form-select
+                v-model="selectedCategory"
+                :options="categoriesOptions"
+                @input="atCategorySelection"
+              >
+                <template #first>
+                  <b-form-select-option :value="null">
+                    ---
+                  </b-form-select-option>
+                </template>
+              </b-form-select>
             </b-col>
 
             <b-col>
@@ -70,7 +89,7 @@
                 <b-input
                   type="text"
                   v-model="itemSearchQuery"
-                  placeholder="Search item"
+                  placeholder="Search item name"
                 ></b-input>
                 <br />
 
