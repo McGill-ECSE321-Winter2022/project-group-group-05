@@ -36,11 +36,6 @@
         >
           <b-icon icon="power" aria-hidden="true"></b-icon> Sign out</b-button
         >
-        <router-link to="/CreateCustomerForm">
-          <b-button variant="primary" v-if="!LOGIN_STATE.state.isLoggedIn"
-            >Create account</b-button
-          >
-        </router-link>
 
         <hr />
         <router-link to="/ManageProfile">
@@ -70,31 +65,6 @@
         <b-tooltip target="populate-database-button" triggers="hover">
           <b>Development option:</b> populate database with some data
         </b-tooltip>
-
-        <b-button v-b-modal.opening-hours>See our opening hours</b-button>
-        <b-modal id="opening-hours" title="Opening Hours" ok-only scrollable>
-          <div id="op-hours-outer">
-            <b-table borderless hover :items="openingHours">
-              <template #cell(startTime)="data">
-                {{ data.value | formatTime }}
-              </template>
-              <template #cell(endTime)="data">
-                {{ data.value | formatTime }}
-              </template>
-            </b-table>
-          </div>
-        </b-modal>
-
-        <b-button v-b-modal.list-holidays>See all holidays</b-button>
-        <b-modal id="list-holidays" title="Holidays" ok-only scrollable>
-          <div id="list-holidays-outer">
-            <b-table striped borderless :items="holidays">
-              <template #cell(date)="data">
-                {{ data.value | formatDate }}
-              </template>
-            </b-table>
-          </div>
-        </b-modal>
 
         <hr />
       </div>
@@ -148,6 +118,7 @@
                   id="in-stock-items-table"
                   borderless
                   hover
+                  :busy="isLoading"
                   :per-page="perPage"
                   :current-page="currentPage"
                   :items="filteredItemList"
@@ -270,7 +241,6 @@
 
 <style scoped>
 #welcome-inner {
-  padding-top: 50px;
   padding-left: 50px;
   padding-right: 50px;
 }

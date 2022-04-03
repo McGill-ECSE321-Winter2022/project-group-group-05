@@ -15,7 +15,6 @@ export default {
       isItemLoading: false,
       loadingMsg: "Waiting for database...",
       marqueePause: false,
-      openingHours: [],
       holidays: [],
       nextHolidayDate: "",
       nextHolidayName: "",
@@ -146,19 +145,6 @@ export default {
           this.nextHolidayDate = this.holidays[0]["date"];
           this.nextHolidayName = this.holidays[0]["name"];
         }
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    // upon creation, fetch opening hours
-    await AXIOS.get("/openingH/getAll", {})
-      .then(response => {
-        this.openingHours = response.data.sort((a, b) => {
-          return (
-            daysOfWeekSorter[a["daysOfWeek"].toLowerCase()] -
-            daysOfWeekSorter[b["daysOfWeek"].toLowerCase()]
-          );
-        });
       })
       .catch(e => {
         console.log(e);
