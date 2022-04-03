@@ -179,6 +179,9 @@ export default {
       await createHoliday();
       await createItem1();
       await createItem2();
+      await createItem3();
+      await createItem4();
+      await createItem5();
       await createItemCategory();
       await createOpeningHours();
       await sleep(200);
@@ -550,6 +553,36 @@ function createItem2() {
   let inventory = 100;
   let canDeliver = false;
   let canPickUp = true;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem3() {
+  let name = "Steam Gift Card $100";
+  let imgURL = "";
+  let price = 99.99;
+  let inventory = 2000;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem4() {
+  let name = "Steam Gift Card $50";
+  let imgURL = "";
+  let price = 49.99;
+  let inventory = 900;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem5() {
+  let name = "Steam Gift Card $20";
+  let imgURL = "";
+  let price = 20;
+  let inventory = 400;
+  let canDeliver = false;
+  let canPickUp = false;
   return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
 }
 
