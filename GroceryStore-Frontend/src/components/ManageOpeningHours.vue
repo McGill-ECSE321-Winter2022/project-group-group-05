@@ -5,7 +5,7 @@
     <b-row class="vh-100" align-v="stretch">
       <b-col md="auto"><staff-dashboard></staff-dashboard></b-col>
       <b-col>
-        <h1 class="header_style">Opening Hours</h1>
+        <h1 class="header_style">Manage Opening Hours</h1>
         <b-alert show variant="danger" v-if="!isOwnerLoggedIn"
           ><h4 class="alert-heading">Error:</h4>
           You must be logged in as an Owner to access this page.
