@@ -2,82 +2,86 @@
 <!--Modify customer's own account infos-->
 <template>
   <div>
-    <div id="manageprofile" v-if="userType === 'Customer'">
-      <b-overlay
-        id="overlay"
-        :show="isLoading"
-        :variant="variant"
-        :opacity="0.85"
-        rounded="sm"
-      >
-        <h1>Manage Your Profile</h1>
-        <br />
-        <table>
-          <tr>
-            <td>Username:</td>
-            <td>{{ username }}</td>
-          </tr>
+    <b-container fluid>
+      <div id="manageprofile" class="mx-auto" v-if="userType === 'Customer'">
+        <b-overlay
+          id="overlay"
+          :show="isLoading"
+          :variant="variant"
+          :opacity="0.85"
+          rounded="sm"
+        >
+          <h1>Manage Your Profile</h1>
           <br />
-          <tr>
-            <td>Email:</td>
-            <td>
-              <input type="text" v-model="customer.email" placeholder="Email" />
-            </td>
-            <td>
-              <b-button
-                variant="outline-primary"
-                v-bind:disabled="!customer.email"
-                @click="updateCustomer(customer.email, null, null, null)"
-              >
-                Save
-              </b-button>
-            </td>
-          </tr>
-          <br />
-          <tr>
-            <td>Password:</td>
-            <td>
-              <input
-                type="text"
-                v-model="customer.password"
-                placeholder="Password"
-              />
-            </td>
-            <td>
-              <b-button
-                variant="outline-primary"
-                v-bind:disabled="!customer.password"
-                @click="updateCustomer(null, customer.password, null, null)"
-              >
-                Save
-              </b-button>
-            </td>
-          </tr>
-          <br />
+          <table class="mx-auto">
+            <tr>
+              <td>Username:</td>
+              <td>{{ username }}</td>
+            </tr>
+            <br />
+            <tr>
+              <td>Email:</td>
+              <td>
+                <input
+                  type="text"
+                  v-model="customer.email"
+                  placeholder="Email"
+                />
+              </td>
+              <td>
+                <b-button
+                  variant="outline-primary"
+                  v-bind:disabled="!customer.email"
+                  @click="updateCustomer(customer.email, null, null, null)"
+                >
+                  Save
+                </b-button>
+              </td>
+            </tr>
+            <br />
+            <tr>
+              <td>Password:</td>
+              <td>
+                <input
+                  type="text"
+                  v-model="customer.password"
+                  placeholder="Password"
+                />
+              </td>
+              <td>
+                <b-button
+                  variant="outline-primary"
+                  v-bind:disabled="!customer.password"
+                  @click="updateCustomer(null, customer.password, null, null)"
+                >
+                  Save
+                </b-button>
+              </td>
+            </tr>
+            <br />
 
-          <tr>
-            <td>Address:</td>
-            <td>
-              <input
-                type="text"
-                v-model="customer.address"
-                placeholder="Address"
-              />
-            </td>
-            <td>
-              <b-button
-                variant="outline-primary"
-                v-bind:disabled="!customer.address"
-                @click="updateCustomer(null, null, customer.address, null)"
-              >
-                Save
-              </b-button>
-            </td>
-          </tr>
-        </table>
-        <br />
-        <tr>
-          <td>
+            <tr>
+              <td>Address:</td>
+              <td>
+                <input
+                  type="text"
+                  v-model="customer.address"
+                  placeholder="Address"
+                />
+              </td>
+              <td>
+                <b-button
+                  variant="outline-primary"
+                  v-bind:disabled="!customer.address"
+                  @click="updateCustomer(null, null, customer.address, null)"
+                >
+                  Save
+                </b-button>
+              </td>
+            </tr>
+          </table>
+          <br />
+          <b-container>
             <h5>Is this address local?</h5>
             <input
               type="radio"
@@ -97,15 +101,15 @@
               v-on:click="updateCustomer(null, null, null, false)"
             />
             <label for="False">no</label>
-          </td>
-        </tr>
-      </b-overlay>
-    </div>
-    <div>
-      <span id="error" v-if="errorCustomer" style="color: red"
-        >Error: {{ errorCustomer }}
-      </span>
-    </div>
+          </b-container>
+        </b-overlay>
+      </div>
+      <div>
+        <span id="error" v-if="errorCustomer" style="color: red"
+          >Error: {{ errorCustomer }}
+        </span>
+      </div>
+    </b-container>
   </div>
 </template>
 
@@ -175,6 +179,9 @@ export default {
 </script>
 
 <style scoped>
+#manageprofile {
+  width: 30%;
+}
 div {
   line-height: 40px;
 }
@@ -187,13 +194,5 @@ input[type="text"] {
   position: absolute;
   top: 210px;
   right: 500px;
-}
-#manageprofile {
-  text-align: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 750px;
 }
 </style>
