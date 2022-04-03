@@ -51,6 +51,8 @@
                 <tr id="totalPrice">
                   Total: ${{
                     purchase.total | formatCurrency
+                  }}{{
+                    deliveryFee(purchase)
                   }}
                 </tr>
                 <br />
