@@ -2,70 +2,72 @@
 <!--View list of all purchases (state [cancelled, completed], timeofpurchase, total price, etc.)-->
 <!--Cancel button for purchases in paid state-->
 <template>
-  <div id="viewhistory" v-if="userType === 'Customer'">
-    <b-overlay
-      id="overlay"
-      :show="isLoading"
-      :variant="variant"
-      :opacity="0.85"
-      rounded="sm"
-    >
-      <h1>Purchase History</h1>
-      <br />
-      <table
-        id="purchaseTable"
-        v-for="purchase in purchases"
-        :key="purchase.id"
+  <b-container fluid>
+    <div id="viewhistory" class="mx-auto" v-if="userType === 'Customer'">
+      <b-overlay
+        id="overlay"
+        :show="isLoading"
+        :variant="variant"
+        :opacity="0.85"
+        rounded="sm"
       >
-        <div id="header">
-          <td id="state">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
-          <td id="date">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
-          <td id="orderID">Order# {{ purchase.id }} &nbsp;</td>
-          <td id="orderType">Order type: {{ orderType(purchase) }} &nbsp;</td>
-          <td v-if="purchase.state == 'Paid'">
-            <b-button
-              variant="danger"
-              id="cancel"
-              v-on:click="cancel(purchase.id)"
-              >Cancel Order</b-button
-            >
-          </td>
-          <td v-else-if="purchase.state == 'Prepared'">
-            <b-button
-              variant="success"
-              id="confirm"
-              v-on:click="confirm(purchase.id)"
-              >Confirm Order Received</b-button
-            >
-          </td>
-        </div>
-        <table id="itemTable">
-          <tr>
-            <th>item</th>
-            <th>price</th>
-            <th>quantity</th>
-          </tr>
-          <tr
-            v-for="specificItem in purchase.specificItems"
-            :key="specificItem.id"
-          >
-            <td>{{ specificItem.item.name }}</td>
-            <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
-            <td>
-              {{ specificItem.purchaseQuantity }}
-            </td>
-          </tr>
-        </table>
-        <hr />
-        <tr id="totalPrice">
-          Total: ${{
-            purchase.total | formatCurrency
-          }}
-        </tr>
+        <h1>Purchase History</h1>
         <br />
-      </table>
-    </b-overlay>
-  </div>
+        <table
+          id="purchaseTable"
+          v-for="purchase in purchases"
+          :key="purchase.id"
+        >
+          <div id="header">
+            <td id="state">{{ purchase.state }} &nbsp; &nbsp; &nbsp;</td>
+            <td id="date">Date: {{ purchase.dateOfPurchase }} &nbsp;</td>
+            <td id="orderID">Order# {{ purchase.id }} &nbsp;</td>
+            <td id="orderType">Order type: {{ orderType(purchase) }} &nbsp;</td>
+            <td v-if="purchase.state == 'Paid'">
+              <b-button
+                variant="danger"
+                id="cancel"
+                v-on:click="cancel(purchase.id)"
+                >Cancel Order</b-button
+              >
+            </td>
+            <td v-else-if="purchase.state == 'Prepared'">
+              <b-button
+                variant="success"
+                id="confirm"
+                v-on:click="confirm(purchase.id)"
+                >Confirm Order Received</b-button
+              >
+            </td>
+          </div>
+          <table id="itemTable">
+            <tr>
+              <th>item</th>
+              <th>price</th>
+              <th>quantity</th>
+            </tr>
+            <tr
+              v-for="specificItem in purchase.specificItems"
+              :key="specificItem.id"
+            >
+              <td>{{ specificItem.item.name }}</td>
+              <td>${{ specificItem.purchasePrice | formatCurrency }}</td>
+              <td>
+                {{ specificItem.purchaseQuantity }}
+              </td>
+            </tr>
+          </table>
+          <hr />
+          <tr id="totalPrice">
+            Total: ${{
+              purchase.total | formatCurrency
+            }}
+          </tr>
+          <br />
+        </table>
+      </b-overlay>
+    </div>
+  </b-container>
 </template>
 
 <script>
@@ -153,6 +155,9 @@ export default {
 </script>
 
 <style scoped>
+#viewhistory {
+  width: 70%;
+}
 #overlay {
   position: fixed;
   height: 50%;
@@ -173,14 +178,6 @@ export default {
   flex-direction: row;
   height: 40px;
   text-align: bottom;
-}
-#viewhistory {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60%;
-  transform: translate(-50%, -50%);
-  height: 750px;
 }
 #purchaseTable {
   position: relative;

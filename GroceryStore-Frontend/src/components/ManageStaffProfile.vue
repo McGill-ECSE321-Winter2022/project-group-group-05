@@ -10,13 +10,12 @@
             <b-col md="auto">
               <StaffDashboard></StaffDashboard>
             </b-col>
-
             <b-col>
               <h1 class="header_style">Manage Your Profile</h1>
               <br />
-              <div id="manage-col">
+              <div id="manage-col" class="mx-auto">
                 <div v-if="userType === 'Employee'" id="etable">
-                  <table>
+                  <table class="mx-auto">
                     <tr>
                       <td>Username:</td>
                       <td>{{ username }}</td>
@@ -67,7 +66,7 @@
                   </div>
                 </div>
                 <div v-if="userType === 'Owner'" id="otable">
-                  <table>
+                  <table class="mx-auto">
                     <tr>
                       <td>Username:</td>
                       <td>{{ username }}</td>
@@ -243,13 +242,5 @@ input[type="text"] {
 }
 #manage-col {
   text-align: center;
-}
-#etable {
-  position: relative;
-  left: 40%;
-}
-#otable {
-  position: relative;
-  left: 40%;
 }
 </style>

@@ -14,7 +14,7 @@ export default {
       // fetch customer to check if address is local
       await AXIOS.get("/customer/".concat(LOGIN_STATE.state.username))
         .then(response => {
-          this.isLocal = response.data.isLocal;
+          this.isLocal = response.data.local;
         })
         .catch(error => {
           // An error will be thrown if the customer logged in does not exist
