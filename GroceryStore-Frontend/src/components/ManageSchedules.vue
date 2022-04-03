@@ -3,8 +3,8 @@
 <template>
   <b-container fluid>
     <b-row align-v="stretch">
-      <b-col><staff-dashboard></staff-dashboard></b-col>
-      <b-col cols="10">
+      <b-col md="auto"><staff-dashboard></staff-dashboard></b-col>
+      <b-col>
         <h1 class="header_style">Manage Schedules</h1>
         <b-alert show variant="danger" v-if="!ownerLoggedIn"
           ><h4 class="alert-heading">Error:</h4>
@@ -25,15 +25,13 @@
               <b-table
                 :items="items"
                 :fields="fields"
-                striped
-                outlined
-                head-variant="light"
+                fixed
                 sticky-header="85vh"
               >
                 <template #cell(modify_schedule)="row">
                   <b-button
                     size="sm"
-                    variant="outline-primary"
+                    variant="primary"
                     @click="row.toggleDetails"
                     class="mr-2"
                   >
@@ -45,34 +43,34 @@
                     <b-button-group>
                       <b-button
                         class="button_style"
-                        variant="outline-primary"
+                        variant="primary"
                         @click="stepBackWeek(row.index)"
                         >&lsaquo;</b-button
                       >
                       <b-button
                         class="button_style"
-                        variant="outline-primary"
+                        variant="primary"
                         v-bind:disabled="isWeekPresent[row.index]"
                         @click="returnToLatestWeek(row.index)"
                         >Return to this Week</b-button
                       >
                       <b-button
                         class="button_style"
-                        variant="outline-primary"
+                        variant="primary"
                         @click="stepForwardWeek(row.index)"
                         >&rsaquo;</b-button
                       >
                     </b-button-group>
                     <b-button
                       class="button_style"
-                      variant="outline-success"
+                      variant="success"
                       v-bind:disabled="isWeekPresent[row.index] || busy"
                       @click="assignCurrentSchedule(row.index)"
                       >Auto-fill Current Schedule</b-button
                     >
                     <b-button
                       class="button_style"
-                      variant="outline-danger"
+                      variant="danger"
                       v-bind:disabled="busy"
                       @click="clearWeekSchedule(row.index)"
                       >Clear Week Schedule</b-button
@@ -147,7 +145,7 @@
               <div class="shift_header_style bg-light">
                 <h2>Available Shifts</h2>
                 <b-button
-                  variant="outline-primary"
+                  variant="primary"
                   style="margin-bottom: 10px"
                   v-b-modal.createShift
                   >Create a New Shift</b-button
@@ -228,7 +226,7 @@
                       >
                       <b-button
                         size="sm"
-                        variant="outline-primary"
+                        variant="primary"
                         style="margin-top: 10px"
                         @click="deleteShift(shift.name)"
                         >Delete Shift</b-button
@@ -249,13 +247,13 @@
 /* Styling for Page Title */
 .header_style {
   padding-top: 15px;
-  padding-left: 100px;
-  border-color: #0d6efd;
+  border-color: #91c788;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
-  text-align: left;
+  text-align: center;
   margin-bottom: 30px;
 }
+/* Styling for Available Shifts label */
 .shift_header_style {
   padding-top: 5px;
   border-radius: 3px;
@@ -267,11 +265,14 @@
 }
 /* Styling for Button Group */
 .button_style {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   margin-bottom: 5px;
 }
 /* Styling for Schedule Calendar */
+.schedule_style {
+  max-width: 100%;
+}
 .schedule_row_style {
   flex-wrap: nowrap;
   white-space: nowrap;
@@ -280,20 +281,19 @@
   display: flex;
   margin: auto;
 }
-.schedule_style {
-  max-width: 100%;
-}
 .schedule_column_style {
   height: 100%;
   min-height: 300px;
   min-width: 150px;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin: 2px;
   padding-top: 10px;
-  background-color: #dbf4fa;
-  border: 1px solid #9ac2fe;
+  border-radius: 3px;
+  outline-style: solid;
+  outline-color: #cccccc;
+  outline-width: 1px;
   flex-wrap: wrap;
 }
+/* Styling for Assigned Shift elements */
 .scheduled_shift_style {
   width: 90%;
   margin-top: 4px;
@@ -307,6 +307,9 @@
   outline-style: solid;
   outline-color: #cccccc;
   outline-width: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .button_remove_style {
   font-size: 85%;
@@ -316,6 +319,7 @@
   outline-color: #cccccc;
   outline-width: 1px;
 }
+/* Styling for List of Available Shifts */
 .shift_container_style {
   padding-top: 5px;
   padding-bottom: 5px;
@@ -340,12 +344,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* Font sizes */
 .font_size_large {
   font-size: 18px;
 }
 .font_size_med {
   font-size: 15px;
 }
+/* Draggable Entity Styles */
 .ghost-card {
   opacity: 0.5;
   background: #f7fafc;
@@ -357,6 +363,13 @@
   max-height: 50px;
   margin: auto;
   padding: 0px;
+}
+.gone-card .card-header {
+  font-size: 15px;
+  min-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .gone-card .card-text {
   visibility: hidden;

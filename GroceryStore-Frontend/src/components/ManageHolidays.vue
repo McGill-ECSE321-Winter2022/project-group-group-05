@@ -12,7 +12,7 @@
             </b-col>
 
             <b-col>
-              <h1>Manage Holidays</h1>
+              <h1 class="header_style">Manage Holidays</h1>
               <div id="holidays-col">
                 <b-container fluid>
                   <b-row>
@@ -161,4 +161,14 @@
 
 <script src="./ManageHolidaysScript.js"></script>
 
-<style scoped></style>
+<style scoped>
+/* Styling for Page Title */
+.header_style {
+  padding-top: 15px;
+  border-color: #91c788;
+  border-style: solid;
+  border-width: 0px 0px 6px 0px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+</style>

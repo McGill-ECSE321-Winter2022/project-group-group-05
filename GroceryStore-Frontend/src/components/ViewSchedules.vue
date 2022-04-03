@@ -3,8 +3,8 @@
 <template>
   <b-container fluid>
     <b-row class="vh-100" align-v="stretch">
-      <b-col><staff-dashboard></staff-dashboard></b-col>
-      <b-col cols="10">
+      <b-col md="auto"><staff-dashboard></staff-dashboard></b-col>
+      <b-col>
         <h1 class="header_style">Work Schedule</h1>
         <b-alert show variant="danger" v-if="!isEmployeeLoggedIn"
           ><h4 class="alert-heading">Error:</h4>
@@ -24,28 +24,28 @@
             <b-button-group>
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="currentWeek === 0"
                 @click="selectFirstWeek()"
                 >&laquo;</b-button
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="currentWeek === 0"
                 @click="stepBackWeek()"
                 >&lsaquo;</b-button
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="currentWeek === latestWeek"
                 @click="returnToLatestWeek()"
                 >Return to Latest Assigned Shifts</b-button
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="
                   currentWeek === scheduledShiftsByWeek.length - 1
                 "
@@ -54,7 +54,7 @@
               >
               <b-button
                 class="button_style"
-                variant="outline-primary"
+                variant="primary"
                 v-bind:disabled="
                   currentWeek === scheduledShiftsByWeek.length - 1
                 "
@@ -99,19 +99,17 @@
                   </div>
                   <!-- Schedule Assignment Cards -->
                   <b-card
-                    class="my-2 text-center"
+                    class="my-2 text-center shift_style"
                     no-body
                     v-bind:header="schedule.shift.name"
                     v-for="schedule in weekday.scheduledShifts"
                     :key="schedule.shift.name"
                   >
-                    <b-card-text class="shift_style" style="padding-top: 15px"
+                    <b-card-text style="padding-top: 15px"
                       >Start Time:
                       {{ schedule.shift.startTime | formatTime }}</b-card-text
                     >
-                    <b-card-text
-                      class="shift_style"
-                      style="padding-bottom: 15px"
+                    <b-card-text style="padding-bottom: 15px"
                       >End Time:
                       {{ schedule.shift.endTime | formatTime }}</b-card-text
                     >
@@ -130,17 +128,16 @@
 /* Styling for Page Title */
 .header_style {
   padding-top: 15px;
-  padding-left: 100px;
-  border-color: #0d6efd;
+  border-color: #91c788;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
-  text-align: left;
+  text-align: center;
   margin-bottom: 30px;
 }
 /* Styling for Button Group */
 .button_style {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 /* Styling for Schedule Calendar */
 .schedule_style {
@@ -149,7 +146,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
-  max-width: 80%;
+  max-width: 93%;
 }
 .schedule_row_style {
   flex-wrap: nowrap;
@@ -158,13 +155,14 @@
   height: 100%;
 }
 .schedule_column_style {
-  height: 100%;
+  height: 99%;
   min-width: 160px;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin: 2px;
   padding-top: 10px;
-  background-color: #dbf4fa;
-  border: 1px solid #9ac2fe;
+  border-radius: 3px;
+  outline-style: solid;
+  outline-color: #cccccc;
+  outline-width: 1px;
 }
 .no_schedule_style {
   width: 79%;
@@ -175,7 +173,10 @@
   padding: 10px 0px 10px 0px;
 }
 /* Styling for Shift Cards */
-.shift_style {
+.shift_style .card-header {
+  white-space: normal;
+}
+.shift_style .card-text {
   margin: 0px;
   font-size: 16px;
 }

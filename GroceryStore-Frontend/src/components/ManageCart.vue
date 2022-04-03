@@ -26,10 +26,8 @@
           class="table_style"
           :items="items"
           :fields="fields"
-          striped
-          outlined
+          hover
           v-if="isCustomerLoggedIn"
-          head-variant="light"
           sticky-header="75vh"
         >
           <!-- Name Column -->
@@ -85,7 +83,7 @@
           <template #cell(remove)="row">
             <b-button
               size="md"
-              variant="outline-primary"
+              variant="primary"
               @click="removeItem(row.index)"
               class="mr-2"
             >
@@ -97,7 +95,7 @@
         <div v-if="isCustomerLoggedIn" class="table_style">
           <b-button-toolbar justify>
             <router-link to="/">
-              <b-button size="lg" variant="outline-primary"
+              <b-button size="lg" variant="primary"
                 >Back to Store</b-button
               >
             </router-link>
@@ -128,7 +126,7 @@
             >
             <b-button
               size="lg"
-              variant="outline-success"
+              variant="success"
               @click="orderPurchase()"
               >Order</b-button
             >
@@ -143,7 +141,7 @@
         >
           <h3 class="text-success">Success! Your order has been received!</h3>
           <hr />
-          <b-button variant="outline-primary" @click="$router.push('/')"
+          <b-button variant="primary" @click="$router.push('/')"
             >Return to Store</b-button
           >
         </b-modal>
@@ -156,16 +154,15 @@
 /* Styling for Page Title */
 .header_style {
   padding-top: 15px;
-  padding-left: 100px;
-  border-color: #0d6efd;
+  border-color: #91c788;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
-  text-align: left;
+  text-align: center;
   margin-bottom: 30px;
 }
 .table_style {
   min-width: 600px;
-  width: 60%;
+  width: 80%;
   margin: auto;
   margin-bottom: 20px;
 }

@@ -59,10 +59,9 @@ export default {
         {
           key: "daysOfWeek",
           label: "Day of the Week",
-          thStyle: { width: "60%" },
         },
-        { key: "startTime", label: "Opens at", thStyle: { width: "20%" } },
-        { key: "endTime", label: "Closes at", thStyle: { width: "20%" } },
+        { key: "startTime", label: "Opens at" },
+        { key: "endTime", label: "Closes at" },
       ],
 
       // Used for error message

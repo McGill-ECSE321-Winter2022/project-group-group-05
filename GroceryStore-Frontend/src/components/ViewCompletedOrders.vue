@@ -69,7 +69,6 @@
 /* Styling for Page Title */
 .header_style {
   padding-top: 15px;
-  padding-left: 100px;
   border-color: #91c788;
   border-style: solid;
   border-width: 0px 0px 6px 0px;
