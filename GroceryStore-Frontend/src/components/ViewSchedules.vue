@@ -136,8 +136,8 @@
 }
 /* Styling for Button Group */
 .button_style {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 /* Styling for Schedule Calendar */
 .schedule_style {
