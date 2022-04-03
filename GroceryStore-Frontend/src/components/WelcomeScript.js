@@ -55,7 +55,9 @@ export default {
       addItemSuccess: "",
       // item filtering
       itemSearchQuery: "",
-      selectedCategory: "",
+      categoriesList: [],
+      categoriesOptions: [],
+      selectedCategory: null,
       mustCanDeliver: false,
       mustCanPickUp: false,
       mustAvailableOnline: false,
@@ -154,8 +156,12 @@ export default {
       .catch(e => {
         console.log(e);
       });
+    await this.fetchCategories();
+    this.updateSelection();
     this.isLoading = false;
+    this.isItemLoading = true;
     await this.fetchItems();
+    this.isItemLoading = false;
   },
   methods: {
     logout: function () {
@@ -234,30 +240,60 @@ export default {
       this.isLoading = false;
       this.isItemLoading = false;
     },
-    fetchItems: async function () {
+    atCategorySelection: async function (value) {
       this.isItemLoading = true;
-      if (this.selectedCategory === "") {
-        // fetch all items if no category is selected
-        await AXIOS.get("/item/getAll", {})
-          .then(response => {
-            this.itemList = response.data;
-          })
-          .catch(e => {
-            console.log(e);
-          });
+      if (value === null) {
+        await this.fetchItems();
       } else {
-        await AXIOS.get(
-          "/itemCategory/".concat(this.selectedCategory).concat("/getItems"),
-          {}
-        )
-          .then(response => {
-            this.itemList = response.data;
-          })
-          .catch(e => {
-            console.log(e);
-          });
+        await this.fetchItemsInCategory(value);
       }
       this.isItemLoading = false;
+    },
+    atClearFilters: function () {
+      this.mustCanDeliver = false;
+      this.mustCanPickUp = false;
+      this.mustAvailableOnline = false;
+      this.showOutOfStock = false;
+    },
+    fetchItems() {
+      return AXIOS.get("/item/getAll", {})
+        .then(response => {
+          this.itemList = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    fetchCategories() {
+      return AXIOS.get("/itemCategory", {})
+        .then(response => {
+          this.categoriesList = response.data;
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+        });
+    },
+    updateSelection() {
+      this.categoriesOptions = [];
+      for (const category of this.categoriesList) {
+        let name = category["name"];
+        let option = { value: name, text: name };
+        this.categoriesOptions.push(option);
+      }
+    },
+    fetchItemsInCategory(categoryName) {
+      return AXIOS.get(
+        "/itemCategory/".concat(categoryName).concat("/getItems"),
+        {}
+      )
+        .then(response => {
+          this.itemList = response.data;
+        })
+        .catch(e => {
+          let errorMsg = e.response.data.message;
+          console.log(errorMsg);
+        });
     },
   },
 };
