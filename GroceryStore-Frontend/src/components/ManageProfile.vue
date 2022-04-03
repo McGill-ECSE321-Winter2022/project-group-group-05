@@ -102,12 +102,10 @@
             />
             <label for="False">no</label>
           </b-container>
+          <span id="error" v-if="errorCustomer" style="color: red"
+            >Error: {{ errorCustomer }}
+          </span>
         </b-overlay>
-      </div>
-      <div>
-        <span id="error" v-if="errorCustomer" style="color: red"
-          >Error: {{ errorCustomer }}
-        </span>
       </div>
     </b-container>
   </div>
@@ -189,10 +187,5 @@ input[type="text"] {
   background: transparent;
   border: none;
   border-bottom: 1px solid #727272;
-}
-#error {
-  position: absolute;
-  top: 210px;
-  right: 500px;
 }
 </style>
