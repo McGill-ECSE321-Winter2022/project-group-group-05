@@ -9,7 +9,7 @@
           class="light-box-shadow mb-3"
           :aria-busy="isLoading"
         >
-          <b-navbar-brand to="/" v-b-tooltip title="Back to home page">
+          <b-navbar-brand id="grocery-brand" to="/">
             <b-icon
               icon="cart4"
               aria-hidden="true"
@@ -19,6 +19,9 @@
             ></b-icon>
             321Grocery<sub><i>&nbsp; by Group 05</i></sub></b-navbar-brand
           >
+          <b-tooltip target="grocery-brand" triggers="hover">
+            Back to home page
+          </b-tooltip>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
