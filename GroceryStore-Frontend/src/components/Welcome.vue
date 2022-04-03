@@ -6,7 +6,7 @@
         <!--Temporary skeleton to provide functionalities but not looks-->
         <h1>{{ msg }}</h1>
 
-        <div id="holiday-marquee" v-if="nextHolidayDate">
+        <div id="holiday-marquee" v-if="nextHolidayDate" class="mb-4">
           <marquee-text :duration="10" :repeat="10" :paused="marqueePause">
             <div
               @mouseenter="marqueePause = !marqueePause"
@@ -22,81 +22,18 @@
             </div>
           </marquee-text>
         </div>
-        <br />
-
-        <router-link to="/LoginForm">
-          <b-button variant="success" v-if="!LOGIN_STATE.state.isLoggedIn"
-            >Sign in</b-button
-          >
-        </router-link>
-        <b-button
-          variant="outline-info"
-          v-if="LOGIN_STATE.state.isLoggedIn"
-          @click="logout()"
-        >
-          <b-icon icon="power" aria-hidden="true"></b-icon> Sign out</b-button
-        >
-        <router-link to="/CreateCustomerForm">
-          <b-button variant="primary" v-if="!LOGIN_STATE.state.isLoggedIn"
-            >Create account</b-button
-          >
-        </router-link>
-
-        <hr />
-        <router-link to="/ManageProfile">
-          <b-button pill variant="info" v-if="isCustomer">My profile</b-button>
-        </router-link>
-        <router-link to="/ManageStaffProfile">
-          <b-button pill variant="info" v-if="isStaff"
-            >My staff profile</b-button
-          >
-        </router-link>
-        <router-link to="/ViewHistory">
-          <b-button pill variant="info" v-if="isCustomer"
-            >My purchase history</b-button
-          >
-        </router-link>
-        <router-link to="/ManageCart">
-          <b-button pill variant="info" v-if="isCustomer">My cart</b-button>
-        </router-link>
 
         <hr />
         <b-button
           id="populate-database-button"
           variant="warning"
+          class="mb-4"
           v-on:click="genData()"
           >Populate database</b-button
         >
         <b-tooltip target="populate-database-button" triggers="hover">
           <b>Development option:</b> populate database with some data
         </b-tooltip>
-
-        <b-button v-b-modal.opening-hours>See our opening hours</b-button>
-        <b-modal id="opening-hours" title="Opening Hours" ok-only scrollable>
-          <div id="op-hours-outer">
-            <b-table borderless hover :items="openingHours">
-              <template #cell(startTime)="data">
-                {{ data.value | formatTime }}
-              </template>
-              <template #cell(endTime)="data">
-                {{ data.value | formatTime }}
-              </template>
-            </b-table>
-          </div>
-        </b-modal>
-
-        <b-button v-b-modal.list-holidays>See all holidays</b-button>
-        <b-modal id="list-holidays" title="Holidays" ok-only scrollable>
-          <div id="list-holidays-outer">
-            <b-table striped borderless :items="holidays">
-              <template #cell(date)="data">
-                {{ data.value | formatDate }}
-              </template>
-            </b-table>
-          </div>
-        </b-modal>
-
-        <hr />
       </div>
       <template #overlay>
         <div class="text-center">
@@ -148,6 +85,7 @@
                   id="in-stock-items-table"
                   borderless
                   hover
+                  :busy="isLoading"
                   :per-page="perPage"
                   :current-page="currentPage"
                   :items="filteredItemList"
@@ -270,7 +208,6 @@
 
 <style scoped>
 #welcome-inner {
-  padding-top: 50px;
   padding-left: 50px;
   padding-right: 50px;
 }
