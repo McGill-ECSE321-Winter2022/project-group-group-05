@@ -27,12 +27,12 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
-| Peini Cheng  | Software Architect | 14 | 13.75 | &mdash; | &mdash; |
-| Sibo Huang | Software Developer | 12 | 16.75 | &mdash; | &mdash; |
-| Annie Kang | Business Analyst | 12 | 15.75 | &mdash; | &mdash; |
-| Yida Pan | Software Developer | 12 | 17.75 | &mdash; | &mdash; |
-| Jimmy Sheng | Team Lead | 24 | 27.75 | &mdash; | &mdash; |
-| Harrison Wang | Documentation Lead | 21.5 | 22.75 | &mdash; | &mdash; |
+| Peini Cheng  | Software Architect | 14 | 13.75 | 24.5 | &mdash; |
+| Sibo Huang | Software Developer | 12 | 16.75 | 24.5 | &mdash; |
+| Annie Kang | Business Analyst | 12 | 15.75 | 24.5 | &mdash; |
+| Yida Pan | Software Developer | 12 | 17.75 | 16.5 | &mdash; |
+| Jimmy Sheng | Team Lead | 24 | 27.75 | 48.5 | &mdash; |
+| Harrison Wang | Documentation Lead | 21.5 | 22.75 | 44.5 | &mdash; |
 
 ## [Sprint 1](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-1-Project-Report)
 
@@ -87,9 +87,9 @@ Started on Feb 28, 2022
 * Project Report
 
 ### Tasks completed by each member:
-* **Peini**:
-* **Sibo**:
-* **Annie**:
-* **Yida**: 
-* **Jimmy**:
-* **Harrison**: 
+* **Peini**: ViewPurchaseHistory, ManageProfile, ManageCustomers, updated UML class diagram
+* **Sibo**: StaffDashboard, ManageEmployees, ManageStaffProfile
+* **Annie**: Designed architecture model, recorded meeting minutes, ViewCompletedOrders, ManagePaidOrders
+* **Yida**: Attempted implementation of ManageCategories, attended meetings.
+* **Jimmy**: Set up frontend repository and CI heroku deployment, set up code style using Prettier, vue state management, common AXIOS object, Welcome, LoginForm, CreateCustomerForm, PointOfSale, ManageCategories, ManageHolidays, Navbar, fixed StaffDashboard and ManageStaffProfile, fixed styles, bug fixes, code review.
+* **Harrison**: Set up skeleton for project wiki, Sprint 3 project report, added Spring 3 to readme.md, edited architecture model component descriptions, updated project wiki documentation on backend services, ViewSchedules, ManageSchedules, ManageItems, ManageCart, ManageOpeningHours, made style of StaffDashboard pages more uniform, bug fixes, code review.
