@@ -7,10 +7,6 @@ export default {
     return {
       msg: "Welcome to the Grocery Store",
       LOGIN_STATE,
-      isStaff:
-        LOGIN_STATE.state.userType === "Employee" ||
-        LOGIN_STATE.state.userType === "Owner",
-      isCustomer: LOGIN_STATE.state.userType === "Customer",
       isLoading: false,
       isItemLoading: false,
       loadingMsg: "Waiting for database...",
@@ -67,6 +63,15 @@ export default {
     };
   },
   computed: {
+    isStaff() {
+      return (
+        LOGIN_STATE.state.userType === "Employee" ||
+        LOGIN_STATE.state.userType === "Owner"
+      );
+    },
+    isCustomer() {
+      return LOGIN_STATE.state.userType === "Customer";
+    },
     numRows() {
       return this.filteredItemList.length;
     },
