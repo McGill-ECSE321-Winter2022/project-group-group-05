@@ -34,6 +34,24 @@
         <b-tooltip target="populate-database-button" triggers="hover">
           <b>Development option:</b> populate database with some data
         </b-tooltip>
+
+        <b-button
+          id="show-instructions-button"
+          variant="info"
+          class="mb-4"
+          v-b-modal.instructions-modal
+          >Read Me!</b-button
+        >
+        <b-tooltip target="show-instructions-button" triggers="hover">
+          <b>Development option:</b> view instructions for testing the frontend
+        </b-tooltip>
+        <b-modal id="instructions-modal" title="Frontend Instructions" ok-only>
+          <p>
+            The database is wiped each time the project is built. Clicking on
+            'Populate database' will fill it with necessary data to test the
+            frontend.
+          </p>
+        </b-modal>
       </div>
       <template #overlay>
         <div class="text-center">
