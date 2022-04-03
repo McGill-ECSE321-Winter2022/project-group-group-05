@@ -6,7 +6,7 @@
         <!--Temporary skeleton to provide functionalities but not looks-->
         <h1>{{ msg }}</h1>
 
-        <div id="holiday-marquee" v-if="nextHolidayDate">
+        <div id="holiday-marquee" v-if="nextHolidayDate" class="mb-4">
           <marquee-text :duration="10" :repeat="10" :paused="marqueePause">
             <div
               @mouseenter="marqueePause = !marqueePause"
@@ -22,51 +22,18 @@
             </div>
           </marquee-text>
         </div>
-        <br />
-
-        <router-link to="/LoginForm">
-          <b-button variant="success" v-if="!LOGIN_STATE.state.isLoggedIn"
-            >Sign in</b-button
-          >
-        </router-link>
-        <b-button
-          variant="outline-info"
-          v-if="LOGIN_STATE.state.isLoggedIn"
-          @click="logout()"
-        >
-          <b-icon icon="power" aria-hidden="true"></b-icon> Sign out</b-button
-        >
-
-        <hr />
-        <router-link to="/ManageProfile">
-          <b-button pill variant="info" v-if="isCustomer">My profile</b-button>
-        </router-link>
-        <router-link to="/ManageStaffProfile">
-          <b-button pill variant="info" v-if="isStaff"
-            >My staff profile</b-button
-          >
-        </router-link>
-        <router-link to="/ViewHistory">
-          <b-button pill variant="info" v-if="isCustomer"
-            >My purchase history</b-button
-          >
-        </router-link>
-        <router-link to="/ManageCart">
-          <b-button pill variant="info" v-if="isCustomer">My cart</b-button>
-        </router-link>
 
         <hr />
         <b-button
           id="populate-database-button"
           variant="warning"
+          class="mb-4"
           v-on:click="genData()"
           >Populate database</b-button
         >
         <b-tooltip target="populate-database-button" triggers="hover">
           <b>Development option:</b> populate database with some data
         </b-tooltip>
-
-        <hr />
       </div>
       <template #overlay>
         <div class="text-center">

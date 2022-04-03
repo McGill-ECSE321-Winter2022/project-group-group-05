@@ -18,8 +18,10 @@ export default {
       return "Welcome, " + username;
     },
     isCustomer() {
-      return LOGIN_STATE.state.userType === "Customer" &&
-      LOGIN_STATE.state.username !== "kiosk";
+      return (
+        LOGIN_STATE.state.userType === "Customer" &&
+        LOGIN_STATE.state.username !== "kiosk"
+      );
     },
   },
   methods: {
@@ -38,7 +40,10 @@ export default {
     clickedProfile: function () {
       if (LOGIN_STATE.state.userType === "Customer") {
         this.$router.push("/ManageProfile");
-      } else if (LOGIN_STATE.state.userType === "Employee" || LOGIN_STATE.state.userType === "Owner") {
+      } else if (
+        LOGIN_STATE.state.userType === "Employee" ||
+        LOGIN_STATE.state.userType === "Owner"
+      ) {
         this.$router.push("/ManageStaffProfile");
       }
     },
