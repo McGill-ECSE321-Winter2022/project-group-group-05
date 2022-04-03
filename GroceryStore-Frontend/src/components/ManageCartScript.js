@@ -200,7 +200,7 @@ export default {
       });
       // pay for purchase
       await AXIOS.post("/purchase/pay/".concat(this.cartId))
-        .then(this.$bvModal.show("order-complete"))
+        .then(response => this.$bvModal.show("order-complete"))
         .catch(error => {
           // Throws an error if:
           // Cart is not in cart state

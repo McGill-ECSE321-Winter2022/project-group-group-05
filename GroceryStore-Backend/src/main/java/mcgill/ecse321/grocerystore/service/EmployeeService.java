@@ -177,9 +177,7 @@ public class EmployeeService {
           throw new IllegalArgumentException(
               "That schedule is already assigned to Employee with username \""
                   + employee.getUsername() + "\"!");
-        } else if (existingSchedule.getDate().equals(date) && !(existingSchedule.getShift()
-            .getStartTime().after(shiftToBeAdded.getEndTime())
-            || existingSchedule.getShift().getEndTime().before(shiftToBeAdded.getStartTime()))) {
+        } else if (existingSchedule.getDate().equals(date) && conflict(existingSchedule.getShift(), shiftToBeAdded)) {
           // if the new schedule assignment is on the same day, and overlaps with an existing shift,
           // throw error
           throw new IllegalArgumentException(
@@ -373,6 +371,22 @@ public class EmployeeService {
       throw new IllegalArgumentException("Shift with name '" + name + "' does not exist!");
     }
     return requestedShift;
+  }
+
+  /**
+   * Used to verify whether two shifts occur at the same time of day
+   * 
+   * @param shiftone - First shift we're comparing
+   * @param shiftTwo - second shift we're comparing
+   * @return true if the shifts conflict; false otherwise
+   */
+  private boolean conflict(Shift shiftOne, Shift shiftTwo) {
+    if (shiftOne.getStartTime().before(shiftTwo.getStartTime())) {
+      return shiftOne.getEndTime().after(shiftTwo.getStartTime());
+    } else if (shiftTwo.getStartTime().before(shiftOne.getStartTime())) {
+      return shiftTwo.getEndTime().after(shiftOne.getStartTime());
+    }
+    return true;
   }
 
 }
