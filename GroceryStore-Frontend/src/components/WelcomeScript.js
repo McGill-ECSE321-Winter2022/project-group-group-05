@@ -470,6 +470,57 @@ function createHoliday() {
     });
 }
 
+
+function createItem1() {
+  let name = "Bar of Chocolate 100g";
+  let imgURL = "https://i.ibb.co/0Qv0HFL/img-Bar-of-Chocolate-100g.jpg";
+  let price = 3.49;
+  let inventory = 500;
+  let canDeliver = true;
+  let canPickUp = true;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem2() {
+  let name = "Bag of Apples 1.36kg";
+  let imgURL = "https://i.ibb.co/F34h8Yg/img-Bag-of-Apples-1-36kg.jpg";
+  let price = 4.99;
+  let inventory = 100;
+  let canDeliver = false;
+  let canPickUp = true;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem3() {
+  let name = "Steam Gift Card $100";
+  let imgURL = "https://i.ibb.co/8cwSbZV/img-steam-gift-card-100.webp";
+  let price = 99.99;
+  let inventory = 2000;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem4() {
+  let name = "Steam Gift Card $50";
+  let imgURL = "";
+  let price = 49.99;
+  let inventory = 900;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem5() {
+  let name = "Steam Gift Card $20";
+  let imgURL = "";
+  let price = 20;
+  let inventory = 400;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
 function createItemCategory() {
   console.log("Attempting to create item category 'Test Category x'");
   return AXIOS.post("/itemCategory/Test Category x", {}, {})
@@ -529,56 +580,6 @@ function createOpeningHours() {
           console.log("'Tuesday' already exists");
         });
     });
-}
-
-function createItem1() {
-  let name = "Bar of Chocolate 100g";
-  let imgURL = "https://i.ibb.co/0Qv0HFL/img-Bar-of-Chocolate-100g.jpg";
-  let price = 3.49;
-  let inventory = 500;
-  let canDeliver = true;
-  let canPickUp = true;
-  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
-}
-
-function createItem2() {
-  let name = "Bag of Apples 1.36kg";
-  let imgURL = "https://i.ibb.co/F34h8Yg/img-Bag-of-Apples-1-36kg.jpg";
-  let price = 4.99;
-  let inventory = 100;
-  let canDeliver = false;
-  let canPickUp = true;
-  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
-}
-
-function createItem3() {
-  let name = "Steam Gift Card $100";
-  let imgURL = "https://i.ibb.co/8cwSbZV/img-steam-gift-card-100.webp";
-  let price = 99.99;
-  let inventory = 2000;
-  let canDeliver = false;
-  let canPickUp = false;
-  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
-}
-
-function createItem4() {
-  let name = "Steam Gift Card $50";
-  let imgURL = "";
-  let price = 49.99;
-  let inventory = 900;
-  let canDeliver = false;
-  let canPickUp = false;
-  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
-}
-
-function createItem5() {
-  let name = "Steam Gift Card $20";
-  let imgURL = "";
-  let price = 20;
-  let inventory = 400;
-  let canDeliver = false;
-  let canPickUp = false;
-  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
 }
 
 function createItem(name, imageURL, price, inventory, canDeliver, canPickUp) {
