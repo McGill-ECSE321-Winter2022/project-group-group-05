@@ -60,6 +60,7 @@ export default {
           this.errorPurchase = errorMsg;
         })
         .finally(() => {
+          // refresh page once the purchase has been set to "prepared" state
           window.location.reload();
         });
     },

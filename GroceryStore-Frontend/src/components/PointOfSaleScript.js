@@ -85,6 +85,7 @@ export default {
     startNewOrder: async function () {
       this.clear();
       this.isLoading = true;
+      // create new cart purchase
       await AXIOS.post("/purchase/pos/cart", {}, {})
         .then(response => {
           this.cart = response.data;
@@ -97,6 +98,7 @@ export default {
           console.log(errorMsg);
           this.posError = errorMsg;
         });
+        // update list with all items that are currently in stock
       await AXIOS.get("/item/allInStock", {})
         .then(response => {
           this.itemList = response.data;
@@ -160,6 +162,7 @@ export default {
       this.isLoading = true;
       await AXIOS.post("/purchase/pos/pay/".concat(this.cart["id"]), {}, {})
         .then(response => {
+          // display success popup after payment
           let message = "Successfully completed order #" + response.data["id"];
           console.log(message);
           this.paySuccessMessage = message;

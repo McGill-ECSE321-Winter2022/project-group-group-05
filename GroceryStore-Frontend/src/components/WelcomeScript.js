@@ -168,6 +168,7 @@ export default {
       LOGIN_STATE.commit("logout");
       window.location.reload();
     },
+    // this method is used to populate the database for demo purposes
     genData: async function () {
       this.isLoading = true;
       this.isItemLoading = true;

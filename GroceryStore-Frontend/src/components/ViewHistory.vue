@@ -13,6 +13,7 @@
       >
         <h1>Purchase History</h1>
         <br />
+        <!-- List of Purchases -->
         <table
           id="purchaseTable"
           v-for="purchase in purchases"
@@ -40,6 +41,7 @@
               >
             </td>
           </div>
+          <!-- SpecificItems of the Purchase -->
           <table id="itemTable">
             <tr>
               <th>item</th>
@@ -101,6 +103,7 @@ export default {
       })
       .then(response => {
         this.purchases.forEach(function (purchase) {
+          // add a field to purchase objects to track total cost
           var total = 0;
           purchase.specificItems.forEach(function (specificItem) {
             total += specificItem.purchaseQuantity * specificItem.purchasePrice;

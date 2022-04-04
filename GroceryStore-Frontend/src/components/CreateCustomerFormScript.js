@@ -43,6 +43,7 @@ export default {
         .then(response => {
           LOGIN_STATE.commit("login", { userType, username });
           this.isLoading = false;
+          // return to welcome page
           this.$router.push("/");
         })
         .catch(e => {

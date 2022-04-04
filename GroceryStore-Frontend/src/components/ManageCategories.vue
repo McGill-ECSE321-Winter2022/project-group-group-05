@@ -25,6 +25,7 @@
                       >
                     </b-col>
                     <b-col sm="4">
+                      <!-- List of Categories -->
                       <b-form-select
                         v-model="selectedCategory"
                         :options="categoriesOptions"
@@ -61,7 +62,7 @@
               <div class="text-center h5" v-show="categoriesError">
                 <b style="color: red">{{ categoriesError }}</b>
               </div>
-
+<!-- Items in currently selected ItemCategory -->
               <h3 class="mt-3">Items in this Category</h3>
               <div id="selected-category-info">
                 <b-table
@@ -84,7 +85,7 @@
             </b-col>
           </b-row>
         </b-container>
-
+<!-- create new category -->
         <b-modal
           id="create-category-dialog"
           title="Create new category"
@@ -109,7 +110,7 @@
             </div>
           </b-form>
         </b-modal>
-
+<!-- add item -->
         <b-modal
           id="item-search"
           title="Click to add item to this category"
@@ -136,7 +137,7 @@
             </b-table>
           </div>
         </b-modal>
-
+<!-- remove item -->
         <b-modal
           id="remove-item-dialog"
           title="Remove item"
