@@ -1,6 +1,9 @@
 # ECSE 321 Grocery Store Project - Winter 2022 - Group 05
 
-![heroku-deploy-status](https://img.shields.io/badge/Deploy%20to%20Heroku-enabled-blueviolet?style=for-the-badge&logo=heroku)  
+[![heroku-deploy-status](https://img.shields.io/badge/Deploy%20to%20Heroku-enabled-blueviolet?style=for-the-badge&logo=heroku)](https://grocery-frontend-g05-mcgill.herokuapp.com/)
+[![backend: spring boot](https://img.shields.io/badge/backend-spring%20boot-green?style=for-the-badge&logo=springboot)](https://spring.io/)
+[![frontend: vue.js](https://img.shields.io/badge/frontend-Vue.js-42b883?style=for-the-badge&logo=vue.js)](https://v2.vuejs.org/)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=for-the-badge&logo=prettier)](https://github.com/prettier/prettier)  
 
 Welcome to the Group 05 Grocery Store Project Repository!  
 
