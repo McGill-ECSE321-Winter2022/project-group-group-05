@@ -184,7 +184,6 @@ export default {
       await createItem5();
       await createItemCategory();
       await createOpeningHours();
-      await sleep(200);
       this.isLoading = false;
       this.isItemLoading = false;
       // comment this out if need to examine console output
@@ -530,10 +529,6 @@ function createOpeningHours() {
           console.log("'Tuesday' already exists");
         });
     });
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function createItem1() {
