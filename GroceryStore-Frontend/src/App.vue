@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!--    <img src="./assets/logo.png" />-->
     <b-overlay :show="isLoading" rounded="sm">
       <div :aria-hidden="isLoading ? 'true' : null">
         <b-navbar
@@ -18,7 +17,7 @@
               class="rounded-circle bg-light p-1 mr-2"
               variant="danger"
             ></b-icon>
-            321Grocery<sub><i>&nbsp by Group 05</i></sub></b-navbar-brand
+            321Grocery<sub><i>&nbsp; by Group 05</i></sub></b-navbar-brand
           >
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -59,7 +58,7 @@
         </b-navbar>
       </div>
     </b-overlay>
-
+    <!-- Show store hours -->
     <b-modal id="opening-h" title="Opening Hours" ok-only scrollable>
       <div id="op-hours-outer">
         <b-table striped :items="openingHours">
@@ -73,6 +72,7 @@
       </div>
     </b-modal>
 
+    <!-- Show store holidays -->
     <b-modal id="list-of-holidays" title="Holidays" ok-only scrollable>
       <div id="list-of-holidays-outer">
         <b-table striped :items="holidays">

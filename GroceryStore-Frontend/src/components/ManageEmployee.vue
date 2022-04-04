@@ -273,6 +273,7 @@ export default {
     submitEdit: function (event) {
       event.preventDefault();
       this.editForm.error = "";
+      // verify that inputs are valid
       if (this.editForm.password === "") {
         this.editForm.error = "Please enter password";
       } else if (this.editForm.email === "") {
@@ -292,6 +293,7 @@ export default {
           .then(() => {
             this.$bvModal.hide("edit-employee-dialog");
             this.resetForms();
+            // update frontend data
             AXIOS.get("/employee/getAll", {})
               .then(response => {
                 this.employeeList = response.data;
@@ -312,7 +314,6 @@ export default {
           });
       }
     },
-
     deleteEmployee: function () {
       this.editForm.error = "";
       this.isLoading = true;
@@ -320,6 +321,7 @@ export default {
         .then(() => {
           this.$bvModal.hide("edit-employee-dialog");
           this.resetForms();
+          // update employee list in frontend
           AXIOS.get("/employee/getAll", {}).then(response => {
             this.employeeList = response.data;
           });
@@ -336,6 +338,7 @@ export default {
     submitCreate: function (event) {
       event.preventDefault();
       this.createForm.error = "";
+      // verify that inputs are valid
       if (this.createForm.password === "") {
         this.createForm.error = "Please enter password";
       } else if (this.createForm.email === "") {
@@ -355,6 +358,7 @@ export default {
           .then(() => {
             this.$bvModal.hide("create-employee-dialog");
             this.resetForms();
+            // update employee list in frontend
             AXIOS.get("/employee/getAll", {})
               .then(response => {
                 this.employeeList = response.data;

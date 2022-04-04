@@ -28,6 +28,7 @@ export default {
         this.errorPurchase = errorMsg;
       })
       .then(response => {
+        // add a field to purchase to track total cost
         this.purchases.forEach(function (purchase) {
           var total = 0;
           purchase.specificItems.forEach(function (specificItem) {
