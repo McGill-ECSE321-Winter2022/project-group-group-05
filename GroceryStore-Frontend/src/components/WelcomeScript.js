@@ -533,7 +533,7 @@ function createOpeningHours() {
 
 function createItem1() {
   let name = "Bar of Chocolate 100g";
-  let imgURL = "https://i.ibb.co/ScXnkPY/img-Bar-of-Chocolate-100g.jpg";
+  let imgURL = "https://i.ibb.co/0Qv0HFL/img-Bar-of-Chocolate-100g.jpg";
   let price = 3.49;
   let inventory = 500;
   let canDeliver = true;
@@ -543,7 +543,7 @@ function createItem1() {
 
 function createItem2() {
   let name = "Bag of Apples 1.36kg";
-  let imgURL = "https://i.ibb.co/G7bZHL7/img-Bag-of-Apples-1-36kg.jpg";
+  let imgURL = "https://i.ibb.co/F34h8Yg/img-Bag-of-Apples-1-36kg.jpg";
   let price = 4.99;
   let inventory = 100;
   let canDeliver = false;
@@ -553,7 +553,7 @@ function createItem2() {
 
 function createItem3() {
   let name = "Steam Gift Card $100";
-  let imgURL = "";
+  let imgURL = "https://i.ibb.co/8cwSbZV/img-steam-gift-card-100.webp";
   let price = 99.99;
   let inventory = 2000;
   let canDeliver = false;
