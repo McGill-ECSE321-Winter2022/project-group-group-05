@@ -98,7 +98,7 @@ export default {
           console.log(errorMsg);
           this.posError = errorMsg;
         });
-        // update list with all items that are currently in stock
+      // update list with all items that are currently in stock
       await AXIOS.get("/item/allInStock", {})
         .then(response => {
           this.itemList = response.data;

@@ -179,9 +179,11 @@ export default {
       await createHoliday();
       await createItem1();
       await createItem2();
+      await createItem3();
+      await createItem4();
+      await createItem5();
       await createItemCategory();
       await createOpeningHours();
-      await sleep(200);
       this.isLoading = false;
       this.isItemLoading = false;
       // comment this out if need to examine console output
@@ -468,6 +470,56 @@ function createHoliday() {
     });
 }
 
+function createItem1() {
+  let name = "Bar of Chocolate 100g";
+  let imgURL = "https://i.ibb.co/0Qv0HFL/img-Bar-of-Chocolate-100g.jpg";
+  let price = 3.49;
+  let inventory = 500;
+  let canDeliver = true;
+  let canPickUp = true;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem2() {
+  let name = "Bag of Apples 1.36kg";
+  let imgURL = "https://i.ibb.co/F34h8Yg/img-Bag-of-Apples-1-36kg.jpg";
+  let price = 4.99;
+  let inventory = 100;
+  let canDeliver = false;
+  let canPickUp = true;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem3() {
+  let name = "Steam Gift Card $100";
+  let imgURL = "https://i.ibb.co/8cwSbZV/img-steam-gift-card-100.webp";
+  let price = 99.99;
+  let inventory = 2000;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem4() {
+  let name = "Steam Gift Card $50";
+  let imgURL = "";
+  let price = 49.99;
+  let inventory = 900;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
+function createItem5() {
+  let name = "Steam Gift Card $20";
+  let imgURL = "";
+  let price = 20;
+  let inventory = 400;
+  let canDeliver = false;
+  let canPickUp = false;
+  return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
+}
+
 function createItemCategory() {
   console.log("Attempting to create item category 'Test Category x'");
   return AXIOS.post("/itemCategory/Test Category x", {}, {})
@@ -529,35 +581,31 @@ function createOpeningHours() {
     });
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function createItem1() {
-  console.log("Attempting to create item 'Bar of Chocolate 100g'...");
+function createItem(name, imageURL, price, inventory, canDeliver, canPickUp) {
+  console.log("Attempting to create item '" + name + "'...");
   return AXIOS.post(
-    "/item/Bar of Chocolate 100g",
+    "/item/".concat(name),
     {},
     {
       params: {
-        image: "https://i.ibb.co/ScXnkPY/img-Bar-of-Chocolate-100g.jpg",
-        price: 3.49,
-        inventory: 500,
-        canDeliver: true,
-        canPickUp: true,
+        image: imageURL,
+        price: price,
+        inventory: inventory,
+        canDeliver: canDeliver,
+        canPickUp: canPickUp,
       },
     }
   )
     .then(() => {
-      console.log("Created item 'Bar of Chocolate 100g'");
+      console.log("Created item '" + name + "'");
     })
     .catch(() => {
       return AXIOS.patch(
-        "/item/Bar of Chocolate 100g/setImage",
+        "/item/".concat(name).concat("/setImage"),
         {},
         {
           params: {
-            image: "https://i.ibb.co/ScXnkPY/img-Bar-of-Chocolate-100g.jpg",
+            image: imageURL,
           },
         }
       )
@@ -565,11 +613,11 @@ function createItem1() {
         .catch(() => {})
         .finally(() => {
           return AXIOS.patch(
-            "/item/Bar of Chocolate 100g/setInventory",
+            "/item/".concat(name).concat("/setInventory"),
             {},
             {
               params: {
-                inventory: 500,
+                inventory: inventory,
               },
             }
           )
@@ -577,11 +625,11 @@ function createItem1() {
             .catch(() => {})
             .finally(() => {
               return AXIOS.patch(
-                "/item/Bar of Chocolate 100g/setCanDeliver",
+                "/item/".concat(name).concat("/setCanDeliver"),
                 {},
                 {
                   params: {
-                    canDeliver: true,
+                    canDeliver: canDeliver,
                   },
                 }
               )
@@ -589,11 +637,11 @@ function createItem1() {
                 .catch(() => {})
                 .finally(() => {
                   return AXIOS.patch(
-                    "/item/Bar of Chocolate 100g/setCanPickUp",
+                    "/item/".concat(name).concat("/setCanPickUp"),
                     {},
                     {
                       params: {
-                        canPickUp: true,
+                        canPickUp: canPickUp,
                       },
                     }
                   )
@@ -601,7 +649,7 @@ function createItem1() {
                     .catch(() => {})
                     .finally(() => {
                       return AXIOS.patch(
-                        "/item/Bar of Chocolate 100g/setIsDiscontinued",
+                        "/item/".concat(name).concat("/setIsDiscontinued"),
                         {},
                         {
                           params: {
@@ -613,119 +661,18 @@ function createItem1() {
                         .catch(() => {})
                         .finally(() => {
                           return AXIOS.patch(
-                            "/item/Bar of Chocolate 100g/setPrice",
+                            "/item/".concat(name).concat("/setPrice"),
                             {},
                             {
                               params: {
-                                price: 3.49,
+                                price: price,
                               },
                             }
                           )
                             .then(() => {})
                             .catch(() => {})
                             .finally(() => {
-                              console.log("Reset item 'Bar of Chocolate 100g'");
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-}
-
-function createItem2() {
-  console.log("Attempting to create item 'Bag of Apples 1.36kg'...");
-  return AXIOS.post(
-    "/item/Bag of Apples 1.36kg",
-    {},
-    {
-      params: {
-        image: "https://i.ibb.co/G7bZHL7/img-Bag-of-Apples-1-36kg.jpg",
-        price: 7.99,
-        inventory: 100,
-        canDeliver: false,
-        canPickUp: true,
-      },
-    }
-  )
-    .then(() => {
-      console.log("Created item 'Bag of Apples 1.36kg'");
-    })
-    .catch(() => {
-      return AXIOS.patch(
-        "/item/Bag of Apples 1.36kg/setImage",
-        {},
-        {
-          params: {
-            image: "https://i.ibb.co/G7bZHL7/img-Bag-of-Apples-1-36kg.jpg",
-          },
-        }
-      )
-        .then(() => {})
-        .catch(() => {})
-        .finally(() => {
-          return AXIOS.patch(
-            "/item/Bag of Apples 1.36kg/setInventory",
-            {},
-            {
-              params: {
-                inventory: 100,
-              },
-            }
-          )
-            .then(() => {})
-            .catch(() => {})
-            .finally(() => {
-              return AXIOS.patch(
-                "/item/Bag of Apples 1.36kg/setCanDeliver",
-                {},
-                {
-                  params: {
-                    canDeliver: false,
-                  },
-                }
-              )
-                .then(() => {})
-                .catch(() => {})
-                .finally(() => {
-                  return AXIOS.patch(
-                    "/item/Bag of Apples 1.36kg/setCanPickUp",
-                    {},
-                    {
-                      params: {
-                        canPickUp: true,
-                      },
-                    }
-                  )
-                    .then(() => {})
-                    .catch(() => {})
-                    .finally(() => {
-                      return AXIOS.patch(
-                        "/item/Bag of Apples 1.36kg/setIsDiscontinued",
-                        {},
-                        {
-                          params: {
-                            isDiscontinued: false,
-                          },
-                        }
-                      )
-                        .then(() => {})
-                        .catch(() => {})
-                        .finally(() => {
-                          return AXIOS.patch(
-                            "/item/Bag of Apples 1.36kg/setPrice",
-                            {},
-                            {
-                              params: {
-                                price: 7.99,
-                              },
-                            }
-                          )
-                            .then(() => {})
-                            .catch(() => {})
-                            .finally(() => {
-                              console.log("Reset item 'Bag of Apples 1.36kg'");
+                              console.log("Reset item '" + name + "'");
                             });
                         });
                     });

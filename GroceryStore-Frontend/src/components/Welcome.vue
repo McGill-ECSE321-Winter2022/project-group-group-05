@@ -34,6 +34,80 @@
         <b-tooltip target="populate-database-button" triggers="hover">
           <b>Development option:</b> populate database with some data
         </b-tooltip>
+
+        <b-button
+          id="show-instructions-button"
+          variant="info"
+          class="mb-4"
+          v-b-modal.instructions-modal
+          >Read Me!</b-button
+        >
+        <b-tooltip target="show-instructions-button" triggers="hover">
+          <b>Development option:</b> view instructions for testing the frontend
+        </b-tooltip>
+        <b-modal
+          id="instructions-modal"
+          title="Frontend Instructions"
+          ok-only
+          scrollable
+        >
+          <p class="mb-3">
+            The database is wiped each time the project is built. Clicking on
+            <b>Populate database</b> will fill it with necessary data to test
+            the frontend. To see in detail what's being created, see function
+            <code>genData()</code> in <code>WelcomeScript.js</code>.
+          </p>
+          <p class="mb-3">
+            Clicking on the logo at top left corner will always redirect back to
+            this Welcome page.
+          </p>
+          <h5><b>Owner Account Credentials</b></h5>
+          <ul>
+            <li>username: admin</li>
+            <li>password: admin</li>
+          </ul>
+          <p class="mb-3">
+            After signing in as owner (top right corner), go to My Profile to
+            manage the store.
+          </p>
+          <h5><b>Employee Account Credentials</b></h5>
+          <ul>
+            <li>username: worker1</li>
+            <li>password: worker1</li>
+          </ul>
+          <h5><b>Customer Account Credentials</b></h5>
+          <ul>
+            <li>username: loyalcustomer</li>
+            <li>password: 123456</li>
+          </ul>
+          <p class="mb-3">
+            Customers can be created via Create Account on the navbar or in
+            Manage Customers after signing in as owner or employee.
+          </p>
+          <h5><b>In-Store Purchases</b></h5>
+          <p>
+            To execute in-store purchases, first sign in with this special
+            customer account:
+          </p>
+          <ul>
+            <li>username: kiosk</li>
+            <li>password: kiosk</li>
+          </ul>
+          <p class="mb-3">
+            The page to execute in-store orders is located at
+            <code>/PointOfSale</code>
+          </p>
+          <h5><b>Adding Items to Cart</b></h5>
+          <p class="mb-3">
+            Once signed in as a customer (except 'kiosk'), simply click the
+            items displayed on this Welcome page.
+          </p>
+          <h5><b>About the Marquee</b></h5>
+          <p class="mb-3">
+            The marquee near the top of this Welcome page will display the
+            earliest Holiday (by date) in the system.
+          </p>
+        </b-modal>
       </div>
       <template #overlay>
         <div class="text-center">
