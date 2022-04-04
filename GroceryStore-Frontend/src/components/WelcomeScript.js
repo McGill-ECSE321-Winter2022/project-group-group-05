@@ -470,7 +470,6 @@ function createHoliday() {
     });
 }
 
-
 function createItem1() {
   let name = "Bar of Chocolate 100g";
   let imgURL = "https://i.ibb.co/0Qv0HFL/img-Bar-of-Chocolate-100g.jpg";
