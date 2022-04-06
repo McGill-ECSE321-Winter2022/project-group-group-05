@@ -19,19 +19,24 @@ import java.io.IOException;
  */
 public class LoginDataSource {
     Result<LoggedInUser> user;
+    String error;
 
     public Result<LoggedInUser> login(String username, String password) {
-        String error = null;
         HttpUtils.get("owner/" + username, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                if () {
-                } else {
-                    LoggedInUser owner =
-                            new LoggedInUser(
-                                    "Owner",
-                                    username);
-                    user = new Result.Success<>(owner);
+                try {
+                    String expectPassword = new JSONObject(response.toString()).getString("password");
+                    if (password.equals(expectPassword)) {
+                        LoggedInUser owner =
+                                new LoggedInUser(
+                                        "Owner",
+                                        username);
+                        user = new Result.Success<>(owner);
+                    } else {
+                        error = "Wrong password";
+                    }
+                } catch (Exception e) {
                 }
             }
 
@@ -40,25 +45,59 @@ public class LoginDataSource {
                 HttpUtils.get("employee/" + username, new RequestParams(), new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        LoggedInUser owner =
-                                new LoggedInUser(
-                                        "Owner",
-                                        username);
-                        user = new Result.Success<>(owner);
+                        try {
+                            String expectPassword = new JSONObject(response.toString()).getString("password");
+                            if (password.equals(expectPassword)) {
+                                LoggedInUser owner =
+                                        new LoggedInUser(
+                                                "Employee",
+                                                username);
+                                user = new Result.Success<>(owner);
+                            } else {
+                                error = "Wrong password";
+                            }
+                        } catch (Exception e) {
+                        }
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        HttpUtils.get("customer/" + username, new RequestParams(), new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                                try {
+                                    String expectPassword = new JSONObject(response.toString()).getString("password");
+                                    if (password.equals(expectPassword)) {
+                                        LoggedInUser owner =
+                                                new LoggedInUser(
+                                                        "Customer",
+                                                        username);
+                                        user = new Result.Success<>(owner);
+                                    } else {
+                                        error = "Wrong password";
+                                    }
+                                } catch (Exception e) {
+                                }
+                            }
 
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                error = "User does not exist";
 
+                            }
+                        });
                     }
-
                 });
             }
         });
+        if(error == null){
+            return user;
+        }else {
+            return new Result.Error(new IOException(error, new Exception()));
+        }
     }
 
-    public void logout() {
-        // TODO: revoke authentication
+        public void logout () {
+            // TODO: revoke authentication
+        }
     }
-}
