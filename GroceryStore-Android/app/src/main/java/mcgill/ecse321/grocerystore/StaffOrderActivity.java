@@ -1,10 +1,10 @@
 package mcgill.ecse321.grocerystore;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class StaffOrderActivity extends AppCompatActivity {
 

@@ -1,8 +1,8 @@
 package mcgill.ecse321.grocerystore.ui.login;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 import mcgill.ecse321.grocerystore.data.LoginDataSource;
 import mcgill.ecse321.grocerystore.data.LoginRepository;

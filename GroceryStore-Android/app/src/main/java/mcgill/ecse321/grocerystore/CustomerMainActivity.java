@@ -1,20 +1,16 @@
 package mcgill.ecse321.grocerystore;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import mcgill.ecse321.grocerystore.ui.login.LoginActivity;
 
 public class CustomerMainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
@@ -39,8 +35,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                cart(view);
             }
         });
     }
@@ -69,4 +64,8 @@ public class CustomerMainActivity extends AppCompatActivity {
         startActivity(profilePage);
     }
 
+    public void cart(View v) {
+        Intent cartPage = new Intent(this, CartActivity.class);
+        startActivity(cartPage);
+    }
 }

@@ -6,16 +6,16 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class StaffScheduleActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_schedule);
+        setContentView(R.layout.activity_cart);
     }
 
     public void main(View v) {
-        Intent mainPage = new Intent(this, StaffMainActivity.class);
+        Intent mainPage = new Intent(this, CustomerMainActivity.class);
         startActivity(mainPage);
     }
 }

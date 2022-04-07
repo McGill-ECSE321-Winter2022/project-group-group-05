@@ -1,18 +1,8 @@
 package mcgill.ecse321.grocerystore.ui.login;
 
 import android.app.Activity;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -24,13 +14,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import mcgill.ecse321.grocerystore.CreateAccountActivity;
@@ -39,9 +35,6 @@ import mcgill.ecse321.grocerystore.HttpUtils;
 import mcgill.ecse321.grocerystore.MainActivity;
 import mcgill.ecse321.grocerystore.R;
 import mcgill.ecse321.grocerystore.StaffMainActivity;
-import mcgill.ecse321.grocerystore.data.model.LoggedInUser;
-import mcgill.ecse321.grocerystore.ui.login.LoginViewModel;
-import mcgill.ecse321.grocerystore.ui.login.LoginViewModelFactory;
 import mcgill.ecse321.grocerystore.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {

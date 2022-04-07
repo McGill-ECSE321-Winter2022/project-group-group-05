@@ -4,12 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.util.Patterns;
-
+import mcgill.ecse321.grocerystore.R;
 import mcgill.ecse321.grocerystore.data.LoginRepository;
 import mcgill.ecse321.grocerystore.data.Result;
 import mcgill.ecse321.grocerystore.data.model.LoggedInUser;
-import mcgill.ecse321.grocerystore.R;
 
 public class LoginViewModel extends ViewModel {
 

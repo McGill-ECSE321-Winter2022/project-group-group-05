@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryStoreAndroid">
         <activity
+            android:name=".CartActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateAccountActivity"
             android:exported="false"
             android:theme="@style/Theme.GroceryStoreAndroid.NoActionBar" />
