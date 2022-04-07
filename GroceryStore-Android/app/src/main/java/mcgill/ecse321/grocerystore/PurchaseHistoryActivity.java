@@ -19,6 +19,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_history);
     }
+
     public void main(View v) {
         Intent mainPage = new Intent(this, CustomerMainActivity.class);
         startActivity(mainPage);
