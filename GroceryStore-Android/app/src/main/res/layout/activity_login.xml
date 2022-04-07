@@ -14,7 +14,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="4dp"
-        android:hint="@string/prompt_email"
+        android:hint="@string/prompt_username"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true" />
 
@@ -57,9 +57,12 @@
 
     <ProgressBar
         android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="66dp"
+        android:layout_height="63dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center|center_horizontal"
+        android:layout_marginStart="170dp"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="64dp"
         android:visibility="gone" />

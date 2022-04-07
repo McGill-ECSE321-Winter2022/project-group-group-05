@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">321Grocery</string>
-    <string name="action_login">Log in</string>
+    <string name="action_login">Log In</string>
     <string name="title_activity_login">Welcome!</string>
-    <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Welcome! "</string>
     <string name="invalid_username">username cannot be empty</string>
     <string name="invalid_password">password cannot be empty</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="login_failed">"Your username or password is not correct"</string>
     <string name="title_activity_customer_main">CustomerMainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -17,7 +17,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>

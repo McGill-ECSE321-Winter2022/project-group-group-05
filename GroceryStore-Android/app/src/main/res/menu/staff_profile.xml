@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+
+    <item
+        android:id="@+id/stuff_profile"
+        android:title="My Profile" />
+
+    <item
+        android:id="@+id/stuff_schedule"
+        android:title="My Schedule" />
+
+    <item
+        android:id="@+id/stuff_order"
+        android:title="View Orders" />
+
+    <item
+        android:id="@+id/stuff_logout"
+        android:title="Log Out"
+        android:onClick="logout" />
+</menu>

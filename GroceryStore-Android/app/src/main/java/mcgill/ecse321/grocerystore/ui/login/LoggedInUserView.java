@@ -4,14 +4,20 @@ package mcgill.ecse321.grocerystore.ui.login;
  * Class exposing authenticated user details to the UI.
  */
 class LoggedInUserView {
-    private String displayName;
+    private String userName;
+    private String userType;
     //... other data fields that may be accessible to the UI
 
-    LoggedInUserView(String displayName) {
-        this.displayName = displayName;
+    LoggedInUserView(String userName, String userType) {
+        this.userName = userName;
+        this.userType = userType;
     }
 
-    String getDisplayName() {
-        return displayName;
+    String getUsername() {
+        return userName;
+    }
+
+    String getUserType() {
+        return userType;
     }
 }

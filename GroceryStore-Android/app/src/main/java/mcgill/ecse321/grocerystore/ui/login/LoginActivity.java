@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -23,7 +24,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import mcgill.ecse321.grocerystore.CustomerMainActivity;
+import mcgill.ecse321.grocerystore.HttpUtils;
 import mcgill.ecse321.grocerystore.R;
+import mcgill.ecse321.grocerystore.StaffMainActivity;
+import mcgill.ecse321.grocerystore.data.model.LoggedInUser;
 import mcgill.ecse321.grocerystore.ui.login.LoginViewModel;
 import mcgill.ecse321.grocerystore.ui.login.LoginViewModelFactory;
 import mcgill.ecse321.grocerystore.databinding.ActivityLoginBinding;
@@ -32,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+    private ArrayList<String> user = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,9 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                     updateUiWithUser(loginResult.getSuccess());
                 }
                 setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
             }
         });
 
@@ -121,19 +133,77 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                String username = usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                loginHttpRequest(username, password, v, user);
             }
         });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
+        String welcome = getString(R.string.welcome) + model.getUsername();
+        if (model.getUserType().equals("Customer")) {
+            Intent customerPage = new Intent(this, CustomerMainActivity.class);
+            startActivity(customerPage);
+        } else {
+            Intent staffPage = new Intent(this, StaffMainActivity.class);
+            startActivity(staffPage);
+        }
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    public void loginHttpRequest(String username, String password, View v, final ArrayList<String> user) {
+        user.clear();
+        HttpUtils.get("employee/" + username, new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                try {
+                    String expectPassword = new JSONObject(response.toString()).getString("password");
+                    if (password.equals(expectPassword)) {
+                        user.add(0, username);
+                        user.add(1, "Employee");
+                        loginViewModel.login(user.get(0),
+                                user.get(1));
+                    } else {
+                        loginViewModel.login(null,
+                                null);
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                HttpUtils.get("customer/" + username, new RequestParams(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                        try {
+                            String expectPassword = new JSONObject(response.toString()).getString("password");
+                            if (password.equals(expectPassword)) {
+                                user.add(0, username);
+                                user.add(1, "Customer");
+                                loginViewModel.login(user.get(0),
+                                        user.get(1));
+                            } else {
+                                loginViewModel.login(null,
+                                        null);
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        loginViewModel.login(null,
+                                null);
+                    }
+                });
+            }
+        });
+
     }
 }
