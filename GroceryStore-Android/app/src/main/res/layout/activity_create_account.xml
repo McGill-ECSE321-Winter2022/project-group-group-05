@@ -4,9 +4,9 @@
     android:layout_height="match_parent">
 
     <Button
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Back"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:onClick="main" />
+        android:onClick="main"
+        android:text="Back" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

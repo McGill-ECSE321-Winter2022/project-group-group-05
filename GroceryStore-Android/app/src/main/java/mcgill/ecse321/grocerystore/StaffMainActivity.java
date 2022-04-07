@@ -42,4 +42,24 @@ public class StaffMainActivity extends AppCompatActivity {
         Intent mainPage = new Intent(this, MainActivity.class);
         startActivity(mainPage);
     }
+
+    public void profile(MenuItem item) {
+        Intent profilePage = new Intent(this, StaffProfileActivity.class);
+        startActivity(profilePage);
+    }
+
+    public void order(MenuItem item) {
+        Intent orderPage = new Intent(this, StaffOrderActivity.class);
+        startActivity(orderPage);
+    }
+
+    public void customer(MenuItem item) {
+        Intent customerPage = new Intent(this, StaffCustomerActivity.class);
+        startActivity(customerPage);
+    }
+
+    public void schedule(MenuItem item) {
+        Intent schedulePage = new Intent(this, StaffScheduleActivity.class);
+        startActivity(schedulePage);
+    }
 }

@@ -5,15 +5,21 @@
 
     <item
         android:id="@+id/stuff_profile"
-        android:title="My Profile" />
+        android:title="My Profile"
+        android:onClick="profile" />
 
     <item
         android:id="@+id/stuff_schedule"
-        android:title="My Schedule" />
-
+        android:title="My Schedule"
+        android:onClick="schedule" />
+    <item
+        android:id="@+id/stuff_customer"
+        android:title="View Orders"
+        android:onClick="customer" />
     <item
         android:id="@+id/stuff_order"
-        android:title="View Orders" />
+        android:title="View Customers"
+        android:onClick="order" />
 
     <item
         android:id="@+id/stuff_logout"

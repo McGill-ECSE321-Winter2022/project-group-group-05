@@ -12,6 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryStoreAndroid">
         <activity
+            android:name=".CreateAccountActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GroceryStoreAndroid.NoActionBar" />
+        <activity
+            android:name=".StaffCustomerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StaffScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StaffOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StaffProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".CustomerProfileActivity"
             android:exported="false" />
         <activity
@@ -26,7 +42,6 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="false"
-            android:label="@string/title_activity_login"
             android:theme="@style/Theme.GroceryStoreAndroid.NoActionBar" />
         <activity
             android:name=".MainActivity"

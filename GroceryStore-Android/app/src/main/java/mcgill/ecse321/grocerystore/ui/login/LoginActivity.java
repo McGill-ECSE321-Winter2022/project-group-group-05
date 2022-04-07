@@ -33,8 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import mcgill.ecse321.grocerystore.CreateAccountActivity;
 import mcgill.ecse321.grocerystore.CustomerMainActivity;
 import mcgill.ecse321.grocerystore.HttpUtils;
+import mcgill.ecse321.grocerystore.MainActivity;
 import mcgill.ecse321.grocerystore.R;
 import mcgill.ecse321.grocerystore.StaffMainActivity;
 import mcgill.ecse321.grocerystore.data.model.LoggedInUser;
@@ -145,11 +147,12 @@ public class LoginActivity extends AppCompatActivity {
         if (model.getUserType().equals("Customer")) {
             Intent customerPage = new Intent(this, CustomerMainActivity.class);
             startActivity(customerPage);
-        } else {
+            Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        } else if (model.getUserType().equals("Employee")) {
             Intent staffPage = new Intent(this, StaffMainActivity.class);
             startActivity(staffPage);
+            Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
@@ -205,5 +208,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void main(View v) {
+        Intent mainPage = new Intent(this, MainActivity.class);
+        startActivity(mainPage);
+    }
+
+    public void register(View v) {
+        Intent registerPage = new Intent(this, CreateAccountActivity.class);
+        startActivity(registerPage);
     }
 }
