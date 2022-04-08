@@ -35,6 +35,7 @@ import mcgill.ecse321.grocerystore.HttpUtils;
 import mcgill.ecse321.grocerystore.MainActivity;
 import mcgill.ecse321.grocerystore.R;
 import mcgill.ecse321.grocerystore.StaffMainActivity;
+import mcgill.ecse321.grocerystore.User;
 import mcgill.ecse321.grocerystore.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -143,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getUsername();
+        User user = new User(model.getUsername());
         if (model.getUserType().equals("Customer")) {
             Intent customerPage = new Intent(this, CustomerMainActivity.class);
             startActivity(customerPage);
