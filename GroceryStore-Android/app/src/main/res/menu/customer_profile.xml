@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+    <item
+        android:id="@+id/customer_profile"
+        android:title="My Profile"
+        android:onClick="profile" />
+
+    <item
+        android:id="@+id/customer_history"
+        android:title="Purchase History"
+        android:onClick="history" />
+
+    <item
+        android:id="@+id/customer_logout"
+        android:title="Log Out"
+        android:onClick="logout" />
+</menu>
