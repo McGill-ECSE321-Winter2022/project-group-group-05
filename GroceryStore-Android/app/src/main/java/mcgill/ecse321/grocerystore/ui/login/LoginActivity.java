@@ -127,10 +127,16 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                loginHttpRequest(username, password, v, user);
+                if (username == null || username.trim().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "Please enter your username", Toast.LENGTH_SHORT).show();
+                } else if (password == null || password.trim().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
+                } else {
+                    loadingProgressBar.setVisibility(View.VISIBLE);
+                    loginHttpRequest(username, password, v, user);
+                }
             }
         });
     }
