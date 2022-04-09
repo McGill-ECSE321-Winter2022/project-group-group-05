@@ -4,10 +4,6 @@ package mcgill.ecse321.grocerystore;
  * Singleton Class used to store the login data of the User
  */
 public class User {
-
-    private String username;
-    private String userType;
-
     private static volatile User INSTANCE;
 
     public static User getInstance() {
@@ -35,4 +31,5 @@ public class User {
     public String getUserType() {
         return userType;
     }
+
 }

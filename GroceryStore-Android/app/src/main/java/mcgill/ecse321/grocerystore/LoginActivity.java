@@ -18,32 +18,28 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import mcgill.ecse321.grocerystore.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private ActivityLoginBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_login);
 
-
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        final ProgressBar loadingProgressBar = binding.loading;
+        final EditText usernameEditText = findViewById(R.id.username);
+        final EditText passwordEditText = findViewById(R.id.password);
+        final Button loginButton = findViewById(R.id.login);
+        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
+
+                //perform input validation and throw error
                 if (username == null || username.trim().length() == 0) {
                     Toast.makeText(getApplicationContext(), "Please enter your username", Toast.LENGTH_SHORT).show();
                 } else if (password == null || password.trim().length() == 0) {
@@ -60,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         String welcome = getString(R.string.welcome) + username;
         User.getInstance().setUsername(username);
         User.getInstance().setUserType(userType);
+
+        //redirect current user to different pages depending on their user type
         if (userType.equals("Customer")) {
             Intent customerPage = new Intent(this, CustomerMainActivity.class);
             startActivity(customerPage);
@@ -78,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
     public void loginHttpRequest(String username, String password, View v, ProgressBar loadingProgressBar) {
         HttpUtils.get("employee/" + username, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     String expectPassword = new JSONObject(response.toString()).getString("password");
                     if (password.equals(expectPassword)) {
