@@ -177,7 +177,8 @@ public class EmployeeService {
           throw new IllegalArgumentException(
               "That schedule is already assigned to Employee with username \""
                   + employee.getUsername() + "\"!");
-        } else if (existingSchedule.getDate().equals(date) && conflict(existingSchedule.getShift(), shiftToBeAdded)) {
+        } else if (existingSchedule.getDate().equals(date)
+            && conflict(existingSchedule.getShift(), shiftToBeAdded)) {
           // if the new schedule assignment is on the same day, and overlaps with an existing shift,
           // throw error
           throw new IllegalArgumentException(

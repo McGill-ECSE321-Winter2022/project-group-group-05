@@ -64,7 +64,7 @@ public class HolidayService {
   public List<Holiday> getAll() {
     return holidayRepository.findAllByOrderByName();
   }
-  
+
   @Transactional
   public List<Holiday> getAllByDate() {
     return holidayRepository.findAllByOrderByDateAsc();

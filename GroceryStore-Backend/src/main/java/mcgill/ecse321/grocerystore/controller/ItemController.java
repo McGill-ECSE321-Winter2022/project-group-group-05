@@ -27,8 +27,8 @@ public class ItemController {
   private ItemService service;
 
   @PostMapping(value = {"/item/{name}", "/item/{name}/"})
-  public ItemDto createItem(@PathVariable("name") String name, @RequestParam String image, @RequestParam double price,
-      @RequestParam int inventory, @RequestParam boolean canDeliver,
+  public ItemDto createItem(@PathVariable("name") String name, @RequestParam String image,
+      @RequestParam double price, @RequestParam int inventory, @RequestParam boolean canDeliver,
       @RequestParam boolean canPickUp) throws IllegalArgumentException {
     return convertToDto(service.createItem(name, image, price, inventory, canDeliver, canPickUp));
   }
@@ -83,7 +83,7 @@ public class ItemController {
     return service.searchItemsDescending(searchQuery).stream().map(p -> convertToDto(p))
         .collect(Collectors.toList());
   }
-  
+
   @PatchMapping(value = {"/item/{name}/setImage", "/item/{name}/setImage/"})
   public ItemDto setImage(@PathVariable("name") String name, @RequestParam String image)
       throws IllegalArgumentException {
