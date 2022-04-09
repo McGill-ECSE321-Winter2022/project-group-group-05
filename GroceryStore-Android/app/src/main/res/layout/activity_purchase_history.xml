@@ -9,4 +9,10 @@
         android:layout_gravity="start"
         android:onClick="main"
         android:text="Back" />
+
+    <ListView
+        android:id="@+id/purchase_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
