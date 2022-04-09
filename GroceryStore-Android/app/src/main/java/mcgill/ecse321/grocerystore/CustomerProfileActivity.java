@@ -82,7 +82,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     public void getUser() {
         HttpUtils.get("customer/" + User.getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     JSONObject responseDto = new JSONObject(response.toString());
                     String password = responseDto.getString("password");

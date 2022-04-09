@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
     public void loginHttpRequest(String username, String password, View v, ProgressBar loadingProgressBar) {
         HttpUtils.get("employee/" + username, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     String expectPassword = new JSONObject(response.toString()).getString("password");
                     if (password.equals(expectPassword)) {
