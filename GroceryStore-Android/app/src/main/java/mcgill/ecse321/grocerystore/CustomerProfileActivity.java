@@ -27,7 +27,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_profile);
-        ((TextView) findViewById(R.id.username)).setText(User.getUsername());
+        ((TextView) findViewById(R.id.username)).setText(User.getInstance().getUsername());
         getUser();
     }
 
@@ -64,7 +64,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 rp.add("isLocal", "false");
             }
 
-            HttpUtils.patch("customer/" + User.getUsername(), rp, new JsonHttpResponseHandler() {
+            HttpUtils.patch("customer/" + User.getInstance().getUsername(), rp, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                     bar.setVisibility(View.GONE);
@@ -80,7 +80,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     }
 
     public void getUser() {
-        HttpUtils.get("customer/" + User.getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
+        HttpUtils.get("customer/" + User.getInstance().getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {

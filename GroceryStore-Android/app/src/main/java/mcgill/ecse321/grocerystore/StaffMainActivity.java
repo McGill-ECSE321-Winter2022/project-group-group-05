@@ -22,7 +22,7 @@ public class StaffMainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.staff_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         MenuItem schedule = ((NavigationView) findViewById(R.id.staff_navigation)).getMenu().findItem(R.id.staff_schedule);
-        if (User.getUserType().equals("Owner")) {
+        if (User.getInstance().getUserType().equals("Owner")) {
             schedule.setVisible(false);
         }
         // pass the Open and Close toggle for the drawer layout listener
