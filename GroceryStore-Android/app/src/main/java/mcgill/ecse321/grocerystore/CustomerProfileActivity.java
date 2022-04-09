@@ -46,7 +46,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
         String email = ((TextView) findViewById(R.id.email)).getText().toString();
         String address = ((TextView) findViewById(R.id.address)).getText().toString();
 
-        //perform input validation and throw error
+        // Perform input validation and throw error
         if (password == null || password.trim().length() == 0) {
             Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
         } else if (email == null || email.trim().length() == 0) {
@@ -90,12 +90,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     String address = responseDto.getString("address");
                     String local = responseDto.getString("local");
 
-                    //prefill the text fields with the user's information
+                    // Prefill the text fields with the user's information
                     ((TextView) findViewById(R.id.password)).setText(password);
                     ((TextView) findViewById(R.id.email)).setText(email);
                     ((TextView) findViewById(R.id.address)).setText(address);
 
-                    //set value for the radio button group
+                    // Set value for the radio button group
                     if (local.equals("true")) {
                         ((RadioButton) findViewById(R.id.radio_yes)).setChecked(true);
                     } else {

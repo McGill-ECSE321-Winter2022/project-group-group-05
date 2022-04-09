@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-                //perform input validation and throw error
+                // Perform input validation and throw error
                 if (username == null || username.trim().length() == 0) {
                     Toast.makeText(getApplicationContext(), "Please enter your username", Toast.LENGTH_SHORT).show();
                 } else if (password == null || password.trim().length() == 0) {
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         User.getInstance().setUsername(username);
         User.getInstance().setUserType(userType);
 
-        //redirect current user to different pages depending on their user type
+        // Redirect current user to different pages depending on their user type
         if (userType.equals("Customer")) {
             Intent customerPage = new Intent(this, CustomerMainActivity.class);
             startActivity(customerPage);

@@ -94,7 +94,8 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.purchase, parent, false);
             }
-            // Display items
+
+            // Display purchased items
             LinearLayout layout = (LinearLayout) (convertView.findViewById(R.id.purchase_item_list));
             if (layout.getChildCount() == 0) {
                 for (PurchaseItem item : purchase.items) {
@@ -105,6 +106,8 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
                     layout.addView(itemView);
                 }
             }
+
+            // Display the purchase information
             ((TextView) convertView.findViewById(R.id.purchase_id)).setText("Order #" + purchase.id);
             ((TextView) convertView.findViewById(R.id.purchase_date)).setText("" + purchase.date);
             if (purchase.delivery) {
