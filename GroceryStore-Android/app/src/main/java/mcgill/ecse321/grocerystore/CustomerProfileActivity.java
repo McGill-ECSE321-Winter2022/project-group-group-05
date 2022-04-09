@@ -45,6 +45,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
         String password = ((TextView) findViewById(R.id.password)).getText().toString();
         String email = ((TextView) findViewById(R.id.email)).getText().toString();
         String address = ((TextView) findViewById(R.id.address)).getText().toString();
+
+        //perform input validation and throw error
         if (password == null || password.trim().length() == 0) {
             Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
         } else if (email == null || email.trim().length() == 0) {
@@ -61,6 +63,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             } else {
                 rp.add("isLocal", "false");
             }
+
             HttpUtils.patch("customer/" + User.getUsername(), rp, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
@@ -86,14 +89,19 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     String email = responseDto.getString("email");
                     String address = responseDto.getString("address");
                     String local = responseDto.getString("local");
+
+                    //prefill the text fields with the user's information
                     ((TextView) findViewById(R.id.password)).setText(password);
                     ((TextView) findViewById(R.id.email)).setText(email);
                     ((TextView) findViewById(R.id.address)).setText(address);
+
+                    //set value for the radio button group
                     if (local.equals("true")) {
                         ((RadioButton) findViewById(R.id.radio_yes)).setChecked(true);
                     } else {
                         ((RadioButton) findViewById(R.id.radio_no)).setChecked(true);
                     }
+
                 } catch (Exception e) {
                 }
             }
