@@ -357,7 +357,7 @@ public class TestShiftService {
     assertNull(shift);
     assertEquals("Shift end time cannot be null.", error);
   }
-  
+
 }
 
 
