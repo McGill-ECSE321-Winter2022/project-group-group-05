@@ -4,21 +4,26 @@
     tools:ignore="HardcodedText">
 
     <item
-        android:id="@+id/stuff_profile"
+        android:id="@+id/staff_profile"
         android:title="My Profile"
         android:onClick="profile" />
 
     <item
-        android:id="@+id/stuff_schedule"
+        android:id="@+id/staff_schedule"
         android:title="My Schedule"
         android:onClick="schedule" />
     <item
-        android:id="@+id/stuff_order"
-        android:title="View Customers"
-        android:onClick="order" />
+        android:id="@+id/staff_paid_order"
+        android:title="View Paid Orders"
+        android:onClick="paidOrder" />
 
     <item
-        android:id="@+id/stuff_logout"
+        android:id="@+id/staff_completed_order"
+        android:title="View Completed Orders"
+        android:onClick="completedOrder" />
+
+    <item
+        android:id="@+id/staff_logout"
         android:title="Log Out"
         android:onClick="logout" />
 </menu>

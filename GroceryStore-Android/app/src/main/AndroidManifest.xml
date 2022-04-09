@@ -20,18 +20,27 @@
             android:theme="@style/Theme.GroceryStoreAndroid.NoActionBar" />
         <activity
             android:name=".StaffScheduleActivity"
+            android:label="@string/title_activity_staff_schedule"
             android:exported="false" />
         <activity
-            android:name=".StaffOrderActivity"
+            android:name=".StaffCompletedOrderActivity"
+            android:label="@string/title_activity_completed_order"
+            android:exported="false" />
+        <activity
+            android:name=".StaffPaidOrderActivity"
+            android:label="@string/title_activity_paid_order"
             android:exported="false" />
         <activity
             android:name=".StaffProfileActivity"
+            android:label="@string/title_activity_staff_profile"
             android:exported="false" />
         <activity
             android:name=".CustomerProfileActivity"
+            android:label="@string/title_activity_customer_profile"
             android:exported="false" />
         <activity
             android:name=".PurchaseHistoryActivity"
+            android:label="@string/title_activity_customer_history"
             android:exported="false" />
         <activity
             android:name=".StaffMainActivity"
