@@ -19,9 +19,6 @@
             android:exported="false"
             android:theme="@style/Theme.GroceryStoreAndroid.NoActionBar" />
         <activity
-            android:name=".StaffCustomerActivity"
-            android:exported="false" />
-        <activity
             android:name=".StaffScheduleActivity"
             android:exported="false" />
         <activity

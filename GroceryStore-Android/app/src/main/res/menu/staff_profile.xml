@@ -13,10 +13,6 @@
         android:title="My Schedule"
         android:onClick="schedule" />
     <item
-        android:id="@+id/stuff_customer"
-        android:title="View Orders"
-        android:onClick="customer" />
-    <item
         android:id="@+id/stuff_order"
         android:title="View Customers"
         android:onClick="order" />

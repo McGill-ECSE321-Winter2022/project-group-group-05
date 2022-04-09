@@ -53,11 +53,6 @@ public class StaffMainActivity extends AppCompatActivity {
         startActivity(orderPage);
     }
 
-    public void customer(MenuItem item) {
-        Intent customerPage = new Intent(this, StaffCustomerActivity.class);
-        startActivity(customerPage);
-    }
-
     public void schedule(MenuItem item) {
         Intent schedulePage = new Intent(this, StaffScheduleActivity.class);
         startActivity(schedulePage);

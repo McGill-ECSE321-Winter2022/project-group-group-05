@@ -1,6 +1,5 @@
 package mcgill.ecse321.grocerystore.ui.login;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,19 +13,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import mcgill.ecse321.grocerystore.CreateAccountActivity;
@@ -42,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
-    private ArrayList<String> user = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,40 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
-
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
-            }
-        });
-
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-            }
-        });
-
+        loginButton.setEnabled(true);
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -136,20 +97,21 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
                 } else {
                     loadingProgressBar.setVisibility(View.VISIBLE);
-                    loginHttpRequest(username, password, v, user);
+                    loginHttpRequest(username, password, v, loadingProgressBar);
                 }
             }
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getUsername();
-        User user = new User(model.getUsername());
-        if (model.getUserType().equals("Customer")) {
+    private void updateUiWithUser(String username, String userType) {
+        String welcome = getString(R.string.welcome) + username;
+        User.getInstance().setUsername(username);
+        User.getInstance().setUserType(userType);
+        if (userType.equals("Customer")) {
             Intent customerPage = new Intent(this, CustomerMainActivity.class);
             startActivity(customerPage);
             Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        } else if (model.getUserType().equals("Employee")) {
+        } else if (userType.equals("Employee") || userType.equals("Owner")) {
             Intent staffPage = new Intent(this, StaffMainActivity.class);
             startActivity(staffPage);
             Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
@@ -160,22 +122,18 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    public void loginHttpRequest(String username, String password, View v, final ArrayList<String> user) {
-        user.clear();
+    public void loginHttpRequest(String username, String password, View v, ProgressBar loadingProgressBar) {
         HttpUtils.get("employee/" + username, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                 try {
                     String expectPassword = new JSONObject(response.toString()).getString("password");
                     if (password.equals(expectPassword)) {
-                        user.add(0, username);
-                        user.add(1, "Employee");
-                        loginViewModel.login(user.get(0),
-                                user.get(1));
+                        updateUiWithUser(username, "Employee");
                     } else {
-                        loginViewModel.login(null,
-                                null);
+                        showLoginFailed(R.string.login_failed);
                     }
+                    loadingProgressBar.setVisibility(View.GONE);
                 } catch (Exception e) {
                 }
             }
@@ -188,22 +146,38 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             String expectPassword = new JSONObject(response.toString()).getString("password");
                             if (password.equals(expectPassword)) {
-                                user.add(0, username);
-                                user.add(1, "Customer");
-                                loginViewModel.login(user.get(0),
-                                        user.get(1));
+                                updateUiWithUser(username, "Customer");
                             } else {
-                                loginViewModel.login(null,
-                                        null);
+                                showLoginFailed(R.string.login_failed);
                             }
+                            loadingProgressBar.setVisibility(View.GONE);
                         } catch (Exception e) {
                         }
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        loginViewModel.login(null,
-                                null);
+                        HttpUtils.get("owner/" + username, new RequestParams(), new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                                try {
+                                    String expectPassword = new JSONObject(response.toString()).getString("password");
+                                    if (password.equals(expectPassword)) {
+                                        updateUiWithUser(username, "Owner");
+                                    } else {
+                                        showLoginFailed(R.string.login_failed);
+                                    }
+                                    loadingProgressBar.setVisibility(View.GONE);
+                                } catch (Exception e) {
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                showLoginFailed(R.string.login_failed);
+                                loadingProgressBar.setVisibility(View.GONE);
+                            }
+                        });
                     }
                 });
             }
