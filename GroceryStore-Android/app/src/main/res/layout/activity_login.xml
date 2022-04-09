@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity">
+    tools:context=".LoginActivity">
 
     <Button
         android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
         android:layout_marginStart="142dp"
         android:layout_marginTop="400dp"
         android:layout_marginBottom="64dp"
-        android:enabled="false"
+        android:enabled="true"
         android:text="@string/action_sign_in" />
 
     <ProgressBar

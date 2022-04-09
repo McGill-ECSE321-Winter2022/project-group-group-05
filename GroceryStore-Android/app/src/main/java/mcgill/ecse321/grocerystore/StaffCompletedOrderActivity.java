@@ -6,12 +6,12 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class StaffCustomerActivity extends AppCompatActivity {
+public class StaffCompletedOrderActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_customer);
+        setContentView(R.layout.activity_staff_completed_order);
     }
 
     public void main(View v) {

@@ -9,6 +9,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
+
 public class StaffMainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -19,7 +21,10 @@ public class StaffMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_staff_main);
         drawerLayout = findViewById(R.id.staff_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
+        MenuItem schedule = ((NavigationView) findViewById(R.id.staff_navigation)).getMenu().findItem(R.id.staff_schedule);
+        if (User.getUserType().equals("Owner")) {
+            schedule.setVisible(false);
+        }
         // pass the Open and Close toggle for the drawer layout listener
         // to toggle the button
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -48,14 +53,14 @@ public class StaffMainActivity extends AppCompatActivity {
         startActivity(profilePage);
     }
 
-    public void order(MenuItem item) {
-        Intent orderPage = new Intent(this, StaffOrderActivity.class);
-        startActivity(orderPage);
+    public void paidOrder(MenuItem item) {
+        Intent paidOrderPage = new Intent(this, StaffPaidOrderActivity.class);
+        startActivity(paidOrderPage);
     }
 
-    public void customer(MenuItem item) {
-        Intent customerPage = new Intent(this, StaffCustomerActivity.class);
-        startActivity(customerPage);
+    public void completedOrder(MenuItem item) {
+        Intent completedOrderPage = new Intent(this, StaffCompletedOrderActivity.class);
+        startActivity(completedOrderPage);
     }
 
     public void schedule(MenuItem item) {

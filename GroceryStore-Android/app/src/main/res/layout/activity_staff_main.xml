@@ -21,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:id="@+id/staff_navigation"
         app:menu="@menu/staff_profile" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
