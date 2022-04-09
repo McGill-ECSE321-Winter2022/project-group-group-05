@@ -67,7 +67,8 @@ public class Item {
    * @param canDeliver
    * @param canPickUp
    */
-  public Item(String name, String image, double price, int inventory, boolean canDeliver, boolean canPickUp) {
+  public Item(String name, String image, double price, int inventory, boolean canDeliver,
+      boolean canPickUp) {
     this.setName(name);
     this.setImage(image);
     this.setPrice(price);
@@ -85,7 +86,7 @@ public class Item {
   public String getName() {
     return this.name;
   }
-  
+
   public String getImage() {
     return this.image;
   }
@@ -120,7 +121,7 @@ public class Item {
   public void setName(String name) {
     this.name = name;
   }
-  
+
   public void setImage(String image) {
     this.image = image;
   }

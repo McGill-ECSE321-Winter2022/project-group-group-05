@@ -609,7 +609,7 @@ public class TestEmployeeService {
     verify(mockEmployeeOne, times(0)).addEmployeeSchedule(any());
     assertEquals("That schedule conflicts with an already existing schedule!", error);
   }
-  
+
   @Test
   public void testAddScheduleConflictingAfter() {
     String error = "";

@@ -15,8 +15,7 @@ public interface EmployeeScheduleRepository extends CrudRepository<EmployeeSched
   List<EmployeeSchedule> findAllByOrderByDate();
 
   List<EmployeeSchedule> findAllByOrderByDateDesc();
- 
 
- 
+
 
 }

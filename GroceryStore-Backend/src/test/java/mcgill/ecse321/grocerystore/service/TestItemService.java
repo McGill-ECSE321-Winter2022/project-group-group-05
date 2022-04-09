@@ -175,7 +175,7 @@ public class TestItemService {
   @Test
   public void testCreateItem() {
     String itemName = "Banana";
-    String itemImage = "fakeImage.com"; 
+    String itemImage = "fakeImage.com";
     double price = 2.5;
     int inventory = 10;
     Boolean canDeliver = true;
@@ -237,7 +237,7 @@ public class TestItemService {
     assertNull(item);
     assertEquals("Item name is already taken!", error);
   }
-  
+
   @Test
   public void testCreateItemNullImage() {
     String itemName = "negative price";
@@ -479,7 +479,7 @@ public class TestItemService {
     assertNull(itemList);
     assertEquals("Search Query must not be empty!", error);
   }
-  
+
   @Test
   public void testSetImage() {
     Item item = null;

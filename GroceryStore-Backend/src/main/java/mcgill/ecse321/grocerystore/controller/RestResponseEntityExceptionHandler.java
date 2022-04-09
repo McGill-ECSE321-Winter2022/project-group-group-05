@@ -21,11 +21,4 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     response.sendError(HttpStatus.BAD_REQUEST.value());
   }
 
-//  @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
-//  public ResponseEntity<Object> modifyResponse(RuntimeException ex, WebRequest request) {
-//    String responseBody = ex.getMessage();
-//    return handleExceptionInternal(ex, responseBody, new HttpHeaders(), HttpStatus.BAD_REQUEST,
-//        request);
-//  }
-
 }

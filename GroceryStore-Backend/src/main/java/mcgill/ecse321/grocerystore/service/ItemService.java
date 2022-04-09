@@ -183,7 +183,7 @@ public class ItemService {
     }
     return itemRepository.findByNameIgnoreCaseContainingOrderByNameDesc(searchQuery);
   }
-  
+
   @Transactional
   public Item setImage(String itemName, String image) {
     Item item = getItem(itemName);

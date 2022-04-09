@@ -25,8 +25,6 @@ dependencies {
 	testImplementation 'org.mockito:mockito-junit-jupiter:4.3.1'
 	// jupiter engine
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-	// StringUtils
-	implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 tasks.named('test') {

@@ -10,8 +10,8 @@ public class ItemDto {
   private boolean canPickUp;
   private boolean discontinued;
 
-  public ItemDto(String name, String image, double price, int inventory, boolean canDeliver, boolean canPickUp,
-      boolean discontinued) {
+  public ItemDto(String name, String image, double price, int inventory, boolean canDeliver,
+      boolean canPickUp, boolean discontinued) {
     this.name = name;
     this.image = image;
     this.price = price;
@@ -27,7 +27,7 @@ public class ItemDto {
   public String getName() {
     return name;
   }
-  
+
   /**
    * @return the image
    */
