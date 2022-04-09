@@ -30,6 +30,10 @@ public class HttpUtils {
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
+    public static void patch(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.patch(getAbsoluteUrl(url), params, responseHandler);
+    }
+
     public static void getByUrl(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(url, params, responseHandler);
     }
