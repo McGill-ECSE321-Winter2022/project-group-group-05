@@ -211,7 +211,7 @@ public class CartActivity extends AppCompatActivity {
         entryFormat.setMargins(0, 0, 0, 1);
         itemEntry.setLayoutParams(entryFormat);
         itemEntry.setPadding(15, 20, 0, 20);
-        itemEntry.setBackgroundColor(Color.WHITE);
+        itemEntry.setBackgroundColor(getResources().getColor(R.color.white));
 
         // Create column for the item name
         final TextView item = new TextView(this);
@@ -219,7 +219,7 @@ public class CartActivity extends AppCompatActivity {
         item.setGravity(Gravity.CENTER_VERTICAL);
         item.setPadding(4, 4, 4, 4);
         item.setText(specificItem.getJSONObject("item").getString("name"));
-        item.setBackgroundColor(Color.WHITE);
+        item.setBackgroundColor(getResources().getColor(R.color.white));
         item.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         // Create column for the item purchase quantity
@@ -228,7 +228,7 @@ public class CartActivity extends AppCompatActivity {
         purchaseQuantity.setGravity(Gravity.CENTER);
         purchaseQuantity.setPadding(4, 4, 4, 4);
         purchaseQuantity.setText(specificItem.getString("purchaseQuantity"));
-        purchaseQuantity.setBackgroundColor(Color.WHITE);
+        purchaseQuantity.setBackgroundColor(getResources().getColor(R.color.white));
         purchaseQuantity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         // Create column for the item purchase price
@@ -240,7 +240,7 @@ public class CartActivity extends AppCompatActivity {
         double priceOfItem = Double.parseDouble(specificItem.getString("purchasePrice"));
         int itemQuantity = Integer.parseInt(specificItem.getString("purchaseQuantity"));
         purchasePrice.setText(formatCurrency(itemQuantity * priceOfItem));
-        purchasePrice.setBackgroundColor(Color.WHITE);
+        purchasePrice.setBackgroundColor(getResources().getColor(R.color.white));
         purchasePrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         // Create column for the item availability
@@ -262,7 +262,7 @@ public class CartActivity extends AppCompatActivity {
             availabilityOfItem = "Not available for Online Order";
         }
         availability.setText(availabilityOfItem);
-        availability.setBackgroundColor(Color.WHITE);
+        availability.setBackgroundColor(getResources().getColor(R.color.white));
         availability.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         // Add columns to the table row
