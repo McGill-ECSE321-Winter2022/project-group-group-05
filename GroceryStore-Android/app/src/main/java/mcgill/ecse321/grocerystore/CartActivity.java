@@ -126,6 +126,7 @@ public class CartActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         // purchase successfully completed, return to main page
+                        Toast.makeText(getApplicationContext(), "Order Placed!", Toast.LENGTH_SHORT).show();
                         Intent mainPage = new Intent(CartActivity.this, CustomerMainActivity.class);
                         startActivity(mainPage);
                     }
