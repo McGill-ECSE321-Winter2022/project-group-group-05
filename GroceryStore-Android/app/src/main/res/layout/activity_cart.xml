@@ -9,4 +9,124 @@
         android:text="Back"
         android:layout_gravity="start"
         android:onClick="main" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="50dp">
+
+            <TableLayout
+                android:id="@+id/itemTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Table Heading -->
+                <TableRow
+                    android:id="@+id/itemTableFields"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/grocery"
+                    android:paddingBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/itemName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:padding="2sp"
+                        android:text="Item"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/purchaseQuantity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:padding="2sp"
+                        android:text="Purchase Quantity"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/itemPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:padding="2sp"
+                        android:text="Item Price"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/availability"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:padding="2sp"
+                        android:text="Availability"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="10dp">
+
+            <TextView
+                android:id="@+id/totalPriceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:background="@color/grey"/>
+
+            <TextView
+                android:id="@+id/deliveryFeeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:background="@color/grey"
+                android:text="+ $10.00 Delivery Fee"
+                android:visibility="gone"/>
+
+            <Spinner
+                android:id="@+id/orderTypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:minHeight="48dp"
+                android:paddingVertical="20dp"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/orderButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="10dp"
+                android:text="Order"
+                android:onClick="order"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
