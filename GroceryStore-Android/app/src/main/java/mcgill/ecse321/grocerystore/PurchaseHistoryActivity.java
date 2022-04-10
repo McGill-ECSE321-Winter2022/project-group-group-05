@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,9 +33,9 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_history);
-        final ListView listview = (ListView) findViewById(R.id.purchase_list);
+        final ListView purchaseListview = (ListView) findViewById(R.id.purchase_list);
         adapter = new PurchaseAdapter(this, purchases);
-        listview.setAdapter(adapter);
+        purchaseListview.setAdapter(adapter);
         refreshLists(this.getCurrentFocus());
     }
 
@@ -42,11 +43,19 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
         loadPurchases(adapter, purchases);
     }
 
+    /**
+     * Format item price to 2 decimal places
+     *
+     * @param price
+     * @return string of price
+     */
     public String displayPrice(double price) {
         return "$ " + String.format("%.2f", price);
     }
 
-
+    /**
+     * Inner class that stores information of a purchased item which will be displayed
+     */
     class PurchaseItem {
         public String name;
         public double price;
@@ -60,6 +69,9 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Inner class that stores information of a purchase which will be displayed
+     */
     class Purchase {
         public double total;
         public boolean delivery;
@@ -149,7 +161,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-
+                Toast.makeText(getApplicationContext(), "Loading failed", Toast.LENGTH_LONG).show();
             }
         });
     }
