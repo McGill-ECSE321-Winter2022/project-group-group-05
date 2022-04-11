@@ -2,7 +2,6 @@ package mcgill.ecse321.grocerystore;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -67,7 +66,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
                         while (i < response.length() || !today.before(new Date(calendar.getTimeInMillis()))) {
                             JSONArray schedules = new JSONArray();
                             Date scheduleDate = new Date(calendar.getTimeInMillis());
-                            Log.d("date", scheduleDate.toString());
                             if (today.after(scheduleDate)) {
                                 currentlyShownSchedule++;
                             }
@@ -126,7 +124,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
 
                 @Override
                 public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                    Log.d("swipe", "swiped");
                     float xDiff = e2.getX() - e1.getX();
                     float yDiff = e2.getY() - e1.getY();
                     try {
@@ -134,7 +131,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
                             if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
                                 if (xDiff > 0) {
                                     // do right swipe
-                                    Log.d("swipe", "swiped right");
                                     if (currentlyShownSchedule > 0) {
                                         LinearLayout currentSchedule = workSchedule.get(currentlyShownSchedule);
                                         LinearLayout nextSchedule = workSchedule.get(currentlyShownSchedule - 1);
@@ -146,7 +142,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
                                     }
                                 } else {
                                     // do left swipe
-                                    Log.d("swipe", "swiped left");
                                     if (currentlyShownSchedule < workSchedule.size() - 1) {
                                         LinearLayout currentSchedule = workSchedule.get(currentlyShownSchedule);
                                         LinearLayout nextSchedule = workSchedule.get(currentlyShownSchedule + 1);
@@ -171,7 +166,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            Log.d("swipe", "touched");
             return gestureDetector.onTouchEvent(motionEvent);
         }
     }
