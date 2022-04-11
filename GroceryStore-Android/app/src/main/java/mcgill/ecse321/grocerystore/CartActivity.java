@@ -28,6 +28,9 @@ import java.text.DecimalFormat;
 
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * This page is used to draw the Customer's Cart
+ */
 public class CartActivity extends AppCompatActivity {
 
     private int cartId = -1;
@@ -141,6 +144,7 @@ public class CartActivity extends AppCompatActivity {
                     }
                 });
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
                 try {

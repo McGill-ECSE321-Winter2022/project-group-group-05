@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--This page is used to draw the Customer's Cart-->
     <Button
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Back"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:onClick="main" />
+        android:onClick="main"
+        android:text="Back" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,16 +20,16 @@
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="9"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="50dp"
+            android:layout_weight="9">
 
             <TableLayout
                 android:id="@+id/itemTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!-- Table Heading -->
+                <!--Table Heading-->
                 <TableRow
                     android:id="@+id/itemTableFields"
                     android:layout_width="match_parent"
@@ -83,48 +84,49 @@
             </TableLayout>
         </ScrollView>
 
+        <!--Cart Options-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="10dp">
+            android:layout_marginVertical="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/totalPriceLabel"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:textSize="24sp"
+                android:background="@color/grey"
                 android:gravity="center"
-                android:background="@color/grey"/>
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/deliveryFeeLabel"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:textSize="12sp"
-                android:gravity="center"
                 android:background="@color/grey"
+                android:gravity="center"
                 android:text="+ $10.00 Delivery Fee"
-                android:visibility="gone"/>
+                android:textSize="12sp"
+                android:visibility="gone" />
 
             <Spinner
                 android:id="@+id/orderTypeSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:gravity="center"
                 android:minHeight="48dp"
-                android:paddingVertical="20dp"
-                android:gravity="center"/>
+                android:paddingVertical="20dp" />
 
             <Button
                 android:id="@+id/orderButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
-                android:text="Order"
-                android:onClick="order"/>
+                android:onClick="order"
+                android:text="Order" />
 
         </LinearLayout>
     </LinearLayout>
