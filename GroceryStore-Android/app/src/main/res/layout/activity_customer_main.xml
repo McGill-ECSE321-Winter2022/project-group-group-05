@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".CustomerMainActivity">
 
+    <ListView
+        android:id="@+id/item_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <include layout="@layout/activity_customer_main_cart" />
 
     <com.google.android.material.navigation.NavigationView

@@ -111,11 +111,11 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
             LinearLayout layout = (LinearLayout) (convertView.findViewById(R.id.purchase_item_list));
             layout.removeAllViews();
             for (PurchaseItem item : purchase.items) {
-                    View itemView = getLayoutInflater().inflate(R.layout.purchase_item, null);
-                    ((TextView) itemView.findViewById(R.id.item_name)).setText(item.name);
-                    ((TextView) itemView.findViewById(R.id.item_price)).setText(displayPrice(item.price));
-                    ((TextView) itemView.findViewById(R.id.item_quantity)).setText("" + item.quantity);
-                    layout.addView(itemView);
+                View itemView = getLayoutInflater().inflate(R.layout.purchase_item, null);
+                ((TextView) itemView.findViewById(R.id.item_name)).setText(item.name);
+                ((TextView) itemView.findViewById(R.id.item_price)).setText(displayPrice(item.price));
+                ((TextView) itemView.findViewById(R.id.item_quantity)).setText("" + item.quantity);
+                layout.addView(itemView);
             }
 
             // Display the purchase information
