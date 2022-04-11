@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryStoreAndroid">
         <activity
+            android:name=".ItemDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".CartActivity"
             android:exported="false" />
         <activity
@@ -20,28 +23,28 @@
             android:theme="@style/Theme.GroceryStoreAndroid.NoActionBar" />
         <activity
             android:name=".StaffScheduleActivity"
-            android:label="@string/title_activity_staff_schedule"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_staff_schedule" />
         <activity
             android:name=".StaffCompletedOrderActivity"
-            android:label="@string/title_activity_completed_order"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_completed_order" />
         <activity
             android:name=".StaffPaidOrderActivity"
-            android:label="@string/title_activity_paid_order"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_paid_order" />
         <activity
             android:name=".StaffProfileActivity"
-            android:label="@string/title_activity_staff_profile"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_staff_profile" />
         <activity
             android:name=".CustomerProfileActivity"
-            android:label="@string/title_activity_customer_profile"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_customer_profile" />
         <activity
             android:name=".PurchaseHistoryActivity"
-            android:label="@string/title_activity_customer_history"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_customer_history" />
         <activity
             android:name=".StaffMainActivity"
             android:exported="false" />
