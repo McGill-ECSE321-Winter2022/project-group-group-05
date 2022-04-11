@@ -91,16 +91,6 @@ public class CustomerMainActivity extends AppCompatActivity {
     }
 
     /**
-     * Format item price to 2 decimal places
-     *
-     * @param price
-     * @return string of price
-     */
-    public String displayPrice(double price) {
-        return "$ " + String.format("%.2f", price);
-    }
-
-    /**
      * Inner class that stores partial information of an item
      */
     class Item {
@@ -133,7 +123,7 @@ public class CustomerMainActivity extends AppCompatActivity {
 
             // Display the item information
             ((TextView) convertView.findViewById(R.id.item_name)).setText(item.name);
-            ((TextView) convertView.findViewById(R.id.item_price)).setText(displayPrice(item.price));
+            ((TextView) convertView.findViewById(R.id.item_price)).setText(FormatUtils.formatCurrency(item.price));
             if (item.image.trim().length() > 0) {
                 Glide.with(getContext()).load(item.image).into((ImageView) convertView.findViewById(R.id.item_image));
             } else {

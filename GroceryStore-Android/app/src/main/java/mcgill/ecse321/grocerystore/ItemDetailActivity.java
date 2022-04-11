@@ -48,16 +48,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         startActivity(mainPage);
     }
 
-    /**
-     * Format item price to 2 decimal places
-     *
-     * @param price
-     * @return string of price
-     */
-    public String displayPrice(double price) {
-        return "$ " + String.format("%.2f", price);
-    }
-
     private void loadItem(String name, Context context, final ArrayAdapter<Integer> adapter) {
         HttpUtils.get("item/" + name, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
@@ -65,7 +55,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                 quantity.clear();
                 try {
                     ((TextView) findViewById(R.id.item_name)).setText(response.getString("name"));
-                    ((TextView) findViewById(R.id.item_price)).setText(displayPrice(response.getDouble("price")));
+                    ((TextView) findViewById(R.id.item_price)).setText(FormatUtils.formatCurrency(response.getDouble("price")));
                     if (response.getString("image").trim().length() > 0) {
                         Glide.with(context).load(response.getString("image")).into((ImageView) findViewById(R.id.item_image));
                     }

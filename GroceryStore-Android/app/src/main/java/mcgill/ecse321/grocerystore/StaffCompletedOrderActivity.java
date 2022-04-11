@@ -44,16 +44,6 @@ public class StaffCompletedOrderActivity extends AppCompatActivity {
     }
 
     /**
-     * Format item price to 2 decimal places
-     *
-     * @param price
-     * @return string of price
-     */
-    public String displayPrice(double price) {
-        return "$ " + String.format("%.2f", price);
-    }
-
-    /**
      * Inner class that stores information of a purchased item which will be displayed
      */
     class PurchaseItem {
@@ -114,20 +104,20 @@ public class StaffCompletedOrderActivity extends AppCompatActivity {
             for (PurchaseItem item : purchase.items) {
                 View itemView = getLayoutInflater().inflate(R.layout.purchase_item, null);
                 ((TextView) itemView.findViewById(R.id.item_name)).setText(item.name);
-                ((TextView) itemView.findViewById(R.id.item_price)).setText(displayPrice(item.price));
+                ((TextView) itemView.findViewById(R.id.item_price)).setText(FormatUtils.formatCurrency(item.price));
                 ((TextView) itemView.findViewById(R.id.item_quantity)).setText("" + item.quantity);
                 layout.addView(itemView);
             }
 
             // Display the purchase information
             ((TextView) convertView.findViewById(R.id.purchase_id)).setText("Order #" + purchase.id);
-            ((TextView) convertView.findViewById(R.id.purchase_date)).setText("" + purchase.date);
+            ((TextView) convertView.findViewById(R.id.purchase_date)).setText(FormatUtils.formatDate(purchase.date));
             if (purchase.delivery) {
                 ((TextView) convertView.findViewById(R.id.purchase_type)).setText("Order Type: delivery");
             } else {
                 ((TextView) convertView.findViewById(R.id.purchase_type)).setText("Order Type: pick up");
             }
-            ((TextView) convertView.findViewById(R.id.purchase_total)).setText("Total: " + displayPrice(purchase.total));
+            ((TextView) convertView.findViewById(R.id.purchase_total)).setText("Total: " + FormatUtils.formatCurrency(purchase.total));
             ((TextView) convertView.findViewById(R.id.purchase_state)).setText("Order State: " + purchase.state);
 
             //Return the completed view to render on screen
