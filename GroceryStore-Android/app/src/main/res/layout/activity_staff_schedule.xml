@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".StaffScheduleActivity">
 
+    <!--This page is used to draw the Employee's Schedule-->
     <Button
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Back"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:onClick="main" />
+        android:onClick="main"
+        android:text="Back" />
 
     <ScrollView
         android:id="@+id/scheduled_scrollview"
@@ -25,8 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="530dp"
-            android:paddingHorizontal="20dp"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp" />
 
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

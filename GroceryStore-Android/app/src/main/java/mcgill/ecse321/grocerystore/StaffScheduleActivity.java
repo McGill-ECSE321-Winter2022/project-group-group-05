@@ -30,9 +30,14 @@ import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * This page is used to draw the Employee's Schedule
+ */
 public class StaffScheduleActivity extends AppCompatActivity {
 
+    // Initialize array used to store the work schedule for each day
     private ArrayList<LinearLayout> workSchedule;
+    // Indicates which day's schedule is currently displayed on screen
     private int currentlyShownSchedule;
 
     @Override
@@ -42,11 +47,16 @@ public class StaffScheduleActivity extends AppCompatActivity {
         workSchedule = new ArrayList<>();
         currentlyShownSchedule = 0;
         LinearLayout scheduleView = (LinearLayout) findViewById(R.id.schedule);
+        // Fetch the schedules of the currently logged in Employee. This request should not throw an error in normal
+        // operation, because this page cannot be reached unless the User is logged in as a valid Employee
         HttpUtils.get("/employee/" + User.getInstance().getUsername() + "/getSchedules", new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 try {
                     if (response.length() > 0) {
+                        // If the Employee has scheduled shifts
+
+                        // Fetch today's date to serve as a starting point
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(new Date(System.currentTimeMillis()));
                         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -55,6 +65,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
                         calendar.set(Calendar.MILLISECOND, 0);
                         Date firstScheduledDate = Date.valueOf(response.getJSONObject(0).getString("date"));
                         Date today = new Date(calendar.getTimeInMillis());
+                        // If a schedule is assigned before today, adjust the starting point accordingly
                         if (today.after(firstScheduledDate)) {
                             calendar.setTime(firstScheduledDate);
                             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -66,13 +77,16 @@ public class StaffScheduleActivity extends AppCompatActivity {
                         while (i < response.length() || !today.before(new Date(calendar.getTimeInMillis()))) {
                             JSONArray schedules = new JSONArray();
                             Date scheduleDate = new Date(calendar.getTimeInMillis());
+                            // Increment currentlyShownSchedule so that Today's schedule is the first schedule shown
                             if (today.after(scheduleDate)) {
                                 currentlyShownSchedule++;
                             }
+                            // Gather all the schedules which correspond to the current calendar day being processed
                             while (i < response.length() && scheduleDate.equals(Date.valueOf(response.getJSONObject(i).getString("date")))) {
                                 schedules.put(response.getJSONObject(i));
                                 i++;
                             }
+                            // Create the Schedule Layout and add it to the View
                             LinearLayout scheduledDay = createScheduleLayout(scheduleDate, schedules);
                             scheduledDay.setVisibility(View.GONE);
                             workSchedule.add(scheduledDay);
@@ -80,11 +94,13 @@ public class StaffScheduleActivity extends AppCompatActivity {
                             calendar.add(Calendar.DAY_OF_YEAR, 1);
                         }
                     } else {
+                        // If there are no assigned shifts, create an empty schedule with Today's date to display
                         LinearLayout scheduledDay = createScheduleLayout(new Date(System.currentTimeMillis()), new JSONArray());
                         scheduledDay.setVisibility(View.GONE);
                         workSchedule.add(scheduledDay);
                         scheduleView.addView(scheduledDay);
                     }
+                    // Show Today's schedule and set up the swipe functionality
                     workSchedule.get(currentlyShownSchedule).setVisibility(View.VISIBLE);
                     findViewById(R.id.scheduled_scrollview).setOnTouchListener(new SwipeListener());
                 } catch (JSONException e) {
@@ -108,13 +124,16 @@ public class StaffScheduleActivity extends AppCompatActivity {
         startActivity(mainPage);
     }
 
+    /**
+     * Customer listener class used to process left and right swipe inputs
+     */
     private class SwipeListener implements View.OnTouchListener {
 
         GestureDetector gestureDetector;
 
         SwipeListener() {
-            int threshold = 100;
-            int velocity_threshold = 100;
+            int threshold = 100;            // How far the swipe must travel to count
+            int velocity_threshold = 100;   // How fast the swipe must be to count
 
             GestureDetector.SimpleOnGestureListener listener = new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -127,10 +146,11 @@ public class StaffScheduleActivity extends AppCompatActivity {
                     float xDiff = e2.getX() - e1.getX();
                     float yDiff = e2.getY() - e1.getY();
                     try {
+                        // Check that the swipe is more horizontal than vertical
                         if (Math.abs(xDiff) > Math.abs(yDiff)) {
                             if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
                                 if (xDiff > 0) {
-                                    // do right swipe
+                                    // User swiped right, slide the current schedule off to the right and the new one in from the left
                                     if (currentlyShownSchedule > 0) {
                                         LinearLayout currentSchedule = workSchedule.get(currentlyShownSchedule);
                                         LinearLayout nextSchedule = workSchedule.get(currentlyShownSchedule - 1);
@@ -141,7 +161,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
                                         currentlyShownSchedule--;
                                     }
                                 } else {
-                                    // do left swipe
+                                    // User swiped left, slide the current schedule off to the left and the new one in from the right
                                     if (currentlyShownSchedule < workSchedule.size() - 1) {
                                         LinearLayout currentSchedule = workSchedule.get(currentlyShownSchedule);
                                         LinearLayout nextSchedule = workSchedule.get(currentlyShownSchedule + 1);
@@ -170,6 +190,14 @@ public class StaffScheduleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper method used to generate the UI element which displays the schedule for each day
+     *
+     * @param date            - The day that the schedule corresponds to
+     * @param scheduledShifts - The shifts assigned to that day
+     * @return A LinearLayout object which displays the scheduled shifts for the provided day
+     * @throws JSONException if the JSONArray provided is invalid
+     */
     private LinearLayout createScheduleLayout(Date date, JSONArray scheduledShifts) throws JSONException {
         // Extract the day of week and the date for the schedules to us as labels
         DateFormat dayOfWeekFormatter = new SimpleDateFormat("EEEE", Locale.CANADA);
@@ -273,6 +301,13 @@ public class StaffScheduleActivity extends AppCompatActivity {
         return schedule;
     }
 
+    /**
+     * Converts a JDBC time format to AM/PM time format for display
+     * ex. 14:00:00 -> 2:00 PM
+     *
+     * @param time - the JDBC time to convert
+     * @return converted string representation of the time
+     */
     private String formatTime(String time) {
         String[] timeComponents = time.split(":");
         int hour = Integer.parseInt(timeComponents[0]) % 12;
