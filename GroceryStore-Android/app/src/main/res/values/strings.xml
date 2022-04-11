@@ -9,6 +9,7 @@
     <string name="invalid_username">username cannot be empty</string>
     <string name="invalid_password">password cannot be empty</string>
     <string name="login_failed">"Your username or password is not correct"</string>
+    <string name="kiosk_login">"In-Store Kiosk System not available on this App"</string>
     <string name="title_activity_customer_profile">Your Profile</string>
     <string name="title_activity_customer_history">Your Purchase History</string>
     <string name="title_activity_staff_profile">Your Profile</string>
