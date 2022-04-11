@@ -1,8 +1,6 @@
 package mcgill.ecse321.grocerystore;
 
 import android.content.Intent;
-import android.gesture.Gesture;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -12,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
@@ -39,7 +35,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
 
     private ArrayList<LinearLayout> workSchedule;
     private int currentlyShownSchedule;
-    private SwipeListener swipeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,25 +47,48 @@ public class StaffScheduleActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 try {
-                    int i = 0;
-                    while (i < response.length()) {
-                        JSONArray schedules = new JSONArray();
-                        Date scheduleDate = Date.valueOf(response.getJSONObject(i).getString("date"));
-                        while (i < response.length() && scheduleDate.compareTo(Date.valueOf(response.getJSONObject(i).getString("date"))) == 0) {
-                            schedules.put(response.getJSONObject(i));
-                            if (new Date(System.currentTimeMillis()).compareTo(Date.valueOf(response.getJSONObject(i).getString("date"))) < 0) {
+                    if (response.length() > 0) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(new Date(System.currentTimeMillis()));
+                        calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        calendar.set(Calendar.MINUTE, 0);
+                        calendar.set(Calendar.SECOND, 0);
+                        calendar.set(Calendar.MILLISECOND, 0);
+                        Date firstScheduledDate = Date.valueOf(response.getJSONObject(0).getString("date"));
+                        Date today = new Date(calendar.getTimeInMillis());
+                        if (today.after(firstScheduledDate)) {
+                            calendar.setTime(firstScheduledDate);
+                            calendar.set(Calendar.HOUR_OF_DAY, 0);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                        }
+                        int i = 0;
+                        while (i < response.length() || !today.before(new Date(calendar.getTimeInMillis()))) {
+                            JSONArray schedules = new JSONArray();
+                            Date scheduleDate = new Date(calendar.getTimeInMillis());
+                            Log.d("date", scheduleDate.toString());
+                            if (today.after(scheduleDate)) {
                                 currentlyShownSchedule++;
                             }
-                            i++;
+                            while (i < response.length() && scheduleDate.equals(Date.valueOf(response.getJSONObject(i).getString("date")))) {
+                                schedules.put(response.getJSONObject(i));
+                                i++;
+                            }
+                            LinearLayout scheduledDay = createScheduleLayout(scheduleDate, schedules);
+                            scheduledDay.setVisibility(View.GONE);
+                            workSchedule.add(scheduledDay);
+                            scheduleView.addView(scheduledDay);
+                            calendar.add(Calendar.DAY_OF_YEAR, 1);
                         }
-                        LinearLayout scheduledDay = createScheduleLayout(schedules);
+                    } else {
+                        LinearLayout scheduledDay = createScheduleLayout(new Date(System.currentTimeMillis()), new JSONArray());
                         scheduledDay.setVisibility(View.GONE);
                         workSchedule.add(scheduledDay);
                         scheduleView.addView(scheduledDay);
                     }
-                    if (workSchedule.size() > 0) {
-                        workSchedule.get(currentlyShownSchedule).setVisibility(View.VISIBLE);
-                    }
+                    workSchedule.get(currentlyShownSchedule).setVisibility(View.VISIBLE);
+                    findViewById(R.id.scheduled_scrollview).setOnTouchListener(new SwipeListener());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -85,8 +103,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
                 }
             }
         });
-        Log.d("swipe", "touched");
-        swipeListener = new SwipeListener(findViewById(R.id.scheduled_scrollview));
     }
 
     public void main(View v) {
@@ -98,7 +114,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
 
         GestureDetector gestureDetector;
 
-        SwipeListener(View view) {
+        SwipeListener() {
             int threshold = 100;
             int velocity_threshold = 100;
 
@@ -135,8 +151,8 @@ public class StaffScheduleActivity extends AppCompatActivity {
                                         LinearLayout currentSchedule = workSchedule.get(currentlyShownSchedule);
                                         LinearLayout nextSchedule = workSchedule.get(currentlyShownSchedule + 1);
                                         currentSchedule.startAnimation(AnimationUtils.loadAnimation(StaffScheduleActivity.this, R.anim.slide_out_left));
-                                        currentSchedule.setVisibility(View.GONE);
                                         nextSchedule.startAnimation(AnimationUtils.loadAnimation(StaffScheduleActivity.this, R.anim.slide_in_right));
+                                        currentSchedule.setVisibility(View.GONE);
                                         nextSchedule.setVisibility(View.VISIBLE);
                                         currentlyShownSchedule++;
                                     }
@@ -151,7 +167,6 @@ public class StaffScheduleActivity extends AppCompatActivity {
                 }
             };
             gestureDetector = new GestureDetector(StaffScheduleActivity.this, listener);
-            view.setOnTouchListener(this);
         }
 
         @Override
@@ -161,13 +176,12 @@ public class StaffScheduleActivity extends AppCompatActivity {
         }
     }
 
-    private LinearLayout createScheduleLayout(JSONArray scheduledShifts) throws JSONException {
+    private LinearLayout createScheduleLayout(Date date, JSONArray scheduledShifts) throws JSONException {
         // Extract the day of week and the date for the schedules to us as labels
-        Date scheduledDay = Date.valueOf(scheduledShifts.getJSONObject(0).getString("date"));
         DateFormat dayOfWeekFormatter = new SimpleDateFormat("EEEE", Locale.CANADA);
         DateFormat dateFormatter = new SimpleDateFormat("MMM d, yyyy", Locale.CANADA);
-        String dayOfWeek = dayOfWeekFormatter.format(scheduledDay);
-        String date = dateFormatter.format(scheduledDay);
+        String dayOfWeekText = dayOfWeekFormatter.format(date);
+        String dateText = dateFormatter.format(date);
 
         LinearLayout.LayoutParams scheduleLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -184,7 +198,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
         dayOfWeekLabel.setBackgroundColor(getResources().getColor(R.color.grocery));
         dayOfWeekLabel.setTextColor(getResources().getColor(R.color.white));
         dayOfWeekLabel.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-        dayOfWeekLabel.setText(dayOfWeek);
+        dayOfWeekLabel.setText(dayOfWeekText);
 
         // Create label for the date
         TextView dateLabel = new TextView(this);
@@ -194,7 +208,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
         dateLabel.setBackgroundColor(getResources().getColor(R.color.grocery));
         dateLabel.setTextColor(getResources().getColor(R.color.white));
         dateLabel.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-        dateLabel.setText(date);
+        dateLabel.setText(dateText);
 
         // add labels to schedule
         schedule.addView(dayOfWeekLabel);
@@ -224,6 +238,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
             startTime.setLayoutParams(scheduleLayout);
             startTime.setGravity(Gravity.CENTER);
             startTime.setPadding(20, 20, 20, 0);
+            startTime.setBackgroundColor(getResources().getColor(R.color.white));
             startTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             String startTimeText = "Start Time: " + formatTime(scheduledShifts.getJSONObject(i).getJSONObject("shift").getString("startTime"));
             startTime.setText(startTimeText);
@@ -233,6 +248,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
             endTime.setLayoutParams(scheduleLayout);
             endTime.setGravity(Gravity.CENTER);
             endTime.setPadding(20, 0, 20, 20);
+            endTime.setBackgroundColor(getResources().getColor(R.color.white));
             endTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             String endTimeText = "End Time: " + formatTime(scheduledShifts.getJSONObject(i).getJSONObject("shift").getString("endTime"));
             endTime.setText(endTimeText);
@@ -243,6 +259,21 @@ public class StaffScheduleActivity extends AppCompatActivity {
             shift.addView(endTime);
 
             schedule.addView(shift);
+        }
+
+        // if there are no shifts scheduled for this date, add a label indicating so
+        if (scheduledShifts.length() == 0) {
+            TextView noShiftLabel = new TextView(this);
+            noShiftLabel.setLayoutParams(scheduleLayout);
+            noShiftLabel.setGravity(Gravity.CENTER);
+            noShiftLabel.setPadding(20, 20, 20, 20);
+            noShiftLabel.setBackgroundColor(getResources().getColor(R.color.grocery));
+            noShiftLabel.setTextColor(getResources().getColor(R.color.white));
+            noShiftLabel.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            String noShiftText = "No shifts scheduled for this date!";
+            noShiftLabel.setText(noShiftText);
+
+            schedule.addView(noShiftLabel);
         }
 
         return schedule;
