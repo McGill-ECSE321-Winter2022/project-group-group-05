@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setContentView(R.layout.activity_login);
 
@@ -33,21 +33,18 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = usernameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+        loginButton.setOnClickListener(v -> {
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
 
-                // Perform input validation and throw error
-                if (username == null || username.trim().length() == 0) {
-                    Toast.makeText(getApplicationContext(), "Please enter your username", Toast.LENGTH_SHORT).show();
-                } else if (password == null || password.trim().length() == 0) {
-                    Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
-                } else {
-                    loadingProgressBar.setVisibility(View.VISIBLE);
-                    loginHttpRequest(username, password, v, loadingProgressBar);
-                }
+            // Perform input validation and throw error
+            if (username == null || username.trim().length() == 0) {
+                Toast.makeText(getApplicationContext(), "Please enter your username", Toast.LENGTH_SHORT).show();
+            } else if (password == null || password.trim().length() == 0) {
+                Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
+            } else {
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                loginHttpRequest(username, password, loadingProgressBar);
             }
         });
     }
@@ -73,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    public void loginHttpRequest(String username, String password, View v, ProgressBar loadingProgressBar) {
+    public void loginHttpRequest(String username, String password, ProgressBar loadingProgressBar) {
         HttpUtils.get("employee/" + username, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -86,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     loadingProgressBar.setVisibility(View.GONE);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -93,16 +91,22 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 HttpUtils.get("customer/" + username, new RequestParams(), new JsonHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
-                            String expectPassword = new JSONObject(response.toString()).getString("password");
-                            if (password.equals(expectPassword)) {
-                                updateUiWithUser(username, "Customer");
-                            } else {
-                                showLoginFailed(R.string.login_failed);
+                            if (username.equals("kiosk")) {
+                                showLoginFailed(R.string.kiosk_login);
+                            }
+                            else {
+                                String expectPassword = new JSONObject(response.toString()).getString("password");
+                                if (password.equals(expectPassword)) {
+                                    updateUiWithUser(username, "Customer");
+                                } else {
+                                    showLoginFailed(R.string.login_failed);
+                                }
                             }
                             loadingProgressBar.setVisibility(View.GONE);
                         } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -120,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                     loadingProgressBar.setVisibility(View.GONE);
                                 } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
 
