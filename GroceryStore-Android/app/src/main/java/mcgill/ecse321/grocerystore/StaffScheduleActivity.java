@@ -199,7 +199,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
      * @throws JSONException if the JSONArray provided is invalid
      */
     private LinearLayout createScheduleLayout(Date date, JSONArray scheduledShifts) throws JSONException {
-        // Extract the day of week and the date for the schedules to us as labels
+        // Extract the day of week and the date for the schedules to use as labels
         DateFormat dayOfWeekFormatter = new SimpleDateFormat("EEEE", Locale.CANADA);
         DateFormat dateFormatter = new SimpleDateFormat("MMM d, yyyy", Locale.CANADA);
         String dayOfWeekText = dayOfWeekFormatter.format(date);
