@@ -134,7 +134,11 @@ public class CustomerMainActivity extends AppCompatActivity {
             // Display the item information
             ((TextView) convertView.findViewById(R.id.item_name)).setText(item.name);
             ((TextView) convertView.findViewById(R.id.item_price)).setText(displayPrice(item.price));
-            Glide.with(getContext()).load(item.image).into((ImageView) convertView.findViewById(R.id.item_image));
+            if (item.image.trim().length() > 0) {
+                Glide.with(getContext()).load(item.image).into((ImageView) convertView.findViewById(R.id.item_image));
+            } else {
+                ((ImageView) convertView.findViewById(R.id.item_image)).setImageResource(R.drawable.ic_baseline_image_not_supported_24);
+            }
             if (item.available) {
                 ((TextView) convertView.findViewById(R.id.item_available)).setVisibility(View.INVISIBLE);
             } else {

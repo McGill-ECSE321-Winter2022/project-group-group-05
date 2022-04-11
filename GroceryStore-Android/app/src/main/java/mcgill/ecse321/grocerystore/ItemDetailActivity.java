@@ -31,12 +31,11 @@ public class ItemDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-        Intent intent = getIntent();
-        loadItem(intent.getStringExtra("name"), this);
         Spinner quantitySpinner = (Spinner) findViewById(R.id.quantity_spinner);
         quantityAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, quantity);
         quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         quantitySpinner.setAdapter(quantityAdapter);
+        loadItem(getIntent().getStringExtra("name"), this, quantityAdapter);
     }
 
     public void main(View v) {
@@ -54,7 +53,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         return "$ " + String.format("%.2f", price);
     }
 
-    private void loadItem(String name, Context context) {
+    private void loadItem(String name, Context context, final ArrayAdapter<Integer> adapter) {
         HttpUtils.get("item/" + name, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -62,7 +61,9 @@ public class ItemDetailActivity extends AppCompatActivity {
                 try {
                     ((TextView) findViewById(R.id.item_name)).setText(response.getString("name"));
                     ((TextView) findViewById(R.id.item_price)).setText(displayPrice(response.getDouble("price")));
-                    Glide.with(context).load(response.getString("image")).into((ImageView) findViewById(R.id.item_image));
+                    if (response.getString("image").trim().length() > 0) {
+                        Glide.with(context).load(response.getString("image")).into((ImageView) findViewById(R.id.item_image));
+                    }
                     ((TextView) findViewById(R.id.item_stock)).setText(response.getInt("inventory") + " in stock");
                     if (response.getBoolean("canDeliver")) {
                         ((TextView) findViewById(R.id.item_delivery)).setText("available for delivery");
@@ -78,6 +79,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                     for (int i = 1; i <= response.getInt("inventory"); i++) {
                         quantity.add(i);
                     }
+                    adapter.notifyDataSetChanged();
                 } catch (Exception e) {
 
                 }
@@ -89,4 +91,49 @@ public class ItemDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void addToCart(View v) {
+
+        final Spinner quantitySpinner = (Spinner) findViewById(R.id.quantity_spinner);
+
+        RequestParams rpCart = new RequestParams();
+        rpCart.add("username", User.getInstance().getUsername());
+
+        HttpUtils.post("purchase/cart", rpCart, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    String name = getIntent().getStringExtra("name");
+                    Long id = response.getLong("id");
+                    RequestParams rpItem = new RequestParams();
+                    rpItem.add("itemName", name);
+                    rpItem.add("quantity", quantitySpinner.getSelectedItem().toString());
+                    HttpUtils.post("purchase/addItem/" + id, rpItem, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_LONG).show();
+                            main(v);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Toast.makeText(getApplicationContext(), "Loading failed", Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(getApplicationContext(), "Loading failed", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+
 }
