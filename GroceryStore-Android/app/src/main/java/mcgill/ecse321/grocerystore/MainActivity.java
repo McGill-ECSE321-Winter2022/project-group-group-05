@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         ;
     }
 
+    /**
+     * Set opening hours for every day of the week
+     */
     private void setOpeningHours() {
         setOpeningHours("Monday", R.id.mondayHours);
         setOpeningHours("Tuesday", R.id.tuesdayHours);
@@ -95,6 +98,12 @@ public class MainActivity extends AppCompatActivity {
         setOpeningHours("Sunday", R.id.sundayHours);
     }
 
+    /**
+     * Set the formatted opening hours text to the View with the given id
+     *
+     * @param daysOfWeek day of the week
+     * @param id id of the View
+     */
     private void setOpeningHours(String daysOfWeek, int id) {
         HttpUtils.get("openingH/" + daysOfWeek, new RequestParams(), new JsonHttpResponseHandler() {
             @Override

@@ -188,6 +188,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="360dp"
         android:layout_marginRight="20dp"
-        android:stretchColumns="0"></TableLayout>
+        android:stretchColumns="0" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
