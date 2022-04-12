@@ -94,7 +94,7 @@ public class CustomerMainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the search bar
         getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) menuItem.getActionView();
