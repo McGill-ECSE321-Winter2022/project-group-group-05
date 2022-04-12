@@ -23,8 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
-
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -68,7 +66,7 @@ public class CartActivity extends AppCompatActivity {
         HttpUtils.post("/purchase/cart/", getCartRequest, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                TableLayout itemTable = (TableLayout) findViewById(R.id.itemTable);
+                TableLayout itemTable = findViewById(R.id.itemTable);
                 try {
                     cartId = Integer.parseInt(response.getString("id"));
                     JSONArray specificItems = response.getJSONArray("specificItems");
@@ -91,7 +89,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
         // Set up the Order Selection Spinner
-        Spinner orderTypeSelector = (Spinner) findViewById(R.id.orderTypeSpinner);
+        Spinner orderTypeSelector = findViewById(R.id.orderTypeSpinner);
         ArrayAdapter<CharSequence> orderChoices = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         orderChoices.addAll("Pick Up", "Delivery");
         orderTypeSelector.setAdapter(orderChoices);
@@ -175,12 +173,12 @@ public class CartActivity extends AppCompatActivity {
                     // handle fee calculation and update delivery fee notification
                     if (!isLocal && isDelivery) {
                         totalPrice += 10;
-                        ((TextView) findViewById(R.id.deliveryFeeLabel)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.deliveryFeeLabel).setVisibility(View.VISIBLE);
                     } else {
-                        ((TextView) findViewById(R.id.deliveryFeeLabel)).setVisibility(View.GONE);
+                        findViewById(R.id.deliveryFeeLabel).setVisibility(View.GONE);
                     }
                     // update total price label
-                    String priceLabel = "Total: " + formatCurrency(totalPrice);
+                    String priceLabel = "Total: " + FormatUtils.formatCurrency(totalPrice);
                     ((TextView) findViewById(R.id.totalPriceLabel)).setText(priceLabel);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -242,7 +240,7 @@ public class CartActivity extends AppCompatActivity {
         // calculate price of the item and convert to a formatted string
         double priceOfItem = Double.parseDouble(specificItem.getString("purchasePrice"));
         int itemQuantity = Integer.parseInt(specificItem.getString("purchaseQuantity"));
-        purchasePrice.setText(formatCurrency(itemQuantity * priceOfItem));
+        purchasePrice.setText(FormatUtils.formatCurrency(itemQuantity * priceOfItem));
         purchasePrice.setBackgroundColor(getResources().getColor(R.color.white));
         purchasePrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
@@ -282,7 +280,7 @@ public class CartActivity extends AppCompatActivity {
 
             removeItemAlert.setPositiveButton("Ok", (dialog, btn) -> {
                 // remove the item from the app ui
-                TableLayout itemTable = (TableLayout) findViewById(R.id.itemTable);
+                TableLayout itemTable = findViewById(R.id.itemTable);
                 itemTable.removeView(row);
 
                 // remove the item from the customer's purchase in the backend
@@ -312,17 +310,6 @@ public class CartActivity extends AppCompatActivity {
             removeItemAlert.show();
         });
         return itemEntry;
-    }
-
-    /**
-     * Converts a double to a $0.00 format to represent prices
-     *
-     * @param price - double value representing the price to convert
-     * @return converted string representation of the price
-     */
-    private String formatCurrency(double price) {
-        DecimalFormat priceFormat = new DecimalFormat("0.00");
-        return "$" + priceFormat.format(price);
     }
 
 }

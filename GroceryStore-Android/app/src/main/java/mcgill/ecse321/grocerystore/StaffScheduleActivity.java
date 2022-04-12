@@ -46,7 +46,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_staff_schedule);
         workSchedule = new ArrayList<>();
         currentlyShownSchedule = 0;
-        LinearLayout scheduleView = (LinearLayout) findViewById(R.id.schedule);
+        LinearLayout scheduleView = findViewById(R.id.schedule);
         // Fetch the schedules of the currently logged in Employee. This request should not throw an error in normal
         // operation, because this page cannot be reached unless the User is logged in as a valid Employee
         HttpUtils.get("/employee/" + User.getInstance().getUsername() + "/getSchedules", new RequestParams(), new JsonHttpResponseHandler() {
@@ -201,9 +201,8 @@ public class StaffScheduleActivity extends AppCompatActivity {
     private LinearLayout createScheduleLayout(Date date, JSONArray scheduledShifts) throws JSONException {
         // Extract the day of week and the date for the schedules to use as labels
         DateFormat dayOfWeekFormatter = new SimpleDateFormat("EEEE", Locale.CANADA);
-        DateFormat dateFormatter = new SimpleDateFormat("MMM d, yyyy", Locale.CANADA);
         String dayOfWeekText = dayOfWeekFormatter.format(date);
-        String dateText = dateFormatter.format(date);
+        String dateText = FormatUtils.formatDate(date);
 
         LinearLayout.LayoutParams scheduleLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -262,7 +261,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
             startTime.setPadding(20, 20, 20, 0);
             startTime.setBackgroundColor(getResources().getColor(R.color.white));
             startTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            String startTimeText = "Start Time: " + formatTime(scheduledShifts.getJSONObject(i).getJSONObject("shift").getString("startTime"));
+            String startTimeText = "Start Time: " + FormatUtils.formatTime(scheduledShifts.getJSONObject(i).getJSONObject("shift").getString("startTime"));
             startTime.setText(startTimeText);
 
             // Create label for end time
@@ -272,7 +271,7 @@ public class StaffScheduleActivity extends AppCompatActivity {
             endTime.setPadding(20, 0, 20, 20);
             endTime.setBackgroundColor(getResources().getColor(R.color.white));
             endTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            String endTimeText = "End Time: " + formatTime(scheduledShifts.getJSONObject(i).getJSONObject("shift").getString("endTime"));
+            String endTimeText = "End Time: " + FormatUtils.formatTime(scheduledShifts.getJSONObject(i).getJSONObject("shift").getString("endTime"));
             endTime.setText(endTimeText);
 
             // add labels to shift card
@@ -301,18 +300,4 @@ public class StaffScheduleActivity extends AppCompatActivity {
         return schedule;
     }
 
-    /**
-     * Converts a JDBC time format to AM/PM time format for display
-     * ex. 14:00:00 -> 2:00 PM
-     *
-     * @param time - the JDBC time to convert
-     * @return converted string representation of the time
-     */
-    private String formatTime(String time) {
-        String[] timeComponents = time.split(":");
-        int hour = Integer.parseInt(timeComponents[0]) % 12;
-        hour += hour == 0 ? 12 : 0;
-        String amOrPm = Integer.parseInt(timeComponents[0]) < 12 ? " AM" : " PM";
-        return hour + ":" + timeComponents[1] + amOrPm;
-    }
 }
