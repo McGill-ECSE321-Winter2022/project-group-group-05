@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
@@ -68,19 +70,6 @@ public class StaffMainActivity extends AppCompatActivity {
         adapter = new ItemAdapter(this, items);
         itemListView.setAdapter(adapter);
         updateItemDisplay("", adapter, items);
-
-        // set up search function
-        ((EditText) findViewById(R.id.searchBar)).setOnEditorActionListener((v, actionId, event) -> {
-            boolean handled = false;
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                // hide keyboard and update item list when search action is triggered
-                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(StaffMainActivity.this.getCurrentFocus().getWindowToken(), 0);
-                findViewById(R.id.searchBar).clearFocus();
-                updateItemDisplay(((EditText) findViewById(R.id.searchBar)).getText().toString(), adapter, items);
-                handled = true;
-            }
-            return handled;
-        });
     }
 
     @Override
@@ -90,6 +79,28 @@ public class StaffMainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the search bar
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                updateItemDisplay(newText, adapter, items);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
