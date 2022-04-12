@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Set the formatted opening hours text to the View with the given id
+     * Do not do anything if there's an error (because the store can close on some daysOfWeek)
      *
      * @param daysOfWeek day of the week
      * @param id         id of the View
@@ -119,11 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getApplicationContext(), errorResponse.optString("message", "Database Error!"), Toast.LENGTH_SHORT).show();
             }
         });
     }
