@@ -2,7 +2,6 @@ package mcgill.ecse321.grocerystore;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,8 +20,6 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Iterator;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -102,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
      * Set the formatted opening hours text to the View with the given id
      *
      * @param daysOfWeek day of the week
-     * @param id id of the View
+     * @param id         id of the View
      */
     private void setOpeningHours(String daysOfWeek, int id) {
         HttpUtils.get("openingH/" + daysOfWeek, new RequestParams(), new JsonHttpResponseHandler() {
