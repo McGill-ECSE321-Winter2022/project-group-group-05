@@ -16,7 +16,10 @@ import mcgill.ecse321.grocerystore.dto.HolidayDto;
 import mcgill.ecse321.grocerystore.model.Holiday;
 import mcgill.ecse321.grocerystore.service.HolidayService;
 
-
+/**
+ * REST API for Holiday service methods
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class HolidayController {
@@ -67,7 +70,7 @@ public class HolidayController {
    */
   @GetMapping(value = {"/holiday/getAll", "/holiday/getAll/"})
   public List<HolidayDto> getAllHolidays() {
-    ArrayList<HolidayDto> holidays = new ArrayList<HolidayDto>();
+    ArrayList<HolidayDto> holidays = new ArrayList<>();
     for (var holiday : service.getAllByDate()) {
       holidays.add(convertToDto(holiday));
     }

@@ -18,7 +18,7 @@ public class ItemCategory {
   private Set<Item> items;
 
   public ItemCategory() {
-    this.items = new HashSet<Item>();
+    this.items = new HashSet<>();
   }
 
   // Getters
@@ -49,7 +49,7 @@ public class ItemCategory {
 
   /**
    * Remove the item with a given name in the item set
-   * 
+   *
    * @param name
    * @return true if the item is removed
    */

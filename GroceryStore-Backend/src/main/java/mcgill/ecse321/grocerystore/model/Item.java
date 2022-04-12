@@ -26,7 +26,7 @@ public class Item {
   /**
    * Create an item with the specified name.<br>
    * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
-   * 
+   *
    * @param name
    */
   public Item(String name) {
@@ -36,7 +36,7 @@ public class Item {
   /**
    * Create an item with the specified name and price<br>
    * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
-   * 
+   *
    * @param name
    * @param price
    */
@@ -47,7 +47,7 @@ public class Item {
   /**
    * Create an item with the specified name, price, and inventory<br>
    * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
-   * 
+   *
    * @param name
    * @param price
    * @param inventory
@@ -59,7 +59,7 @@ public class Item {
   /**
    * Create an item with the specified attributes.<br>
    * <b>Name must be validated (i.e. no duplicate) prior to calling this constructor</b>
-   * 
+   *
    * @param name
    * @param image
    * @param price
@@ -80,7 +80,7 @@ public class Item {
   // getter methods
   // --------------
   /**
-   * 
+   *
    * @return the primary key of this Item
    */
   public String getName() {
@@ -115,7 +115,7 @@ public class Item {
   // --------------
   /**
    * This method should <b>only be used once at the creation</b> of the Item
-   * 
+   *
    * @param name
    */
   public void setName(String name) {
@@ -149,7 +149,7 @@ public class Item {
   // utility methods
   /**
    * Increment the inventory of this item by the specified value
-   * 
+   *
    * @param addValue
    * @return the new total inventory of this item
    */
@@ -160,7 +160,7 @@ public class Item {
 
   /**
    * Decrement the inventory of this item by the specified value if there is enough inventory
-   * 
+   *
    * @param subtractValue
    * @return The new total inventory of this item<br>
    *         <b>Returns -1 if there's not enough inventory</b>

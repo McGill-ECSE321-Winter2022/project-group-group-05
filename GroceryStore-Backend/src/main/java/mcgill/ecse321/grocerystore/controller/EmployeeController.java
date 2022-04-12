@@ -22,7 +22,7 @@ import mcgill.ecse321.grocerystore.service.EmployeeService;
 
 /**
  * RESTful API for Employee service methods
- * 
+ *
  * @author Harrison Wang
  */
 @CrossOrigin(origins = "*")
@@ -88,7 +88,7 @@ public class EmployeeController {
   @GetMapping(value = {"/employee/{username}/getSchedules", "employee/{username}/getSchedules/"})
   public List<EmployeeScheduleDto> getEmployeeScheduleSorted(
       @PathVariable("username") String username) {
-    List<EmployeeScheduleDto> schedules = new ArrayList<EmployeeScheduleDto>();
+    List<EmployeeScheduleDto> schedules = new ArrayList<>();
     // Convert list of EmployeeSchedule to list of EmployeeScheduleDto
     for (EmployeeSchedule schedule : service.getEmployeeScheduleSorted(username)) {
       Shift scheduleShift = schedule.getShift();
@@ -103,7 +103,7 @@ public class EmployeeController {
 
   @GetMapping(value = {"/employee/getAll", "/employee/getAll/"})
   public List<EmployeeDto> getAllEmployees() {
-    ArrayList<EmployeeDto> employees = new ArrayList<EmployeeDto>();
+    ArrayList<EmployeeDto> employees = new ArrayList<>();
     for (var employee : service.getAllEmployees()) {
       employees.add(convertToDto(employee));
     }
@@ -113,7 +113,7 @@ public class EmployeeController {
   @GetMapping(value = {"/employee/searchAscending", "/employee/searchAscending/"})
   public List<EmployeeDto> searchEmployeesAscending(@RequestParam String searchQuery)
       throws IllegalArgumentException {
-    ArrayList<EmployeeDto> employees = new ArrayList<EmployeeDto>();
+    ArrayList<EmployeeDto> employees = new ArrayList<>();
     for (var employee : service.searchEmployeesAscending(searchQuery)) {
       employees.add(convertToDto(employee));
     }
@@ -123,7 +123,7 @@ public class EmployeeController {
   @GetMapping(value = {"/employee/searchDescending", "/employee/searchDescending/"})
   public List<EmployeeDto> searchEmployeesDescending(@RequestParam String searchQuery)
       throws IllegalArgumentException {
-    ArrayList<EmployeeDto> employees = new ArrayList<EmployeeDto>();
+    ArrayList<EmployeeDto> employees = new ArrayList<>();
     for (var employee : service.searchEmployeesDescending(searchQuery)) {
       employees.add(convertToDto(employee));
     }
@@ -132,12 +132,12 @@ public class EmployeeController {
 
   /**
    * Converts domain objects to data transfer objects
-   * 
+   *
    * @param employee - employee instance to be converted
    * @return employee parameter as a DTO
    */
   private EmployeeDto convertToDto(Employee employee) {
-    ArrayList<EmployeeScheduleDto> scheduleList = new ArrayList<EmployeeScheduleDto>();
+    ArrayList<EmployeeScheduleDto> scheduleList = new ArrayList<>();
     if (employee.getEmployeeSchedules() != null) {
       for (var schedule : service.getEmployeeScheduleSorted(employee.getUsername())) {
         Shift scheduleShift = schedule.getShift();

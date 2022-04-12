@@ -13,6 +13,10 @@ import mcgill.ecse321.grocerystore.dto.OwnerDto;
 import mcgill.ecse321.grocerystore.model.Owner;
 import mcgill.ecse321.grocerystore.service.OwnerService;
 
+/**
+ * REST API for Owner service methods
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class OwnerController {

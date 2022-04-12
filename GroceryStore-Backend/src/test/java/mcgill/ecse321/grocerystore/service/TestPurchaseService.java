@@ -791,6 +791,7 @@ public class TestPurchaseService {
     // purchaseRepo
     doThrow(new IllegalArgumentException()).when(purchaseRepo).delete(null);
     doAnswer(new Answer<Void>() {
+      @Override
       public Void answer(InvocationOnMock invocation) {
         purchaseData.remove(invocation.getArgument(0));
         return null;
@@ -799,6 +800,7 @@ public class TestPurchaseService {
     // customerRepo
     doThrow(new IllegalArgumentException()).when(customerRepo).delete(null);
     doAnswer(new Answer<Void>() {
+      @Override
       public Void answer(InvocationOnMock invocation) {
         customerData.remove(invocation.getArgument(0));
         return null;

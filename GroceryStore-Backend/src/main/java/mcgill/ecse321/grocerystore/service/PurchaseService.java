@@ -15,6 +15,12 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 import mcgill.ecse321.grocerystore.model.SpecificItem;
 
+/**
+ * Service methods for Purchase
+ *
+ * @author Jimmy Sheng
+ *
+ */
 @Service
 public class PurchaseService {
 
@@ -29,7 +35,7 @@ public class PurchaseService {
    * Add the item with the given name to the purchase with the given ID, with the specified
    * quantity. Throws if purchase is not in the cart state, quantity > inventory, purchase doesn't
    * exist, or item doesn't exist. (RQ1)
-   * 
+   *
    * @param purchaseId
    * @param itemName
    * @param quantity
@@ -63,7 +69,7 @@ public class PurchaseService {
   /**
    * Cancel the purchase with the given ID. The purchase can only be cancelled if it's in the Paid
    * state. (RQ7)
-   * 
+   *
    * @param purchaseId
    * @return the cancelled purchase object
    * @throws IllegalArgumentException
@@ -80,7 +86,7 @@ public class PurchaseService {
   /**
    * Complete the purchase by switching it to the completed state. The purchase must be in the
    * prepared state prior to being completed.
-   * 
+   *
    * @param purchaseId
    * @return the completed purchase
    * @throws IllegalArgumentException
@@ -96,7 +102,7 @@ public class PurchaseService {
   /**
    * Delete this purchase. Can be used by both POS, online, or orphan (i.e. not associated with any
    * customer)
-   * 
+   *
    * @param purchaseId
    * @throws IllegalArgumentException
    */
@@ -115,7 +121,7 @@ public class PurchaseService {
 
   /**
    * Delete this purchase, belonging to the specified customer. Can be used by both POS or online.
-   * 
+   *
    * @param username
    * @param purchaseId
    * @throws IllegalArgumentException
@@ -137,7 +143,7 @@ public class PurchaseService {
 
   /**
    * Delete all purchases in the system.
-   * 
+   *
    * @throws IllegalArgumentException
    */
   @Transactional
@@ -151,7 +157,7 @@ public class PurchaseService {
   /**
    * Get a list of all purchases, ordered from oldest to newest by time of purchase. This list is
    * backed by an arraylist. (RQ9)
-   * 
+   *
    * @return a list
    */
   @Transactional
@@ -162,7 +168,7 @@ public class PurchaseService {
   /**
    * Get a list of all purchases in the completed state, ordered from oldest to newest by time of
    * purchase. This list is backed by an arraylist.
-   * 
+   *
    * @return a list
    */
   @Transactional
@@ -173,7 +179,7 @@ public class PurchaseService {
   /**
    * Get a list of all purchases, ordered from newest to oldest by time of purchase. This list is
    * backed by an arraylist. (RQ9)
-   * 
+   *
    * @return a list
    */
   @Transactional
@@ -184,7 +190,7 @@ public class PurchaseService {
   /**
    * Get a list of all purchases in the paid state, ordered from oldest to newest by time of
    * purchase. This list is backed by an arraylist. (RQ8)
-   * 
+   *
    * @return a list
    */
   @Transactional
@@ -195,7 +201,7 @@ public class PurchaseService {
   /**
    * Get a list of all purchases in the prepared state, ordered from oldest to newest by time of
    * purchase. This list is backed by an arraylist.
-   * 
+   *
    * @return a list
    */
   @Transactional
@@ -206,7 +212,7 @@ public class PurchaseService {
   /**
    * Get a list of all purchases in the given state, ordered from oldest to newest by time of
    * purchase. This list is backed by an arraylist. (RQ8)
-   * 
+   *
    * @param state
    * @return a list
    */
@@ -219,7 +225,7 @@ public class PurchaseService {
    * This method should <b>not</b> be accessed by the in-store POS.<br>
    * Get a cart for the given customer. A customer may only have one purchase in the cart state at a
    * time.
-   * 
+   *
    * @param username
    * @return the customer's existing cart, or a new cart if it doesn't exist
    * @throws IllegalArgumentException
@@ -247,7 +253,7 @@ public class PurchaseService {
 
   /**
    * Get the purchase object with the given ID.
-   * 
+   *
    * @param purchaseId
    * @return the purchase object
    * @throws IllegalArgumentException
@@ -264,7 +270,7 @@ public class PurchaseService {
   /**
    * This method should <b>not</b> be accessed by the in-store POS.<br>
    * Change the given purchase to the paid state. (RQ6)
-   * 
+   *
    * @param purchaseId
    * @return the paid purchase
    * @throws IllegalArgumentException
@@ -296,7 +302,7 @@ public class PurchaseService {
   /**
    * <b>This method shall only be accessed by the in-store POS.</b><br>
    * Only purchases in the cart state can be deleted.
-   * 
+   *
    * @param purchaseId
    * @throws IllegalArgumentException
    */
@@ -315,7 +321,7 @@ public class PurchaseService {
 
   /**
    * <b>This method shall only be accessed by the in-store POS.</b><br>
-   * 
+   *
    * @return a new purchase object
    */
   @Transactional
@@ -331,7 +337,7 @@ public class PurchaseService {
   /**
    * <b>This method shall only be accessed by the in-store POS.</b><br>
    * Change the given purchase to the completed state. (RQ6)
-   * 
+   *
    * @param purchaseId
    * @return the completed purchase
    * @throws IllegalArgumentException
@@ -360,13 +366,13 @@ public class PurchaseService {
 
   /**
    * Delete all purchases in the cart state associated with the POS customer.
-   * 
+   *
    * @throws IllegalArgumentException
    */
   @Transactional
   public void posPurgeCarts() throws IllegalArgumentException {
     Customer pos = this.getPOS();
-    ArrayList<Purchase> toBeDeleted = new ArrayList<Purchase>();
+    ArrayList<Purchase> toBeDeleted = new ArrayList<>();
     Iterator<Purchase> iter = pos.getPurchases().iterator();
     while (iter.hasNext()) {
       Purchase p = iter.next();
@@ -382,7 +388,7 @@ public class PurchaseService {
   /**
    * Prepare the purchase with the given ID. The purchase can only be prepared if it's in the Paid
    * state. (RQ8)
-   * 
+   *
    * @param purchaseId
    * @return the prepared purchase object
    * @throws IllegalArgumentException
@@ -399,7 +405,7 @@ public class PurchaseService {
    * This method should <b>not</b> be accessed by the in-store POS.<br>
    * Set if the purchase is an delivery or an pickup. Throw exception if incompatible items are
    * present in the cart.
-   * 
+   *
    * @param purchaseId
    * @param isDelivery
    * @return the updated purchase object
@@ -438,7 +444,7 @@ public class PurchaseService {
    * Set the quantity of the item in this purchase that must be in the cart state. If quantity <= 0,
    * the item will be removed from the purchase. If the item is not already in the purchase, it will
    * be added. (RQ1)
-   * 
+   *
    * @param purchaseId
    * @param itemName
    * @param quantity

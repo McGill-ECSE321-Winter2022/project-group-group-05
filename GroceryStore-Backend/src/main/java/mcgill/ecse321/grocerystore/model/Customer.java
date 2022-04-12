@@ -19,7 +19,7 @@ public class Customer {
   private Set<Purchase> purchases;
 
   public Customer() {
-    this.purchases = new HashSet<Purchase>();
+    this.purchases = new HashSet<>();
   }
 
   public void setUsername(String value) {

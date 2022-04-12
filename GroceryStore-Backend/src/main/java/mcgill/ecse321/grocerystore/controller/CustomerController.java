@@ -23,6 +23,10 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.SpecificItem;
 import mcgill.ecse321.grocerystore.service.CustomerService;
 
+/**
+ * REST API for Customer service methods
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class CustomerController {

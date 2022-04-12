@@ -14,7 +14,7 @@ import mcgill.ecse321.grocerystore.model.Shift;
 
 /**
  * Persistence Tests for EmployeeSchedule Class.
- * 
+ *
  * @author Harrison Wang
  */
 @ExtendWith(SpringExtension.class)
@@ -89,7 +89,7 @@ public class TestEmployeeSchedulePersistence {
 
   /*
    * Test EmployeeSchedule Reference
-   * 
+   *
    * Because the reference to shift in EmployeeSchedule is immutable as defined by the Class
    * Diagram, testing modifications to this reference is irrelevant. Instead, this method ensures
    * that changes made to an EmployeeSchedule's shift reference are preserved in the database.

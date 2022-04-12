@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
  * <li>RQ13 - Instances of the Employee Class represent employee accounts, allowing the owner to
  * assign schedules to store employees.</li>
  * </ul>
- * 
+ *
  * @author Harrison Wang
  */
 @Entity
@@ -79,7 +79,7 @@ public class Employee {
    */
   public boolean addEmployeeSchedule(EmployeeSchedule employeeSchedule) {
     if (employeeSchedules == null) {
-      employeeSchedules = new HashSet<EmployeeSchedule>();
+      employeeSchedules = new HashSet<>();
     }
     return employeeSchedules.add(employeeSchedule);
   }

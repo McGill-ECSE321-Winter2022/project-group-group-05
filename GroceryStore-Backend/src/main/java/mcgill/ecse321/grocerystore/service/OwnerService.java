@@ -11,6 +11,10 @@ import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
 import mcgill.ecse321.grocerystore.model.Owner;
 
+/**
+ * Service methods for Owner
+ *
+ */
 @Service
 public class OwnerService {
   @Autowired
@@ -25,13 +29,9 @@ public class OwnerService {
     if (username == null || username.trim().length() == 0) {
       throw new IllegalArgumentException("Username cannot be empty!");
     }
-    if (ownerRepository.findByUsername(username) != null) {
-      throw new IllegalArgumentException("Username is already taken!");
-    }
-    if (customerRepository.findByUsername(username) != null) {
-      throw new IllegalArgumentException("Username is already taken!");
-    }
-    if (employeeRepository.findByUsername(username) != null) {
+    if ((ownerRepository.findByUsername(username) != null)
+        || (customerRepository.findByUsername(username) != null)
+        || (employeeRepository.findByUsername(username) != null)) {
       throw new IllegalArgumentException("Username is already taken!");
     }
     if (password == null || password.trim().length() == 0) {
@@ -96,7 +96,7 @@ public class OwnerService {
    * Used to match the email string to a regex which checks for proper email format. The
    * restrictions for an email to be considered valid can be found <a href=
    * "https://www.baeldung.com/java-email-validation-regex#strict-regular-expression-validation">here</a>
-   * 
+   *
    * @param email - the email string to be checked
    * @return a boolean indicating whether the email conforms to standards or not. True indicates
    *         that the email is valid.

@@ -12,6 +12,10 @@ import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
 
+/**
+ * Service methods for ItemCategory
+ *
+ */
 @Service
 public class ItemCategoryService {
   @Autowired
@@ -85,7 +89,7 @@ public class ItemCategoryService {
 
   /**
    * return a list of items sorted in alphabetic order
-   * 
+   *
    * @param name
    * @return a sorted list of items
    * @throws IllegalArgumentException
@@ -93,7 +97,7 @@ public class ItemCategoryService {
   @Transactional
   public List<Item> getItemsByItemCategory(String name) throws IllegalArgumentException {
     ItemCategory itemCategory = getItemCategory(name);
-    List<Item> itemList = new ArrayList<Item>();
+    List<Item> itemList = new ArrayList<>();
     for (Item item : itemCategory.getItems()) {
       itemList.add(item);
     }

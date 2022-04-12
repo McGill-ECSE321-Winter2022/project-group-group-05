@@ -18,6 +18,10 @@ import mcgill.ecse321.grocerystore.dto.OpeningHoursDto;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 import mcgill.ecse321.grocerystore.service.OpeningHoursService;
 
+/**
+ * REST API for OpeningHours service methods
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class OpeningHoursController {
@@ -83,7 +87,7 @@ public class OpeningHoursController {
    */
   @GetMapping(value = {"/openingH/getAll", "/openingH/getAll/"})
   public List<OpeningHoursDto> getAllOpeningHours() {
-    ArrayList<OpeningHoursDto> openingHours = new ArrayList<OpeningHoursDto>();
+    ArrayList<OpeningHoursDto> openingHours = new ArrayList<>();
     for (var openingH : service.getAll()) {
       openingHours.add(convertToDto(openingH));
     }

@@ -12,7 +12,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
   /**
    * All IllegalArgumentException shall return the status 400 BAD_REQUEST
-   * 
+   *
    * @param response
    * @throws IOException
    */

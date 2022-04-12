@@ -29,7 +29,7 @@ import mcgill.ecse321.grocerystore.model.Shift;
  * <li>RQ13 - The grocery store system shall allow the store owner to assign schedules to store
  * employees.</li>
  * </ul>
- * 
+ *
  * @author Harrison Wang
  */
 @Service
@@ -58,7 +58,7 @@ public class EmployeeService {
    * after the '@'. It must also contain something in front of the '@', between the '@' and '.', and
    * after the '.'.</li>
    * </ul>
-   * 
+   *
    * @param username - the username of the Employee Account
    * @param email - the email of the Employee Account
    * @param password - the password of the Employee Account
@@ -97,7 +97,7 @@ public class EmployeeService {
 
   /**
    * Deletes the specified Employee (RQ12)
-   * 
+   *
    * @param username - username of the employee to be deleted
    * @return The Employee Instance that was removed from the database
    * @throws IllegalArgumentException when the employee to be deleted doesn't exist
@@ -111,7 +111,7 @@ public class EmployeeService {
 
   /**
    * Changes the email of the specified Employee
-   * 
+   *
    * @param username - username of the employee to be modified
    * @param newEmail - the new email value to change to
    * @return the newly modified Employee
@@ -130,7 +130,7 @@ public class EmployeeService {
 
   /**
    * Changes the password of the specified Employee
-   * 
+   *
    * @param username - username of the employee to be modified
    * @param newPassword - the new password value to change to
    * @return the newly modified Employee
@@ -150,7 +150,7 @@ public class EmployeeService {
   /**
    * Constructs an EmployeeSchedule object from the given parameters and adds it to the specified
    * Employee
-   * 
+   *
    * @param username - the username of the employee account
    * @param date - the date on which the employee has the shift
    * @param shift - the shift to assign to the employee
@@ -197,7 +197,7 @@ public class EmployeeService {
   /**
    * Scans through the Employees schedule set and removes the one with the same date and shift
    * fields as the input parameters.
-   * 
+   *
    * @param username - the username of the employee account
    * @param date - the date on which the employee has the shift
    * @param shift - the shift to delete from the employee
@@ -285,8 +285,7 @@ public class EmployeeService {
   public List<EmployeeSchedule> getEmployeeScheduleSorted(String username)
       throws IllegalArgumentException {
     Employee employee = getEmployee(username);
-    ArrayList<EmployeeSchedule> schedules =
-        new ArrayList<EmployeeSchedule>(employee.getEmployeeSchedules());
+    ArrayList<EmployeeSchedule> schedules = new ArrayList<>(employee.getEmployeeSchedules());
     Collections.sort(schedules, new Comparator<EmployeeSchedule>() {
       @Override
       public int compare(EmployeeSchedule p1, EmployeeSchedule p2) {
@@ -303,7 +302,7 @@ public class EmployeeService {
    * Implemented using .findByUsernameIgnoreCaseContainingOrderByUsername() to automatically sort
    * the list. An empty string is passed to the above method, because all usernames in the database
    * will contain an empty string.
-   * 
+   *
    * @return sorted list (ascending lexicographical order) of employees
    */
   @Transactional
@@ -313,7 +312,7 @@ public class EmployeeService {
 
   /**
    * Fetches a list of all the employees whose usernames correspond to the search query.
-   * 
+   *
    * @param searchQuery
    * @return list of all employees containing the searchQuery in their username, sorted
    *         lexicographically in ascending order
@@ -330,7 +329,7 @@ public class EmployeeService {
 
   /**
    * Fetches a list of all the employees whose usernames correspond to the search query.
-   * 
+   *
    * @param searchQuery
    * @return list of all employees containing the searchQuery in their username, sorted
    *         lexicographically in descending order
@@ -349,7 +348,7 @@ public class EmployeeService {
    * Used to match the email string to a regex which checks for proper email format. The
    * restrictions for an email to be considered valid can be found <a href=
    * "https://www.baeldung.com/java-email-validation-regex#strict-regular-expression-validation">here</a>
-   * 
+   *
    * @param email - the email string to be checked
    * @return a boolean indicating whether the email conforms to standards or not. True indicates
    *         that the email is valid.
@@ -361,7 +360,7 @@ public class EmployeeService {
 
   /**
    * Used to validate and fetch an instance of Shift given a name
-   * 
+   *
    * @param name - primary key name of the Shift instance
    * @return Shift instance
    * @throws IllegalArgumentException when the requested Shift is not in the repository
@@ -376,7 +375,7 @@ public class EmployeeService {
 
   /**
    * Used to verify whether two shifts occur at the same time of day
-   * 
+   *
    * @param shiftone - First shift we're comparing
    * @param shiftTwo - second shift we're comparing
    * @return true if the shifts conflict; false otherwise

@@ -13,7 +13,7 @@ import javax.persistence.Id;
  * <li>RQ13 - Instances of the Shift class represent employee shifts outlined by the Owner. These
  * shifts can then be assigned to store employees.</li>
  * </ul>
- * 
+ *
  * @author Harrison Wang
  */
 @Entity

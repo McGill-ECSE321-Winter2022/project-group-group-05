@@ -34,7 +34,7 @@ import mcgill.ecse321.grocerystore.model.Shift;
 
 /**
  * RESTful service tests for Employee Class.
- * 
+ *
  * @author Harrison Wang
  */
 @ExtendWith(MockitoExtension.class)
@@ -126,7 +126,7 @@ public class TestEmployeeService {
     // simulates finding EMPLOYEE_KEY and EMPLOYEE2_KEY in the database
     lenient().when(employeeDao.findByUsernameIgnoreCaseContainingOrderByUsername(anyString()))
         .thenAnswer(i -> {
-          List<Employee> employeeList = new ArrayList<Employee>();
+          List<Employee> employeeList = new ArrayList<>();
           if (EMPLOYEE_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
             var employee = new Employee();
             employee.setUsername(EMPLOYEE_KEY);
@@ -141,7 +141,7 @@ public class TestEmployeeService {
         });
     lenient().when(employeeDao.findByUsernameIgnoreCaseContainingOrderByUsernameDesc(anyString()))
         .thenAnswer(i -> {
-          List<Employee> employeeList = new ArrayList<Employee>();
+          List<Employee> employeeList = new ArrayList<>();
           if (EMPLOYEE2_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
             var employee = new Employee();
             employee.setUsername(EMPLOYEE2_KEY);
@@ -174,7 +174,7 @@ public class TestEmployeeService {
               || i.getArgument(0).equals(mockScheduleThree);
         });
     lenient().when(mockEmployeeOne.getEmployeeSchedules()).thenAnswer(i -> {
-      HashSet<EmployeeSchedule> mockSet = new HashSet<EmployeeSchedule>();
+      HashSet<EmployeeSchedule> mockSet = new HashSet<>();
       mockSet.add(mockScheduleOne);
       mockSet.add(mockScheduleTwo);
       mockSet.add(mockScheduleThree);
