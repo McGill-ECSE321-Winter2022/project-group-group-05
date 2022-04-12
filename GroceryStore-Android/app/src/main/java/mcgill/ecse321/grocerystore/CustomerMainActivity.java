@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
@@ -90,6 +92,28 @@ public class CustomerMainActivity extends AppCompatActivity {
         loadItems(adapter, items);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the search bar
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterItems(adapter, items, newText);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /**
      * Inner class that stores partial information of an item
      */
@@ -151,7 +175,35 @@ public class CustomerMainActivity extends AppCompatActivity {
                         Boolean availableOnline = itemJSON.getBoolean("canDeliver") || itemJSON.getBoolean("canPickUp");
                         items.add(new Item(itemJSON.getString("name"), itemJSON.getString("image"), itemJSON.getDouble("price"), availableOnline));
                     } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(getApplicationContext(), "Loading failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void filterItems(final ArrayAdapter<Item> adapter, final List<Item> items, String filterText) {
+        HttpUtils.get("item/getAll", new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                items.clear();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject itemJSON = response.getJSONObject(i);
+
+                        // Add the item to the list only if its name contains the required string
+                        if (itemJSON.getString("name").toLowerCase().contains(filterText.toLowerCase())) {
+                            Boolean availableOnline = itemJSON.getBoolean("canDeliver") || itemJSON.getBoolean("canPickUp");
+                            items.add(new Item(itemJSON.getString("name"), itemJSON.getString("image"), itemJSON.getDouble("price"), availableOnline));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
                 adapter.notifyDataSetChanged();
