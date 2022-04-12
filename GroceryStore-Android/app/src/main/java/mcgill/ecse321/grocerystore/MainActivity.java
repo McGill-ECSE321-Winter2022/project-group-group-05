@@ -37,17 +37,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        try {
-            JSONObject test = new JSONObject();
-            test.put("name", "Boba Party");
-            test.put("date", "2022-12-30");
-            TableLayout holidayTable = findViewById(R.id.holidayTable);
-            holidayTable.addView(createHolidayRow(test));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        // Fetch opening hours and display them
+        setOpeningHours();
 
-        // Fetch holidays
+        // Fetch holidays and display them
         HttpUtils.get("holiday/getAll", new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -92,6 +85,40 @@ public class MainActivity extends AppCompatActivity {
         ;
     }
 
+    private void setOpeningHours() {
+        setOpeningHours("Monday", R.id.mondayHours);
+        setOpeningHours("Tuesday", R.id.tuesdayHours);
+        setOpeningHours("Wednesday", R.id.wednesdayHours);
+        setOpeningHours("Thursday", R.id.thursdayHours);
+        setOpeningHours("Friday", R.id.fridayHours);
+        setOpeningHours("Saturday", R.id.saturdayHours);
+        setOpeningHours("Sunday", R.id.sundayHours);
+    }
+
+    private void setOpeningHours(String daysOfWeek, int id) {
+        HttpUtils.get("openingH/" + daysOfWeek, new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    String startTime = FormatUtils.formatTime(response.getString("startTime"));
+                    String endTime = FormatUtils.formatTime(response.getString("endTime"));
+                    String text = startTime + " to " + endTime;
+                    ((TextView) findViewById(id)).setText(text);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Generates a TableRow View object for the provided holiday.
+     * This will eventually be used to populate the Holiday table.
+     *
+     * @param holiday a holiday JSONObject
+     * @return a formatted TableRow
+     * @throws JSONException if exception is thrown during JSON parsing
+     */
     private TableRow createHolidayRow(JSONObject holiday) throws JSONException {
         // Format the table row
         TableRow holidayEntry = new TableRow(this);
