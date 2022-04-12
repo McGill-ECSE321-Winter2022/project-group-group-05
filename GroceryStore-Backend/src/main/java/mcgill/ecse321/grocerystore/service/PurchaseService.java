@@ -15,6 +15,12 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 import mcgill.ecse321.grocerystore.model.SpecificItem;
 
+/**
+ * Service methods for Purchase
+ * 
+ * @author Jimmy Sheng
+ *
+ */
 @Service
 public class PurchaseService {
 
