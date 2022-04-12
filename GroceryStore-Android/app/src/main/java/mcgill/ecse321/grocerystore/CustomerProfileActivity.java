@@ -66,7 +66,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
             HttpUtils.patch("customer/" + User.getInstance().getUsername(), rp, new JsonHttpResponseHandler() {
                 @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     bar.setVisibility(View.GONE);
                 }
 

@@ -60,7 +60,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             HttpUtils.post("customer/" + username, rp, new JsonHttpResponseHandler() {
                 // On success, redirect the user to CustomerMainActivity
                 @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     spinner.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
                     redirectUser(username);
