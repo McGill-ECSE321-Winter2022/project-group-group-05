@@ -29,7 +29,9 @@ public class OwnerService {
     if (username == null || username.trim().length() == 0) {
       throw new IllegalArgumentException("Username cannot be empty!");
     }
-    if ((ownerRepository.findByUsername(username) != null) || (customerRepository.findByUsername(username) != null) || (employeeRepository.findByUsername(username) != null)) {
+    if ((ownerRepository.findByUsername(username) != null)
+        || (customerRepository.findByUsername(username) != null)
+        || (employeeRepository.findByUsername(username) != null)) {
       throw new IllegalArgumentException("Username is already taken!");
     }
     if (password == null || password.trim().length() == 0) {

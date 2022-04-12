@@ -285,8 +285,7 @@ public class EmployeeService {
   public List<EmployeeSchedule> getEmployeeScheduleSorted(String username)
       throws IllegalArgumentException {
     Employee employee = getEmployee(username);
-    ArrayList<EmployeeSchedule> schedules =
-        new ArrayList<>(employee.getEmployeeSchedules());
+    ArrayList<EmployeeSchedule> schedules = new ArrayList<>(employee.getEmployeeSchedules());
     Collections.sort(schedules, new Comparator<EmployeeSchedule>() {
       @Override
       public int compare(EmployeeSchedule p1, EmployeeSchedule p2) {
