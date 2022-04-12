@@ -34,7 +34,7 @@ public class StaffPaidOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_paid_order);
         final ListView purchaseListview = (ListView) findViewById(R.id.purchase_list);
-        adapter = new StaffPaidOrderActivity.PurchaseAdapter(this, purchases);
+        adapter = new PurchaseAdapter(this, purchases);
         purchaseListview.setAdapter(adapter);
         refreshLists(this.getCurrentFocus());
     }
@@ -43,10 +43,19 @@ public class StaffPaidOrderActivity extends AppCompatActivity {
         loadPurchases(adapter, purchases);
     }
 
+    /**
+     * Format item price to 2 decimal places
+     *
+     * @param price
+     * @return string of price
+     */
     public String displayPrice(double price) {
         return "$ " + String.format("%.2f", price);
     }
 
+    /**
+     * Inner class that stores information of a purchased item which will be displayed
+     */
     class PurchaseItem {
         public String name;
         public double price;
@@ -60,6 +69,9 @@ public class StaffPaidOrderActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Inner class that stores information of a purchase which will be displayed
+     */
     class Purchase {
         public double total;
         public boolean delivery;
