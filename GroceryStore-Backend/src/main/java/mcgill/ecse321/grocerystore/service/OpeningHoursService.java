@@ -9,6 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
+/**
+ * Service methods for OpeningHours
+ *
+ */
 @Service
 public class OpeningHoursService {
   @Autowired

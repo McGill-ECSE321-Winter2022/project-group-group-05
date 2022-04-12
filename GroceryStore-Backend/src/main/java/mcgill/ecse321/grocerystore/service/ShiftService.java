@@ -15,6 +15,10 @@ import mcgill.ecse321.grocerystore.model.Employee;
 import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 
+/**
+ * Service methods for Shift
+ *
+ */
 @Service
 public class ShiftService {
 

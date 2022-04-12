@@ -11,6 +11,10 @@ import mcgill.ecse321.grocerystore.dao.EmployeeRepository;
 import mcgill.ecse321.grocerystore.dao.OwnerRepository;
 import mcgill.ecse321.grocerystore.model.Owner;
 
+/**
+ * Service methods for Owner
+ *
+ */
 @Service
 public class OwnerService {
   @Autowired

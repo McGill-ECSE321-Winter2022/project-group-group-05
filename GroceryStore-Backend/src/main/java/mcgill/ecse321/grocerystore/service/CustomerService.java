@@ -16,6 +16,10 @@ import mcgill.ecse321.grocerystore.model.Customer;
 import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 
+/**
+ * Service methods for Customer
+ *
+ */
 @Service
 public class CustomerService {
   @Autowired

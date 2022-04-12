@@ -8,6 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import mcgill.ecse321.grocerystore.dao.HolidayRepository;
 import mcgill.ecse321.grocerystore.model.Holiday;
 
+/**
+ * Service methods for Holiday
+ *
+ */
 @Service
 public class HolidayService {
   @Autowired

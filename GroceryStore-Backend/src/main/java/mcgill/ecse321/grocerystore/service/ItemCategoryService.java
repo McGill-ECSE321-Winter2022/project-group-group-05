@@ -12,6 +12,10 @@ import mcgill.ecse321.grocerystore.dao.ItemRepository;
 import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
 
+/**
+ * Service methods for ItemCategory
+ *
+ */
 @Service
 public class ItemCategoryService {
   @Autowired

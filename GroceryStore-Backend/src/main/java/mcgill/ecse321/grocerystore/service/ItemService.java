@@ -16,6 +16,7 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.SpecificItem;
 
 /**
+ * Service methods for Item
  * 
  * @author Annie Kang
  *
