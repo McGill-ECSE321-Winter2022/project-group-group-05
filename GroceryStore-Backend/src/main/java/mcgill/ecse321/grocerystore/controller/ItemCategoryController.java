@@ -18,6 +18,10 @@ import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
 import mcgill.ecse321.grocerystore.service.ItemCategoryService;
 
+/**
+ * REST API for ItemCategory service methods
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class ItemCategoryController {

@@ -16,7 +16,7 @@ import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.service.ItemService;
 
 /**
- * RESTful API for Employee service methods
+ * RESTful API for Item service methods
  * 
  * @author Annie Kang
  */

@@ -16,7 +16,10 @@ import mcgill.ecse321.grocerystore.dto.HolidayDto;
 import mcgill.ecse321.grocerystore.model.Holiday;
 import mcgill.ecse321.grocerystore.service.HolidayService;
 
-
+/**
+ * REST API for Holiday service methods
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class HolidayController {
