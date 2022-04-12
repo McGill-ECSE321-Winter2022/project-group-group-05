@@ -87,7 +87,7 @@ public class OpeningHoursController {
    */
   @GetMapping(value = {"/openingH/getAll", "/openingH/getAll/"})
   public List<OpeningHoursDto> getAllOpeningHours() {
-    ArrayList<OpeningHoursDto> openingHours = new ArrayList<OpeningHoursDto>();
+    ArrayList<OpeningHoursDto> openingHours = new ArrayList<>();
     for (var openingH : service.getAll()) {
       openingHours.add(convertToDto(openingH));
     }

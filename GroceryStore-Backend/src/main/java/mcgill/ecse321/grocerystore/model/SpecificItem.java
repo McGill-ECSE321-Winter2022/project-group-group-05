@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * 
+ *
  * @author Jimmy Sheng
  *
  */
@@ -31,7 +31,7 @@ public class SpecificItem {
 
   /**
    * Create a specificItem with the given item and 0 quantity
-   * 
+   *
    * @param item
    */
   public SpecificItem(Item item) {
@@ -40,7 +40,7 @@ public class SpecificItem {
 
   /**
    * Create a specificItem with the given item and quantity
-   * 
+   *
    * @param item
    * @param qty
    */
@@ -53,7 +53,7 @@ public class SpecificItem {
   /**
    * <b>IMPORTANT: id is set automatically only after saving to database</b> <br>
    * Do not use this before saving to database
-   * 
+   *
    * @return auto generated id
    */
   public long getId() {
@@ -74,7 +74,7 @@ public class SpecificItem {
 
   /**
    * For mockito testing only. The id should never be set manually otherwise.
-   * 
+   *
    * @param id
    */
   public void setId(long id) {
@@ -84,7 +84,7 @@ public class SpecificItem {
   /**
    * This method should only be used once at the creation of the specificItem<br>
    * Once set, the linked item should not be modified
-   * 
+   *
    * @param anItem
    */
   public void setItem(Item anItem) {
@@ -98,7 +98,7 @@ public class SpecificItem {
   /**
    * This method generally <b>should not be used</b><br>
    * Use updatePurchasePrice to automatically get the price of the linked item
-   * 
+   *
    * @param price
    */
   public void setPurchasePrice(double price) {
@@ -107,7 +107,7 @@ public class SpecificItem {
 
   /**
    * Update the recorded purchasePrice to the current price of the item
-   * 
+   *
    * @return The updated price if item is not null<br>
    *         Otherwise returns -1
    */

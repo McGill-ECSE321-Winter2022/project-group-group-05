@@ -21,7 +21,7 @@ import mcgill.ecse321.grocerystore.service.ShiftService;
 
 /**
  * RESTful API for Shift service methods
- * 
+ *
  * @author Yida Pan
  *
  */
@@ -72,7 +72,7 @@ public class ShiftController {
 
   @GetMapping(value = {"/shift/getAll", "/shift/getAll/"})
   public List<ShiftDto> getAllShifts() {
-    ArrayList<ShiftDto> shifts = new ArrayList<ShiftDto>();
+    ArrayList<ShiftDto> shifts = new ArrayList<>();
     for (var shift : service.getAllShifts()) {
       shifts.add(convertToDto(shift));
     }
@@ -81,7 +81,7 @@ public class ShiftController {
 
   /**
    * Converts domain objects to data transfer objects
-   * 
+   *
    * @param shift - shift instance to be converted
    * @return shift parameter as a DTO
    */

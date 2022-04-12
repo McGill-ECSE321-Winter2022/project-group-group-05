@@ -22,7 +22,7 @@ import mcgill.ecse321.grocerystore.service.PurchaseService;
 
 /**
  * RESTful API for Purchase services
- * 
+ *
  * @author Jimmy Sheng
  */
 @CrossOrigin(origins = "*")

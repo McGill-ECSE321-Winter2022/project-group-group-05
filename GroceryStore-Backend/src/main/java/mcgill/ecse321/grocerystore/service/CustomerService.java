@@ -92,7 +92,7 @@ public class CustomerService {
 
   /**
    * return a list of purchases sorted by purchase time from newest to oldest
-   * 
+   *
    * @param username
    * @return a sorted list of purchases
    * @throws IllegalArgumentException
@@ -100,7 +100,7 @@ public class CustomerService {
   @Transactional
   public List<Purchase> getPurchasesByUsername(String username) throws IllegalArgumentException {
     Customer customer = getCustomer(username);
-    List<Purchase> purchaseList = new ArrayList<Purchase>();
+    List<Purchase> purchaseList = new ArrayList<>();
     for (Purchase purchase : customer.getPurchases()) {
       if (purchase.getState() != PurchaseState.Cart)
         purchaseList.add(purchase);
@@ -162,7 +162,7 @@ public class CustomerService {
    * Used to match the email string to a regex which checks for proper email format. The
    * restrictions for an email to be considered valid can be found <a href=
    * "https://www.baeldung.com/java-email-validation-regex#strict-regular-expression-validation">here</a>
-   * 
+   *
    * @param email - the email string to be checked
    * @return a boolean indicating whether the email conforms to standards or not. True indicates
    *         that the email is valid.

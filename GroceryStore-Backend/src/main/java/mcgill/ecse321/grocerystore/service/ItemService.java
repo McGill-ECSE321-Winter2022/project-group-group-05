@@ -17,7 +17,7 @@ import mcgill.ecse321.grocerystore.model.SpecificItem;
 
 /**
  * Service methods for Item
- * 
+ *
  * @author Annie Kang
  *
  */
@@ -68,7 +68,7 @@ public class ItemService {
    * <b>This action should not be done under normal circumstances.</b><br>
    * The removal of an item from the store should be done through setIsDiscontinued. This method is
    * provided for maintenance purposes only and would alter purchase histories kept in the system.
-   * 
+   *
    * @param itemName
    * @throws IllegalArgumentException
    */
@@ -127,7 +127,7 @@ public class ItemService {
 
   @Transactional
   public List<Item> getAllInStock() {
-    ArrayList<Item> itemList = new ArrayList<Item>();
+    ArrayList<Item> itemList = new ArrayList<>();
     for (Item i : itemRepository.findAllByOrderByName()) {
       if (i.getInventory() > 0 && !i.getIsDiscontinued()) {
         itemList.add(i);
@@ -138,7 +138,7 @@ public class ItemService {
 
   @Transactional
   public List<Item> getAllCanDeliver() {
-    ArrayList<Item> itemList = new ArrayList<Item>();
+    ArrayList<Item> itemList = new ArrayList<>();
     for (Item i : itemRepository.findAllByOrderByName()) {
       if (i.getCanDeliver() && !i.getIsDiscontinued()) {
         itemList.add(i);
@@ -149,7 +149,7 @@ public class ItemService {
 
   @Transactional
   public List<Item> getAllCanPickUp() {
-    ArrayList<Item> itemList = new ArrayList<Item>();
+    ArrayList<Item> itemList = new ArrayList<>();
     for (Item i : itemRepository.findAllByOrderByName()) {
       if (i.getCanPickUp() && !i.getIsDiscontinued()) {
         itemList.add(i);
@@ -160,7 +160,7 @@ public class ItemService {
 
   @Transactional
   public List<Item> getAllIsDiscontinued() {
-    ArrayList<Item> itemList = new ArrayList<Item>();
+    ArrayList<Item> itemList = new ArrayList<>();
     for (Item i : itemRepository.findAllByOrderByName()) {
       if (i.getIsDiscontinued()) {
         itemList.add(i);
