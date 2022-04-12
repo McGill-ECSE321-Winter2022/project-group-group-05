@@ -25,18 +25,29 @@ export default {
     },
   },
   methods: {
+    /**
+     * Show the opening hours popup window
+     * @returns {Promise<void>}
+     */
     clickedOpeningH: async function () {
       this.isLoading = true;
       await this.fetchOpeningH();
       this.$bvModal.show("opening-h");
       this.isLoading = false;
     },
+    /**
+     * Show the holidays popup window
+     * @returns {Promise<void>}
+     */
     clickedHoliday: async function () {
       this.isLoading = true;
       await this.fetchHoliday();
       this.$bvModal.show("list-of-holidays");
       this.isLoading = false;
     },
+    /**
+     * Redirect to user profile management page
+     */
     clickedProfile: function () {
       if (LOGIN_STATE.state.userType === "Customer") {
         this.$router.push("/ManageProfile");
@@ -47,10 +58,17 @@ export default {
         this.$router.push("/ManageStaffProfile");
       }
     },
+    /**
+     * Perform logout
+     */
     clickedLogout: function () {
       LOGIN_STATE.commit("logout");
       this.$router.push("/");
     },
+    /**
+     * Fetch all holidays from the database
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     fetchHoliday() {
       return AXIOS.get("holiday/getAll", {})
         .then(response => {
@@ -60,6 +78,10 @@ export default {
           console.log(e);
         });
     },
+    /**
+     * Fetch all opening hours from the database
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     fetchOpeningH() {
       return AXIOS.get("/openingH/getAll", {})
         .then(response => {
@@ -77,6 +99,10 @@ export default {
   },
 };
 
+/**
+ * Used to sort the opening hours by daysOfWeek
+ * @type {{sunday: number, saturday: number, tuesday: number, wednesday: number, thursday: number, friday: number, monday: number}}
+ */
 const daysOfWeekSorter = {
   monday: 1,
   tuesday: 2,

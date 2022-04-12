@@ -2,6 +2,11 @@ import axios from "axios";
 
 const CONFIG = require("../../config");
 
+/**
+ * Get the backend URL for AXIOS, depending on whether the current environment is dev or prod
+ * @returns {string}
+ * @constructor
+ */
 const BACKEND_URL = function () {
   switch (process.env.NODE_ENV) {
     case "development":
@@ -24,6 +29,11 @@ const BACKEND_URL = function () {
   }
 };
 
+/**
+ * Get the frontend URL for AXIOS, depending on whether the current environment is dev or prod
+ * @returns {string}
+ * @constructor
+ */
 const FRONTEND_URL = function () {
   switch (process.env.NODE_ENV) {
     case "development":
@@ -33,6 +43,10 @@ const FRONTEND_URL = function () {
   }
 };
 
+/**
+ * The common AXIOS instance used by all components
+ * @type {AxiosInstance}
+ */
 export const AXIOS = axios.create({
   baseURL: BACKEND_URL(),
   headers: { "Access-Control-Allow-Origin": FRONTEND_URL() },

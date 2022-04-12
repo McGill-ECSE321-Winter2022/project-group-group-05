@@ -23,21 +23,27 @@ new Vue({
   components: { App },
 });
 
-// Vue filters
+/**
+ * Vue filter: convert time string from HH:mm:ss to hh:mm A
+ */
 Vue.filter("formatTime", function (value) {
   if (value) {
     return moment(String(value), "HH:mm:ss").format("hh:mm A");
   }
 });
 
-// Don't use this filter on dates unless needed, the default display looks cleaner
+/**
+ * Vue filter: convert date string from YYYY-MM-DD to MMMM Do, YYYY
+ */
 Vue.filter("formatDate", function (value) {
   if (value) {
     return moment(String(value), "YYYY-MM-DD").format("MMMM Do, YYYY");
   }
 });
 
-// Format numbers rounded to 2 decimal places
+/**
+ * Vue filter: convert number string to rounded 2 decimal places
+ */
 Vue.filter("formatCurrency", function (value) {
   if (value) {
     return (Math.round(value * 100) / 100).toFixed(2);

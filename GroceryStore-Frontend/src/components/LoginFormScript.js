@@ -15,6 +15,9 @@ export default {
     };
   },
   methods: {
+    /**
+     * Called when the login button is clicked
+     */
     onsubmit(event) {
       // disable the default response on submit buttons
       event.preventDefault();

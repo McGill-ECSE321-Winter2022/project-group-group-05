@@ -77,6 +77,10 @@ export default {
     numRows() {
       return this.filteredItemList.length;
     },
+    /**
+     * Apply string search filter to the list of items
+     * @returns {*[]}
+     */
     filteredItemList() {
       return this.itemList.filter(item => {
         if (!item["discontinued"]) {
@@ -164,11 +168,17 @@ export default {
     this.isItemLoading = false;
   },
   methods: {
+    /**
+     * Called when the logout button is clicked
+     */
     logout: function () {
       LOGIN_STATE.commit("logout");
       window.location.reload();
     },
-    // this method is used to populate the database for demo purposes
+    /**
+     * Called when the populate database button is clicked, this is used for demo purposes
+     * @returns {Promise<void>}
+     */
     genData: async function () {
       this.isLoading = true;
       this.isItemLoading = true;
@@ -189,6 +199,10 @@ export default {
       // comment this out if need to examine console output
       window.location.reload();
     },
+    /**
+     * Show different popup dialogs depending on the currently logged in user type
+     * @param item
+     */
     addItemDialog: function (item) {
       this.clickedItem = "";
       this.addQuantity = 1;
@@ -209,6 +223,10 @@ export default {
         }
       }
     },
+    /**
+     * Called when the add item button is clicked inside the add item dialog popup window
+     * @returns {Promise<void>}
+     */
     addItemToCart: async function () {
       // this should never be called outside of the add-item-dialog
       this.isLoading = true;
@@ -243,6 +261,11 @@ export default {
       this.isLoading = false;
       this.isItemLoading = false;
     },
+    /**
+     * Called when the user selects a category filter
+     * @param value name of the selected category
+     * @returns {Promise<void>}
+     */
     atCategorySelection: async function (value) {
       this.isItemLoading = true;
       if (value === null) {
@@ -252,12 +275,19 @@ export default {
       }
       this.isItemLoading = false;
     },
+    /**
+     * Clear all filter checkboxes
+     */
     atClearFilters: function () {
       this.mustCanDeliver = false;
       this.mustCanPickUp = false;
       this.mustAvailableOnline = false;
       this.showOutOfStock = false;
     },
+    /**
+     * Fetch all items from the database
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     fetchItems() {
       return AXIOS.get("/item/getAll", {})
         .then(response => {
@@ -267,6 +297,10 @@ export default {
           console.log(e);
         });
     },
+    /**
+     * Fetch a list of the categories in the database
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     fetchCategories() {
       return AXIOS.get("/itemCategory", {})
         .then(response => {
@@ -277,6 +311,9 @@ export default {
           console.log(errorMsg);
         });
     },
+    /**
+     * Update the categories list available for selection
+     */
     updateSelection() {
       this.categoriesOptions = [];
       for (const category of this.categoriesList) {
@@ -285,6 +322,11 @@ export default {
         this.categoriesOptions.push(option);
       }
     },
+    /**
+     * Fetch all items from the selected category
+     * @param categoryName
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     fetchItemsInCategory(categoryName) {
       return AXIOS.get(
         "/itemCategory/".concat(categoryName).concat("/getItems"),
@@ -301,16 +343,10 @@ export default {
   },
 };
 
-const daysOfWeekSorter = {
-  monday: 1,
-  tuesday: 2,
-  wednesday: 3,
-  thursday: 4,
-  friday: 5,
-  saturday: 6,
-  sunday: 7,
-};
-
+/**
+ * Demo only: populate database
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 function createOwner() {
   console.log("Attempting to create owner...");
   return AXIOS.post(
@@ -345,6 +381,10 @@ function createOwner() {
     });
 }
 
+/**
+ * Demo only: populate database
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 function createKiosk() {
   console.log("Attempting to create customer 'kiosk'...");
   return AXIOS.post(
@@ -381,6 +421,10 @@ function createKiosk() {
     });
 }
 
+/**
+ * Demo only: populate database
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 function createCustomer() {
   console.log("Attempting to create customer 'loyalcustomer'...");
   return AXIOS.post(
@@ -417,6 +461,10 @@ function createCustomer() {
     });
 }
 
+/**
+ * Demo only: populate database
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 function createEmployee() {
   console.log("Attempting to create employee...");
   return AXIOS.post(
@@ -451,6 +499,10 @@ function createEmployee() {
     });
 }
 
+/**
+ * Demo only: populate database
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 function createHoliday() {
   console.log("Attempting to create holiday...");
   return AXIOS.post(
@@ -470,6 +522,10 @@ function createHoliday() {
     });
 }
 
+/**
+ * Demo only: populate database
+ * @returns {*|Promise<AxiosResponse<any> | U>}
+ */
 function createItem1() {
   let name = "Bar of Chocolate 100g";
   let imgURL = "https://i.ibb.co/0Qv0HFL/img-Bar-of-Chocolate-100g.jpg";
@@ -480,6 +536,10 @@ function createItem1() {
   return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
 }
 
+/**
+ * Demo only: populate database
+ * @returns {*|Promise<AxiosResponse<any> | U>}
+ */
 function createItem2() {
   let name = "Bag of Apples 1.36kg";
   let imgURL = "https://i.ibb.co/F34h8Yg/img-Bag-of-Apples-1-36kg.jpg";
@@ -490,6 +550,10 @@ function createItem2() {
   return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
 }
 
+/**
+ * Demo only: populate database
+ * @returns {*|Promise<AxiosResponse<any> | U>}
+ */
 function createItem3() {
   let name = "Steam Gift Card $100";
   let imgURL = "https://i.ibb.co/8cwSbZV/img-steam-gift-card-100.webp";
@@ -500,6 +564,10 @@ function createItem3() {
   return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
 }
 
+/**
+ * Demo only: populate database
+ * @returns {*|Promise<AxiosResponse<any> | U>}
+ */
 function createItem4() {
   let name = "Steam Gift Card $50";
   let imgURL = "";
@@ -510,6 +578,10 @@ function createItem4() {
   return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
 }
 
+/**
+ * Demo only: populate database
+ * @returns {*|Promise<AxiosResponse<any> | U>}
+ */
 function createItem5() {
   let name = "Steam Gift Card $20";
   let imgURL = "";
@@ -520,6 +592,9 @@ function createItem5() {
   return createItem(name, imgURL, price, inventory, canDeliver, canPickUp);
 }
 
+/**
+ * Demo only: populate database
+ */
 function createItemCategory() {
   console.log("Attempting to create item category 'Test Category x'");
   return AXIOS.post("/itemCategory/Test Category x", {}, {})
@@ -542,6 +617,9 @@ function createItemCategory() {
     });
 }
 
+/**
+ * Demo only: populate database
+ */
 function createOpeningHours() {
   console.log("Attempting to create opening hours for 'Friday'");
   return AXIOS.post(
@@ -581,6 +659,9 @@ function createOpeningHours() {
     });
 }
 
+/**
+ * Demo only: populate database
+ */
 function createItem(name, imageURL, price, inventory, canDeliver, canPickUp) {
   console.log("Attempting to create item '" + name + "'...");
   return AXIOS.post(
