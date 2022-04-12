@@ -139,7 +139,7 @@ public class StaffPaidOrderActivity extends AppCompatActivity {
                             PurchaseItem newItem = new PurchaseItem(item.getString("name"), purchaseItem.getDouble("purchasePrice"), purchaseItem.getInt("purchaseQuantity"));
                             items.add(newItem);
                         }
-                        purchases.add(new Purchase(purchaseJSON.getBoolean("delivery"), purchaseJSON.getLong("id"), purchaseJSON.getString("dateOfPurcahse"), purchaseJSON.getString("state"), items));
+                        purchases.add(new Purchase(purchaseJSON.getBoolean("delivery"), purchaseJSON.getLong("id"), purchaseJSON.getString("dateOfPurchase"), purchaseJSON.getString("state"), items));
                     } catch (Exception e) {
 
                     }
