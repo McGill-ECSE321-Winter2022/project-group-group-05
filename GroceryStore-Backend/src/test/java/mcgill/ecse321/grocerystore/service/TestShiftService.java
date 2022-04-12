@@ -56,7 +56,7 @@ public class TestShiftService {
   private static final Time TEST_START_TIME = Time.valueOf("11:00:00");
   private static final Time TEST_END_TIME = Time.valueOf("12:00:00");
   private static final Time TEST_START_TIME1 = Time.valueOf("13:00:00");
-  private static final Time TEST_END_TIME1 = Time.valueOf("14:00:00");;
+  private static final Time TEST_END_TIME1 = Time.valueOf("14:00:00");
   private static final String TEST_NAME = "Test";
   private static final String TEST_NAME1 = "Testname";
   private static final String TEST_NAME2 = "Someone";
@@ -79,7 +79,7 @@ public class TestShiftService {
       }
     });
     lenient().when(shiftDao.findAllByOrderByName()).thenAnswer((InvocationOnMock invocation) -> {
-      List<Shift> shiftList = new ArrayList<Shift>();
+      List<Shift> shiftList = new ArrayList<>();
       var shiftOne = new Shift();
       shiftOne.setName(TEST_NAME1);
       shiftOne.setStartTime(TEST_START_TIME);

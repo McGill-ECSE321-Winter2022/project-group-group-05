@@ -13,7 +13,7 @@ import mcgill.ecse321.grocerystore.model.Shift;
 
 /**
  * Persistence Tests for Shift Class.
- * 
+ *
  * @author Harrison Wang
  */
 @ExtendWith(SpringExtension.class)

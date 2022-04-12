@@ -54,7 +54,7 @@ public class TestItemCategoryService {
             itemCategory.setName(ITEMCATEGORY_KEY);
             ITEM_ONE.setName(ITEM_ONE_NAME);
             ITEM_TWO.setName(ITEM_TWO_NAME);
-            Set<Item> set = new HashSet<Item>();
+            Set<Item> set = new HashSet<>();
             set.add(ITEM_ONE);
             set.add(ITEM_TWO);
             itemCategory.setItems(set);
@@ -70,7 +70,7 @@ public class TestItemCategoryService {
     // imitate ordered list of ItemCategory objects
     lenient().when(itemCategoryDao.findAllByOrderByName())
         .thenAnswer((InvocationOnMock invocation) -> {
-          List<ItemCategory> list = new ArrayList<ItemCategory>();
+          List<ItemCategory> list = new ArrayList<>();
           ItemCategory itemCategory = new ItemCategory();
           itemCategory.setName(ITEMCATEGORY_KEY);
           ITEM_ONE.setName(ITEM_ONE_NAME);
@@ -319,7 +319,7 @@ public class TestItemCategoryService {
 
   @Test
   public void testGetItemsByItemCategory() {
-    List<Item> items = new ArrayList<Item>();
+    List<Item> items = new ArrayList<>();
     items.add(ITEM_ONE);
     items.add(ITEM_TWO);
     List<Item> itemSet = service.getItemsByItemCategory(ITEMCATEGORY_KEY);

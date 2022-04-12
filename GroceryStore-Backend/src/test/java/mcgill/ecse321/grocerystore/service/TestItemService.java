@@ -36,9 +36,9 @@ import mcgill.ecse321.grocerystore.model.SpecificItem;
 
 /**
  * RESTful service tests for Item Class.
- * 
+ *
  * @author Annie Kang
- * 
+ *
  */
 @ExtendWith(MockitoExtension.class)
 public class TestItemService {
@@ -78,7 +78,7 @@ public class TestItemService {
     });
     // imitate getting an ordered list of item objects
     lenient().when(itemDao.findAllByOrderByName()).thenAnswer((InvocationOnMock invocation) -> {
-      List<Item> itemList = new ArrayList<Item>();
+      List<Item> itemList = new ArrayList<>();
       var itemOne = new Item();
       itemOne.setName(ITEM_KEY);
       itemOne.setCanDeliver(true);
@@ -99,7 +99,7 @@ public class TestItemService {
     });
     // imitate searching for items
     lenient().when(itemDao.findByNameIgnoreCaseContainingOrderByName(anyString())).thenAnswer(i -> {
-      List<Item> itemList = new ArrayList<Item>();
+      List<Item> itemList = new ArrayList<>();
       if (ITEM2_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
         var item = new Item();
         item.setName(ITEM2_KEY);
@@ -114,7 +114,7 @@ public class TestItemService {
     });
     lenient().when(itemDao.findByNameIgnoreCaseContainingOrderByNameDesc(anyString()))
         .thenAnswer(i -> {
-          List<Item> itemList = new ArrayList<Item>();
+          List<Item> itemList = new ArrayList<>();
           if (ITEM_KEY.toUpperCase().contains(((String) i.getArgument(0)).toUpperCase())) {
             var item = new Item();
             item.setName(ITEM_KEY);

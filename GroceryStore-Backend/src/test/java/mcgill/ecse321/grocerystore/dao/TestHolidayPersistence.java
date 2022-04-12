@@ -15,7 +15,7 @@ import mcgill.ecse321.grocerystore.model.Holiday;
 
 /**
  * Persistence Tests for Holiday Class.
- * 
+ *
  * @author Oliver Sibo Huang
  */
 

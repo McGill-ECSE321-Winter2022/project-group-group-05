@@ -418,7 +418,7 @@ public class TestCustomerService {
 
   @Test
   public void testGetPurchasesByUsername() {
-    List<Purchase> purchases = new ArrayList<Purchase>();
+    List<Purchase> purchases = new ArrayList<>();
     PURCHASE_TWO.setTimeOfPurchaseMillis(Time.valueOf("09:17:32").getTime());
     PURCHASE_THREE.setTimeOfPurchaseMillis(Time.valueOf("09:18:45").getTime());
     purchases.add(PURCHASE_THREE);
