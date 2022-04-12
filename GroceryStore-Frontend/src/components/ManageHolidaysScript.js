@@ -42,6 +42,10 @@ export default {
     };
   },
   computed: {
+    /**
+     * Apply string search filter to the list of Holiday
+     * @returns {*[]}
+     */
     filteredHolidayList() {
       return this.holidayList.filter(holiday => {
         return holiday["name"]

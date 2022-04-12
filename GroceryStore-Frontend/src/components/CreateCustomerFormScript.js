@@ -18,6 +18,9 @@ export default {
     };
   },
   methods: {
+    /**
+     * Called when the customer creation form is submitted
+     */
     onsubmit(event) {
       event.preventDefault();
       let userType = "Customer";
@@ -40,7 +43,7 @@ export default {
           },
         }
       )
-        .then(response => {
+        .then(() => {
           LOGIN_STATE.commit("login", { userType, username });
           this.isLoading = false;
           // return to welcome page

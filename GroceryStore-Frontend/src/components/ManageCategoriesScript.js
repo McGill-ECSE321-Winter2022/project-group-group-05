@@ -40,6 +40,10 @@ export default {
     };
   },
   computed: {
+    /**
+     * Apply a string search filter to the item list
+     * @returns {*[]}
+     */
     filteredItemList() {
       return this.itemList.filter(item => {
         return item["name"]

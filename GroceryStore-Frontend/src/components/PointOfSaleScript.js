@@ -59,6 +59,10 @@ export default {
     };
   },
   computed: {
+    /**
+     * Apply string search filter to the list of items
+     * @returns {*[]}
+     */
     filteredItemList() {
       return this.itemList.filter(item => {
         return item["name"]
@@ -82,6 +86,10 @@ export default {
       this.addItemQty = 1;
       this.itemSearchQuery = "";
     },
+    /**
+     * Called when the start new order button is clicked
+     * @returns {Promise<void>}
+     */
     startNewOrder: async function () {
       this.clear();
       this.isLoading = true;
@@ -108,6 +116,9 @@ export default {
         });
       this.isLoading = false;
     },
+    /**
+     * Called when the cancel order button is clicked
+     */
     cancelNewOrder() {
       this.posError = "";
       this.isLoading = true;
@@ -125,6 +136,9 @@ export default {
           this.isLoading = false;
         });
     },
+    /**
+     * Add the selected item with the selected quantity to the cart
+     */
     addItem: function () {
       this.posError = "";
       this.isLoading = true;
@@ -157,6 +171,10 @@ export default {
           );
         });
     },
+    /**
+     * Called when the checkout button is clicked
+     * @returns {Promise<void>}
+     */
     payNow: async function () {
       this.posError = "";
       this.isLoading = true;
@@ -177,11 +195,19 @@ export default {
         });
       this.isLoading = false;
     },
+    /**
+     * Called when an item in the cart is clicked, in order to edit the quantity
+     * @param item
+     */
     editCartDialog: function (item) {
       this.clickedSpItem = item;
       this.clickedSpItemQuantity = item["purchaseQuantity"];
       this.$bvModal.show("edit-cart-item");
     },
+    /**
+     * Called to save the modification made in the editCartDialog popup window
+     * @returns {Promise<void>}
+     */
     editCartSave: async function () {
       this.posError = "";
       this.isLoading = true;
@@ -210,6 +236,10 @@ export default {
       );
       this.isLoading = false;
     },
+    /**
+     * Called if the remove item button is clicked
+     * @returns {Promise<void>}
+     */
     editCartRemove: async function () {
       this.posError = "";
       this.isLoading = true;
@@ -238,14 +268,24 @@ export default {
       );
       this.isLoading = false;
     },
+    /**
+     * Show the item lookup popup window
+     */
     itemLookup: function () {
       this.posError = "";
       this.$bvModal.show("item-lookup");
     },
+    /**
+     * Hide the item lookup popup window when an item is chosen
+     * @param item
+     */
     itemLookupClicked: function (item) {
       this.addItemName = item["name"];
       this.$bvModal.hide("item-lookup");
     },
+    /**
+     * Recompute the costs of the items in the cart
+     */
     computeCartCosts: function () {
       // compute individual total costs of each items in the cart
       this.cart["specificItems"].forEach(function (spItem) {
