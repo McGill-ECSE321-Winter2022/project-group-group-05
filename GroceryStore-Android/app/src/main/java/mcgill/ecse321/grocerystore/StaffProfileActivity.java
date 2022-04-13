@@ -5,22 +5,17 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.json.JSONObject;
-
 import cz.msebera.android.httpclient.Header;
 
+
+
 public class StaffProfileActivity extends AppCompatActivity {
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
-    String staff=User.getInstance().getUserType().toLowerCase();
+    //use lowercased input in http request
+    String staff = User.getInstance().getUserType().toLowerCase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +37,6 @@ public class StaffProfileActivity extends AppCompatActivity {
         String password = ((TextView) findViewById(R.id.password)).getText().toString();
         String email = ((TextView) findViewById(R.id.email)).getText().toString();
 
-
         // Perform input validation and throw error
         if (password == null || password.trim().length() == 0) {
             Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
@@ -52,52 +46,45 @@ public class StaffProfileActivity extends AppCompatActivity {
             bar.setVisibility(View.VISIBLE);
             rp.add("password", ((TextView) findViewById(R.id.password)).getText().toString());
             rp.add("email", ((TextView) findViewById(R.id.email)).getText().toString());
-
-
-
-                HttpUtils.patch(staff.concat("/") + User.getInstance().getUsername(), rp, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        bar.setVisibility(View.GONE);
-
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        Toast.makeText(getApplicationContext(), "Email is invalid", Toast.LENGTH_SHORT).show();
-                        bar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }
-
-
-    public void getUser() {
-
-
-            HttpUtils.get(staff.concat("/") + User.getInstance().getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
+            HttpUtils.patch(staff.concat("/") + User.getInstance().getUsername(), rp, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    try {
-                        JSONObject responseDto = new JSONObject(response.toString());
-                        String password = responseDto.getString("password");
-                        String email = responseDto.getString("email");
-
-
-                        // Prefill the text fields with the user's information
-                        ((TextView) findViewById(R.id.password)).setText(password);
-                        ((TextView) findViewById(R.id.email)).setText(email);
-
-
-                    } catch (Exception e) {
-                    }
+                    Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+                    bar.setVisibility(View.GONE);
                 }
-
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Toast.makeText(getApplicationContext(), errorResponse.optString("message", "Invalid inputs!"), Toast.LENGTH_SHORT).show();
+                    bar.setVisibility(View.GONE);
                 }
             });
         }
-
     }
+
+    /**
+     *get the user with given username using the http get request
+     */
+    private void getUser() {
+        HttpUtils.get(staff.concat("/") + User.getInstance().getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    JSONObject responseDto = new JSONObject(response.toString());
+                    String password = responseDto.getString("password");
+                    String email = responseDto.getString("email");
+                    // Prefill the text fields with the user's information
+                    ((TextView) findViewById(R.id.password)).setText(password);
+                    ((TextView) findViewById(R.id.email)).setText(email);
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(getApplicationContext(), errorResponse.optString("message", "Invalid username!"), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+}
 
