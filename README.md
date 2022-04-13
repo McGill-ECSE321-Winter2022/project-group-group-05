@@ -18,13 +18,17 @@ Have a look at our [wiki](https://github.com/McGill-ECSE321-Winter2022/project-g
 Heroku Backend URL: <https://grocery-backend-g05-mcgill.herokuapp.com/>  
 Click [here](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/RESTful-Service-Documentation) for the documentation of our REST API. All endpoints are appended after the Heroku Backend URL above.
 
-For more detail please see the main branch.
+For more detail please see the `main` branch.
 
 ### Frontend
 
 Heroku Frontend URL: <https://grocery-frontend-g05-mcgill.herokuapp.com/>
 
-For more detail please see the main branch.
+For more detail please see the `main` branch.
+
+### Android
+
+Click [here](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Android-App-User-Documentation) for the full user documentation of our Android Application.
 
 ## Team Members
 
