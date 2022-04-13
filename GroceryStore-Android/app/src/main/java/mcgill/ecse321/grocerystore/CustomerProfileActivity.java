@@ -8,9 +8,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -20,8 +18,6 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class CustomerProfileActivity extends AppCompatActivity {
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

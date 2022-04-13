@@ -95,8 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             if (username.equals("kiosk")) {
                                 showLoginFailed(R.string.kiosk_login);
-                            }
-                            else {
+                            } else {
                                 String expectPassword = new JSONObject(response.toString()).getString("password");
                                 if (password.equals(expectPassword)) {
                                     updateUiWithUser(username, "Customer");

@@ -8,7 +8,7 @@ public class HttpUtils {
     public static final String DEFAULT_BASE_URL = "https://grocery-backend-g05-mcgill.herokuapp.com/";
 
     private static String baseUrl;
-    private static AsyncHttpClient client = new AsyncHttpClient();
+    private static final AsyncHttpClient client = new AsyncHttpClient();
 
     static {
         baseUrl = DEFAULT_BASE_URL;

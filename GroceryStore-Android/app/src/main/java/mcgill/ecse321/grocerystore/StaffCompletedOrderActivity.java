@@ -26,14 +26,14 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 public class StaffCompletedOrderActivity extends AppCompatActivity {
-    private ArrayList<Purchase> purchases = new ArrayList<>();
+    private final ArrayList<Purchase> purchases = new ArrayList<>();
     private ArrayAdapter<Purchase> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_completed_order);
-        final ListView purchaseListview = (ListView) findViewById(R.id.purchase_list);
+        final ListView purchaseListview = findViewById(R.id.purchase_list);
         adapter = new PurchaseAdapter(this, purchases);
         purchaseListview.setAdapter(adapter);
         refreshLists(this.getCurrentFocus());
@@ -99,7 +99,7 @@ public class StaffCompletedOrderActivity extends AppCompatActivity {
             }
 
             // Display purchased items
-            LinearLayout layout = (LinearLayout) (convertView.findViewById(R.id.purchase_item_list));
+            LinearLayout layout = convertView.findViewById(R.id.purchase_item_list);
             layout.removeAllViews();
             for (PurchaseItem item : purchase.items) {
                 View itemView = getLayoutInflater().inflate(R.layout.purchase_item, null);

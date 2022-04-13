@@ -37,7 +37,7 @@ import cz.msebera.android.httpclient.Header;
 public class CustomerMainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    private ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Item> items = new ArrayList<>();
     private ArrayAdapter<Item> adapter;
 
     @Override
@@ -55,7 +55,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         // to make the Navigation drawer icon always appear on the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final ListView itemListview = (ListView) findViewById(R.id.item_list);
+        final ListView itemListview = findViewById(R.id.item_list);
         adapter = new ItemAdapter(this, items);
         itemListview.setAdapter(adapter);
         itemListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,7 +70,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         });
         refreshLists(this.getCurrentFocus());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,9 +154,9 @@ public class CustomerMainActivity extends AppCompatActivity {
                 ((ImageView) convertView.findViewById(R.id.item_image)).setImageResource(R.drawable.ic_baseline_image_not_supported_24);
             }
             if (item.available) {
-                ((TextView) convertView.findViewById(R.id.item_available)).setVisibility(View.INVISIBLE);
+                convertView.findViewById(R.id.item_available).setVisibility(View.INVISIBLE);
             } else {
-                ((TextView) convertView.findViewById(R.id.item_available)).setVisibility(View.VISIBLE);
+                convertView.findViewById(R.id.item_available).setVisibility(View.VISIBLE);
             }
 
             //Return the completed view to render on screen

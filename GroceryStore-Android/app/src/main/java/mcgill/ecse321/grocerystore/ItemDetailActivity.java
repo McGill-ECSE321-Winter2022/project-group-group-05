@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,7 +25,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class ItemDetailActivity extends AppCompatActivity {
     private ArrayAdapter<Integer> quantityAdapter;
-    private List<Integer> quantity = new ArrayList<>();
+    private final List<Integer> quantity = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_detail);
 
         // Set up the spinner for choosing item quantity
-        Spinner quantitySpinner = (Spinner) findViewById(R.id.quantity_spinner);
+        Spinner quantitySpinner = findViewById(R.id.quantity_spinner);
         quantityAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, quantity);
         quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         quantitySpinner.setAdapter(quantityAdapter);
@@ -80,7 +79,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                         }
                     } else {
                         // If current stock is empty, disable the button
-                        ((Button) findViewById(R.id.cart_button)).setEnabled(false);
+                        findViewById(R.id.cart_button).setEnabled(false);
                     }
                     adapter.notifyDataSetChanged();
                 } catch (Exception e) {
@@ -97,7 +96,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     public void addToCart(View v) {
 
-        final Spinner quantitySpinner = (Spinner) findViewById(R.id.quantity_spinner);
+        final Spinner quantitySpinner = findViewById(R.id.quantity_spinner);
 
         // Get the cart of current user
         RequestParams rpCart = new RequestParams();
