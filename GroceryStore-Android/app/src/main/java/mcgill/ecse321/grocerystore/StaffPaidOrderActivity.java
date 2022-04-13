@@ -44,16 +44,6 @@ public class StaffPaidOrderActivity extends AppCompatActivity {
     }
 
     /**
-     * Format item price to 2 decimal places
-     *
-     * @param price
-     * @return string of price
-     */
-    public String displayPrice(double price) {
-        return "$ " + String.format("%.2f", price);
-    }
-
-    /**
      * Inner class that stores information of a purchased item which will be displayed
      */
     class PurchaseItem {
@@ -78,16 +68,16 @@ public class StaffPaidOrderActivity extends AppCompatActivity {
         public long id;
         public String date;
         public String state;
-        public ArrayList<StaffPaidOrderActivity.PurchaseItem> items;
+        public ArrayList<PurchaseItem> items;
 
-        public Purchase(boolean delivery, long id, String date, String state, ArrayList<StaffPaidOrderActivity.PurchaseItem> items) {
+        public Purchase(boolean delivery, long id, String date, String state, ArrayList<PurchaseItem> items) {
             this.total = 0;
             this.delivery = delivery;
             this.id = id;
             this.date = date;
             this.items = items;
             this.state = state;
-            for (StaffPaidOrderActivity.PurchaseItem item : items) {
+            for (PurchaseItem item : items) {
                 total += item.price * item.quantity;
             }
         }
@@ -109,24 +99,24 @@ public class StaffPaidOrderActivity extends AppCompatActivity {
 
             LinearLayout layout = (LinearLayout) (convertView.findViewById(R.id.purchase_item_list));
             layout.removeAllViews();
-            for (StaffPaidOrderActivity.PurchaseItem item : purchase.items) {
+            for (PurchaseItem item : purchase.items) {
                 View itemView = getLayoutInflater().inflate(R.layout.purchase_item, null);
                 ((TextView) itemView.findViewById(R.id.item_name)).setText(item.name);
-                ((TextView) itemView.findViewById(R.id.item_price)).setText(displayPrice(item.price));
+                ((TextView) itemView.findViewById(R.id.item_price)).setText(FormatUtils.formatCurrency(item.price));
                 ((TextView) itemView.findViewById(R.id.item_quantity)).setText("" + item.quantity);
                 layout.addView(itemView);
             }
 
             // Purchase info
             ((TextView) convertView.findViewById(R.id.purchase_id)).setText("Order #" + purchase.id);
-            ((TextView) convertView.findViewById(R.id.purchase_date)).setText("" + purchase.date);
+            ((TextView) convertView.findViewById(R.id.purchase_date)).setText(FormatUtils.formatDate(purchase.date));
 
             if (purchase.delivery) {
                 ((TextView) convertView.findViewById(R.id.purchase_type)).setText("Order Type: delivery");
             } else {
                 ((TextView) convertView.findViewById(R.id.purchase_type)).setText("Order Type: pick up");
             }
-            ((TextView) convertView.findViewById(R.id.purchase_total)).setText("Total: " + displayPrice(purchase.total));
+            ((TextView) convertView.findViewById(R.id.purchase_total)).setText("Total: " + FormatUtils.formatCurrency(purchase.total));
             ((TextView) convertView.findViewById(R.id.purchase_state)).setText("Order State: " + purchase.state);
 
             //Return the view to render on screen
