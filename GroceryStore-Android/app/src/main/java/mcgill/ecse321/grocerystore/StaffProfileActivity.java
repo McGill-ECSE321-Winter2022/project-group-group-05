@@ -1,16 +1,20 @@
 package mcgill.ecse321.grocerystore;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import org.json.JSONObject;
-import cz.msebera.android.httpclient.Header;
 
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class StaffProfileActivity extends AppCompatActivity {
@@ -52,6 +56,7 @@ public class StaffProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
                     bar.setVisibility(View.GONE);
                 }
+
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     Toast.makeText(getApplicationContext(), errorResponse.optString("message", "Invalid inputs!"), Toast.LENGTH_SHORT).show();
@@ -62,7 +67,7 @@ public class StaffProfileActivity extends AppCompatActivity {
     }
 
     /**
-     *get the user with given username using the http get request
+     * get the user with given username using the http get request
      */
     private void getUser() {
         HttpUtils.get(staff.concat("/") + User.getInstance().getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
