@@ -1,10 +1,8 @@
 package mcgill.ecse321.grocerystore;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +20,7 @@ import cz.msebera.android.httpclient.Header;
 public class StaffProfileActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    String staff=User.getInstance().getUserType();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +30,6 @@ public class StaffProfileActivity extends AppCompatActivity {
         getUser();
     }
 
-    public void onRadioButtonClicked(View view) {
-    }
 
     public void main(View v) {
         Intent mainPage = new Intent(this, StaffMainActivity.class);
@@ -51,55 +48,56 @@ public class StaffProfileActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
         } else if (email == null || email.trim().length() == 0) {
             Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
-        }
-         else {
+        } else {
             bar.setVisibility(View.VISIBLE);
             rp.add("password", ((TextView) findViewById(R.id.password)).getText().toString());
             rp.add("email", ((TextView) findViewById(R.id.email)).getText().toString());
 
 
 
-            HttpUtils.patch("staff/" + User.getInstance().getUsername(), rp, new JsonHttpResponseHandler() {
+                HttpUtils.patch(staff.concat("/") + User.getInstance().getUsername(), rp, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                        bar.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Toast.makeText(getApplicationContext(), "Email is invalid", Toast.LENGTH_SHORT).show();
+                        bar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }
+
+
+    public void getUser() {
+
+
+            HttpUtils.get(staff.concat("/") + User.getInstance().getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
                 @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                    bar.setVisibility(View.GONE);
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        JSONObject responseDto = new JSONObject(response.toString());
+                        String password = responseDto.getString("password");
+                        String email = responseDto.getString("email");
+
+
+                        // Prefill the text fields with the user's information
+                        ((TextView) findViewById(R.id.password)).setText(password);
+                        ((TextView) findViewById(R.id.email)).setText(email);
+
+
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Toast.makeText(getApplicationContext(), "Email is invalid", Toast.LENGTH_SHORT).show();
-                    bar.setVisibility(View.GONE);
                 }
             });
         }
+
     }
 
-    public void getUser() {
-        HttpUtils.get("staff/" + User.getInstance().getUsername(), new RequestParams(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    JSONObject responseDto = new JSONObject(response.toString());
-                    String password = responseDto.getString("password");
-                    String email = responseDto.getString("email");
-
-
-
-                    // Prefill the text fields with the user's information
-                    ((TextView) findViewById(R.id.password)).setText(password);
-                    ((TextView) findViewById(R.id.email)).setText(email);
-
-
-
-
-                } catch (Exception e) {
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-            }
-        });
-    }
-
-}
