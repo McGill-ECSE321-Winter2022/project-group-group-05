@@ -72,7 +72,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Toast.makeText(getApplicationContext(), "Email is invalid", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), errorResponse.optString("message", "Invalid inputs!"), Toast.LENGTH_SHORT).show();
                     bar.setVisibility(View.GONE);
                 }
             });
