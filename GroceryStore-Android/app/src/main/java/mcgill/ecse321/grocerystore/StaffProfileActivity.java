@@ -20,7 +20,7 @@ import cz.msebera.android.httpclient.Header;
 public class StaffProfileActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    String staff=User.getInstance().getUserType();
+    String staff=User.getInstance().getUserType().toLowerCase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
