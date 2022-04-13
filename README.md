@@ -18,15 +18,13 @@ Have a look at our [wiki](https://github.com/McGill-ECSE321-Winter2022/project-g
 Heroku Backend URL: <https://grocery-backend-g05-mcgill.herokuapp.com/>  
 Click [here](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/RESTful-Service-Documentation) for the documentation of our REST API. All endpoints are appended after the Heroku Backend URL above.
 
-To run the backend locally, make sure that port 8080 is available. Navigate to project root, then issue the command `./gradlew bootRun` to run the project as a Spring Boot application. The backend will be available at the URL `localhost:8080`. To stop the gradle daemon, issue the command `./gradle --stop`.
-
-Additionally, integration tests of the REST API can be run with the command `./gradlew integrationTest`. Note that the Heroku database is easily overwhelmed when multiple people are working on the project and may cause all tests to fail.
+For more detail please see the main branch.
 
 ### Frontend
 
 Heroku Frontend URL: <https://grocery-frontend-g05-mcgill.herokuapp.com/>
 
-To run the frontend locally, navigate to [GroceryStore-Frontend](/GroceryStore-Frontend/), then issue the command `npm install`. After the dependencies are installed, run the command `npm run dev`. The frontend will be hosted at `127.0.0.1:8087`. By default, the program will attempt to use the backend hosted on Heroku (see paragraph above). If you would like to host the backend locally and use that, go to [GroceryStore-Frontend/config/index.js](/GroceryStore-Frontend/config/index.js) and modify line 35-36 `backendHost` to `127.0.0.1` and `backendPort` to `8080`.
+For more detail please see the main branch.
 
 ## Team Members
 
