@@ -41,12 +41,12 @@ Below can be found the time spent in hours by each team member on each sprint. P
 
 | Name  | Role | Sprint 1 | Sprint 2 | Sprint 3 | Sprint 4 |
 | ----- | ----- | :-----: | :-----: | :-----: | :-----: |
-| Peini Cheng  | Software Architect | 14 | 13.75 | 24.5 | &mdash; |
-| Sibo Huang | Software Developer | 12 | 16.75 | 24.5 | &mdash; |
-| Annie Kang | Business Analyst | 12 | 15.75 | 24.5 | &mdash; |
-| Yida Pan | Software Developer | 12 | 17.75 | 16.5 | &mdash; |
-| Jimmy Sheng | Team Lead | 24 | 27.75 | 48.5 | &mdash; |
-| Harrison Wang | Documentation Lead | 21.5 | 22.75 | 44.5 | &mdash; |
+| Peini Cheng  | Software Architect | 14 | 13.75 | 24.5 | 23.5 |
+| Sibo Huang | Software Developer | 12 | 16.75 | 24.5 | 11.5 |
+| Annie Kang | Business Analyst | 12 | 15.75 | 24.5 | 11.5 |
+| Yida Pan | Software Developer | 12 | 17.75 | 16.5 | 11.5 |
+| Jimmy Sheng | Team Lead | 24 | 27.75 | 48.5 | 13.5 |
+| Harrison Wang | Documentation Lead | 21.5 | 22.75 | 44.5 | 25 |
 
 ## [Sprint 1](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-1-Project-Report)
 
@@ -107,3 +107,20 @@ Started on Feb 28, 2022
 * **Yida**: Attempted implementation of ManageCategories, attended meetings.
 * **Jimmy**: Set up frontend repository and CI heroku deployment, set up code style using Prettier, vue state management, common AXIOS object, Welcome, LoginForm, CreateCustomerForm, PointOfSale, ManageCategories, ManageHolidays, Navbar, fixed StaffDashboard and ManageStaffProfile, fixed styles, bug fixes, code review.
 * **Harrison**: Set up skeleton for project wiki, Sprint 3 project report, added Spring 3 to readme.md, edited architecture model component descriptions, updated project wiki documentation on backend services, ViewSchedules, ManageSchedules, ManageItems, ManageCart, ManageOpeningHours, made style of StaffDashboard pages more uniform, bug fixes, code review.
+
+## [Sprint 4](https://github.com/McGill-ECSE321-Winter2022/project-group-group-05/wiki/Sprint-4-Project-Report)
+
+### Objectives to complete:
+Started on April 8, 2022  
+* Functional Android-Frontend
+* Integration of Android-Frontend with Backend Services
+* Improve code quality
+* Project Report
+
+### Tasks completed by each member:
+* **Peini**: Set up the Android Frontend repository; Android Frontend components: CustomerMainActivity, CustomerProfileActivity, PurchaseHistoryActivity, LoginActivity; Helped with code review; Code quality for Backend: JavaDoc; Android Frontend user documentation
+* **Sibo**: Android Frontend components: StaffCompletedOrderAcitivty
+* **Annie**: Recorded Meeting Minutes, Android Frontend components: StaffPaidOrderActivity
+* **Yida**: Android Frontend components: StaffProfileActivity
+* **Jimmy**: Android Frontend components: CreateAccountActivity, MainActivity, clean up, format; Code quality for Backend: JavaDoc, clean up, format; Code quality for Frontend: comments, clean up, format; Resolve Android IME not closing issue; Helped with code review
+* **Harrison**: Set up skeleton for wiki, set up skeleton for Android app documentation, web Frontend user documentation, Android Frontend components: CartActivity, StaffScheduleActivity, StaffMainActivity; project report sprint 4, code review
