@@ -18,7 +18,8 @@ import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 
 /**
  * Service methods for Customer
- *
+ * 
+ * @author Peini Cheng
  */
 @Service
 public class CustomerService {
@@ -31,6 +32,17 @@ public class CustomerService {
   @Autowired
   PurchaseRepository purchaseRepository;
 
+  /**
+   * Creates a new Customer account
+   * 
+   * @param username the username of the account
+   * @param password the password of the account
+   * @param email the email of the account
+   * @param address the address of the account
+   * @param isLocal whether the address of the account is a local address
+   * @return the Customer instance created wit the input parameters
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Customer createCustomer(String username, String password, String email, String address,
       Boolean isLocal) throws IllegalArgumentException {
@@ -51,6 +63,13 @@ public class CustomerService {
     return customerRepository.save(customer);
   }
 
+  /**
+   * Return the Customer instance with the given username
+   * 
+   * @param username username of the account
+   * @return the Customer instance with given username if there exists one
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Customer getCustomer(String username) throws IllegalArgumentException {
     if (username == null || username.trim().length() == 0) {
@@ -63,6 +82,14 @@ public class CustomerService {
     return customer;
   }
 
+  /**
+   * Changes the password of the specific Customer account
+   * 
+   * @param username username of the account
+   * @param password new password of the account
+   * @return the Customer instance after the password is changed
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Customer setCustomerPassword(String username, String password)
       throws IllegalArgumentException {
@@ -70,12 +97,28 @@ public class CustomerService {
     return setPassword(customer, password);
   }
 
+  /**
+   * Changes the email of the specific Customer account
+   * 
+   * @param username username of the account
+   * @param email new email of the account
+   * @return the Customer instance after the email is changed
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Customer setCustomerEmail(String username, String email) throws IllegalArgumentException {
     Customer customer = getCustomer(username);
     return setEmail(customer, email);
   }
 
+  /**
+   * Changes the address of the specific Customer account
+   * 
+   * @param username username of the account
+   * @param address new address of the account
+   * @return the Customer instance after the address is changed
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Customer setCustomerAddress(String username, String address)
       throws IllegalArgumentException {
@@ -83,6 +126,14 @@ public class CustomerService {
     return setAddress(customer, address);
   }
 
+  /**
+   * Changes whether the current address is local
+   * 
+   * @param username username of the account
+   * @param isLocal whether the current address is local
+   * @return the Customer instance after the isLocal field is changed
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Customer setCustomerIsLocal(String username, boolean isLocal)
       throws IllegalArgumentException {
@@ -91,9 +142,9 @@ public class CustomerService {
   }
 
   /**
-   * return a list of purchases sorted by purchase time from newest to oldest
+   * Returns a list of purchases sorted by purchase time from newest to oldest
    *
-   * @param username
+   * @param username username of the account
    * @return a sorted list of purchases
    * @throws IllegalArgumentException
    */
@@ -114,12 +165,23 @@ public class CustomerService {
     return purchaseList;
   }
 
+  /**
+   * Deletes the specific Customer account
+   * 
+   * @param username username of the account
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public void deleteCustomer(String username) throws IllegalArgumentException {
     Customer customer = getCustomer(username);
     customerRepository.delete(customer);
   }
 
+  /**
+   * Returns a list of Customer accounts
+   * 
+   * @return a sorted list (ascending lexicographical order) of customers
+   */
   @Transactional
   public List<Customer> getAllCustomers() {
     ArrayList<Customer> customerList = customerRepository.findAllByOrderByUsername();
