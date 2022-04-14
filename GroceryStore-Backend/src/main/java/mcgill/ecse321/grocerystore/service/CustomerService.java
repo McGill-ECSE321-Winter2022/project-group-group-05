@@ -17,7 +17,7 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.Purchase.PurchaseState;
 
 /**
- * Service methods for Customer
+ * RESTful Service methods for Customer
  * 
  * @author Peini Cheng
  */
@@ -180,7 +180,7 @@ public class CustomerService {
   /**
    * Returns a list of Customer accounts
    * 
-   * @return a sorted list (ascending lexicographical order) of customers
+   * @return a sorted list (ascending lexicographical order) of Customer instances
    */
   @Transactional
   public List<Customer> getAllCustomers() {

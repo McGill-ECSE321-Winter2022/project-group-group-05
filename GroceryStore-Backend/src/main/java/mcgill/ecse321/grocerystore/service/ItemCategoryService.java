@@ -13,8 +13,9 @@ import mcgill.ecse321.grocerystore.model.Item;
 import mcgill.ecse321.grocerystore.model.ItemCategory;
 
 /**
- * Service methods for ItemCategory
- *
+ * RESTful Service methods for Customer
+ * 
+ * @author Peini Cheng
  */
 @Service
 public class ItemCategoryService {
@@ -23,6 +24,13 @@ public class ItemCategoryService {
   @Autowired
   ItemRepository itemRepository;
 
+  /**
+   * Creates a new item category with the given name
+   * 
+   * @param name name of the category
+   * @return the ItemCategory instance created with the given name
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public ItemCategory createItemCategory(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
@@ -36,11 +44,24 @@ public class ItemCategoryService {
     return itemCategoryRepository.save(itemCategory);
   }
 
+  /**
+   * Deletes the specific Item Category
+   * 
+   * @param name name of the category
+   * @throws IllegalArgumentException
+   */
   public void delete(String name) throws IllegalArgumentException {
     ItemCategory ic = this.getItemCategory(name);
     itemCategoryRepository.delete(ic);
   }
 
+  /**
+   * Returns the ItemCategory instance with the given name
+   * 
+   * @param name name of the category
+   * @return the ItemCategory instance with given username if there exists one
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public ItemCategory getItemCategory(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
@@ -53,6 +74,14 @@ public class ItemCategoryService {
     return itemCategory;
   }
 
+  /**
+   * Adds the specific item to the specific category
+   * 
+   * @param itemName name of the item
+   * @param categoryName name of the category
+   * @return the ItemCategory instance after the item is added
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public ItemCategory addItemToItemCategory(String itemName, String categoryName)
       throws IllegalArgumentException {
@@ -70,6 +99,14 @@ public class ItemCategoryService {
     throw new IllegalArgumentException("This item is already in this category!");
   }
 
+  /**
+   * Removes the specific item from the specific category
+   * 
+   * @param itemName name of the item
+   * @param categoryName name of the category
+   * @return the ItemCategory instance after the item is removed
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public ItemCategory removeItemFromItemCategory(String itemName, String categoryName)
       throws IllegalArgumentException {
@@ -88,7 +125,7 @@ public class ItemCategoryService {
   }
 
   /**
-   * return a list of items sorted in alphabetic order
+   * Returns a list of items belongs to the specific category sorted in alphabetic order
    *
    * @param name
    * @return a sorted list of items
@@ -110,6 +147,11 @@ public class ItemCategoryService {
     return itemList;
   }
 
+  /**
+   * Returns a list of categories sorted in alphabetic order
+   * 
+   * @return a sorted list of ItemCategory instances
+   */
   @Transactional
   public List<ItemCategory> getAllItemCategories() {
     return itemCategoryRepository.findAllByOrderByName();
