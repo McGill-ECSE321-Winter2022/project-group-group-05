@@ -28,7 +28,7 @@ public class ItemCategoryService {
    * Creates a new item category with the given name
    * 
    * @param name name of the category
-   * @return the ItemCategory instance created with the given name
+   * @return the new ItemCategory instance created with the given name
    * @throws IllegalArgumentException
    */
   @Transactional

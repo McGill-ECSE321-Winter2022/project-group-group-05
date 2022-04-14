@@ -9,15 +9,22 @@ import mcgill.ecse321.grocerystore.dao.HolidayRepository;
 import mcgill.ecse321.grocerystore.model.Holiday;
 
 /**
- * Service methods for Holiday
- *
+ * RESTful Service methods for Holiday
+ * 
+ * @author Sibo Huang
  */
 @Service
 public class HolidayService {
   @Autowired
   HolidayRepository holidayRepository;
 
-
+  /**
+   * Creates a new holiday with the given name and date
+   * 
+   * @param name name of the holiday
+   * @param date date of the holiday
+   * @return the new Holiday instance created
+   */
   @Transactional
   public Holiday createHoliday(String name, Date date) {
     if (name == null || name.trim().length() == 0) {
@@ -36,6 +43,13 @@ public class HolidayService {
     return holidayRepository.save(holiday);
   }
 
+  /**
+   * Returns the holiday with the given name
+   * 
+   * @param name name of the holiday
+   * @return the Holiday instance with the given name
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Holiday getHoliday(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
@@ -48,12 +62,24 @@ public class HolidayService {
     return holiday;
   }
 
+  /**
+   * Deletes the specific holiday
+   * 
+   * @param name name of the holiday
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public void deleteHoliday(String name) throws IllegalArgumentException {
     Holiday holidy = this.getHoliday(name);
     this.holidayRepository.delete(holidy);
   }
 
+  /**
+   * Change the date of the specific holiday
+   * @param name name of the holiday
+   * @param date new date of the holiday
+   * @return the Holiday instance after the date is changed
+   */
   @Transactional
   public Holiday updateHoliday(String name, Date date) {
     if (date == null) {
@@ -64,11 +90,19 @@ public class HolidayService {
     return this.holidayRepository.save(holiday);
   }
 
+  /**
+   * Returns a sorted list of holidays
+   * @return a sorted list (ascending lexicographical order) of Holiday instances
+   */
   @Transactional
   public List<Holiday> getAll() {
     return holidayRepository.findAllByOrderByName();
   }
 
+  /**
+   * Returns a sorted list of holidays
+   * @return a sorted list (ascending date order)of Holiday instances
+   */
   @Transactional
   public List<Holiday> getAllByDate() {
     return holidayRepository.findAllByOrderByDateAsc();
