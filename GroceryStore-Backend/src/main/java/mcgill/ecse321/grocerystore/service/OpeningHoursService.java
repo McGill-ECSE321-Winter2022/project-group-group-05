@@ -10,14 +10,24 @@ import mcgill.ecse321.grocerystore.dao.OpeningHoursRepository;
 import mcgill.ecse321.grocerystore.model.OpeningHours;
 
 /**
- * Service methods for OpeningHours
- *
+ * RESTful Service methods for OpeningHours
+ * 
+ * @author Sibo Huang
  */
 @Service
 public class OpeningHoursService {
   @Autowired
   OpeningHoursRepository openingHoursRepository;
 
+  /**
+   * Creates new opening hours for one of the days of the week
+   * 
+   * @param daysOfWeek the specific day
+   * @param startH the time when the store will open
+   * @param endH the time when the store will close
+   * @return the new OpeningHour instance created
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public OpeningHours createOpeningHours(String daysOfWeek, Time startH, Time endH)
       throws IllegalArgumentException {
@@ -51,6 +61,13 @@ public class OpeningHoursService {
     return openingHoursRepository.save(openingH);
   }
 
+  /**
+   * Returns the opening hours of the specific day
+   * 
+   * @param daysOfWeek the specific day
+   * @return the OpeningHour instance
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public OpeningHours getOpeningHours(String daysOfWeek) throws IllegalArgumentException {
     if (daysOfWeek == null || daysOfWeek.trim().length() == 0) {
@@ -63,6 +80,15 @@ public class OpeningHoursService {
     return openingH;
   }
 
+  /**
+   * Change the opening hours of the specific day
+   * 
+   * @param daysOfWeek the specific day
+   * @param startH new time when the store will open
+   * @param endH new time when the store will close
+   * @return the new OpeningHour instance after the change
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public OpeningHours updateOpeningHours(String daysOfWeek, Time startH, Time endH)
       throws IllegalArgumentException {
@@ -81,13 +107,23 @@ public class OpeningHoursService {
     return this.openingHoursRepository.save(openingH);
   }
 
-
+  /**
+   * Deletes the opening hours of the specific day
+   * 
+   * @param daysOfWeek the specific day
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public void deleteOpeningHours(String daysOfWeek) throws IllegalArgumentException {
     OpeningHours openingH = getOpeningHours(daysOfWeek);
     openingHoursRepository.delete(openingH);
   }
 
+  /**
+   * Returns the list of all opening hours
+   * 
+   * @return list of all opening hours
+   */
   @Transactional
   public List<OpeningHours> getAll() {
     ArrayList<OpeningHours> openingHoursList = openingHoursRepository.findAllByOrderByDaysOfWeek();

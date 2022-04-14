@@ -125,7 +125,7 @@ public class ItemCategoryService {
   }
 
   /**
-   * Returns a list of items belongs to the specific category sorted in alphabetic order
+   * Returns the list of items belongs to the specific category sorted in alphabetic order
    *
    * @param name
    * @return a sorted list of items
@@ -148,7 +148,7 @@ public class ItemCategoryService {
   }
 
   /**
-   * Returns a list of all categories sorted in alphabetic order
+   * Returns the list of all categories sorted in alphabetic order
    * 
    * @return a sorted list of ItemCategory instances
    */

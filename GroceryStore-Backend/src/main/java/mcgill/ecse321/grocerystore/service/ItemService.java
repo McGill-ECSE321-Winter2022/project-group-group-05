@@ -140,7 +140,7 @@ public class ItemService {
   }
 
   /**
-   * Returns a list of all items sorted in alphabetic order
+   * Returns the list of all items sorted in alphabetic order
    * 
    * @return a sorted list of Item instances
    */
@@ -150,7 +150,7 @@ public class ItemService {
   }
 
   /**
-   * Returns a list of items that are currently in stock sorted in alphabetic order
+   * Returns the list of items that are currently in stock sorted in alphabetic order
    * 
    * @return a sorted list of available Item instances
    */
@@ -167,7 +167,7 @@ public class ItemService {
 
   /**
    * 
-   * Returns a list of items that can be delivered sorted in alphabetic order
+   * Returns the list of items that can be delivered sorted in alphabetic order
    * 
    * @return a sorted list of Item instances available for delivery
    */
@@ -183,7 +183,7 @@ public class ItemService {
   }
 
   /**
-   * Returns a list of items that can be picked up sorted in alphabetic order
+   * Returns the list of items that can be picked up sorted in alphabetic order
    * 
    * @return sorted list of Item instances available for pick-up
    */
@@ -199,7 +199,7 @@ public class ItemService {
   }
 
   /**
-   * Returns a list of discontinued items sorted in alphabetic order
+   * Returns the list of discontinued items sorted in alphabetic order
    * 
    * @return sorted list of Item instances that are discontinued
    */

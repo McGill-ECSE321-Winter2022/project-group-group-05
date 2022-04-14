@@ -178,7 +178,7 @@ public class CustomerService {
   }
 
   /**
-   * Returns a list of all Customer accounts
+   * Returns the list of all Customer accounts
    * 
    * @return a sorted list (ascending lexicographical order) of Customer instances
    */

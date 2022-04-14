@@ -91,7 +91,7 @@ public class HolidayService {
   }
 
   /**
-   * Returns a sorted list of all holidays
+   * Returns the sorted list of all holidays
    * @return a sorted list (ascending lexicographical order) of Holiday instances
    */
   @Transactional
@@ -100,7 +100,7 @@ public class HolidayService {
   }
 
   /**
-   * Returns a sorted list of all holidays
+   * Returns the sorted list of all holidays
    * @return a sorted list (ascending date order)of Holiday instances
    */
   @Transactional
