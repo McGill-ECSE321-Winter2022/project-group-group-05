@@ -16,8 +16,9 @@ import mcgill.ecse321.grocerystore.model.EmployeeSchedule;
 import mcgill.ecse321.grocerystore.model.Shift;
 
 /**
- * Service methods for Shift
- *
+ * RESTful Service methods for Shift
+ * 
+ * @author Yida Pan
  */
 @Service
 public class ShiftService {
@@ -29,6 +30,15 @@ public class ShiftService {
   @Autowired
   EmployeeRepository employeeRepo;
 
+  /**
+   * Creates a new shift with the given name and time
+   * 
+   * @param name name of the new shift
+   * @param startTime start time of the new shift
+   * @param endTime end time of the new shift
+   * @return the new Shift instance created
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Shift createShift(String name, Time startTime, Time endTime)
       throws IllegalArgumentException {
@@ -55,8 +65,14 @@ public class ShiftService {
     return shiftRepo.save(shift);
   }
 
+  /**
+   * Returns the shift with the given name
+   * 
+   * @param name name of the shift
+   * @return the Shift instance with the given name
+   * @throws IllegalArgumentException
+   */
   @Transactional
-  // Get the shift with the specific name
   public Shift getShift(String name) throws IllegalArgumentException {
     if (name == null || name.trim().length() == 0) {
       throw new IllegalArgumentException("Shift name cannot be empty.");
@@ -68,12 +84,21 @@ public class ShiftService {
     return shift;
   }
 
+  /**
+   * Returns the list of all shifts sorted by name
+   * 
+   * @return the list of all Shift instances
+   */
   @Transactional
-  // Get all the shifts sorted by name in order
   public List<Shift> getAllShifts() {
     return shiftRepo.findAllByOrderByName();
   }
 
+  /**
+   * Deletes the shift with the given name
+   * 
+   * @param shiftName name of the shift
+   */
   @Transactional
   public void deleteShiftByName(String shiftName) {
     Shift shift = this.getShift(shiftName);
@@ -94,7 +119,14 @@ public class ShiftService {
     shiftRepo.delete(shift);
   }
 
-
+  /**
+   * Change the time of the specific shift
+   * 
+   * @param name name of the shift
+   * @param startTime new start time of the shift
+   * @param endTime new end time of the shift
+   * @return the Shift instance after the change
+   */
   @Transactional
   public Shift updateShift(String name, Time startTime, Time endTime) {
     if (startTime == null) {

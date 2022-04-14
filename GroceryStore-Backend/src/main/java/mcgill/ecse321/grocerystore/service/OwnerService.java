@@ -13,7 +13,8 @@ import mcgill.ecse321.grocerystore.model.Owner;
 
 /**
  * Service methods for Owner
- *
+ * 
+ * @author Sibo Huang
  */
 @Service
 public class OwnerService {
@@ -24,6 +25,14 @@ public class OwnerService {
   @Autowired
   EmployeeRepository employeeRepository;
 
+  /**
+   * Creates a new owner account with the given parameters
+   * 
+   * @param username username of the new account
+   * @param password password of the new account
+   * @param email email of the new account
+   * @return the new Owner instance created
+   */
   @Transactional
   public Owner createOwner(String username, String password, String email) {
     if (username == null || username.trim().length() == 0) {
@@ -51,6 +60,13 @@ public class OwnerService {
     return ownerRepository.save(owner);
   }
 
+  /**
+   * Returns the owner account with the given username
+   * 
+   * @param username username of the account
+   * @return the Owner instance with the given username
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Owner getOwner(String username) throws IllegalArgumentException {
     if (username == null || username.trim().length() == 0) {
@@ -63,12 +79,26 @@ public class OwnerService {
     return owner;
   }
 
+  /**
+   * Deletes the owner account with the given username
+   * 
+   * @param username username of the account
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public void deleteOwner(String username) throws IllegalArgumentException {
     Owner owner = getOwner(username);
     ownerRepository.delete(owner);
   }
 
+  /**
+   * Changes the specific owner account detail
+   * 
+   * @param username username of the account
+   * @param password new password of the account
+   * @param email new email of the account
+   * @return the Owner instance after the change
+   */
   @Transactional
   public Owner updateOwner(String username, String password, String email) {
     if (password == null || password.trim().length() == 0) {
@@ -86,6 +116,11 @@ public class OwnerService {
     return this.ownerRepository.save(owner);
   }
 
+  /**
+   * Returns the list of all owners sorted by alphabetic order
+   * 
+   * @return a sorted list of owners
+   */
   @Transactional
   public List<Owner> getAllOwners() {
     ArrayList<Owner> ownerList = ownerRepository.findAllByOrderByUsername();
