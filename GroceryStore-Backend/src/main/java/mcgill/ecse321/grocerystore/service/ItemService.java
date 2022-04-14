@@ -16,7 +16,7 @@ import mcgill.ecse321.grocerystore.model.Purchase;
 import mcgill.ecse321.grocerystore.model.SpecificItem;
 
 /**
- * Service methods for Item
+ * RESTful Service methods for Item
  *
  * @author Annie Kang
  *
@@ -32,6 +32,18 @@ public class ItemService {
   @Autowired
   ItemCategoryRepository itemCategoryRepository;
 
+  /**
+   * Creates a new item with the given parameters
+   * 
+   * @param name name of the new item
+   * @param image image of the new item
+   * @param price price of the new item
+   * @param inventory current stock of the new item
+   * @param canDeliver whether the new item can be delivered
+   * @param canPickUp whether the new item can be picked up
+   * @return the new Item instance created
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Item createItem(String name, String image, double price, int inventory, boolean canDeliver,
       boolean canPickUp) throws IllegalArgumentException {
@@ -63,8 +75,8 @@ public class ItemService {
   }
 
   /**
-   * Delete the item with the given name, while also removing any SpecificItems associated with this
-   * Item.<br>
+   * Deletes the item with the given name, while also removing any SpecificItems associated with
+   * this Item.<br>
    * <b>This action should not be done under normal circumstances.</b><br>
    * The removal of an item from the store should be done through setIsDiscontinued. This method is
    * provided for maintenance purposes only and would alter purchase histories kept in the system.
@@ -108,6 +120,13 @@ public class ItemService {
     itemRepository.delete(item);
   }
 
+  /**
+   * Returns the item with the given name
+   * 
+   * @param itemName name of the item
+   * @return the Item instance with the given name
+   * @throws IllegalArgumentException
+   */
   @Transactional
   public Item getItem(String itemName) throws IllegalArgumentException {
     if (itemName == null || itemName.trim().length() == 0) {
@@ -120,11 +139,21 @@ public class ItemService {
     return item;
   }
 
+  /**
+   * Returns a list of all items sorted in alphabetic order
+   * 
+   * @return a sorted list of Item instances
+   */
   @Transactional
   public List<Item> getAllItems() {
     return itemRepository.findAllByOrderByName();
   }
 
+  /**
+   * Returns a list of items that are currently in stock sorted in alphabetic order
+   * 
+   * @return a sorted list of available Item instances
+   */
   @Transactional
   public List<Item> getAllInStock() {
     ArrayList<Item> itemList = new ArrayList<>();
@@ -136,6 +165,12 @@ public class ItemService {
     return itemList;
   }
 
+  /**
+   * 
+   * Returns a list of items that can be delivered sorted in alphabetic order
+   * 
+   * @return a sorted list of Item instances available for delivery
+   */
   @Transactional
   public List<Item> getAllCanDeliver() {
     ArrayList<Item> itemList = new ArrayList<>();
@@ -147,6 +182,11 @@ public class ItemService {
     return itemList;
   }
 
+  /**
+   * Returns a list of items that can be picked up sorted in alphabetic order
+   * 
+   * @return sorted list of Item instances available for pick-up
+   */
   @Transactional
   public List<Item> getAllCanPickUp() {
     ArrayList<Item> itemList = new ArrayList<>();
@@ -158,6 +198,11 @@ public class ItemService {
     return itemList;
   }
 
+  /**
+   * Returns a list of discontinued items sorted in alphabetic order
+   * 
+   * @return sorted list of Item instances that are discontinued
+   */
   @Transactional
   public List<Item> getAllIsDiscontinued() {
     ArrayList<Item> itemList = new ArrayList<>();
@@ -185,6 +230,13 @@ public class ItemService {
     return itemRepository.findByNameIgnoreCaseContainingOrderByNameDesc(searchQuery);
   }
 
+  /**
+   * Changes the image of the specific item
+   * 
+   * @param itemName name of the item
+   * @param image new image of the item
+   * @return the Item instance after the image is changed
+   */
   @Transactional
   public Item setImage(String itemName, String image) {
     Item item = getItem(itemName);
@@ -195,6 +247,13 @@ public class ItemService {
     return itemRepository.save(item);
   }
 
+  /**
+   * Changes the price of the specific item
+   * 
+   * @param itemName name of the item
+   * @param price new price of the item
+   * @return the Item instance after the price is changed
+   */
   @Transactional
   public Item setPrice(String itemName, double price) {
     Item item = getItem(itemName);
@@ -205,6 +264,13 @@ public class ItemService {
     return itemRepository.save(item);
   }
 
+  /**
+   * Changes the current stock of the specific item
+   * 
+   * @param itemName name of the item
+   * @param inventory inventory of the item
+   * @return the Item instance after the current inventory is changed
+   */
   @Transactional
   public Item setInventory(String itemName, int inventory) {
     Item item = getItem(itemName);
@@ -215,6 +281,13 @@ public class ItemService {
     return itemRepository.save(item);
   }
 
+  /**
+   * Sets if the specific item is available for delivery
+   * 
+   * @param itemName name of the item
+   * @param whether the item can be delivered
+   * @return the Item instance after the change
+   */
   @Transactional
   public Item setCanDeliver(String itemName, boolean canDeliver) {
     Item item = getItem(itemName);
@@ -222,6 +295,13 @@ public class ItemService {
     return itemRepository.save(item);
   }
 
+  /**
+   * Sets if the specific item is available for pick-up
+   * 
+   * @param itemName name of the item
+   * @param whether the item can be picked up
+   * @return the Item instance after the change
+   */
   @Transactional
   public Item setCanPickUp(String itemName, boolean canPickUp) {
     Item item = getItem(itemName);
@@ -229,6 +309,13 @@ public class ItemService {
     return itemRepository.save(item);
   }
 
+  /**
+   * Sets if the specific item is discontinued
+   * 
+   * @param itemName name of the item
+   * @param isDiscontinued whether the item is discontinued
+   * @return the Item instance after the change
+   */
   @Transactional
   public Item setIsDiscontinued(String itemName, boolean isDiscontinued) {
     Item item = getItem(itemName);

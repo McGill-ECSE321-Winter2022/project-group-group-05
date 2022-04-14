@@ -148,7 +148,7 @@ public class ItemCategoryService {
   }
 
   /**
-   * Returns a list of categories sorted in alphabetic order
+   * Returns a list of all categories sorted in alphabetic order
    * 
    * @return a sorted list of ItemCategory instances
    */
