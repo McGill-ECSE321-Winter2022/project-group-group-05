@@ -7,6 +7,8 @@
 
 Welcome to the Group 05 Grocery Store Project Repository!  
 
+### NOTE: Since Heroku is discontinuing its free hosting service, the demo websites (backend and frontend), as well as the PostgreSQL database, will stop working. `spring.datasource.url` in [GroceryStore-Backend/src/main/resources/application.properties](GroceryStore-Backend/src/main/resources/application.properties) must be updated in order for the project to build correctly  
+
 ## Project Overview
 
 The goal of this project is to create a website and an app to facilitate the grocery shopping process for our customers.
